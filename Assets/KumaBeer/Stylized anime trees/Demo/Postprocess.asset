@@ -1,5 +1,33 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-4616384630961389975
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d65e486e4de6e5448a8fbb43dc8756a0, type: 3}
+  m_Name: Grain
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+  colored:
+    overrideState: 0
+    value: 1
+  intensity:
+    overrideState: 1
+    value: 0.218
+  size:
+    overrideState: 1
+    value: 0.63
+  lumContrib:
+    overrideState: 1
+    value: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20,6 +48,8 @@ MonoBehaviour:
   - {fileID: 114269680806686294}
   - {fileID: 114724551949795928}
   - {fileID: 114392629153132876}
+  - {fileID: 6279564068141098651}
+  - {fileID: -4616384630961389975}
 --- !u!114 &114016392164041882
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -60,6 +90,9 @@ MonoBehaviour:
   thicknessModifier:
     overrideState: 1
     value: 4.68
+  zBias:
+    overrideState: 0
+    value: 0.0001
   directLightingStrength:
     overrideState: 0
     value: 0
@@ -134,7 +167,7 @@ MonoBehaviour:
     value: 0
   saturation:
     overrideState: 1
-    value: 0
+    value: 23
   brightness:
     overrideState: 0
     value: 0
@@ -143,7 +176,7 @@ MonoBehaviour:
     value: 0.4
   contrast:
     overrideState: 1
-    value: 8
+    value: 11
   mixerRedOutRedIn:
     overrideState: 0
     value: 100
@@ -1539,4 +1572,48 @@ MonoBehaviour:
     value: 0.02
   fastMode:
     overrideState: 1
+    value: 1
+--- !u!114 &6279564068141098651
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40b924e2dad56384a8df2a1e111bb675, type: 3}
+  m_Name: Vignette
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+  mode:
+    overrideState: 1
+    value: 0
+  color:
+    overrideState: 1
+    value: {r: 0.1981132, g: 0.12164073, b: 0.092515126, a: 1}
+  center:
+    overrideState: 0
+    value: {x: 0.5, y: 0.5}
+  intensity:
+    overrideState: 1
+    value: 0.5
+  smoothness:
+    overrideState: 1
+    value: 0.16
+  roundness:
+    overrideState: 1
+    value: 1
+  rounded:
+    overrideState: 0
+    value: 0
+  mask:
+    overrideState: 0
+    value: {fileID: 0}
+    defaultState: 1
+  opacity:
+    overrideState: 0
     value: 1
