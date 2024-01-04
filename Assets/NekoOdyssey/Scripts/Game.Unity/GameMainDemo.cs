@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace NekoOdyssey.Scripts.Game.Unity
 {
@@ -34,6 +35,13 @@ namespace NekoOdyssey.Scripts.Game.Unity
 
         private async void Awake()
         {
+            if (!Application.isEditor)
+            {
+                SceneManager.LoadScene($"Neko2", LoadSceneMode.Additive);
+                SceneManager.LoadScene($"SkyBox", LoadSceneMode.Additive);
+                SceneManager.LoadScene($"NekoRoad", LoadSceneMode.Additive);
+            }
+
             StartCoroutine(LoadBundle());
         }
     }

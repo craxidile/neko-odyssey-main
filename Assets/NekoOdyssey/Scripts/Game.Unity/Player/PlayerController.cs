@@ -61,7 +61,6 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
             cc = GetComponent<CharacterController>();
             sprite = GetComponent<SpriteRenderer>();
             animator = GetComponent<Animator>();
-            Debug.Log($">>character_controller<< {cc}");
         }
 
         private void Update()
@@ -92,17 +91,16 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
             moveInput = playerControls.Player.Movement.ReadValue<Vector2>();
             var directionChanged = (int)lastInput.x == (int)-moveInput.x;
 
-            //Turn Around
+            // Turn Around
             if (!isTurnAround && moveInput.x != 0 && directionChanged)
             {
-                Debug.Log(">>turn_around<<");
                 turningTimerCounter = stillRunning ? 0.6f : 0.4f;
                 stopMove = true;
                 isTurnAround = true;
                 animator.SetTrigger($"Move Reverse");
             }
 
-            //Set last direction for Animation Idle
+            // Set last direction for Animation Idle
             if (
                 (moveInput.x != 0 || moveInput.y != 0) &&
                 (moveDirection.x == 0 || moveDirection.z == 0) || isTurnAround
@@ -150,21 +148,16 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
                 {
                     case null when inertiaMoveInput != Vector2.zero:
                         currentSpeed = !stillRunning ? moveSpeed : moveSpeed * boostMultiplier;
-                        Debug.Log($">>current_speed<< {currentSpeed} {inertiaMoveInput}");
                         break;
                     case <= 0:
                         multiplier = 0;
-                        if (!isTurnAround)
-                        {
-                            isMoving = false;
-                            inertiaMoveInput = Vector2.zero;
-                            lastInput = moveInput;
-                        }
-
+                        if (isTurnAround) return;
+                        isMoving = false;
+                        inertiaMoveInput = Vector2.zero;
+                        lastInput = moveInput;
                         break;
                     case > 0 when currentSpeed != null:
                         currentSpeed -= !stillRunning ? 0.005f : 0.002f;
-                        Debug.Log($">>current_speed<< {currentSpeed}");
                         multiplier = currentSpeed.Value;
                         break;
                 }
@@ -172,11 +165,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
             }
 
 
-            var targetMove = new Vector3(
-                moveDirection.x * multiplier,
-                moveDirection.y,
-                moveDirection.z * multiplier
-            );
+            var targetMove = new Vector3(moveDirection.x * multiplier, moveDirection.y, moveDirection.z * multiplier);
             cc.Move(targetMove);
 
             FlipSprite();
@@ -226,21 +215,9 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
                 }
             }
         }
-        
-        void OnGUI()
-        {
-            if (Application.isEditor)  // or check the app debug flag
-            {
-                GUI.Label(new Rect(0, 0, 300, 300), $"turn_around={isTurnAround}\nmove_input={moveInput}\ninertia={inertiaMoveInput}\naa={aa}");
-            }
-        }
-
-        private string aa = "";
 
         private void ResetTurnAround()
         {
-            aa = "yo";
-            Debug.Log($">>reset_turn_around<<");
             isTurnAround = false;
             inertiaMoveInput = Vector2.zero;
             lastInput = moveInput;
