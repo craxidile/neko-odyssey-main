@@ -102,19 +102,6 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
                 animator.SetTrigger($"Move Reverse");
             }
 
-            if (isTurnAround)
-            {
-                if (turningTimerCounter > 0)
-                {
-                    turningTimerCounter -= Time.deltaTime;
-                    Debug.Log($">>turn_around<< counter {turningTimerCounter}");
-                }
-                else
-                {
-                    isTurnAround = false;
-                }
-            }
-
             //Set last direction for Animation Idle
             if (
                 (moveInput.x != 0 || moveInput.y != 0) &&
@@ -136,6 +123,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
             {
                 moveDirection = new Vector3(moveInput.x, 0f, moveInput.y).normalized;
             }
+
             moveDirection = cameraTransform.forward * moveDirection.z + cameraTransform.right * moveDirection.x;
             if (cc.isGrounded && moveDirection.y < 0.0f)
             {
@@ -166,9 +154,13 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
                         break;
                     case <= 0:
                         multiplier = 0;
-                        isMoving = false;
-                        inertiaMoveInput = Vector2.zero;
-                        lastInput = moveInput;
+                        if (!isTurnAround)
+                        {
+                            isMoving = false;
+                            inertiaMoveInput = Vector2.zero;
+                            lastInput = moveInput;
+                        }
+
                         break;
                     case > 0 when currentSpeed != null:
                         currentSpeed -= !stillRunning ? 0.005f : 0.002f;
@@ -234,14 +226,27 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
                 }
             }
         }
+        
+        void OnGUI()
+        {
+            if (Application.isEditor)  // or check the app debug flag
+            {
+                GUI.Label(new Rect(0, 0, 300, 300), $"turn_around={isTurnAround}\nmove_input={moveInput}\ninertia={inertiaMoveInput}\naa={aa}");
+            }
+        }
+
+        private string aa = "";
 
         private void ResetTurnAround()
         {
+            aa = "yo";
             Debug.Log($">>reset_turn_around<<");
-            FlipSprite();
-            if (!isTurnAround) return;
             isTurnAround = false;
-            animator.ResetTrigger($"Move Reverse");
+            inertiaMoveInput = Vector2.zero;
+            lastInput = moveInput;
+            AnimationsUpdate();
+            FlipSprite();
+            // animator.ResetTrigger($"Move Reverse");
         }
     }
 }
