@@ -16,7 +16,6 @@ namespace NekoOdyssey.Scripts.Game.Unity
                 "player"
             );
             Debug.Log($">>bundle_path<< 02 {bundlePath} {System.IO.File.Exists(bundlePath)}");
-            GameObject go = null;
             if (System.IO.File.Exists(bundlePath))
             {
                 var request = AssetBundle.LoadFromFileAsync(bundlePath);
@@ -25,7 +24,7 @@ namespace NekoOdyssey.Scripts.Game.Unity
                 Debug.Log($">>player<< {player}");
                 if (player != null)
                 {
-                    go = Instantiate(player) as GameObject;
+                    Instantiate(player);
                 }
 
                 var bundle = request.assetBundle;
