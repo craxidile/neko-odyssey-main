@@ -38,6 +38,7 @@ namespace NekoOdyssey.Scripts.Game.Unity
             if (!Application.isEditor)
             {
                 SceneManager.LoadScene($"Neko2", LoadSceneMode.Additive);
+                SceneManager.LoadScene($"Neko08", LoadSceneMode.Additive);
                 SceneManager.LoadScene($"SkyBox", LoadSceneMode.Additive);
                 SceneManager.LoadScene($"NekoRoad", LoadSceneMode.Additive);
             }
