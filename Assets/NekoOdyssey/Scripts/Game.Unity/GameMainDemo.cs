@@ -35,14 +35,6 @@ namespace NekoOdyssey.Scripts.Game.Unity
 
         private async void Awake()
         {
-            if (!Application.isEditor)
-            {
-                SceneManager.LoadScene($"Neko2", LoadSceneMode.Additive);
-                SceneManager.LoadScene($"SkyBox", LoadSceneMode.Additive);
-                SceneManager.LoadScene($"NekoRoad", LoadSceneMode.Additive);
-                // SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex(0));
-            }
-
             StartCoroutine(LoadBundle());
         }
     }
