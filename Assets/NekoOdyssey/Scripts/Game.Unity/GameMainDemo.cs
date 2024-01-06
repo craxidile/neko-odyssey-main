@@ -6,8 +6,12 @@ using UnityEngine.SceneManagement;
 
 namespace NekoOdyssey.Scripts.Game.Unity
 {
+    
     public class GameMainDemo : MonoBehaviour
     {
+        
+        private GameObject _player;
+        
         private IEnumerator LoadBundle()
         {
             var bundlePath = System.IO.Path.Combine(
@@ -24,7 +28,7 @@ namespace NekoOdyssey.Scripts.Game.Unity
                 Debug.Log($">>player<< {player}");
                 if (player != null)
                 {
-                    Instantiate(player);
+                    _player = Instantiate(player) as GameObject;
                 }
 
                 var bundle = request.assetBundle;
@@ -35,6 +39,19 @@ namespace NekoOdyssey.Scripts.Game.Unity
         private async void Awake()
         {
             StartCoroutine(LoadBundle());
+        }
+
+        
+        private void Update()
+        {
+            var playerPosition = _player.transform.position;
+            var cameraPosition = new Vector3(
+                playerPosition.x - 5.27125f,
+                playerPosition.y + 1,
+                Math.Max(-31.083f, Math.Min(-20.218f, playerPosition.z))
+            );
+            if (Camera.main == null) return;
+            Camera.main.transform.position = cameraPosition;
         }
     }
 }
