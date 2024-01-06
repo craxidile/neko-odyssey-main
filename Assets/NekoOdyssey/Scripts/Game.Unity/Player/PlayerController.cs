@@ -22,6 +22,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
 
         private Vector2 moveInput;
         private Vector2 lastInput;
+        private Vector2 standInput;
         private Vector3 moveDirection;
 
         private SpriteRenderer sprite;
@@ -66,8 +67,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
         private void Update()
         {
             RotateSprite();
-            RunMode();
             AnimationsUpdate();
+            RunMode();
         }
 
 
@@ -89,24 +90,28 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
         {
             // Input
             moveInput = playerControls.Player.Movement.ReadValue<Vector2>();
-            var directionChanged = (int)lastInput.x == (int)-moveInput.x;
+            var aa = moveInput;
+            var bb = lastInput;
+            var directionChanged = (int)moveInput.x != 0 && (int)lastInput.x != 0 && (int)lastInput.x == (int)-moveInput.x;
 
             // Turn Around
-            if (!isTurnAround && moveInput.x != 0 && directionChanged)
+            if (!isTurnAround && stillRunning && directionChanged)
             {
-                turningTimerCounter = stillRunning ? 0.6f : 0.4f;
-                stopMove = true;
+                Debug.Log($">>turn_around<< {(int)aa.x} {(int)aa.x != 0} {(int)bb.x} {(int)bb.x != 0} {(int)aa.x != 0 && (int)bb.x != 0 && (int)aa.x == (int)-bb.x} {directionChanged}");
+                // stopMove = true;
                 isTurnAround = true;
                 animator.SetTrigger($"Move Reverse");
             }
 
             // Set last direction for Animation Idle
-            if (
-                (moveInput.x != 0 || moveInput.y != 0) &&
-                (moveDirection.x == 0 || moveDirection.z == 0) || isTurnAround
-            )
+            if (moveInput.x != 0 || moveInput.y != 0)
             {
                 lastInput = moveInput;
+            }
+
+            if (moveInput.x != 0 || moveInput.y != 0)
+            {
+                standInput = moveInput;
             }
 
             if (Camera.main == null) return;
@@ -177,6 +182,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
             animator.SetFloat($"Input Y", inertiaMoveInput != Vector2.zero ? inertiaMoveInput.y : moveInput.y);
             animator.SetFloat($"Last Input X", lastInput.x);
             animator.SetFloat($"Last Input Y", lastInput.y);
+            animator.SetFloat($"Stand Input X", standInput.x);
+            animator.SetFloat($"Stand Input Y", standInput.y);
             animator.SetBool($"Move", isMoving || inertiaMoveInput != Vector2.zero);
             animator.SetBool($"Run", stillRunning);
             // animator.SetBool($"Stop Move", stopMove);
