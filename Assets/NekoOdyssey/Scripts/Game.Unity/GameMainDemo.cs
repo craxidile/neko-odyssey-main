@@ -16,7 +16,6 @@ namespace NekoOdyssey.Scripts.Game.Unity
                 "player"
             );
             Debug.Log($">>bundle_path<< 02 {bundlePath} {System.IO.File.Exists(bundlePath)}");
-            GameObject go = null;
             if (System.IO.File.Exists(bundlePath))
             {
                 var request = AssetBundle.LoadFromFileAsync(bundlePath);
@@ -25,7 +24,7 @@ namespace NekoOdyssey.Scripts.Game.Unity
                 Debug.Log($">>player<< {player}");
                 if (player != null)
                 {
-                    go = Instantiate(player) as GameObject;
+                    Instantiate(player);
                 }
 
                 var bundle = request.assetBundle;
@@ -35,15 +34,6 @@ namespace NekoOdyssey.Scripts.Game.Unity
 
         private async void Awake()
         {
-            if (!Application.isEditor)
-            {
-                SceneManager.LoadScene($"Neko2", LoadSceneMode.Additive);
-                SceneManager.LoadScene($"Neko08", LoadSceneMode.Additive);
-                SceneManager.LoadScene($"SkyBox", LoadSceneMode.Additive);
-                SceneManager.LoadScene($"NekoRoad", LoadSceneMode.Additive);
-                SceneManager.LoadScene($"CatScene", LoadSceneMode.Additive);
-            }
-
             StartCoroutine(LoadBundle());
         }
     }
