@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Linq;
+using Cinemachine;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -34,6 +35,13 @@ namespace NekoOdyssey.Scripts.Game.Unity
                 var bundle = request.assetBundle;
                 Debug.Log($">>bundle_loaded<< 01 {bundle}");
             }
+            
+            if (!_player) yield break;
+            Debug.Log($">>follow<<");
+            var camera = Camera.main.transform.gameObject;
+            var virtualCamera = camera.GetComponent<CinemachineVirtualCamera>();
+            virtualCamera.Follow = _player.transform;
+            virtualCamera.LookAt = _player.transform;
         }
 
         private async void Awake()
@@ -44,14 +52,14 @@ namespace NekoOdyssey.Scripts.Game.Unity
         
         private void Update()
         {
-            var playerPosition = _player.transform.position;
-            var cameraPosition = new Vector3(
-                playerPosition.x - 5.27125f,
-                playerPosition.y + 1,
-                playerPosition.z
-            );
-            if (Camera.main == null) return;
-            Camera.main.transform.position = cameraPosition;
+            // var playerPosition = _player.transform.position;
+            // var cameraPosition = new Vector3(
+            //     playerPosition.x - 5.27125f,
+            //     playerPosition.y + 1,
+            //     playerPosition.z // Math.Max(-36.42f, Math.Min(-16.82f, playerPosition.z))
+            // );
+            // if (Camera.main == null) return;
+            // Camera.main.transform.position = cameraPosition;
         }
     }
 }
