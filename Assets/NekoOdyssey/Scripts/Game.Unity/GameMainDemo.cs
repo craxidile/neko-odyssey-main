@@ -48,7 +48,7 @@ namespace NekoOdyssey.Scripts.Game.Unity
             var cameraPosition = new Vector3(
                 playerPosition.x - 5.27125f,
                 playerPosition.y + 1,
-                Math.Max(-31.083f, Math.Min(-20.218f, playerPosition.z))
+                playerPosition.z
             );
             if (Camera.main == null) return;
             Camera.main.transform.position = cameraPosition;
