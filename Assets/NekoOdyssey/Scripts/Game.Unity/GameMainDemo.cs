@@ -46,20 +46,8 @@ namespace NekoOdyssey.Scripts.Game.Unity
 
         private async void Awake()
         {
-            StartCoroutine(LoadBundle());
+            // StartCoroutine(LoadBundle());
         }
-
         
-        private void Update()
-        {
-            // var playerPosition = _player.transform.position;
-            // var cameraPosition = new Vector3(
-            //     playerPosition.x - 5.27125f,
-            //     playerPosition.y + 1,
-            //     playerPosition.z // Math.Max(-36.42f, Math.Min(-16.82f, playerPosition.z))
-            // );
-            // if (Camera.main == null) return;
-            // Camera.main.transform.position = cameraPosition;
-        }
     }
 }
