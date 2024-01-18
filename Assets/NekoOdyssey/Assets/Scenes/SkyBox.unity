@@ -131,7 +131,7 @@ GameObject:
   - component: {fileID: 257275631}
   - component: {fileID: 257275630}
   m_Layer: 0
-  m_Name: Directional Light
+  m_Name: Daylight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -158,7 +158,7 @@ Light:
     m_Type: 2
     m_Resolution: 2
     m_CustomResolution: -1
-    m_Strength: 0.4
+    m_Strength: 0.6
     m_Bias: 0
     m_NormalBias: 0.28
     m_NearPlane: 2.57
@@ -228,12 +228,12 @@ GameObject:
   - component: {fileID: 291010949}
   - component: {fileID: 291010948}
   m_Layer: 0
-  m_Name: Directional Light (2)
+  m_Name: Daylight support
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &291010948
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -343,13 +343,13 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 0.79
+  m_Intensity: 0.5
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 2
+    m_Type: 0
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 0.3
@@ -401,13 +401,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 291010947}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.65010166, y: -0.18862419, z: 0.654025, w: 0.33769813}
+  m_LocalRotation: {x: 0.49908534, y: -0.25502524, z: 0.77543193, w: 0.29082873}
   m_LocalPosition: {x: 14.27, y: 3.840001, z: -22.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 43.299, y: 83.406, z: 164.338}
+  m_LocalEulerAnglesHint: {x: 43.299, y: 59.283, z: 164.338}
 --- !u!1 &457694137
 GameObject:
   m_ObjectHideFlags: 0
@@ -665,8 +665,8 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 291010952}
   - {fileID: 257275631}
+  - {fileID: 291010952}
   - {fileID: 1887314828}
   - {fileID: 1198413700}
   - {fileID: 457694139}
