@@ -13,53 +13,41 @@ namespace NekoOdyssey.Scripts.Game.Unity
         
         private GameObject _player;
         
-        private IEnumerator LoadBundle()
-        {
-            var bundlePath = System.IO.Path.Combine(
-                Application.streamingAssetsPath,
-                "SwitchAssetBundles",
-                "player"
-            );
-            Debug.Log($">>bundle_path<< 02 {bundlePath} {System.IO.File.Exists(bundlePath)}");
-            if (System.IO.File.Exists(bundlePath))
-            {
-                var request = AssetBundle.LoadFromFileAsync(bundlePath);
-                yield return request;
-                var player = request.assetBundle.LoadAllAssets().FirstOrDefault();
-                Debug.Log($">>player<< {player}");
-                if (player != null)
-                {
-                    _player = Instantiate(player) as GameObject;
-                }
-
-                var bundle = request.assetBundle;
-                Debug.Log($">>bundle_loaded<< 01 {bundle}");
-            }
-            
-            if (!_player) yield break;
-            Debug.Log($">>follow<<");
-            var camera = Camera.main.transform.gameObject;
-            var virtualCamera = camera.GetComponent<CinemachineVirtualCamera>();
-            virtualCamera.Follow = _player.transform;
-            virtualCamera.LookAt = _player.transform;
-        }
+        // private IEnumerator LoadBundle()
+        // {
+        //     var bundlePath = System.IO.Path.Combine(
+        //         Application.streamingAssetsPath,
+        //         "SwitchAssetBundles",
+        //         "player"
+        //     );
+        //     Debug.Log($">>bundle_path<< 02 {bundlePath} {System.IO.File.Exists(bundlePath)}");
+        //     if (System.IO.File.Exists(bundlePath))
+        //     {
+        //         var request = AssetBundle.LoadFromFileAsync(bundlePath);
+        //         yield return request;
+        //         var player = request.assetBundle.LoadAllAssets().FirstOrDefault();
+        //         Debug.Log($">>player<< {player}");
+        //         if (player != null)
+        //         {
+        //             _player = Instantiate(player) as GameObject;
+        //         }
+        //
+        //         var bundle = request.assetBundle;
+        //         Debug.Log($">>bundle_loaded<< 01 {bundle}");
+        //     }
+        //     
+        //     if (!_player) yield break;
+        //     Debug.Log($">>follow<<");
+        //     var camera = Camera.main.transform.gameObject;
+        //     var virtualCamera = camera.GetComponent<CinemachineVirtualCamera>();
+        //     virtualCamera.Follow = _player.transform;
+        //     virtualCamera.LookAt = _player.transform;
+        // }
 
         private async void Awake()
         {
-            StartCoroutine(LoadBundle());
+            // StartCoroutine(LoadBundle());
         }
-
         
-        private void Update()
-        {
-            // var playerPosition = _player.transform.position;
-            // var cameraPosition = new Vector3(
-            //     playerPosition.x - 5.27125f,
-            //     playerPosition.y + 1,
-            //     playerPosition.z // Math.Max(-36.42f, Math.Min(-16.82f, playerPosition.z))
-            // );
-            // if (Camera.main == null) return;
-            // Camera.main.transform.position = cameraPosition;
-        }
     }
 }

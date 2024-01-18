@@ -62,6 +62,24 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Phone"",
+                    ""type"": ""Button"",
+                    ""id"": ""94ffc241-baa1-4ce7-b702-c2ea10ec2879"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Bag"",
+                    ""type"": ""Button"",
+                    ""id"": ""2f49be68-6c61-41d9-90cd-565ea152f507"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -238,6 +256,28 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Run"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a90b7888-2504-49ad-8139-9cebef8ab741"",
+                    ""path"": ""<Keyboard>/#(2)"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Phone"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7c5ef9bb-fdac-4922-9bde-70870daf9e41"",
+                    ""path"": ""<Keyboard>/#(3)"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Bag"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -829,6 +869,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_Action = m_Player.FindAction("Action", throwIfNotFound: true);
         m_Player_Run = m_Player.FindAction("Run", throwIfNotFound: true);
         m_Player_Crouch = m_Player.FindAction("Crouch", throwIfNotFound: true);
+        m_Player_Phone = m_Player.FindAction("Phone", throwIfNotFound: true);
+        m_Player_Bag = m_Player.FindAction("Bag", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -906,6 +948,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Action;
     private readonly InputAction m_Player_Run;
     private readonly InputAction m_Player_Crouch;
+    private readonly InputAction m_Player_Phone;
+    private readonly InputAction m_Player_Bag;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -914,6 +958,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @Action => m_Wrapper.m_Player_Action;
         public InputAction @Run => m_Wrapper.m_Player_Run;
         public InputAction @Crouch => m_Wrapper.m_Player_Crouch;
+        public InputAction @Phone => m_Wrapper.m_Player_Phone;
+        public InputAction @Bag => m_Wrapper.m_Player_Bag;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -935,6 +981,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Crouch.started += instance.OnCrouch;
             @Crouch.performed += instance.OnCrouch;
             @Crouch.canceled += instance.OnCrouch;
+            @Phone.started += instance.OnPhone;
+            @Phone.performed += instance.OnPhone;
+            @Phone.canceled += instance.OnPhone;
+            @Bag.started += instance.OnBag;
+            @Bag.performed += instance.OnBag;
+            @Bag.canceled += instance.OnBag;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -951,6 +1003,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Crouch.started -= instance.OnCrouch;
             @Crouch.performed -= instance.OnCrouch;
             @Crouch.canceled -= instance.OnCrouch;
+            @Phone.started -= instance.OnPhone;
+            @Phone.performed -= instance.OnPhone;
+            @Phone.canceled -= instance.OnPhone;
+            @Bag.started -= instance.OnBag;
+            @Bag.performed -= instance.OnBag;
+            @Bag.canceled -= instance.OnBag;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1137,6 +1195,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnAction(InputAction.CallbackContext context);
         void OnRun(InputAction.CallbackContext context);
         void OnCrouch(InputAction.CallbackContext context);
+        void OnPhone(InputAction.CallbackContext context);
+        void OnBag(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
