@@ -1,7 +1,7 @@
 ﻿using System;
-using NekoOdyssey.Scripts.Game.Unity.Game.Core;
-using UniRx;
 using UnityEngine;
+using UniRx;
+using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 
 namespace NekoOdyssey.Scripts.Game.Unity.Player
 {
