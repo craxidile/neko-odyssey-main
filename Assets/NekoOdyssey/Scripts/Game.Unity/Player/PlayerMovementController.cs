@@ -2,7 +2,6 @@
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 using UniRx;
 using UniRx.Triggers;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 
 namespace NekoOdyssey.Scripts.Game.Unity.Player
