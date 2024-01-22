@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Serialization;
 
 namespace NekoOdyssey.Scripts.Game.Unity.Cameras.FrostedGlass
 {
@@ -8,7 +9,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Cameras.FrostedGlass
     [RequireComponent(typeof(UnityEngine.Camera))]
     public class CommandBufferBlur : MonoBehaviour
     {
-        Shader _Shader;
+        public Shader shader;
 
         Material _Material = null;
 
@@ -49,17 +50,17 @@ namespace NekoOdyssey.Scripts.Game.Unity.Cameras.FrostedGlass
             if (Initialized)
                 return;
 
-            if (!_Shader)
-            {
-                _Shader = Shader.Find("Hidden/SeparableGlassBlur");
-
-                if (!_Shader)
-                    throw new MissingReferenceException("Unable to find required shader \"Hidden/SeparableGlassBlur\"");
-            }
+            // if (!_Shader)
+            // {
+            //     _Shader = Shader.Find("Hidden/SeparableGlassBlur");
+            //
+            //     if (!_Shader)
+            //         throw new MissingReferenceException("Unable to find required shader \"Hidden/SeparableGlassBlur\"");
+            // }
 
             if (!_Material)
             {
-                _Material = new Material(_Shader);
+                _Material = new Material(shader);
                 _Material.hideFlags = HideFlags.HideAndDontSave;
             }
 
