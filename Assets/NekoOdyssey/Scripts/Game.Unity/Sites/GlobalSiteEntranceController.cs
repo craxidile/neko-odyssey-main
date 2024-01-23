@@ -16,6 +16,9 @@ namespace NekoOdyssey.Scripts.Game.Unity.Sites
 
         private void HandlePlayerMenuAction(PlayerMenuAction action)
         {
+            
+            if (action != PlayerMenuAction.Enter && action != PlayerMenuAction.Exit) return;
+            
             GameRunner.Instance.GameCore.GameScene.CloseScene();
             
             if (action == PlayerMenuAction.Exit)
@@ -31,8 +34,6 @@ namespace NekoOdyssey.Scripts.Game.Unity.Sites
                 });
                 return;
             }
-
-            if (action != PlayerMenuAction.Enter) return;
 
             string sceneName = null;
             switch (GameRunner.Instance.GameCore.PlayerMenu.Site)
