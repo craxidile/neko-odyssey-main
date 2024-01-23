@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using DG.Tweening;
 using UniRx;
 using NekoOdyssey.Scripts.Game.Core.PlayerMenu;
 using UnityEngine;
@@ -26,16 +27,31 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
 
         private void Awake()
         {
-            GameRunner.Instance.OnReady.Subscribe(ready =>
+            DOVirtual.DelayedCall(1f, () =>
             {
-                Debug.Log($">>player_menu_ready<< {ready}");
-                if (!ready) return;
-                for (var i = 0; i < availableActions.Length; i++)
+                Debug.Log($">>player_menu_ready<< awake");
+                if (GameRunner.Instance.Ready)
                 {
-                    var action = availableActions[i];
-                    StartCoroutine(CreateActionBanner(action, i, availableActions.Length));
+                    LoadBanners();
+                }
+                else
+                {
+                    GameRunner.Instance.OnReady.Subscribe(ready =>
+                    {
+                        if (!ready) return;
+                        LoadBanners();
+                    });
                 }
             });
+        }
+
+        private void LoadBanners()
+        {
+            for (var i = 0; i < availableActions.Length; i++)
+            {
+                var action = availableActions[i];
+                StartCoroutine(CreateActionBanner(action, i, availableActions.Length));
+            }
         }
 
         private void Start()
@@ -109,17 +125,21 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
             const float originalGap = 0.4f;
             const float gap = scale * originalGap;
             var originalPosition = new Vector3(0, 0, -gap * (length - 1) / 2);
+            Debug.Log($">>banner_01<<");
 
             if (action == PlayerMenuAction.None) yield break;
             var actionName = Enum.GetName(typeof(PlayerMenuAction), action);
             var bundleName = $"{actionName.ToLower()}action";
+            Debug.Log($">>banner_02<<");
 
             if (!GameRunner.Instance.AssetMap.ContainsKey(bundleName)) yield break;
             var bannerAsset = GameRunner.Instance.AssetMap[bundleName];
+            Debug.Log($">>banner_03<<");
 
             if (bannerAsset == null) yield break;
             var banner = Instantiate(bannerAsset, transform) as GameObject;
             if (banner == null) yield break;
+            Debug.Log($">>banner_04<<");
 
             var order = length - 1 - index;
             banner.transform.localPosition = originalPosition + new Vector3(0, 0, order * gap);

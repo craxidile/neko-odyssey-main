@@ -16,13 +16,23 @@ namespace NekoOdyssey.Scripts.Game.Unity.Sites
 
         private void HandlePlayerMenuAction(PlayerMenuAction action)
         {
+            GameRunner.Instance.GameCore.GameScene.CloseScene();
+            
             if (action == PlayerMenuAction.Exit)
             {
+                DOVirtual.DelayedCall(1.5f, () =>
+                {
+                    SceneManager.LoadScene($"Neko2", LoadSceneMode.Single);
+                    SceneManager.LoadScene($"Neko08", LoadSceneMode.Additive);
+                    SceneManager.LoadScene($"CatScene", LoadSceneMode.Additive);
+                    SceneManager.LoadScene($"SkyBox", LoadSceneMode.Additive);
+                    SceneManager.LoadScene($"NekoRoad", LoadSceneMode.Additive);
+                    SceneManager.LoadScene($"GameMain", LoadSceneMode.Additive);
+                });
                 return;
             }
 
             if (action != PlayerMenuAction.Enter) return;
-            GameRunner.Instance.GameCore.GameScene.CloseScene();
 
             string sceneName = null;
             switch (GameRunner.Instance.GameCore.PlayerMenu.Site)

@@ -28,11 +28,13 @@ namespace NekoOdyssey.Scripts.Game.Unity
         public PlayerInputHandler PlayerInputHandler { get; private set; }
         public UiInputHandler UiInputHandler { get; private set; }
         public Dictionary<string, Object> AssetMap { get; } = new();
+        public bool Ready { get; private set; } = false;
         public Subject<bool> OnReady { get; } = new();
 
         public GameRunner()
         {
             Instance = this;
+            Debug.Log($">>game_runner<< ctor");
         }
 
         private void Awake()
@@ -50,6 +52,7 @@ namespace NekoOdyssey.Scripts.Game.Unity
         public void SetReady(bool ready)
         {
             Debug.Log($">>ready<< {ready}");
+            Ready = ready;
             OnReady.OnNext(ready);
         }
 
