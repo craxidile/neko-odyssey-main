@@ -1,4 +1,5 @@
 ﻿using System;
+using DG.Tweening;
 using UniRx;
 using NekoOdyssey.Scripts.Game.Core.PlayerMenu;
 using UnityEngine;
@@ -47,8 +48,12 @@ namespace NekoOdyssey.Scripts.Game.Unity.Sites
             }
 
             if (sceneName == null) return;
-            
-            SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
+
+            DOVirtual.DelayedCall(2, () =>
+            {
+                SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
+                SceneManager.LoadScene($"GameMain", LoadSceneMode.Additive);
+            });
         }
     }
 }

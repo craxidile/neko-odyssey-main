@@ -8,13 +8,10 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
 {
     public class PlayerController : MonoBehaviour
     {
-        [Header("Game Objects")]
-        public GameObject blurPlane;
+        [Header("Game Objects")] public GameObject blurPlane;
         public GameObject phoneScreen;
 
-        [Space]
-        [Header("Movement Speed")]
-        public float moveSpeed = 1.5f;
+        [Space] [Header("Movement Speed")] public float moveSpeed = 1.5f;
         public float boostMultiplier = 1.5f;
         public float gravity = -9.81f;
         [SerializeField] public float gravityMultiplier = 1; // 3.0f;
@@ -27,6 +24,15 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
             GameRunner.Instance.GameCore.Player.GameObject = gameObject;
             _movementController = gameObject.AddComponent<PlayerMovementController>();
             _phoneController = gameObject.AddComponent<PlayerPhoneController>();
+        }
+
+        private void Start()
+        {
+            var playerAnchor = FindAnyObjectByType<PlayerAnchor>();
+            if (playerAnchor != null && Camera.main != null)
+            {
+                transform.position = playerAnchor.transform.position;
+            }
         }
 
         private void ResetTurnAround()

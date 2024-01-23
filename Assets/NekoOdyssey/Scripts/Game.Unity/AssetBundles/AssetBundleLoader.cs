@@ -53,5 +53,10 @@ namespace NekoOdyssey.Scripts.Game.Unity.AssetBundles
             Debug.Log($">>loaded<< {_loadedAssetCount} / {length}");
             if (_loadedAssetCount == length) GameRunner.Instance.SetReady(true);
         }
+
+        private void OnDestroy()
+        {
+            AssetBundle.UnloadAllAssetBundles(true);
+        }
     }
 }
