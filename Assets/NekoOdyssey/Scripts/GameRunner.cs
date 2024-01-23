@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using NekoOdyssey.Scripts.Game.Core;
+using NekoOdyssey.Scripts.Game.Unity.AssetBundles;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 using UnityEngine;
 using UniRx;
 using NekoOdyssey.Scripts.Game.Unity.Inputs;
+using NekoOdyssey.Scripts.Game.Unity.Sites;
 using Unity.VisualScripting;
+using Object = UnityEngine.Object;
 
 namespace NekoOdyssey.Scripts.Game.Unity
 {
@@ -18,7 +22,9 @@ namespace NekoOdyssey.Scripts.Game.Unity
 
         public PlayerInputHandler PlayerInputHandler { get; private set; }
         public UiInputHandler UiInputHandler { get; private set; }
-
+        public Dictionary<string, Object> AssetMap { get; } = new();
+        public Subject<bool> OnReady { get; } = new();
+        
         public GameRunner()
         {
             Instance = this;
@@ -29,10 +35,19 @@ namespace NekoOdyssey.Scripts.Game.Unity
             _inputActions = new PlayerInputActions();
             PlayerInputHandler = gameObject.AddComponent<PlayerInputHandler>();
             PlayerInputHandler.InputActions = _inputActions;
+
+            gameObject.AddComponent<GlobalSiteEntranceController>();
+            gameObject.AddComponent<AssetBundleLoader>();
             
             GameCore.Bind();
         }
 
+        public void SetReady(bool ready)
+        {
+            Debug.Log($">>ready<< {ready}");
+            OnReady.OnNext(ready);
+        }
+        
         private void Start()
         {
             GameCore.Start();

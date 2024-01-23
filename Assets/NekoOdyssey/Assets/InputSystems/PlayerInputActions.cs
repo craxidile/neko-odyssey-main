@@ -80,6 +80,33 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""NextMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""0745e2fc-d7ef-4909-a57a-8220255aa3f3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PrevMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""6ff1e118-6765-4bbf-a21d-783cac23294a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Fire"",
+                    ""type"": ""Button"",
+                    ""id"": ""8d194a38-139c-4c47-8262-85866b3d27ae"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -278,6 +305,50 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Bag"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cd684207-e017-484a-b82d-ed1d812ab3db"",
+                    ""path"": ""<Keyboard>/#(.)"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ff96c83b-7655-4ee7-9261-733fe040d563"",
+                    ""path"": ""<Keyboard>/#(,)"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PrevMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8c113f6e-ee1c-45e9-88f0-ac29fb8fc7a5"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Fire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ce9852c7-afb4-4543-96d7-0e391b3ae6be"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Fire"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -871,6 +942,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_Crouch = m_Player.FindAction("Crouch", throwIfNotFound: true);
         m_Player_Phone = m_Player.FindAction("Phone", throwIfNotFound: true);
         m_Player_Bag = m_Player.FindAction("Bag", throwIfNotFound: true);
+        m_Player_NextMenu = m_Player.FindAction("NextMenu", throwIfNotFound: true);
+        m_Player_PrevMenu = m_Player.FindAction("PrevMenu", throwIfNotFound: true);
+        m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -950,6 +1024,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Crouch;
     private readonly InputAction m_Player_Phone;
     private readonly InputAction m_Player_Bag;
+    private readonly InputAction m_Player_NextMenu;
+    private readonly InputAction m_Player_PrevMenu;
+    private readonly InputAction m_Player_Fire;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -960,6 +1037,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @Crouch => m_Wrapper.m_Player_Crouch;
         public InputAction @Phone => m_Wrapper.m_Player_Phone;
         public InputAction @Bag => m_Wrapper.m_Player_Bag;
+        public InputAction @NextMenu => m_Wrapper.m_Player_NextMenu;
+        public InputAction @PrevMenu => m_Wrapper.m_Player_PrevMenu;
+        public InputAction @Fire => m_Wrapper.m_Player_Fire;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -987,6 +1067,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Bag.started += instance.OnBag;
             @Bag.performed += instance.OnBag;
             @Bag.canceled += instance.OnBag;
+            @NextMenu.started += instance.OnNextMenu;
+            @NextMenu.performed += instance.OnNextMenu;
+            @NextMenu.canceled += instance.OnNextMenu;
+            @PrevMenu.started += instance.OnPrevMenu;
+            @PrevMenu.performed += instance.OnPrevMenu;
+            @PrevMenu.canceled += instance.OnPrevMenu;
+            @Fire.started += instance.OnFire;
+            @Fire.performed += instance.OnFire;
+            @Fire.canceled += instance.OnFire;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1009,6 +1098,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Bag.started -= instance.OnBag;
             @Bag.performed -= instance.OnBag;
             @Bag.canceled -= instance.OnBag;
+            @NextMenu.started -= instance.OnNextMenu;
+            @NextMenu.performed -= instance.OnNextMenu;
+            @NextMenu.canceled -= instance.OnNextMenu;
+            @PrevMenu.started -= instance.OnPrevMenu;
+            @PrevMenu.performed -= instance.OnPrevMenu;
+            @PrevMenu.canceled -= instance.OnPrevMenu;
+            @Fire.started -= instance.OnFire;
+            @Fire.performed -= instance.OnFire;
+            @Fire.canceled -= instance.OnFire;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1197,6 +1295,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnCrouch(InputAction.CallbackContext context);
         void OnPhone(InputAction.CallbackContext context);
         void OnBag(InputAction.CallbackContext context);
+        void OnNextMenu(InputAction.CallbackContext context);
+        void OnPrevMenu(InputAction.CallbackContext context);
+        void OnFire(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

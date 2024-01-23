@@ -4,6 +4,7 @@
     {
         Move,
         Phone,
-        Bag
+        Bag,
+        Menu,
     }
 }
