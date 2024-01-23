@@ -255,6 +255,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""73e3cfb1-09d9-42a1-afc0-9eb7d2dc9f74"",
+                    ""path"": ""<Gamepad>/dpad"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""0bac5267-a1c0-4fc1-b767-00672ab61c60"",
                     ""path"": ""<Keyboard>/f"",
                     ""interactions"": """",
