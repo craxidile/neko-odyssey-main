@@ -55,7 +55,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Cats.N07
                     otherEvent.Clear();
                     DOVirtual.DelayedCall(0.3f, () =>
                     {
-                        GameRunner.Instance.GameCore.PlayerMenu.SetActive(true);
+                       GameRunner.Instance.GameCore.PlayerMenu.SetActive(true);
                     });
                 }
 

@@ -7,5 +7,6 @@
         Bag,
         Menu,
         Capture,
+        Conversation,
     }
 }
