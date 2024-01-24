@@ -14,9 +14,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.AssetBundles
         private void Awake()
         {
             var bundleNames = new List<string>();
-            
             bundleNames.Add($"dialogcanvas");
-            
+            bundleNames.Add($"a01sleepsnap");
             bundleNames.Add($"a01snap");
             bundleNames.Add($"a02snap");
             bundleNames.Add($"a04snap");
