@@ -10,5 +10,6 @@
         FlagShopInside19,
         BookStoreInside07,
         RamenShopInside01,
+        A06,
     }
 }

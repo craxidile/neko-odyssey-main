@@ -34,7 +34,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
         {
             var playerController = GameRunner.Instance.GameCore.Player.GameObject.GetComponent<PlayerController>();
             _phoneScreen = playerController.phoneScreen;
-            _blurPlane = playerController.blurPlane;
+            _blurPlane = playerController.phoneBlurPlane;
             _animator = playerController.GetComponent<Animator>();
             _renderer = playerController.GetComponent<SpriteRenderer>();
         }

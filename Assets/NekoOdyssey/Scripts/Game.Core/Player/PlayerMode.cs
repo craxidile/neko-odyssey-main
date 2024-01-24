@@ -6,5 +6,6 @@
         Phone,
         Bag,
         Menu,
+        Capture,
     }
 }

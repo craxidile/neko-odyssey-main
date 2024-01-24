@@ -74,6 +74,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
             Debug.Log($">>trigger_enter<< {site}");
             GameRunner.Instance.GameCore.PlayerMenu.Site = site;
             GameRunner.Instance.GameCore.PlayerMenu.SetActions(availableActions);
+            GameRunner.Instance.GameCore.PlayerMenu.GameObject = gameObject;
             if (autoActive) GameRunner.Instance.GameCore.PlayerMenu.SetActive(true);
             DisplayBanners();
         }
@@ -90,12 +91,13 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
 
         private void TriggerCurrentAction(PlayerMenuAction currentAction)
         {
+            // Debug.Log($">>compare_site<< {GameRunner.Instance.GameCore.PlayerMenu.Site} {site}");
             if (GameRunner.Instance.GameCore.PlayerMenu.Site != site) return;
             var availableActionList = availableActions.ToList();
             foreach (var action in availableActionList)
             {
                 var index = availableActionList.IndexOf(action);
-                Debug.Log($">>index<< {index} {action} {_banners.Count}");
+                // Debug.Log($">>index<< {index} {action} {_banners.Count}");
                 var banner = _banners[index];
                 if (!banner) continue;
                 var animator = banner.GetComponent<Animator>();

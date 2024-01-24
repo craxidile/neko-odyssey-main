@@ -43,6 +43,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
 
             if (!_active) return;
             _animator.SetLayerWeight(_animator.GetLayerIndex($"Phone"), 0f);
+            _animator.SetLayerWeight(_animator.GetLayerIndex($"Capture"), 0f);
         }
 
         private void Awake()
@@ -66,12 +67,14 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
 
         private void Update()
         {
+            if (GameRunner.Instance.GameCore.Player.Mode == PlayerMode.Capture) return;
             RotateSprite();
             AnimationsUpdate();
         }
 
         private void FixedUpdate()
         {
+            if (GameRunner.Instance.GameCore.Player.Mode == PlayerMode.Capture) return;
             ApplyMovement();
         }
 

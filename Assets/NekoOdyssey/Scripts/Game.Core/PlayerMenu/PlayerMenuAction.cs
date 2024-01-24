@@ -12,5 +12,6 @@
         Camera,
         Left,
         Right,
+        Pet,
     }
 }
