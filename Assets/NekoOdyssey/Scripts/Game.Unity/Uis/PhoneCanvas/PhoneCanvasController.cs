@@ -27,11 +27,17 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
         private Vector3 _endPosition;
         private CanvasGroup _canvasGroup;
         private Animator _playerAnimator;
+        private PlayerMode _previousMode;
 
         private IDisposable _playerModeChangedSubscription;
 
         private void SetActive(PlayerMode mode)
         {
+            if (_previousMode != PlayerMode.Phone && mode != PlayerMode.Phone)
+            {
+                _previousMode = mode;
+                return;
+            }
             _canvasGroup = GetComponent<CanvasGroup>();
             _playerAnimator = GameRunner.Instance.GameCore.Player.GameObject.GetComponent<Animator>();
             _active = mode == PlayerMode.Phone;
@@ -39,6 +45,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
             _positionTransitionTimeCount = 0f;
             _startPosition = (_active ? closePositionTransform : openPositionTransform).position;
             _endPosition = (_active ? openPositionTransform : closePositionTransform).position;
+            _previousMode = mode;
         }
 
         private void Awake()

@@ -28,6 +28,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Cats.N07
 
         private void HandlePlayerMenuAction(PlayerMenuAction action)
         {
+            if (GameRunner.Instance.GameCore.PlayerMenu.Site != PlayerMenuSite.A07Wall) return;
             animator.Play("TriggerState");
             GameRunner.Instance.GameCore.PlayerMenu.SetActive(false);
         }

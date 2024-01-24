@@ -1,4 +1,5 @@
 ﻿using System;
+using NekoOdyssey.Scripts.Game.Core.Player.Capture;
 using NekoOdyssey.Scripts.Game.Core.Player.Phone;
 using NekoOdyssey.Scripts.Game.Unity;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
@@ -11,7 +12,9 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
     {
         public PlayerMode Mode { get; private set; } = PlayerMode.Move;
         public bool Running { get; private set; } = false;
-        public PlayerPhone Phone { get; private set; } = new();
+        
+        public PlayerPhone Phone { get; } = new();
+        public PlayerCapture Capture { get; } = new();
             
         public GameObject GameObject { get; set; }
         
@@ -26,6 +29,13 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
         public void Bind()
         {
             Phone.Bind();
+            Capture.Bind();
+        }
+
+        public void SetMode(PlayerMode mode)
+        {
+            Mode = mode;
+            OnChangeMode.OnNext(Mode);
         }
 
         public void Start()
@@ -51,11 +61,13 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
             });
             
             Phone.Start();
+            Capture.Start();
         }
 
         public void Unbind()
         {
             Phone.Unbind();
+            Capture.Unbind();
             _phoneTriggeredSubscription.Dispose();
             _movingSubscription.Dispose();
             _runningSubscription.Dispose();

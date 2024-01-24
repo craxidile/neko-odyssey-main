@@ -3,13 +3,18 @@ using UniRx;
 using UniRx.Triggers;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace NekoOdyssey.Scripts.Game.Unity.Player
 {
     public class PlayerController : MonoBehaviour
     {
-        [Header("Game Objects")] public GameObject blurPlane;
+        [FormerlySerializedAs("blurPlane")]
+        [Header("Game Objects")]
+        public GameObject phoneBlurPlane;
         public GameObject phoneScreen;
+        public GameObject captureBlurPlane;
+        public GameObject captureScreen;
 
         [Space] [Header("Movement Speed")] public float moveSpeed = 1.5f;
         public float boostMultiplier = 1.5f;
@@ -18,12 +23,14 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
 
         private PlayerMovementController _movementController;
         private PlayerPhoneController _phoneController;
+        private PlayerCaptureController _captureController;
 
         private void Awake()
         {
             GameRunner.Instance.GameCore.Player.GameObject = gameObject;
             _movementController = gameObject.AddComponent<PlayerMovementController>();
             _phoneController = gameObject.AddComponent<PlayerPhoneController>();
+            _captureController = gameObject.AddComponent<PlayerCaptureController>();
         }
 
         private void Start()

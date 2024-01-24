@@ -6,6 +6,7 @@ using DG.Tweening;
 using NekoOdyssey.Scripts.Game.Core;
 using NekoOdyssey.Scripts.Game.Unity.AssetBundles;
 using NekoOdyssey.Scripts.Game.Unity.Cameras;
+using NekoOdyssey.Scripts.Game.Unity.Capture;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 using UnityEngine;
 using UniRx;
@@ -44,6 +45,7 @@ namespace NekoOdyssey.Scripts.Game.Unity
             PlayerInputHandler.InputActions = _inputActions;
 
             gameObject.AddComponent<GlobalSiteEntranceController>();
+            gameObject.AddComponent<GlobalCaptureActionHandler>();
             gameObject.AddComponent<AssetBundleLoader>();
 
             GameCore.Bind();

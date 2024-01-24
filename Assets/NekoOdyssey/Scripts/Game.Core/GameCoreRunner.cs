@@ -10,7 +10,7 @@ namespace NekoOdyssey.Scripts.Game.Core
         public PlayerMenu.PlayerMenu PlayerMenu { get; } = new();
 
         public GameScene GameScene { get; } = new();
-
+        
         public void Bind()
         {
             Player.Bind();

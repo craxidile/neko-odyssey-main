@@ -19,6 +19,8 @@ namespace NekoOdyssey.Scripts.Game.Core.PlayerMenu
         private IDisposable _fireTriggeredSubscription;
 
         public PlayerMenuSite Site { get; set; } = PlayerMenuSite.None;
+        
+        public GameObject GameObject { get; set; }
 
         public Subject<bool> OnActive { get; } = new();
         public Subject<PlayerMenuAction> OnChangeAction { get; } = new();
