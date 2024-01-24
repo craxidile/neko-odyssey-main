@@ -68,14 +68,14 @@ namespace NekoOdyssey.Scripts.Game.Core.PlayerMenu
             {
                 if (!_active || _actions.Length == 0) return;
                 var index = _actions.ToList().IndexOf(_currentAction);
-                index = Math.Max(0, index - 1);
+                index = Math.Min(_actions.Length - 1, index + 1);
                 SetCurrentAction(_actions[index]);
             });
             _prevMenuTriggeredSubscription = GameRunner.Instance.PlayerInputHandler.OnPrevMenuTriggerred.Subscribe(_ =>
             {
                 if (!_active || _actions.Length == 0) return;
                 var index = _actions.ToList().IndexOf(_currentAction);
-                index = Math.Min(_actions.Length - 1, index + 1);
+                index = Math.Max(0, index - 1);
                 SetCurrentAction(_actions[index]);
             });
         }
