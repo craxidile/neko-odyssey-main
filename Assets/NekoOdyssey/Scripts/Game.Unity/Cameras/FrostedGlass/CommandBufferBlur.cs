@@ -99,7 +99,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Cameras.FrostedGlass
                 _CommandBuffer.Blit(blurredID, blurredID2, _Material);
                 _CommandBuffer.SetGlobalVector("offsets", new Vector4(0, 2.0f / sizes[i].y, 0, 0));
                 _CommandBuffer.Blit(blurredID2, blurredID, _Material);
-
+                
                 _CommandBuffer.SetGlobalTexture("_GrabBlurTexture_" + i, blurredID);
             }
 
