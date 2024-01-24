@@ -11,7 +11,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
     {
         public PlayerMode Mode { get; private set; } = PlayerMode.Move;
         public bool Running { get; private set; } = false;
-        public PlayerPhone Phone { get; private set; } = new ();
+        public PlayerPhone Phone { get; private set; } = new();
             
         public GameObject GameObject { get; set; }
         

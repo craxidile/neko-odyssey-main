@@ -1,4 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using UniRx;
+using DG.Tweening;
+using NekoOdyssey.Scripts.Game.Core.PlayerMenu;
 using UnityEngine;
 
 namespace NekoOdyssey.Scripts.Game.Unity.Cats.N07
@@ -13,9 +17,19 @@ namespace NekoOdyssey.Scripts.Game.Unity.Cats.N07
         public bool haveToInteractive;
         private bool canActive;
 
+        private IDisposable _actionCommittedSubscription;
+
         void Start()
         {
             animator = GetComponent<Animator>();
+            _actionCommittedSubscription = GameRunner.Instance.GameCore.PlayerMenu.OnCommitAction
+                .Subscribe(HandlePlayerMenuAction);
+        }
+
+        private void HandlePlayerMenuAction(PlayerMenuAction action)
+        {
+            animator.Play("TriggerState");
+            GameRunner.Instance.GameCore.PlayerMenu.SetActive(false);
         }
 
         // Update is called once per frame
@@ -38,6 +52,10 @@ namespace NekoOdyssey.Scripts.Game.Unity.Cats.N07
                     }
 
                     otherEvent.Clear();
+                    DOVirtual.DelayedCall(0.3f, () =>
+                    {
+                        GameRunner.Instance.GameCore.PlayerMenu.SetActive(true);
+                    });
                 }
 
                 if (hideAfterTrigger)
