@@ -28,7 +28,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
             _active = mode == PlayerMode.Capture;
             if (!_active) return;
             _animator.SetLayerWeight(_animator.GetLayerIndex($"Capture"), 1f);
-            _renderer.flipX = false;
+            // _renderer.flipX = false;
 
             var assetBundleName = $"{GameRunner.Instance.GameCore.Player.Capture.CatCode.ToLower()}snap";
             if (_catPhoto) Destroy(_catPhoto);
