@@ -1,6 +1,7 @@
 ﻿using NekoOdyssey.Scripts.Game.Core.PlayerMenu;
 using NekoOdyssey.Scripts.Game.Unity.Capture;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
+using NekoOdyssey.Scripts.Game.Unity.SoundEffects;
 using UnityEngine;
 using UniRx;
 
@@ -19,6 +20,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Conversations
             Debug.Log($">>handle<< {action}");
             if (action != PlayerMenuAction.Information) return;
             GameRunner.Instance.GameCore.PlayerMenu.SetActive(false);
+            SoundEffectController.Instance.talk.Play();
 
             var menuGameObject = GameRunner.Instance.GameCore.PlayerMenu.GameObject;
             var attributes = menuGameObject.GetComponent<ConversationAttributes>();

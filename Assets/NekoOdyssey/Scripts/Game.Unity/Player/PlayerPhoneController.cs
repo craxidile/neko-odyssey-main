@@ -2,6 +2,7 @@
 using UnityEngine;
 using UniRx;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
+using NekoOdyssey.Scripts.Game.Unity.SoundEffects;
 
 namespace NekoOdyssey.Scripts.Game.Unity.Player
 {
@@ -24,9 +25,14 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
             _phoneScreen.SetActive(_active);
             _blurPlane.SetActive(_active);
 
-            if (!_active) return;
+            if (!_active)
+            {
+                SoundEffectController.Instance.closePhone.Play();
+                return;
+            }
             _animator.SetLayerWeight(_animator.GetLayerIndex($"Phone"), 1f);
             _renderer.flipX = false;
+            SoundEffectController.Instance.openPhone.Play();
         }
 
         

@@ -1,5 +1,7 @@
-﻿using NekoOdyssey.Scripts.Game.Core.PlayerMenu;
+﻿using DG.Tweening;
+using NekoOdyssey.Scripts.Game.Core.PlayerMenu;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
+using NekoOdyssey.Scripts.Game.Unity.SoundEffects;
 using UniRx;
 using UnityEngine;
 
@@ -17,6 +19,11 @@ namespace NekoOdyssey.Scripts.Game.Unity.Capture
 
             if (action != PlayerMenuAction.Camera) return;
             GameRunner.Instance.GameCore.PlayerMenu.SetActive(false);
+
+            DOVirtual.DelayedCall(2f, () =>
+            {
+                SoundEffectController.Instance.shutter.Play();
+            });
             
             var menuGameObject = GameRunner.Instance.GameCore.PlayerMenu.GameObject;
             var attributes = menuGameObject.GetComponent<CaptureAttributes>();
