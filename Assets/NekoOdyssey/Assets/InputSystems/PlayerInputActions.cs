@@ -107,6 +107,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Speed"",
+                    ""type"": ""Button"",
+                    ""id"": ""a3d3cd86-68f1-4a29-9a79-32dc76dc7a80"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -393,6 +402,28 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Fire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bd01001a-6bbc-4628-b113-580cd5635565"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Speed"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8f2e7e86-0744-442c-998b-ca802dbe4f9c"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Speed"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -989,6 +1020,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_NextMenu = m_Player.FindAction("NextMenu", throwIfNotFound: true);
         m_Player_PrevMenu = m_Player.FindAction("PrevMenu", throwIfNotFound: true);
         m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
+        m_Player_Speed = m_Player.FindAction("Speed", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1071,6 +1103,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_NextMenu;
     private readonly InputAction m_Player_PrevMenu;
     private readonly InputAction m_Player_Fire;
+    private readonly InputAction m_Player_Speed;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -1084,6 +1117,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @NextMenu => m_Wrapper.m_Player_NextMenu;
         public InputAction @PrevMenu => m_Wrapper.m_Player_PrevMenu;
         public InputAction @Fire => m_Wrapper.m_Player_Fire;
+        public InputAction @Speed => m_Wrapper.m_Player_Speed;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1120,6 +1154,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Fire.started += instance.OnFire;
             @Fire.performed += instance.OnFire;
             @Fire.canceled += instance.OnFire;
+            @Speed.started += instance.OnSpeed;
+            @Speed.performed += instance.OnSpeed;
+            @Speed.canceled += instance.OnSpeed;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1151,6 +1188,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Fire.started -= instance.OnFire;
             @Fire.performed -= instance.OnFire;
             @Fire.canceled -= instance.OnFire;
+            @Speed.started -= instance.OnSpeed;
+            @Speed.performed -= instance.OnSpeed;
+            @Speed.canceled -= instance.OnSpeed;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1342,6 +1382,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnNextMenu(InputAction.CallbackContext context);
         void OnPrevMenu(InputAction.CallbackContext context);
         void OnFire(InputAction.CallbackContext context);
+        void OnSpeed(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

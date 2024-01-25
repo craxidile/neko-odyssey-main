@@ -2,6 +2,7 @@
 using DG.Tweening;
 using UniRx;
 using NekoOdyssey.Scripts.Game.Core.PlayerMenu;
+using NekoOdyssey.Scripts.Game.Unity.Player;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -62,6 +63,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Sites
 
             DOVirtual.DelayedCall(2, () =>
             {
+                PlayerController.MainPlayerAnchor = GameRunner.Instance.GameCore.Player.GameObject.transform.position;
                 SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
                 SceneManager.LoadScene($"GameMain", LoadSceneMode.Additive);
             });

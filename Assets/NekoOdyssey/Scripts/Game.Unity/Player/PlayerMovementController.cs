@@ -36,6 +36,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
         private float _gravityMultiplier;
         private float _moveSpeed;
         private float _boostMultiplier;
+        private bool _forcePosition;
 
         private void SetActive(PlayerMode mode)
         {
@@ -59,6 +60,13 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
             animator = GetComponent<Animator>();
         }
 
+        public void ForceSetPosition(Vector3 position)
+        {
+            _characterController.enabled = false;
+            transform.position = position;
+            _characterController.enabled = true;
+        }
+
         private void Start()
         {
             GameRunner.Instance.GameCore.Player.OnMove.Subscribe(input => { moveInput = input; });
@@ -71,7 +79,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
             RotateSprite();
             AnimationsUpdate();
         }
-
+        
         private void FixedUpdate()
         {
             if (GameRunner.Instance.GameCore.Player.Mode == PlayerMode.Capture) return;

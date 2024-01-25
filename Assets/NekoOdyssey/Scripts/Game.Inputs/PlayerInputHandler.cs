@@ -15,6 +15,13 @@ namespace NekoOdyssey.Scripts.Game.Unity.Inputs
         public IObservable<Unit> OnRun => this.UpdateAsObservable()
             .Where(_ => InputActions.Player.Run.triggered);
         
+        public IObservable<Unit> OnSpeedStart => this.UpdateAsObservable()
+                    .Where(_ => InputActions.Player.Speed.inProgress);
+        
+        public IObservable<Unit> OnSpeedEnd => this.UpdateAsObservable()
+                    .Where(_ => !InputActions.Player.Speed.inProgress);
+        
+        
         public IObservable<Unit> OnPhoneTriggerred => this.UpdateAsObservable()
             .Where(_ => InputActions.Player.Phone.triggered);
         

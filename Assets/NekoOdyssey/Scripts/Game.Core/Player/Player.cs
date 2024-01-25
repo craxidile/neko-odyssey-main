@@ -57,9 +57,16 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
                 }
                 OnMove.OnNext(input);
             });
-            _runningSubscription = GameRunner.Instance.PlayerInputHandler.OnRun.Subscribe(_ =>
+            _runningSubscription = GameRunner.Instance.PlayerInputHandler.OnSpeedStart.Subscribe(_ =>
             {
-                Running = !Running;
+                if (Running) return;
+                Running = true;
+                OnRun.OnNext(Running);
+            });
+            _runningSubscription = GameRunner.Instance.PlayerInputHandler.OnSpeedEnd.Subscribe(_ =>
+            {
+                if (!Running) return;
+                Running = false;
                 OnRun.OnNext(Running);
             });
             
