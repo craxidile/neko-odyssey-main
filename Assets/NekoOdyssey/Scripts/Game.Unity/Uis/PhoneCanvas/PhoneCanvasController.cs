@@ -38,6 +38,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
                 _previousMode = mode;
                 return;
             }
+
             _canvasGroup = GetComponent<CanvasGroup>();
             _playerAnimator = GameRunner.Instance.GameCore.Player.GameObject.GetComponent<Animator>();
             _active = mode == PlayerMode.Phone;
@@ -58,6 +59,14 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
         private void Start()
         {
             _playerModeChangedSubscription = GameRunner.Instance.GameCore.Player.OnChangeMode.Subscribe(SetActive);
+            GameRunner.Instance.PlayerInputHandler.OnMove.Subscribe(input =>
+            {
+                if (input.y == 0) return;
+                var contentPostition = socialFeedScrollRect.content.anchoredPosition;
+                contentPostition.y -= Time.deltaTime * input.y * 1000;
+
+                socialFeedScrollRect.content.anchoredPosition = contentPostition;
+            });
         }
 
         private void Update()
@@ -85,7 +94,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
 
 
         Vector3 _tempSlideCheck_ScrollRectPosition;
-    
+
         void UpdateSwipeCharacterAnimation()
         {
             var contentPosition = socialFeedScrollRect.content.position;

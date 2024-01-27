@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using NekoOdyssey.Scripts.Game.Unity.Models;
+using NekoOdyssey.Scripts.Models;
 using UniRx;
 using UnityEngine;
 
@@ -17,7 +18,10 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Phone.Apps
         {
             for (var i = 0; i < 9; i++)
             {
-                Entries.Add(new PhotoGalleryEntry());
+                Entries.Add(new PhotoGalleryEntry()
+                {
+                    CatCode = "A02"
+                });
             }
             OnChangeEntries.OnNext(Entries);
         }

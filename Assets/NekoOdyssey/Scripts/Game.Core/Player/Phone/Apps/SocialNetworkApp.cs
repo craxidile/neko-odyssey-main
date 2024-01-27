@@ -13,11 +13,20 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Phone.Apps
             
         public GameObject GameObject { get; set; }
 
+        public void Add(SocialFeed feed)
+        {
+            Feeds.Insert(0, feed);
+            OnChangeFeeds.OnNext(Feeds);
+        }
+        
         public void Bind()
         {
-            for (var i = 0; i < 3; i++)
+            for (var i = 0; i < 2; i++)
             {
-                Feeds.Add(new SocialFeed());
+                Feeds.Add(new SocialFeed()
+                {
+                    CatCode = "A02"
+                });
             }
             OnChangeFeeds.OnNext(Feeds);
         }

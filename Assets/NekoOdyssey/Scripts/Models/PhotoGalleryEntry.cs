@@ -1,7 +1,7 @@
-﻿namespace NekoOdyssey.Scripts.Game.Unity.Models
+﻿namespace NekoOdyssey.Scripts.Models
 {
     public class PhotoGalleryEntry
     {
-        
+        public string CatCode { get; set; }
     }
 }

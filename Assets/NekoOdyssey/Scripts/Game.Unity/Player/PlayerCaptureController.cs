@@ -4,6 +4,7 @@ using NekoOdyssey.Scripts.Game.Core.Capture;
 using UnityEngine;
 using UniRx;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
+using NekoOdyssey.Scripts.Game.Unity.Models;
 using UnityEngine.UI;
 
 namespace NekoOdyssey.Scripts.Game.Unity.Player
@@ -29,6 +30,11 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
             if (!_active) return;
             _animator.SetLayerWeight(_animator.GetLayerIndex($"Capture"), 1f);
             // _renderer.flipX = false;
+            
+            GameRunner.Instance.GameCore.Player.Phone.SocialNetwork.Add(new SocialFeed()
+            {
+                CatCode = GameRunner.Instance.GameCore.Player.Capture.CatCode,
+            });
 
             var assetBundleName = $"{GameRunner.Instance.GameCore.Player.Capture.CatCode.ToLower()}snap";
             if (_catPhoto) Destroy(_catPhoto);
