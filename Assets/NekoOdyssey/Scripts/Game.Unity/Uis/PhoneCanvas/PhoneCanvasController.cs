@@ -1,10 +1,12 @@
 ﻿using System;
+using NekoOdyssey.Scripts.Game.Unity;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
+using NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
+namespace Assets.NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
 {
     public class PhoneCanvasController : MonoBehaviour
     {
@@ -61,10 +63,9 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
             _playerModeChangedSubscription = GameRunner.Instance.GameCore.Player.OnChangeMode.Subscribe(SetActive);
             GameRunner.Instance.PlayerInputHandler.OnMove.Subscribe(input =>
             {
-                if (input.y == 0) return;
+                if (GameRunner.Instance.GameCore.Player.Mode != PlayerMode.Phone || input.y == 0) return;
                 var contentPostition = socialFeedScrollRect.content.anchoredPosition;
                 contentPostition.y -= Time.deltaTime * input.y * 1000;
-
                 socialFeedScrollRect.content.anchoredPosition = contentPostition;
             });
         }

@@ -7,7 +7,14 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Phone.Apps
 {
     public class SocialNetworkApp
     {
-        public List<SocialFeed> Feeds { get;  } = new();
+        private static List<SocialFeed> _feeds = new()
+        {
+            new SocialFeed()
+            {
+                CatCode = "A02"
+            }
+        };
+        public List<SocialFeed> Feeds => _feeds;
 
         public Subject<List<SocialFeed>> OnChangeFeeds = new();
             
@@ -21,14 +28,6 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Phone.Apps
         
         public void Bind()
         {
-            for (var i = 0; i < 2; i++)
-            {
-                Feeds.Add(new SocialFeed()
-                {
-                    CatCode = "A02"
-                });
-            }
-            OnChangeFeeds.OnNext(Feeds);
         }
 
         public void Start()
