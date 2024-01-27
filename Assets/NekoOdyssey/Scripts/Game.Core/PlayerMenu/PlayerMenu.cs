@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Dynamic;
 using System.Linq;
+using NekoOdyssey.Scripts.Game.Core.PlayerMenu;
 using NekoOdyssey.Scripts.Game.Unity;
-using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 using UniRx;
 using UnityEngine;
 
-namespace NekoOdyssey.Scripts.Game.Core.PlayerMenu
+namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
 {
     public class PlayerMenu
     {
@@ -49,9 +48,10 @@ namespace NekoOdyssey.Scripts.Game.Core.PlayerMenu
 
         public void Reset()
         {
-            _active = false;
+            SetActive(false);
             _currentAction = PlayerMenuAction.None;
             _actions = Array.Empty<PlayerMenuAction>();
+            Site = PlayerMenuSite.None;
         }
 
         public void Bind()
@@ -64,6 +64,7 @@ namespace NekoOdyssey.Scripts.Game.Core.PlayerMenu
             _fireTriggeredSubscription = GameRunner.Instance.PlayerInputHandler.OnFireTriggerred.Subscribe(_ =>
             {
                 if (!_active || _currentAction == PlayerMenuAction.None) return;
+                SetActive(false);
                 OnCommitAction.OnNext(_currentAction);
             });
             _nextMenuTriggeredSubscription = GameRunner.Instance.PlayerInputHandler.OnNextMenuTriggerred.Subscribe(_ =>

@@ -6,8 +6,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Phone
 {
     public class PlayerPhone
     {
-        public PhotoGalleryApp PhotoGallery { get; private set; } = new();
-        public SocialNetworkApp SocialNetwork { get; private set; } = new();
+        public PhotoGalleryApp PhotoGallery { get; } = new();
+        public SocialNetworkApp SocialNetwork { get; } = new();
         
         public GameObject GameObject { get; set; }
 
