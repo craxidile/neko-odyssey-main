@@ -45,6 +45,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
         {
             _phoneTriggeredSubscription = GameRunner.Instance.PlayerInputHandler.OnPhoneTriggerred.Subscribe(_ =>
             {
+                if (Mode != PlayerMode.Move && Mode != PlayerMode.Phone) return;
                 Mode = Mode == PlayerMode.Move ? PlayerMode.Phone : PlayerMode.Move;
                 OnChangeMode.OnNext(Mode);
             });

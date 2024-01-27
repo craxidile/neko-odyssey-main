@@ -3,9 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu;
 using DG.Tweening;
 using UniRx;
 using NekoOdyssey.Scripts.Game.Core.PlayerMenu;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Object = UnityEngine.Object;
@@ -69,24 +71,33 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
 
         private void OnTriggerEnter(Collider other)
         {
+            OnTriggerStay(other);
+        }
+
+        private void OnTriggerStay(Collider other)
+        {
             if (!other.CompareTag("Player")) return;
             _eligibleToShow = true;
-            Debug.Log($">>trigger_enter<< {site}");
-            GameRunner.Instance.GameCore.PlayerMenu.Site = site;
-            GameRunner.Instance.GameCore.PlayerMenu.SetActions(availableActions);
-            GameRunner.Instance.GameCore.PlayerMenu.GameObject = gameObject;
-            if (autoActive) GameRunner.Instance.GameCore.PlayerMenu.SetActive(true);
-            DisplayBanners();
+            Debug.Log($">>trigger_stay<< {site}");
+            GameRunner.Instance.GameCore.PlayerMenuCandidateManager.Add(new PlayerMenuCandidate()
+            {
+                Actions = availableActions,
+                GameObject = gameObject,
+                Site = site,
+                AutoActive = autoActive,
+                DistanceFromPlayer = Vector3.Distance(other.transform.position, transform.position)
+            });
         }
 
         private void OnTriggerExit(Collider other)
         {
-            Debug.Log($">>trigger_exit<<");
             if (!other.CompareTag("Player")) return;
             _eligibleToShow = false;
-            GameRunner.Instance.GameCore.PlayerMenu.Reset();
-            if (autoActive) GameRunner.Instance.GameCore.PlayerMenu.SetActive(false);
-            DisplayBanners();
+            Debug.Log($">>trigger_exit<<");
+            GameRunner.Instance.GameCore.PlayerMenuCandidateManager.Remove(new PlayerMenuCandidate()
+            {
+                Site = site
+            });
         }
 
         private void TriggerCurrentAction(PlayerMenuAction currentAction)
