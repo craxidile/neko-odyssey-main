@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 using UniRx;
 using UnityEngine;
@@ -84,9 +85,25 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
             });
             GameRunner.Instance.PlayerInputHandler.OnNextMenuTriggerred.Subscribe(_ =>
             {
+                var index = _phoneAppCanvases.IndexOf(_currentPhoneAppCanvas);
+                if (index < 0) return;
+                var nextIndex = Math.Min(_phoneAppCanvases.Count - 1, index + 1);
+                if (nextIndex == index) return;
+                _prevPhoneAppCanvas = _currentPhoneAppCanvas;
+                _currentPhoneAppCanvas = _phoneAppCanvases[nextIndex];
+                Debug.Log($">>next<< {index} {nextIndex} {_phoneAppCanvases.IndexOf(_currentPhoneAppCanvas)}");
+                AnimateCanvasSwap();
             });
             GameRunner.Instance.PlayerInputHandler.OnPrevMenuTriggerred.Subscribe(_ =>
             {
+                var index = _phoneAppCanvases.IndexOf(_currentPhoneAppCanvas);
+                if (index < 0) return;
+                var prevIndex = Math.Max(0, index - 1);
+                if (prevIndex == index) return;
+                Debug.Log($">>prev<< {index} {prevIndex}");
+                _prevPhoneAppCanvas = _currentPhoneAppCanvas;
+                _currentPhoneAppCanvas = _phoneAppCanvases[prevIndex];
+                AnimateCanvasSwap();
             });
         }
 
@@ -115,7 +132,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
 
         private void AnimateCanvasSwap()
         {
-            
+            _prevPhoneAppCanvas.DOFade(0, 0.3f);
+            _currentPhoneAppCanvas.DOFade(1, 0.3f);
         }
 
         private void UpdateSwipeCharacterAnimation()

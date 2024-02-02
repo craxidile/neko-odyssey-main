@@ -57,14 +57,22 @@ namespace NekoOdyssey.Scripts.Game.Unity.AssetBundles
                 name
             );
             Debug.Log($">>load<< 00 {name} {System.IO.File.Exists(bundlePath)}");
-            if (!System.IO.File.Exists(bundlePath)) yield break;
+            if (!System.IO.File.Exists(bundlePath))
+            {
+                _loadedAssetCount++;
+                yield break;
+            }
 
             var request = AssetBundle.LoadFromFileAsync(bundlePath);
             yield return request;
             var asset = request.assetBundle.LoadAllAssets().FirstOrDefault();
 
             Debug.Log($">>load<< 01 {name} {asset}");
-            if (asset == null) yield break;
+            if (asset == null)
+            {
+                _loadedAssetCount++;
+                yield break;
+            }
 
             GameRunner.Instance.AssetMap.Add(name, asset);
 
