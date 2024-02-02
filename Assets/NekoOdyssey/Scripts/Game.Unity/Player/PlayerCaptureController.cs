@@ -31,12 +31,12 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
             _animator.SetLayerWeight(_animator.GetLayerIndex($"Capture"), 1f);
             // _renderer.flipX = false;
             
-            GameRunner.Instance.GameCore.Player.Phone.SocialNetwork.Add(new SocialFeed()
+            GameRunner.Instance.Core.Player.Phone.SocialNetwork.Add(new SocialFeed()
             {
-                CatCode = GameRunner.Instance.GameCore.Player.Capture.CatCode,
+                CatCode = GameRunner.Instance.Core.Player.Capture.CatCode,
             });
 
-            var assetBundleName = $"{GameRunner.Instance.GameCore.Player.Capture.CatCode.ToLower()}snap";
+            var assetBundleName = $"{GameRunner.Instance.Core.Player.Capture.CatCode.ToLower()}snap";
             if (_catPhoto) Destroy(_catPhoto);
             if (GameRunner.Instance.AssetMap.TryGetValue(assetBundleName, out var asset))
             {
@@ -46,7 +46,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
             // GameRunner.Instance.GameCore.Player.GameObject.transform.position =
             //     GameRunner.Instance.GameCore.Player.Capture.TargetPosition;
             string trigger = null;
-            switch (GameRunner.Instance.GameCore.Player.Capture.Mode)
+            switch (GameRunner.Instance.Core.Player.Capture.Mode)
             {
                 case CaptureMode.StandCaptureTop:
                     trigger = $"StartCaptureTop";
@@ -98,13 +98,13 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
             });
             DOVirtual.DelayedCall(7f, () => { _animator.SetTrigger($"EndCapture"); });
 
-            DOVirtual.DelayedCall(8f, () => { GameRunner.Instance.GameCore.Player.SetMode(PlayerMode.Move); });
+            DOVirtual.DelayedCall(8f, () => { GameRunner.Instance.Core.Player.SetMode(PlayerMode.Move); });
         }
 
 
         public void Awake()
         {
-            var playerController = GameRunner.Instance.GameCore.Player.GameObject.GetComponent<PlayerController>();
+            var playerController = GameRunner.Instance.Core.Player.GameObject.GetComponent<PlayerController>();
             _captureScreen = playerController.captureScreen;
             _captureBlurPlane = playerController.captureBlurPlane;
             _catPhotoContainer = playerController.catPhotoContainer;
@@ -114,7 +114,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
 
         public void Start()
         {
-            _playerModeChangedSubscription = GameRunner.Instance.GameCore.Player.OnChangeMode.Subscribe(SetActive);
+            _playerModeChangedSubscription = GameRunner.Instance.Core.Player.OnChangeMode.Subscribe(SetActive);
         }
 
         public void OnDestroy()

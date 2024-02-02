@@ -32,7 +32,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
 
         private void Awake()
         {
-            GameRunner.Instance.GameCore.Player.GameObject = gameObject;
+            GameRunner.Instance.Core.Player.GameObject = gameObject;
             _movementController = gameObject.AddComponent<PlayerMovementController>();
             _phoneController = gameObject.AddComponent<PlayerPhoneController>();
             _captureController = gameObject.AddComponent<PlayerCaptureController>();

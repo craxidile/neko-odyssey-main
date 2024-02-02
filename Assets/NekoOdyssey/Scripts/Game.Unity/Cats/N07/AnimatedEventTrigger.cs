@@ -22,15 +22,15 @@ namespace NekoOdyssey.Scripts.Game.Unity.Cats.N07
         void Start()
         {
             animator = GetComponent<Animator>();
-            _actionCommittedSubscription = GameRunner.Instance.GameCore.PlayerMenu.OnCommitAction
+            _actionCommittedSubscription = GameRunner.Instance.Core.PlayerMenu.OnCommitAction
                 .Subscribe(HandlePlayerMenuAction);
         }
 
         private void HandlePlayerMenuAction(PlayerMenuAction action)
         {
-            if (GameRunner.Instance.GameCore.PlayerMenu.Site != PlayerMenuSite.A07Wall) return;
+            if (GameRunner.Instance.Core.PlayerMenu.Site != PlayerMenuSite.A07Wall) return;
             animator.Play("TriggerState");
-            GameRunner.Instance.GameCore.PlayerMenu.SetActive(false);
+            GameRunner.Instance.Core.PlayerMenu.SetActive(false);
         }
 
         // Update is called once per frame
@@ -55,7 +55,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Cats.N07
                     otherEvent.Clear();
                     DOVirtual.DelayedCall(0.3f, () =>
                     {
-                       GameRunner.Instance.GameCore.PlayerMenu.SetActive(true);
+                       GameRunner.Instance.Core.PlayerMenu.SetActive(true);
                     });
                 }
 

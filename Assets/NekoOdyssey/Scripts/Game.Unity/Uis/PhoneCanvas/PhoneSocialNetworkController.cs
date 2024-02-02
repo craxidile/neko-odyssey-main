@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Assets.NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas;
 using DG.Tweening;
 using UniRx;
 using NekoOdyssey.Scripts.Game.Unity.Models;
@@ -15,7 +14,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
 
         private void Awake()
         {
-            var phoneCanvasController = GameRunner.Instance.GameCore.Player.Phone.GameObject
+            var phoneCanvasController = GameRunner.Instance.Core.Player.Phone.GameObject
                 .GetComponent<PhoneCanvasController>();
             _socialFeedCell = phoneCanvasController.socialFeedCell;
             
@@ -24,14 +23,14 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
                 Debug.Log($">>player_menu_ready<< awake");
                 if (GameRunner.Instance.Ready)
                 {
-                    GenerateSocialFeedGrid(GameRunner.Instance.GameCore.Player.Phone.SocialNetwork.Feeds);
+                    GenerateSocialFeedGrid(GameRunner.Instance.Core.Player.Phone.SocialNetwork.Feeds);
                 }
                 else
                 {
                     GameRunner.Instance.OnReady.Subscribe(ready =>
                     {
                         if (!ready) return;
-                        GenerateSocialFeedGrid(GameRunner.Instance.GameCore.Player.Phone.SocialNetwork.Feeds);
+                        GenerateSocialFeedGrid(GameRunner.Instance.Core.Player.Phone.SocialNetwork.Feeds);
                     });
                 }
             });
@@ -39,7 +38,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
 
         private void Start()
         {
-            GameRunner.Instance.GameCore.Player.Phone.SocialNetwork.OnChangeFeeds.Subscribe(GenerateSocialFeedGrid);
+            GameRunner.Instance.Core.Player.Phone.SocialNetwork.OnChangeFeeds.Subscribe(GenerateSocialFeedGrid);
         }
 
         private void GenerateSocialFeedGrid(List<SocialFeed> feeds)

@@ -11,30 +11,30 @@ namespace NekoOdyssey.Scripts.Game.Unity.Capture
     {
         private void Start()
         {
-            GameRunner.Instance.GameCore.PlayerMenu.OnCommitAction.Subscribe(HandlePlayerMenuAction);
+            GameRunner.Instance.Core.PlayerMenu.OnCommitAction.Subscribe(HandlePlayerMenuAction);
         }
 
         private void HandlePlayerMenuAction(PlayerMenuAction action)
         {
 
             if (action != PlayerMenuAction.Camera) return;
-            GameRunner.Instance.GameCore.PlayerMenu.SetActive(false);
+            GameRunner.Instance.Core.PlayerMenu.SetActive(false);
 
             DOVirtual.DelayedCall(2f, () =>
             {
                 SoundEffectController.Instance.shutter.Play();
             });
             
-            var menuGameObject = GameRunner.Instance.GameCore.PlayerMenu.GameObject;
+            var menuGameObject = GameRunner.Instance.Core.PlayerMenu.GameObject;
             var attributes = menuGameObject.GetComponent<CaptureAttributes>();
             Debug.Log($">>attributes<< {attributes}");
             if (attributes == null) return;
 
-            GameRunner.Instance.GameCore.Player.Capture.TargetPosition = attributes.captureAnchor.transform.position;
-            GameRunner.Instance.GameCore.Player.Capture.Mode = attributes.captureMode;
-            GameRunner.Instance.GameCore.Player.Capture.CatCode = attributes.catCode;
+            GameRunner.Instance.Core.Player.Capture.TargetPosition = attributes.captureAnchor.transform.position;
+            GameRunner.Instance.Core.Player.Capture.Mode = attributes.captureMode;
+            GameRunner.Instance.Core.Player.Capture.CatCode = attributes.catCode;
 
-            GameRunner.Instance.GameCore.Player.SetMode(PlayerMode.Capture);
+            GameRunner.Instance.Core.Player.SetMode(PlayerMode.Capture);
         }
     }
 }

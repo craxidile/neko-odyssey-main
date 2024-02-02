@@ -1,12 +1,12 @@
 ﻿using System;
-using NekoOdyssey.Scripts.Game.Unity;
+using System.Collections.Generic;
+using System.Linq;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
-using NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Assets.NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
+namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
 {
     public class PhoneCanvasController : MonoBehaviour
     {
@@ -15,6 +15,9 @@ namespace Assets.NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
         public Transform openPositionTransform;
         public Transform closePositionTransform;
         public Transform phoneTransform;
+
+        public CanvasGroup socialFeedCanvas;
+        public CanvasGroup photoGalleryCanvas;
 
         public GameObject socialFeedCell;
         public GameObject photoGalleryEntryCell;
@@ -30,6 +33,11 @@ namespace Assets.NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
         private CanvasGroup _canvasGroup;
         private Animator _playerAnimator;
         private PlayerMode _previousMode;
+        private Vector3 _tempSlideCheck_ScrollRectPosition;
+        private float _slideDelayTime;
+        private List<CanvasGroup> _phoneAppCanvases;
+        private CanvasGroup _prevPhoneAppCanvas;
+        private CanvasGroup _currentPhoneAppCanvas;
 
         private IDisposable _playerModeChangedSubscription;
 
@@ -42,7 +50,7 @@ namespace Assets.NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
             }
 
             _canvasGroup = GetComponent<CanvasGroup>();
-            _playerAnimator = GameRunner.Instance.GameCore.Player.GameObject.GetComponent<Animator>();
+            _playerAnimator = GameRunner.Instance.Core.Player.GameObject.GetComponent<Animator>();
             _active = mode == PlayerMode.Phone;
             _transitionActive = true;
             _positionTransitionTimeCount = 0f;
@@ -53,20 +61,32 @@ namespace Assets.NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
 
         private void Awake()
         {
-            GameRunner.Instance.GameCore.Player.Phone.GameObject = gameObject;
+            GameRunner.Instance.Core.Player.Phone.GameObject = gameObject;
             gameObject.AddComponent<PhoneSocialNetworkController>();
             gameObject.AddComponent<PhonePhotoGalleryController>();
+            _phoneAppCanvases = new List<CanvasGroup>
+            {
+                socialFeedCanvas,
+                photoGalleryCanvas,
+            };
+            _currentPhoneAppCanvas = _phoneAppCanvases.First();
         }
 
         private void Start()
         {
-            _playerModeChangedSubscription = GameRunner.Instance.GameCore.Player.OnChangeMode.Subscribe(SetActive);
+            _playerModeChangedSubscription = GameRunner.Instance.Core.Player.OnChangeMode.Subscribe(SetActive);
             GameRunner.Instance.PlayerInputHandler.OnMove.Subscribe(input =>
             {
-                if (GameRunner.Instance.GameCore.Player.Mode != PlayerMode.Phone || input.y == 0) return;
+                if (GameRunner.Instance.Core.Player.Mode != PlayerMode.Phone || input.y == 0) return;
                 var contentPostition = socialFeedScrollRect.content.anchoredPosition;
                 contentPostition.y -= Time.deltaTime * input.y * 1000;
                 socialFeedScrollRect.content.anchoredPosition = contentPostition;
+            });
+            GameRunner.Instance.PlayerInputHandler.OnNextMenuTriggerred.Subscribe(_ =>
+            {
+            });
+            GameRunner.Instance.PlayerInputHandler.OnPrevMenuTriggerred.Subscribe(_ =>
+            {
             });
         }
 
@@ -93,10 +113,12 @@ namespace Assets.NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
             _playerModeChangedSubscription.Dispose();
         }
 
+        private void AnimateCanvasSwap()
+        {
+            
+        }
 
-        Vector3 _tempSlideCheck_ScrollRectPosition;
-
-        void UpdateSwipeCharacterAnimation()
+        private void UpdateSwipeCharacterAnimation()
         {
             var contentPosition = socialFeedScrollRect.content.position;
             var scrollRectDelta = contentPosition - _tempSlideCheck_ScrollRectPosition;
@@ -109,19 +131,16 @@ namespace Assets.NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
             //}
             if (Mathf.Abs(scrollRectDelta.y) > 12)
             {
-                TriggerGirlSlide();
+                TriggerSwipeAnimation();
             }
         }
 
-        float _slideDelayTime;
 
-        void TriggerGirlSlide()
+        void TriggerSwipeAnimation()
         {
-            if (Time.time >= _slideDelayTime)
-            {
-                _slideDelayTime = Time.time + 0.5f;
-                _playerAnimator.SetTrigger("Swipe");
-            }
+            if (!(Time.time >= _slideDelayTime)) return;
+            _slideDelayTime = Time.time + 0.5f;
+            _playerAnimator.SetTrigger($"Swipe");
         }
     }
 }

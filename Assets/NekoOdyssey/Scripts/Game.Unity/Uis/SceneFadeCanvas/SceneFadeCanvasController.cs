@@ -18,7 +18,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.SceneFadeCanvas
 
         private void Start()
         {
-            GameRunner.Instance.GameCore.GameScene.OnChangeSceneMode.Subscribe(mode =>
+            GameRunner.Instance.Core.GameScene.OnChangeSceneMode.Subscribe(mode =>
             {
                 if (mode == GameSceneMode.Opening)
                 {

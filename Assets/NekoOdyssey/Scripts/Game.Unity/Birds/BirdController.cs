@@ -29,14 +29,14 @@ namespace NekoOdyssey.Scripts.Game.Unity.Birds
             {
                 transform.position = Vector3.MoveTowards(transform.position, characterPos, speed * Time.deltaTime) +
                                      Vector3.up * speed * 2.5f * Time.deltaTime;
-                anim.SetBool("isFlying", true);
+                anim.SetBool("Flying", true);
                 StartCoroutine(SetHideBird(timeCounter));
             }
             else
             {
                 FindCharacterTag("Cat");
                 FindCharacterTag("Player");
-                anim.SetBool("isFlying", false);
+                anim.SetBool("Flying", false);
             }
         }
 

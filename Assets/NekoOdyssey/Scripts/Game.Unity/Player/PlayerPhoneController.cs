@@ -38,7 +38,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
         
         public void Awake()
         {
-            var playerController = GameRunner.Instance.GameCore.Player.GameObject.GetComponent<PlayerController>();
+            var playerController = GameRunner.Instance.Core.Player.GameObject.GetComponent<PlayerController>();
             _phoneScreen = playerController.phoneScreen;
             _blurPlane = playerController.phoneBlurPlane;
             _animator = playerController.GetComponent<Animator>();
@@ -47,7 +47,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
 
         public void Start()
         {
-            _playerModeChangedSubscription = GameRunner.Instance.GameCore.Player.OnChangeMode.Subscribe(SetActive);
+            _playerModeChangedSubscription = GameRunner.Instance.Core.Player.OnChangeMode.Subscribe(SetActive);
         }
 
         public void OnDestroy()

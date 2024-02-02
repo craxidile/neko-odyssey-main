@@ -24,7 +24,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
         private bool stopMove;
         private bool isTurnAround;
 
-        private bool Running => GameRunner.Instance.GameCore.Player.Running;
+        private bool Running => GameRunner.Instance.Core.Player.Running;
 
         private Animator animator;
 
@@ -49,7 +49,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
 
         private void Awake()
         {
-            var playerController = GameRunner.Instance.GameCore.Player.GameObject.GetComponent<PlayerController>();
+            var playerController = GameRunner.Instance.Core.Player.GameObject.GetComponent<PlayerController>();
             _gravity = playerController.gravity;
             _gravityMultiplier = playerController.gravityMultiplier;
             _moveSpeed = playerController.moveSpeed;
@@ -69,20 +69,20 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
 
         private void Start()
         {
-            GameRunner.Instance.GameCore.Player.OnMove.Subscribe(input => { moveInput = input; });
-            GameRunner.Instance.GameCore.Player.OnChangeMode.Subscribe(SetActive);
+            GameRunner.Instance.Core.Player.OnMove.Subscribe(input => { moveInput = input; });
+            GameRunner.Instance.Core.Player.OnChangeMode.Subscribe(SetActive);
         }
 
         private void Update()
         {
-            if (GameRunner.Instance.GameCore.Player.Mode == PlayerMode.Capture) return;
+            if (GameRunner.Instance.Core.Player.Mode == PlayerMode.Capture) return;
             RotateSprite();
             AnimationsUpdate();
         }
         
         private void FixedUpdate()
         {
-            if (GameRunner.Instance.GameCore.Player.Mode == PlayerMode.Capture) return;
+            if (GameRunner.Instance.Core.Player.Mode == PlayerMode.Capture) return;
             ApplyMovement();
         }
 

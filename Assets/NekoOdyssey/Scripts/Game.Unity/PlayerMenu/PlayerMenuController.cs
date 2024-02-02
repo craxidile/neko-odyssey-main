@@ -58,8 +58,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
 
         private void Start()
         {
-            _activeSubscription = GameRunner.Instance.GameCore.PlayerMenu.OnActive.Subscribe(SetMenuActive);
-            _currentActionSubscription = GameRunner.Instance.GameCore.PlayerMenu.OnChangeAction
+            _activeSubscription = GameRunner.Instance.Core.PlayerMenu.OnActive.Subscribe(SetMenuActive);
+            _currentActionSubscription = GameRunner.Instance.Core.PlayerMenu.OnChangeAction
                 .Subscribe(TriggerCurrentAction);
         }
 
@@ -79,7 +79,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
             if (!other.CompareTag("Player")) return;
             _eligibleToShow = true;
             Debug.Log($">>trigger_stay<< {site}");
-            GameRunner.Instance.GameCore.PlayerMenuCandidateManager.Add(new PlayerMenuCandidate()
+            GameRunner.Instance.Core.PlayerMenuCandidateManager.Add(new PlayerMenuCandidate()
             {
                 Actions = availableActions,
                 GameObject = gameObject,
@@ -94,7 +94,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
             if (!other.CompareTag("Player")) return;
             _eligibleToShow = false;
             Debug.Log($">>trigger_exit<<");
-            GameRunner.Instance.GameCore.PlayerMenuCandidateManager.Remove(new PlayerMenuCandidate()
+            GameRunner.Instance.Core.PlayerMenuCandidateManager.Remove(new PlayerMenuCandidate()
             {
                 Site = site
             });
@@ -103,7 +103,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
         private void TriggerCurrentAction(PlayerMenuAction currentAction)
         {
             // Debug.Log($">>compare_site<< {GameRunner.Instance.GameCore.PlayerMenu.Site} {site}");
-            if (GameRunner.Instance.GameCore.PlayerMenu.Site != site) return;
+            if (GameRunner.Instance.Core.PlayerMenu.Site != site) return;
             var availableActionList = availableActions.ToList();
             foreach (var action in availableActionList)
             {
@@ -119,7 +119,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
 
         private void SetMenuActive(bool active)
         {
-            if (GameRunner.Instance.GameCore.PlayerMenu.Site != site) return;
+            if (GameRunner.Instance.Core.PlayerMenu.Site != site) return;
             _active = active;
             DisplayBanners();
         }

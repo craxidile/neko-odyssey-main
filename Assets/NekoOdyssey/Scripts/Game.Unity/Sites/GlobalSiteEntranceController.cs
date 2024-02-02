@@ -12,7 +12,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Sites
     {
         private void Start()
         {
-            GameRunner.Instance.GameCore.PlayerMenu.OnCommitAction.Subscribe(HandlePlayerMenuAction);
+            GameRunner.Instance.Core.PlayerMenu.OnCommitAction.Subscribe(HandlePlayerMenuAction);
         }
 
         private void HandlePlayerMenuAction(PlayerMenuAction action)
@@ -20,7 +20,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Sites
             
             if (action != PlayerMenuAction.Enter && action != PlayerMenuAction.Exit) return;
             
-            GameRunner.Instance.GameCore.GameScene.CloseScene();
+            GameRunner.Instance.Core.GameScene.CloseScene();
             
             if (action == PlayerMenuAction.Exit)
             {
@@ -37,7 +37,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Sites
             }
 
             string sceneName = null;
-            switch (GameRunner.Instance.GameCore.PlayerMenu.Site)
+            switch (GameRunner.Instance.Core.PlayerMenu.Site)
             {
                 case PlayerMenuSite.UdonNekoInside11:
                     sceneName = $"NekoInside11Udon";
@@ -63,7 +63,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Sites
 
             DOVirtual.DelayedCall(2, () =>
             {
-                PlayerController.MainPlayerAnchor = GameRunner.Instance.GameCore.Player.GameObject.transform.position;
+                PlayerController.MainPlayerAnchor = GameRunner.Instance.Core.Player.GameObject.transform.position;
                 SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
                 SceneManager.LoadScene($"GameMain", LoadSceneMode.Additive);
             });

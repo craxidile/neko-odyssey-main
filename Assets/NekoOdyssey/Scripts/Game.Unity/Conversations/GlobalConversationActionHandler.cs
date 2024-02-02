@@ -12,24 +12,24 @@ namespace NekoOdyssey.Scripts.Game.Unity.Conversations
         private void Start()
         {
             Debug.Log(">>handle<< hh");
-            GameRunner.Instance.GameCore.PlayerMenu.OnCommitAction.Subscribe(HandlePlayerMenuAction);
+            GameRunner.Instance.Core.PlayerMenu.OnCommitAction.Subscribe(HandlePlayerMenuAction);
         }
 
         private void HandlePlayerMenuAction(PlayerMenuAction action)
         {
             Debug.Log($">>handle<< {action}");
             if (action != PlayerMenuAction.Information) return;
-            GameRunner.Instance.GameCore.PlayerMenu.SetActive(false);
+            GameRunner.Instance.Core.PlayerMenu.SetActive(false);
             SoundEffectController.Instance.talk.Play();
 
-            var menuGameObject = GameRunner.Instance.GameCore.PlayerMenu.GameObject;
+            var menuGameObject = GameRunner.Instance.Core.PlayerMenu.GameObject;
             var attributes = menuGameObject.GetComponent<ConversationAttributes>();
             if (attributes == null) return;
 
-            GameRunner.Instance.GameCore.Player.Conversation.Dialog = attributes.dialog;
+            GameRunner.Instance.Core.Player.Conversation.Dialog = attributes.dialog;
 
             Debug.Log($">>handle<< eee");
-            GameRunner.Instance.GameCore.Player.SetMode(PlayerMode.Conversation);
+            GameRunner.Instance.Core.Player.SetMode(PlayerMode.Conversation);
         }
     }
 }

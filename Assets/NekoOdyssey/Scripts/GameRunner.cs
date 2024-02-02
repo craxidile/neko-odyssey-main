@@ -25,7 +25,9 @@ namespace NekoOdyssey.Scripts.Game.Unity
 
         private PlayerInputActions _inputActions;
 
-        public GameCoreRunner GameCore { get; } = new();
+        public GameCoreRunner Core { get; } = new();
+
+        public GameObject testCanvas;
 
         public PlayerInputHandler PlayerInputHandler { get; private set; }
         public UiInputHandler UiInputHandler { get; private set; }
@@ -49,8 +51,8 @@ namespace NekoOdyssey.Scripts.Game.Unity
             gameObject.AddComponent<GlobalCaptureActionHandler>();
             gameObject.AddComponent<GlobalConversationActionHandler>();
             gameObject.AddComponent<AssetBundleLoader>();
-
-            GameCore.Bind();
+            
+            Core.Bind();
         }
 
         public void SetReady(bool ready)
@@ -62,7 +64,7 @@ namespace NekoOdyssey.Scripts.Game.Unity
 
         private void Start()
         {
-            GameCore.Start();
+            Core.Start();
             
             var boundary = FindAnyObjectByType<CameraBoundary>();
             if (boundary != null && Camera.main != null)
@@ -80,7 +82,7 @@ namespace NekoOdyssey.Scripts.Game.Unity
 
         private void OnDestroy()
         {
-            GameCore.Unbind();
+            Core.Unbind();
         }
 
         private void OnEnable()

@@ -31,25 +31,25 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
             
             _dialogCanvas = Instantiate(
                 GameRunner.Instance.AssetMap["dialogcanvas"],
-                GameRunner.Instance.GameCore.PlayerMenu.GameObject.transform
+                GameRunner.Instance.Core.PlayerMenu.GameObject.transform
             ) as GameObject;
             Debug.Log($">>dialog_canvas<< {_dialogCanvas}");
             var dialogCanvasController = _dialogCanvas.GetComponent<DialogCanvasController>();
-            dialogCanvasController.messageBox.text = GameRunner.Instance.GameCore.Player.Conversation.Dialog;
+            dialogCanvasController.messageBox.text = GameRunner.Instance.Core.Player.Conversation.Dialog;
         }
 
 
         public void Awake()
         {
-            var playerController = GameRunner.Instance.GameCore.Player.GameObject.GetComponent<PlayerController>();
+            var playerController = GameRunner.Instance.Core.Player.GameObject.GetComponent<PlayerController>();
             _animator = playerController.GetComponent<Animator>();
             _renderer = playerController.GetComponent<SpriteRenderer>();
         }
 
         public void Start()
         {
-            _playerModeChangedSubscription = GameRunner.Instance.GameCore.Player.OnChangeMode.Subscribe(SetActive);
-            GameRunner.Instance.GameCore.Player.OnChangeMode.Subscribe(mode =>
+            _playerModeChangedSubscription = GameRunner.Instance.Core.Player.OnChangeMode.Subscribe(SetActive);
+            GameRunner.Instance.Core.Player.OnChangeMode.Subscribe(mode =>
             {
                 if (mode != PlayerMode.Conversation && _dialogCanvas != null)
                     Destroy(_dialogCanvas);
