@@ -55,9 +55,9 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Phone
             );
 
             subscriptions.Add(GameRunner.Instance.Core.Player.OnChangeMode.Subscribe(ResetCurrentIndex));
-            
+
             foreach (var subscription in subscriptions)
-                subscription.AddTo(GameRunner.Instance)
+                subscription.AddTo(GameRunner.Instance);
 
             SocialNetwork.Start();
             PhotoGallery.Start();
