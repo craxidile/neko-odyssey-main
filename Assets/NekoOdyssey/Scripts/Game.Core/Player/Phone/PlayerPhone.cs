@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using DG.Tweening;
 using NekoOdyssey.Scripts.Game.Core.Player.Phone.Apps;
 using NekoOdyssey.Scripts.Game.Unity;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
@@ -44,28 +45,31 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Phone
                 if (GameRunner.Instance.Core.Player.Mode != PlayerMode.Phone || input.y == 0) return;
                 OnScroll.OnNext(input);
             }).AddTo(GameRunner.Instance);
-            
+
             GameRunner.Instance.PlayerInputHandler.OnNextMenuTriggerred.Subscribe(_ =>
             {
                 if (GameRunner.Instance.Core.Player.Mode != PlayerMode.Phone) return;
                 var index = _currentAppIndex;
                 var nextIndex = Math.Min(_phoneAppList.Count - 1, index + 1);
                 if (nextIndex == index) return;
-                _previousAppIndex = index;
-                _currentAppIndex = nextIndex;
-                OnChangeApp.OnNext(CurrentApp);
+                SetCurrentAppIndex(index, nextIndex);
             }).AddTo(GameRunner.Instance);
-            
+
             GameRunner.Instance.PlayerInputHandler.OnPrevMenuTriggerred.Subscribe(_ =>
             {
                 if (GameRunner.Instance.Core.Player.Mode != PlayerMode.Phone) return;
                 var index = _currentAppIndex;
                 var prevIndex = Math.Max(0, index - 1);
                 if (prevIndex == index) return;
-                _previousAppIndex = index;
-                _currentAppIndex = prevIndex;
-                OnChangeApp.OnNext(CurrentApp);
+                SetCurrentAppIndex(index, prevIndex);
             }).AddTo(GameRunner.Instance);
+
+            GameRunner.Instance.Core.Player.OnChangeMode.Subscribe(mode =>
+            {
+                if (mode != PlayerMode.Phone) return;
+                SetCurrentAppIndex(0, 0);
+            }).AddTo(GameRunner.Instance);
+
             SocialNetwork.Start();
             PhotoGallery.Start();
         }
@@ -74,6 +78,13 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Phone
         {
             SocialNetwork.Unbind();
             PhotoGallery.Unbind();
+        }
+
+        private void SetCurrentAppIndex(int previousIndex, int nextIndex)
+        {
+            _previousAppIndex = previousIndex;
+            _currentAppIndex = nextIndex;
+            OnChangeApp.OnNext(CurrentApp);
         }
     }
 }
