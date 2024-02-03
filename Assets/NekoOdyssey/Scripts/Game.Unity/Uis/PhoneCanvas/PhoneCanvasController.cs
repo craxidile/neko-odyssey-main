@@ -14,6 +14,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
     {
         private const float PositionTransitionDuration = 0.2f;
         private const float AppSwapDuration = 0.3f;
+        private const float ScrollAnimationTriggerDelta = 12f;
+        private const float SlideDelayTimeDelta = 0.5f;
 
         private readonly Dictionary<PlayerPhoneApp, CanvasGroup> _phoneModeCanvasMap = new();
         private readonly Dictionary<PlayerPhoneApp, ScrollRect> _phoneModeScrollRectMap = new();
@@ -125,14 +127,14 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
             var contentPosition = socialFeedScrollRect.content.position;
             var scrollRectDelta = contentPosition - _tempSlideCheckScrollRectPosition;
             _tempSlideCheckScrollRectPosition = contentPosition;
-            if (Mathf.Abs(scrollRectDelta.y) <= 12) return;
+            if (Mathf.Abs(scrollRectDelta.y) <= ScrollAnimationTriggerDelta) return;
             TriggerSwipeAnimation();
         }
 
         private void TriggerSwipeAnimation()
         {
             if (!(Time.time >= _slideDelayTime)) return;
-            _slideDelayTime = Time.time + 0.5f;
+            _slideDelayTime = Time.time + SlideDelayTimeDelta;
             _playerAnimator.SetTrigger($"Swipe");
         }
     }
