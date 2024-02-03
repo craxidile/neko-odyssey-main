@@ -120,6 +120,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!224 &84991748 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 1641874152128884667, guid: b4d939a1822013142b42a8571286eec7, type: 3}
+  m_PrefabInstance: {fileID: 1237204098}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &92142293
 GameObject:
   m_ObjectHideFlags: 0
@@ -1843,7 +1848,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8364476954938773517, guid: b4d939a1822013142b42a8571286eec7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1237204103}
   m_SourcePrefab: {fileID: 100100000, guid: b4d939a1822013142b42a8571286eec7, type: 3}
 --- !u!224 &1237204099 stripped
 RectTransform:
@@ -1855,6 +1863,19 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8364476954938773517, guid: b4d939a1822013142b42a8571286eec7, type: 3}
   m_PrefabInstance: {fileID: 1237204098}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1237204103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1237204100}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aab8d478a233448489c6a6b69bfbeb99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  photoTransform: {fileID: 84991748}
 --- !u!1 &1407048045
 GameObject:
   m_ObjectHideFlags: 0
@@ -3084,6 +3105,7 @@ GameObject:
   - component: {fileID: 6684866020350034453}
   - component: {fileID: 6674451085628200606}
   - component: {fileID: 1109028275014710452}
+  - component: {fileID: 6684866020350034454}
   m_Layer: 5
   m_Name: Gallary scroll rect
   m_TagString: Untagged
@@ -4985,7 +5007,7 @@ MonoBehaviour:
   socialFeedCell: {fileID: 1087008995}
   photoGalleryEntryCell: {fileID: 1237204100}
   socialFeedScrollRect: {fileID: 6411198102504704002}
-  photoGalleryScrollRect: {fileID: 0}
+  photoGalleryScrollRect: {fileID: 6684866020350034454}
 --- !u!114 &6354693279598796504
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5275,6 +5297,36 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 30.069}
   m_SizeDelta: {x: 0, y: -228.138}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &6684866020350034454
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1600929362157856547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51a2e8c92124407c8f21e4e005357ba9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Content: {fileID: 2215130228593401331}
+  m_Horizontal: 1
+  m_Vertical: 1
+  m_MovementType: 1
+  m_Elasticity: 0.1
+  m_Inertia: 1
+  m_DecelerationRate: 0.135
+  m_ScrollSensitivity: 1
+  m_Viewport: {fileID: 0}
+  m_HorizontalScrollbar: {fileID: 0}
+  m_VerticalScrollbar: {fileID: 0}
+  m_HorizontalScrollbarVisibility: 0
+  m_VerticalScrollbarVisibility: 0
+  m_HorizontalScrollbarSpacing: 0
+  m_VerticalScrollbarSpacing: 0
+  m_OnValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!222 &6808189916215851535
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6467,7 +6519,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 311.055, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 442, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &9120415614947407978

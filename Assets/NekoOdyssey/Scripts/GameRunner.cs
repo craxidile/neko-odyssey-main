@@ -48,7 +48,7 @@ namespace NekoOdyssey.Scripts.Game.Unity
             PlayerInputHandler.InputActions = _inputActions;
 
             gameObject.AddComponent<GlobalSiteEntranceController>();
-            gameObject.AddComponent<GlobalCaptureActionHandler>();
+            gameObject.AddComponent<CentralCaptureActionHandler>();
             gameObject.AddComponent<GlobalConversationActionHandler>();
             gameObject.AddComponent<AssetBundleLoader>();
             

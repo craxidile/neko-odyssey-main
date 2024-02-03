@@ -14,12 +14,18 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Phone.Apps
                 CatCode = "A02"
             }
         };
-        
+
         public List<PhotoGalleryEntry> Entries => _entries;
 
         public Subject<List<PhotoGalleryEntry>> OnChangeEntries { get; } = new();
-            
+
         public GameObject GameObject { get; set; }
+
+        public void Add(PhotoGalleryEntry entry)
+        {
+            Entries.Add(entry);
+            OnChangeEntries.OnNext(Entries);
+        }
 
         public void Bind()
         {

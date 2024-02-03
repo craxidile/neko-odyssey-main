@@ -35,6 +35,11 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
             {
                 CatCode = GameRunner.Instance.Core.Player.Capture.CatCode,
             });
+            
+            GameRunner.Instance.Core.Player.Phone.PhotoGallery.Add(new PhotoGalleryEntry()
+            {
+                CatCode = GameRunner.Instance.Core.Player.Capture.CatCode,
+            });
 
             var assetBundleName = $"{GameRunner.Instance.Core.Player.Capture.CatCode.ToLower()}snap";
             if (_catPhoto) Destroy(_catPhoto);
