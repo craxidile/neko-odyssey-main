@@ -83,7 +83,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
 
         private void Update()
         {
-            if (!_isOpen) UpdateSwipeCharacterAnimation();
+            if (!_isOpen) UpdateSwipeAnimation();
 
             if (!_transitionActive) return;
             var targetPosition = Vector3.Lerp(_startPosition, _endPosition, _positionTransitionTimeCount);
@@ -117,7 +117,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
             currentPhoneAppCanvas.DOFade(1, AppSwapDuration);
         }
 
-        private void UpdateSwipeCharacterAnimation()
+        private void UpdateSwipeAnimation()
         {
             var contentPosition = socialFeedScrollRect.content.position;
             var scrollRectDelta = contentPosition - _tempSlideCheckScrollRectPosition;
