@@ -12,9 +12,6 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Phone
 {
     public class PlayerPhone
     {
-        
-        private static int running = 1;
-        
         private readonly List<PlayerPhoneApp> _phoneAppList = new()
         {
             PlayerPhoneApp.SocialNetwork,
@@ -37,11 +34,6 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Phone
 
         public GameObject GameObject { get; set; }
 
-        public PlayerPhone()
-        {
-            _id = running++;
-        }
-
         public void Bind()
         {
             SocialNetwork.Bind();
@@ -50,37 +42,22 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Phone
 
         public void Start()
         {
-            GameRunner.Instance.PlayerInputHandler.OnMove.Subscribe(input =>
-            {
-                if (GameRunner.Instance.Core.Player.Mode != PlayerMode.Phone || input.y == 0) return;
-                OnScroll.OnNext(input);
-            }).AddTo(GameRunner.Instance);
+            var subscriptions = new List<IDisposable>();
 
-            GameRunner.Instance.PlayerInputHandler.OnNextMenuTriggerred.Subscribe(_ =>
-            {
-                if (GameRunner.Instance.Core.Player.Mode != PlayerMode.Phone) return;
-                var index = _currentAppIndex;
-                var nextIndex = Math.Min(_phoneAppList.Count - 1, index + 1);
-                if (nextIndex == index) return;
-                Debug.Log($">>canvas_swap<< check 02 *{_id}* {index} {nextIndex}");
-                SetAppIndices(index, nextIndex);
-            }).AddTo(GameRunner.Instance);
+            subscriptions.Add(GameRunner.Instance.PlayerInputHandler.OnMove.Subscribe(HandleScroll));
+            
+            subscriptions.Add(GameRunner.Instance.PlayerInputHandler.OnNextMenuTriggerred
+                .Subscribe(HandleNextMenuInput)
+            );
 
-            GameRunner.Instance.PlayerInputHandler.OnPrevMenuTriggerred.Subscribe(_ =>
-            {
-                if (GameRunner.Instance.Core.Player.Mode != PlayerMode.Phone) return;
-                var index = _currentAppIndex;
-                var prevIndex = Math.Max(0, index - 1);
-                if (prevIndex == index) return;
-                Debug.Log($">>canvas_swap<< check 02 *{_id}* {index} {prevIndex}");
-                SetAppIndices(index, prevIndex);
-            }).AddTo(GameRunner.Instance);
+            subscriptions.Add(GameRunner.Instance.PlayerInputHandler.OnPrevMenuTriggerred
+                .Subscribe(HandlePreviousMenuInput)
+            );
 
-            GameRunner.Instance.Core.Player.OnChangeMode.Subscribe(mode =>
-            {
-                if (mode != PlayerMode.Phone) return;
-                ResetCurrentIndex();
-            }).AddTo(GameRunner.Instance);
+            subscriptions.Add(GameRunner.Instance.Core.Player.OnChangeMode.Subscribe(ResetCurrentIndex));
+            
+            foreach (var subscription in subscriptions)
+                subscription.AddTo(GameRunner.Instance)
 
             SocialNetwork.Start();
             PhotoGallery.Start();
@@ -92,15 +69,38 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Phone
             PhotoGallery.Unbind();
         }
 
-        private void ResetCurrentIndex()
+        private void HandleScroll(Vector2 input)
         {
-            Debug.Log($">>canvas_swap<< check 03 *{_id}* {_previousAppIndex} {0}");
+            if (GameRunner.Instance.Core.Player.Mode != PlayerMode.Phone || input.y == 0) return;
+            OnScroll.OnNext(input);
+        }
+
+        private void HandleNextMenuInput(Unit _)
+        {
+            if (GameRunner.Instance.Core.Player.Mode != PlayerMode.Phone) return;
+            var index = _currentAppIndex;
+            var nextIndex = Math.Min(_phoneAppList.Count - 1, index + 1);
+            if (nextIndex == index) return;
+            SetAppIndices(index, nextIndex);
+        }
+
+        private void HandlePreviousMenuInput(Unit _)
+        {
+            if (GameRunner.Instance.Core.Player.Mode != PlayerMode.Phone) return;
+            var index = _currentAppIndex;
+            var prevIndex = Math.Max(0, index - 1);
+            if (prevIndex == index) return;
+            SetAppIndices(index, prevIndex);
+        }
+
+        private void ResetCurrentIndex(PlayerMode mode)
+        {
+            if (mode != PlayerMode.Phone) return;
             SetAppIndices(_currentAppIndex, 0);
         }
 
         private void SetAppIndices(int previousIndex, int nextIndex)
         {
-            Debug.Log($">>canvas_swap<< check 04 *{_id}* {previousIndex} {nextIndex}");
             _previousAppIndex = previousIndex;
             _currentAppIndex = nextIndex;
             OnChangeApp.OnNext(CurrentApp);

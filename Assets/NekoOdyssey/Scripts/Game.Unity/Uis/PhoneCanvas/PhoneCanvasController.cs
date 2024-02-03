@@ -109,15 +109,13 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
         private void AnimateCanvasSwap(PlayerPhoneApp _)
         {
             var previousApp = GameRunner.Instance.Core.Player.Phone.PreviousApp;
-            Debug.Log($">>canvas_swap<< 00");
             var currentApp = GameRunner.Instance.Core.Player.Phone.CurrentApp;
-            Debug.Log($">>canvas_swap<< 01");
             if (!_phoneModeCanvasMap.ContainsKey(previousApp) || !_phoneModeCanvasMap.ContainsKey(currentApp)) return;
+            
             var prevPhoneAppCanvas = _phoneModeCanvasMap[previousApp];
             var currentPhoneAppCanvas = _phoneModeCanvasMap[currentApp];
-            Debug.Log($">>canvas_swap<< 02 {previousApp} {currentApp}");
             if (prevPhoneAppCanvas == currentPhoneAppCanvas) return;
-            Debug.Log($">>canvas_swap<< 03 {previousApp} {currentApp}");
+            
             prevPhoneAppCanvas.DOFade(0, AppSwapDuration);
             currentPhoneAppCanvas.DOFade(1, AppSwapDuration);
         }
