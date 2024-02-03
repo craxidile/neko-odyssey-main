@@ -9,32 +9,30 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.SceneFadeCanvas
     public class SceneFadeCanvasController : MonoBehaviour
     {
         private const float FadeDuration = 1.5f;
+        
         private CanvasGroup _canvasGroup;
 
         private void Awake()
         {
+            gameObject.SetActive(true);
+            
             _canvasGroup = GetComponent<CanvasGroup>();
+            _canvasGroup.alpha = 1f;
+            
         }
 
         private void Start()
         {
             GameRunner.Instance.Core.GameScene.OnChangeSceneMode.Subscribe(mode =>
             {
-                if (mode == GameSceneMode.Opening)
-                {
-                    gameObject.SetActive(true);
-                    _canvasGroup.alpha = 1;
-                    _canvasGroup.DOFade(0, FadeDuration);
-                }
-                else
-                {
-                    _canvasGroup.alpha = 0;
-                    _canvasGroup.DOFade(1, FadeDuration);
-                    
-                }
-            });
+                AnimateFade(mode == GameSceneMode.Opening);
+            }).AddTo(this);
         }
 
-
+        private void AnimateFade(bool opening)
+        {
+            _canvasGroup.alpha = opening ? 1 : 0;
+            _canvasGroup.DOFade(opening ? 0 : 1, FadeDuration);
+        }
     }
 }
