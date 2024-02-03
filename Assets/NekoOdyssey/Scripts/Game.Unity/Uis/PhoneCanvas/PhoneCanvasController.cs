@@ -16,6 +16,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
         private const float AppSwapDuration = 0.3f;
         private const float ScrollAnimationTriggerDelta = 12f;
         private const float SlideDelayTimeDelta = 0.5f;
+        private const float ContentScrollTimeFactor = 1000f;
 
         private readonly Dictionary<PlayerPhoneApp, CanvasGroup> _phoneModeCanvasMap = new();
         private readonly Dictionary<PlayerPhoneApp, ScrollRect> _phoneModeScrollRectMap = new();
@@ -101,7 +102,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
         private void ScrollPanel(Vector2 input)
         {
             var contentPosition = socialFeedScrollRect.content.anchoredPosition;
-            contentPosition.y -= Time.deltaTime * input.y * 1000;
+            contentPosition.y -= Time.deltaTime * input.y * ContentScrollTimeFactor;
             var currentApp = GameRunner.Instance.Core.Player.Phone.CurrentApp;
             if (!_phoneModeScrollRectMap.ContainsKey(currentApp)) return;
             var scrollRect = _phoneModeScrollRectMap[currentApp];
@@ -118,8 +119,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
             var currentPhoneAppCanvas = _phoneModeCanvasMap[currentApp];
             if (prevPhoneAppCanvas == currentPhoneAppCanvas) return;
             
-            prevPhoneAppCanvas.DOFade(0, AppSwapDuration);
-            currentPhoneAppCanvas.DOFade(1, AppSwapDuration);
+            prevPhoneAppCanvas.DOFade(0f, AppSwapDuration);
+            currentPhoneAppCanvas.DOFade(1f, AppSwapDuration);
         }
 
         private void UpdateSwipeAnimation()
