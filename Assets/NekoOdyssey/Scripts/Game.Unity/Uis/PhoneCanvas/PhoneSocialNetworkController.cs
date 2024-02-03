@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using DG.Tweening;
+using NekoOdyssey.Scripts.Models;
 using UniRx;
-using NekoOdyssey.Scripts.Game.Unity.Models;
 using UnityEngine;
 
 namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas

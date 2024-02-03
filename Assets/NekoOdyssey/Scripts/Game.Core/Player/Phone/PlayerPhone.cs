@@ -21,7 +21,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Phone
         private int _previousAppIndex;
         private int _currentAppIndex;
 
-        private bool IsPhoneMode => GameRunner.Instance.Core.Player.Mode == PlayerMode.Phone;
+        private static bool IsPhoneMode => GameRunner.Instance.Core.Player.Mode == PlayerMode.Phone;
 
         public PlayerPhoneApp PreviousApp => _phoneAppList[_previousAppIndex];
         public PlayerPhoneApp CurrentApp => _phoneAppList[_currentAppIndex];
@@ -32,9 +32,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Phone
         public Subject<Vector2> OnScroll { get; } = new();
         public Subject<PlayerPhoneApp> OnChangeApp { get; } = new();
 
-        private int _id;
-
         public GameObject GameObject { get; set; }
+        
 
         public void Bind()
         {

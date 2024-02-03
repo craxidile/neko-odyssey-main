@@ -1,10 +1,10 @@
 ﻿using System;
 
-namespace NekoOdyssey.Scripts.Game.Unity.Models
+namespace NekoOdyssey.Scripts.Models
 {
     [Serializable]
     public class SocialFeed
     {
-        public string CatCode { get; set;  }
+        public string CatCode { get; set; }
     }
 }

@@ -4,7 +4,7 @@ using NekoOdyssey.Scripts.Game.Core.Capture;
 using UnityEngine;
 using UniRx;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
-using NekoOdyssey.Scripts.Game.Unity.Models;
+using NekoOdyssey.Scripts.Models;
 using UnityEngine.UI;
 
 namespace NekoOdyssey.Scripts.Game.Unity.Player
