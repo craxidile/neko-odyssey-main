@@ -14,17 +14,12 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
     {
         private bool _active;
 
-        // Game Objects
         private GameObject _captureScreen;
 
-        // private GameObject _captureBlurPlane;
         private GameObject _catPhotoContainer;
         private GameObject _catPhoto;
         private Animator _animator;
         private SpriteRenderer _renderer;
-
-        private IDisposable _playerModeChangedSubscription;
-        private IDisposable _activeChangeSubscription;
 
         private void SetActive(PlayerMode mode)
         {
@@ -50,8 +45,6 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
                 _catPhoto = Instantiate(asset, _catPhotoContainer.transform) as GameObject;
             }
 
-            // GameRunner.Instance.GameCore.Player.GameObject.transform.position =
-            //     GameRunner.Instance.GameCore.Player.Capture.TargetPosition;
             string trigger = null;
             switch (GameRunner.Instance.Core.Player.Capture.Mode)
             {
@@ -69,10 +62,6 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
             if (trigger != null) _animator.SetTrigger(trigger);
             DOVirtual.DelayedCall(2f, () =>
             {
-                // _captureScreen.SetActive(true);
-                // _captureBlurPlane.SetActive(true);
-
-
                 var mainCamera = Camera.main;
                 if (mainCamera == null) return;
                 var postProcessVolume = mainCamera.GetComponent<PostProcessVolume>();
@@ -133,9 +122,15 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
                     1f
                 );
             });
-            DOVirtual.DelayedCall(7f, () => { _animator.SetTrigger($"EndCapture"); });
+            DOVirtual.DelayedCall(7f, () =>
+            {
+                _animator.SetTrigger($"EndCapture");
+            });
 
-            DOVirtual.DelayedCall(8f, () => { GameRunner.Instance.Core.Player.SetMode(PlayerMode.Move); });
+            DOVirtual.DelayedCall(8f, () =>
+            {
+                GameRunner.Instance.Core.Player.SetMode(PlayerMode.Move);
+            });
         }
 
 
@@ -143,7 +138,6 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
         {
             var playerController = GameRunner.Instance.Core.Player.GameObject.GetComponent<PlayerController>();
             _captureScreen = playerController.captureScreen;
-            // _captureBlurPlane = playerController.captureBlurPlane;
             _catPhotoContainer = playerController.catPhotoContainer;
             _animator = playerController.GetComponent<Animator>();
             _renderer = playerController.GetComponent<SpriteRenderer>();
@@ -151,12 +145,9 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
 
         public void Start()
         {
-            _playerModeChangedSubscription = GameRunner.Instance.Core.Player.OnChangeMode.Subscribe(SetActive);
-        }
-
-        public void OnDestroy()
-        {
-            _playerModeChangedSubscription.Dispose();
+            GameRunner.Instance.Core.Player.OnChangeMode
+                .Subscribe(SetActive)
+                .AddTo(this);
         }
     }
 }

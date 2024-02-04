@@ -16,6 +16,9 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
 {
     public class PlayerMenuController : MonoBehaviour
     {
+        private const float MenuScale = 1f;
+        private const float MenuGap = MenuScale * .4f;
+        
         public PlayerMenuAction[] availableActions;
         public PlayerMenuSite site;
         public bool autoActive;
@@ -23,9 +26,6 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
         private List<GameObject> _banners = new();
         private bool _eligibleToShow = false;
         private bool _active = false;
-
-        private IDisposable _activeSubscription;
-        private IDisposable _currentActionSubscription;
 
         private void Awake()
         {
@@ -57,15 +57,12 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
 
         private void Start()
         {
-            _activeSubscription = GameRunner.Instance.Core.PlayerMenu.OnActive.Subscribe(SetMenuActive);
-            _currentActionSubscription = GameRunner.Instance.Core.PlayerMenu.OnChangeAction
-                .Subscribe(TriggerCurrentAction);
-        }
-
-        private void OnDestroy()
-        {
-            _activeSubscription.Dispose();
-            _currentActionSubscription.Dispose();
+            GameRunner.Instance.Core.PlayerMenu.OnActive
+                .Subscribe(SetMenuActive)
+                .AddTo(this);
+            GameRunner.Instance.Core.PlayerMenu.OnChangeAction
+                .Subscribe(TriggerCurrentAction)
+                .AddTo(this);
         }
 
         private void OnTriggerEnter(Collider other)
@@ -77,7 +74,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
         {
             if (!other.CompareTag("Player")) return;
             _eligibleToShow = true;
-            GameRunner.Instance.Core.PlayerMenuCandidateManager.Add(new PlayerMenuCandidate()
+            GameRunner.Instance.Core.PlayerMenuCandidateManager.Add(new PlayerMenuCandidate
             {
                 Actions = availableActions,
                 GameObject = gameObject,
@@ -99,13 +96,11 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
 
         private void TriggerCurrentAction(PlayerMenuAction currentAction)
         {
-            // Debug.Log($">>compare_site<< {GameRunner.Instance.GameCore.PlayerMenu.Site} {site}");
             if (GameRunner.Instance.Core.PlayerMenu.Site != site) return;
             var availableActionList = availableActions.ToList();
             foreach (var action in availableActionList)
             {
                 var index = availableActionList.IndexOf(action);
-                // Debug.Log($">>index<< {index} {action} {_banners.Count}");
                 var banner = _banners[index];
                 if (!banner) continue;
                 var animator = banner.GetComponent<Animator>();
@@ -131,30 +126,23 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
 
         private IEnumerator CreateActionBanner(PlayerMenuAction action, int index, int length)
         {
-            const float scale = 1;
-            const float originalGap = 0.4f;
-            const float gap = scale * originalGap;
-            var originalPosition = new Vector3(0, 0, -gap * (length - 1) / 2);
-            Debug.Log($">>banner_01<<");
+            var originalPosition = new Vector3(0, 0, -MenuGap * (length - 1) / 2);
 
             if (action == PlayerMenuAction.None) yield break;
             var actionName = Enum.GetName(typeof(PlayerMenuAction), action);
+            if (actionName == null) yield break;
             var bundleName = $"{actionName.ToLower()}action";
-            Debug.Log($">>banner_02<<");
 
             if (!GameRunner.Instance.AssetMap.ContainsKey(bundleName)) yield break;
             var bannerAsset = GameRunner.Instance.AssetMap[bundleName];
-            Debug.Log($">>banner_03<<");
 
-            if (bannerAsset == null) yield break;
+            if (!bannerAsset) yield break;
             var banner = Instantiate(bannerAsset, transform) as GameObject;
-            if (banner == null) yield break;
-            Debug.Log($">>banner_04<<");
+            if (!banner) yield break;
 
             var order = length - 1 - index;
-            banner.transform.localPosition = originalPosition + new Vector3(0, 0, order * gap);
-            banner.transform.localScale = new Vector3(scale, scale, scale);
-            banner.GetComponent<SpriteRenderer>().sortingOrder = 999999;
+            banner.transform.localPosition = originalPosition + new Vector3(0, 0, order * MenuGap);
+            banner.transform.localScale = new Vector3(MenuScale, MenuScale, MenuScale);
             _banners.Add(banner);
 
             banner.SetActive(false);
