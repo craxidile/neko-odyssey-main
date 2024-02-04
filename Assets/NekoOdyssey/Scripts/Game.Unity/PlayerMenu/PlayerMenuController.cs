@@ -19,13 +19,13 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
         private const float MenuScale = 1f;
         private const float MenuGap = MenuScale * .4f;
         
+        private readonly List<GameObject> _banners = new();
+        private bool _eligibleToShow = false;
+        private bool _active = false;
+
         public PlayerMenuAction[] availableActions;
         public PlayerMenuSite site;
         public bool autoActive;
-
-        private List<GameObject> _banners = new();
-        private bool _eligibleToShow = false;
-        private bool _active = false;
 
         private void Awake()
         {
@@ -65,10 +65,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
                 .AddTo(this);
         }
 
-        private void OnTriggerEnter(Collider other)
-        {
-            OnTriggerStay(other);
-        }
+        private void OnTriggerEnter(Collider other) => OnTriggerStay(other);
 
         private void OnTriggerStay(Collider other)
         {
@@ -88,10 +85,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
         {
             if (!other.CompareTag("Player")) return;
             _eligibleToShow = false;
-            GameRunner.Instance.Core.PlayerMenuCandidateManager.Remove(new PlayerMenuCandidate()
-            {
-                Site = site
-            });
+            var menuCandidateManager = GameRunner.Instance.Core.PlayerMenuCandidateManager;
+            menuCandidateManager.Remove(new PlayerMenuCandidate { Site = site });
         }
 
         private void TriggerCurrentAction(PlayerMenuAction currentAction)
@@ -101,6 +96,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
             foreach (var action in availableActionList)
             {
                 var index = availableActionList.IndexOf(action);
+                if (index < 0 || index >= _banners.Count) continue;
                 var banner = _banners[index];
                 if (!banner) continue;
                 var animator = banner.GetComponent<Animator>();
@@ -119,9 +115,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
         private void DisplayBanners()
         {
             foreach (var banner in _banners)
-            {
                 banner.SetActive(_eligibleToShow && _active);
-            }
         }
 
         private IEnumerator CreateActionBanner(PlayerMenuAction action, int index, int length)
@@ -143,6 +137,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
             var order = length - 1 - index;
             banner.transform.localPosition = originalPosition + new Vector3(0, 0, order * MenuGap);
             banner.transform.localScale = new Vector3(MenuScale, MenuScale, MenuScale);
+            banner.GetComponent<SpriteRenderer>().sortingOrder = 999999;
             _banners.Add(banner);
 
             banner.SetActive(false);

@@ -79,9 +79,15 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
 
         private void Start()
         {
-            GameRunner.Instance.Core.Player.OnChangeMode.Subscribe(SetActive).AddTo(this);
-            GameRunner.Instance.Core.Player.Phone.OnScroll.Subscribe(ScrollPanel).AddTo(this);
-            GameRunner.Instance.Core.Player.Phone.OnChangeApp.Subscribe(AnimateCanvasSwap).AddTo(this);
+            GameRunner.Instance.Core.Player.OnChangeMode
+                .Subscribe(SetActive)
+                .AddTo(this);
+            GameRunner.Instance.Core.Player.Phone.OnScroll
+                .Subscribe(ScrollAppPane)
+                .AddTo(this);
+            GameRunner.Instance.Core.Player.Phone.OnChangeApp
+                .Subscribe(AnimateCanvasSwap)
+                .AddTo(this);
         }
 
         private void Update()
@@ -99,7 +105,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
             _canvasGroup.blocksRaycasts = _isOpen;
         }
 
-        private void ScrollPanel(Vector2 input)
+        private void ScrollAppPane(Vector2 input)
         {
             var contentPosition = socialFeedScrollRect.content.anchoredPosition;
             contentPosition.y -= Time.deltaTime * input.y * ContentScrollTimeFactor;
@@ -134,7 +140,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
 
         private void TriggerSwipeAnimation()
         {
-            if (!(Time.time >= _slideDelayTime)) return;
+            if (!_playerAnimator || Time.time < _slideDelayTime) return;
             _slideDelayTime = Time.time + SlideDelayTimeDelta;
             _playerAnimator.SetTrigger($"Swipe");
         }

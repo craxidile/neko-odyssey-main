@@ -1,4 +1,8 @@
 ﻿using System;
+using NekoOdyssey.Scripts.Game.Unity.Player.Capture;
+using NekoOdyssey.Scripts.Game.Unity.Player.Conversations;
+using NekoOdyssey.Scripts.Game.Unity.Player.Movement;
+using NekoOdyssey.Scripts.Game.Unity.Player.Phone;
 using UniRx;
 using UniRx.Triggers;
 using Unity.VisualScripting;
