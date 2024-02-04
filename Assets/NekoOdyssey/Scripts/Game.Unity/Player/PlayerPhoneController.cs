@@ -15,7 +15,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
 
         // Game Objects
         private GameObject _phoneScreen;
-        private GameObject _blurPlane;
+
+        // private GameObject _blurPlane;
         private Animator _animator;
         private SpriteRenderer _renderer;
         private DepthOfField _depthOfField;
@@ -25,7 +26,10 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
             _previousActive = _active;
             _active = mode == PlayerMode.Phone;
             _phoneScreen.SetActive(_active);
-            _blurPlane.SetActive(_active);
+            // _blurPlane.SetActive(_active);
+
+            if (_active)
+                _animator.SetLayerWeight(_animator.GetLayerIndex($"Phone"), 1f);
 
             switch (_previousActive)
             {
@@ -42,14 +46,9 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
         {
             var playerController = GameRunner.Instance.Core.Player.GameObject.GetComponent<PlayerController>();
             _phoneScreen = playerController.phoneScreen;
-            _blurPlane = playerController.phoneBlurPlane;
+            // _blurPlane = playerController.phoneBlurPlane;
             _animator = playerController.GetComponent<Animator>();
             _renderer = playerController.GetComponent<SpriteRenderer>();
-
-            var mainCamera = Camera.main;
-            if (mainCamera == null) return;
-            var postProcessVolume = mainCamera.GetComponent<PostProcessVolume>();
-            _depthOfField = postProcessVolume.profile.GetSetting<DepthOfField>();
         }
 
         private void Start()
@@ -57,28 +56,24 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
             GameRunner.Instance.Core.Player.OnChangeMode.Subscribe(SetActive).AddTo(this);
         }
 
+        private void Update()
+        {
+            GameRunner.Instance.playerCamera.fieldOfView = GameRunner.Instance.mainCamera.fieldOfView;
+        }
+
         private void AnimateOpening()
         {
+            Debug.Log($">>animate<< opening");
             _renderer.flipX = false;
             SoundEffectController.Instance.openPhone.Play();
-
-            DOTween.To(
-                () => (double)_depthOfField.focalLength.value,
-                value => _depthOfField.focalLength.value = (float)value,
-                50f,
-                1f
-            );
+            // GameRunner.Instance.playerCamera.transform.DOLocalMoveZ(-4f, 0.5f);
         }
 
         private void AnimateClosing()
         {
+            Debug.Log($">>animate<< closing");
             SoundEffectController.Instance.closePhone.Play();
-            DOTween.To(
-                () => (double)_depthOfField.focalLength.value,
-                value => _depthOfField.focalLength.value = (float)value,
-                1.5f,
-                1f
-            );
+            // GameRunner.Instance.playerCamera.transform.DOLocalMoveZ(0, 0.8f);
         }
     }
 }
