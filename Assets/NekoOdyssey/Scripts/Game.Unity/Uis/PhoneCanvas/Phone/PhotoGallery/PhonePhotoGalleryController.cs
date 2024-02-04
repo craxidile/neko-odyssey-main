@@ -1,14 +1,19 @@
 ﻿using System.Collections.Generic;
-using UniRx;
+using System.Linq;
 using DG.Tweening;
+using NekoOdyssey.Scripts.Game.Core.Player.Phone;
 using NekoOdyssey.Scripts.Models;
+using UniRx;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
-namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
+namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone.PhotoGallery
 {
     public class PhonePhotoGalleryController : MonoBehaviour
     {
-        private GameObject _photoGalleryEntryCell;
+        private GameObject _gridCell;
+        private ScrollRect _scrollRect;
 
         private readonly List<GameObject> _photoGalleryEntryCells = new();
 
@@ -16,7 +21,11 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
         {
             var phoneCanvasController = GameRunner.Instance.Core.Player.Phone.GameObject
                 .GetComponent<PhoneCanvasController>();
-            _photoGalleryEntryCell = phoneCanvasController.photoGalleryEntryCell;
+            var phoneCanvasUi = phoneCanvasController.phoneUiList
+                .FirstOrDefault(ui => ui.phoneApp == PlayerPhoneApp.PhotoGallery);
+            if (phoneCanvasUi == null) return;
+            _gridCell = phoneCanvasUi.gridCell;
+            _scrollRect = phoneCanvasUi.scrollRect;
 
             DOVirtual.DelayedCall(1f, () =>
             {
@@ -34,7 +43,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
                 }
             });
         }
-        
+
         private void Start()
         {
             GameRunner.Instance.Core.Player.Phone.PhotoGallery.OnChangeEntries.Subscribe(GeneratePhotoGalleryEntryGrid);
@@ -54,14 +63,14 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
             }
 
             var phoneCanvasController = GetComponent<PhoneCanvasController>();
-            var contentPosition = phoneCanvasController.socialFeedScrollRect.content.anchoredPosition;
+            var contentPosition = _scrollRect.content.anchoredPosition;
             contentPosition.y = 0;
-            phoneCanvasController.socialFeedScrollRect.content.anchoredPosition = contentPosition;
+            _scrollRect.content.anchoredPosition = contentPosition;
         }
 
         private void AddPhotoGalleryEntryCell(PhotoGalleryEntry photoGalleryEntry)
         {
-            var newPhotoEntryCellObject = Instantiate(_photoGalleryEntryCell, _photoGalleryEntryCell.transform.parent);
+            var newPhotoEntryCellObject = Instantiate(_gridCell, _gridCell.transform.parent);
             var photoTransform = newPhotoEntryCellObject.GetComponent<PhotoGalleryEntryCellController>().photoTransform;
             var assetBundleName = $"{photoGalleryEntry.CatCode.ToLower()}snap";
             if (GameRunner.Instance.AssetMap.TryGetValue(assetBundleName, out var asset))
@@ -75,7 +84,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
                 catPhotoTransform.anchoredPosition = photoTransform.anchoredPosition;
                 catPhotoTransform.sizeDelta = photoTransform.sizeDelta;
             }
-        
+
             _photoGalleryEntryCells.Add(newPhotoEntryCellObject);
             newPhotoEntryCellObject.SetActive(true);
         }

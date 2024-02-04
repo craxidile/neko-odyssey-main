@@ -1,13 +1,10 @@
 ﻿using System;
-using DG.Tweening;
-using NekoOdyssey.Scripts.Game.Core.Capture;
-using UnityEngine;
-using UniRx;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 using NekoOdyssey.Scripts.Game.Unity.Uis.DialogCanvas;
-using UnityEngine.UI;
+using UniRx;
+using UnityEngine;
 
-namespace NekoOdyssey.Scripts.Game.Unity.Player
+namespace NekoOdyssey.Scripts.Game.Unity.Player.Conversations
 {
     public class PlayerConversationController : MonoBehaviour
     {

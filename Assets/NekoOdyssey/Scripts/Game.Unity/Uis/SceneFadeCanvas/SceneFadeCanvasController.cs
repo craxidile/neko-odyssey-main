@@ -18,21 +18,19 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.SceneFadeCanvas
             
             _canvasGroup = GetComponent<CanvasGroup>();
             _canvasGroup.alpha = 1f;
-            
         }
 
         private void Start()
         {
-            GameRunner.Instance.Core.GameScene.OnChangeSceneMode.Subscribe(mode =>
-            {
-                AnimateFade(mode == GameSceneMode.Opening);
-            }).AddTo(this);
+            GameRunner.Instance.Core.GameScene.OnChangeSceneMode
+                .Subscribe(mode => AnimateFade(mode == GameSceneMode.Opening))
+                .AddTo(this);
         }
 
         private void AnimateFade(bool opening)
         {
-            _canvasGroup.alpha = opening ? 1 : 0;
-            _canvasGroup.DOFade(opening ? 0 : 1, FadeDuration);
+            _canvasGroup.alpha = opening ? 1f : 0f;
+            _canvasGroup.DOFade(opening ? 0f : 1f, FadeDuration);
         }
     }
 }
