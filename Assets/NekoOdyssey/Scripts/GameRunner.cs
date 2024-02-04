@@ -25,9 +25,10 @@ namespace NekoOdyssey.Scripts.Game.Unity
 
         private PlayerInputActions _inputActions;
 
-        public GameCoreRunner Core { get; } = new();
+        public Camera mainCamera;
+        public Camera playerCamera;
 
-        public GameObject testCanvas;
+        public GameCoreRunner Core { get; } = new();
 
         public PlayerInputHandler PlayerInputHandler { get; private set; }
         public UiInputHandler UiInputHandler { get; private set; }
@@ -48,7 +49,7 @@ namespace NekoOdyssey.Scripts.Game.Unity
             PlayerInputHandler.InputActions = _inputActions;
 
             gameObject.AddComponent<GlobalSiteEntranceController>();
-            gameObject.AddComponent<GlobalCaptureActionHandler>();
+            gameObject.AddComponent<CentralCaptureActionHandler>();
             gameObject.AddComponent<GlobalConversationActionHandler>();
             gameObject.AddComponent<AssetBundleLoader>();
             

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using DG.Tweening;
+using NekoOdyssey.Scripts.Models;
 using UniRx;
-using NekoOdyssey.Scripts.Game.Unity.Models;
 using UnityEngine;
 
 namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
@@ -10,7 +10,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
     {
         private GameObject _socialFeedCell;
 
-        private List<GameObject> _socialFeedCells = new();
+        private readonly List<GameObject> _socialFeedCells = new();
 
         private void Awake()
         {
@@ -20,7 +20,6 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
             
             DOVirtual.DelayedCall(1f, () =>
             {
-                Debug.Log($">>player_menu_ready<< awake");
                 if (GameRunner.Instance.Ready)
                 {
                     GenerateSocialFeedGrid(GameRunner.Instance.Core.Player.Phone.SocialNetwork.Feeds);

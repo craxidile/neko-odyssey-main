@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace NekoOdyssey.Scripts.Game.Unity.Capture
 {
-    public class GlobalCaptureActionHandler : MonoBehaviour
+    public class CentralCaptureActionHandler : MonoBehaviour
     {
         private void Start()
         {

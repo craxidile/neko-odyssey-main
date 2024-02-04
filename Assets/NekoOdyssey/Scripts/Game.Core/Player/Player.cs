@@ -13,13 +13,13 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
     {
         public PlayerMode Mode { get; private set; } = PlayerMode.Move;
         public bool Running { get; private set; } = false;
-        
+
         public PlayerPhone Phone { get; } = new();
         public PlayerCapture Capture { get; } = new();
         public PlayerConversation Conversation { get; } = new();
-            
+
         public GameObject GameObject { get; set; }
-        
+
         public Subject<PlayerMode> OnChangeMode { get; } = new();
         public Subject<bool> OnRun { get; } = new();
         public Subject<Vector2> OnMove { get; } = new();
@@ -27,7 +27,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
         private IDisposable _phoneTriggeredSubscription;
         private IDisposable _movingSubscription;
         private IDisposable _runningSubscription;
-
+        
         public void Bind()
         {
             Phone.Bind();
@@ -56,6 +56,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
                     OnMove.OnNext(new Vector2(0, 0));
                     return;
                 }
+
                 OnMove.OnNext(input);
             });
             _runningSubscription = GameRunner.Instance.PlayerInputHandler.OnSpeedStart.Subscribe(_ =>
@@ -70,7 +71,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
                 Running = false;
                 OnRun.OnNext(Running);
             });
-            
+
             Phone.Start();
             Capture.Start();
             Conversation.Start();

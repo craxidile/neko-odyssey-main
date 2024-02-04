@@ -4,7 +4,8 @@ using NekoOdyssey.Scripts.Game.Core.Capture;
 using UnityEngine;
 using UniRx;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
-using NekoOdyssey.Scripts.Game.Unity.Models;
+using NekoOdyssey.Scripts.Models;
+using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.UI;
 
 namespace NekoOdyssey.Scripts.Game.Unity.Player
@@ -15,7 +16,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
 
         // Game Objects
         private GameObject _captureScreen;
-        private GameObject _captureBlurPlane;
+
+        // private GameObject _captureBlurPlane;
         private GameObject _catPhotoContainer;
         private GameObject _catPhoto;
         private Animator _animator;
@@ -30,8 +32,13 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
             if (!_active) return;
             _animator.SetLayerWeight(_animator.GetLayerIndex($"Capture"), 1f);
             // _renderer.flipX = false;
-            
+
             GameRunner.Instance.Core.Player.Phone.SocialNetwork.Add(new SocialFeed()
+            {
+                CatCode = GameRunner.Instance.Core.Player.Capture.CatCode,
+            });
+
+            GameRunner.Instance.Core.Player.Phone.PhotoGallery.Add(new PhotoGalleryEntry()
             {
                 CatCode = GameRunner.Instance.Core.Player.Capture.CatCode,
             });
@@ -63,14 +70,20 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
             DOVirtual.DelayedCall(2f, () =>
             {
                 // _captureScreen.SetActive(true);
-                _captureBlurPlane.SetActive(true);
+                // _captureBlurPlane.SetActive(true);
+
+
+                var mainCamera = Camera.main;
+                if (mainCamera == null) return;
+                var postProcessVolume = mainCamera.GetComponent<PostProcessVolume>();
+                var depthOfField = postProcessVolume.profile.GetSetting<DepthOfField>();
                 DOTween.To(
-                    () => _captureBlurPlane.GetComponent<MeshRenderer>().material.GetFloat("_FrostIntensity"),
-                    value => _captureBlurPlane.GetComponent<MeshRenderer>().material.SetFloat("_FrostIntensity", value),
-                    0.5f,
-                    0.5f
+                    () => (double)depthOfField.focalLength.value,
+                    value => depthOfField.focalLength.value = (float)value,
+                    50f,
+                    1f
                 );
-                
+
                 var canvasGroup = _catPhotoContainer.GetComponent<CanvasGroup>();
                 canvasGroup.alpha = 0f;
                 var rectTransform = _catPhotoContainer.GetComponent<RectTransform>();
@@ -83,18 +96,17 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
                 // _captureScreen.SetActive(false);
                 var canvasGroup = _catPhotoContainer.GetComponent<CanvasGroup>();
                 canvasGroup.DOFade(0, .5f);
-                DOTween.Sequence()
-                    .Append(DOTween.To(
-                        () => _captureBlurPlane.GetComponent<MeshRenderer>().material.GetFloat("_FrostIntensity"),
-                        value => _captureBlurPlane.GetComponent<MeshRenderer>().material
-                            .SetFloat("_FrostIntensity", value),
-                        0,
-                        0.5f
-                    ))
-                    .AppendCallback(() =>
-                    {
-                        _captureBlurPlane.SetActive(false);
-                    });
+
+                var mainCamera = Camera.main;
+                if (mainCamera == null) return;
+                var postProcessVolume = mainCamera.GetComponent<PostProcessVolume>();
+                var depthOfField = postProcessVolume.profile.GetSetting<DepthOfField>();
+                DOTween.To(
+                    () => (double)depthOfField.focalLength.value,
+                    value => depthOfField.focalLength.value = (float)value,
+                    38f,
+                    .5f
+                );
             });
             DOVirtual.DelayedCall(7f, () => { _animator.SetTrigger($"EndCapture"); });
 
@@ -106,7 +118,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
         {
             var playerController = GameRunner.Instance.Core.Player.GameObject.GetComponent<PlayerController>();
             _captureScreen = playerController.captureScreen;
-            _captureBlurPlane = playerController.captureBlurPlane;
+            // _captureBlurPlane = playerController.captureBlurPlane;
             _catPhotoContainer = playerController.catPhotoContainer;
             _animator = playerController.GetComponent<Animator>();
             _renderer = playerController.GetComponent<SpriteRenderer>();
