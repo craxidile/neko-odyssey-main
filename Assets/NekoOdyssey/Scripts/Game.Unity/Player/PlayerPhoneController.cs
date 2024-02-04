@@ -25,7 +25,9 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
         {
             _previousActive = _active;
             _active = mode == PlayerMode.Phone;
+
             _phoneScreen.SetActive(_active);
+            GameRunner.Instance.playerCamera.gameObject.SetActive(_active);
             // _blurPlane.SetActive(_active);
 
             if (_active)
@@ -58,6 +60,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
 
         private void Update()
         {
+            if (!GameRunner.Instance.playerCamera.gameObject.activeSelf) return;
             GameRunner.Instance.playerCamera.fieldOfView = GameRunner.Instance.mainCamera.fieldOfView;
         }
 
