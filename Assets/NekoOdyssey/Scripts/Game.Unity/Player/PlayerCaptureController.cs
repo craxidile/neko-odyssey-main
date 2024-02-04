@@ -78,9 +78,21 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
                 var postProcessVolume = mainCamera.GetComponent<PostProcessVolume>();
                 var depthOfField = postProcessVolume.profile.GetSetting<DepthOfField>();
                 DOTween.To(
+                    () => (double)depthOfField.focusDistance.value,
+                    value => depthOfField.focusDistance.value = (float)value,
+                    .1f,
+                    1f
+                );
+                DOTween.To(
+                    () => (double)depthOfField.aperture.value,
+                    value => depthOfField.aperture.value = (float)value,
+                    .1f,
+                    1f
+                );
+                DOTween.To(
                     () => (double)depthOfField.focalLength.value,
                     value => depthOfField.focalLength.value = (float)value,
-                    50f,
+                    2f,
                     1f
                 );
 
@@ -101,11 +113,24 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
                 if (mainCamera == null) return;
                 var postProcessVolume = mainCamera.GetComponent<PostProcessVolume>();
                 var depthOfField = postProcessVolume.profile.GetSetting<DepthOfField>();
+
+                DOTween.To(
+                    () => (double)depthOfField.focusDistance.value,
+                    value => depthOfField.focusDistance.value = (float)value,
+                    1.5f,
+                    1f
+                );
+                DOTween.To(
+                    () => (double)depthOfField.aperture.value,
+                    value => depthOfField.aperture.value = (float)value,
+                    7f,
+                    1f
+                );
                 DOTween.To(
                     () => (double)depthOfField.focalLength.value,
                     value => depthOfField.focalLength.value = (float)value,
                     38f,
-                    .5f
+                    1f
                 );
             });
             DOVirtual.DelayedCall(7f, () => { _animator.SetTrigger($"EndCapture"); });
