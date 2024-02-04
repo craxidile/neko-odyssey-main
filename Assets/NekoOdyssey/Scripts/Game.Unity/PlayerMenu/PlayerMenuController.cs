@@ -31,7 +31,6 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
         {
             DOVirtual.DelayedCall(1f, () =>
             {
-                Debug.Log($">>player_menu_ready<< awake");
                 if (GameRunner.Instance.Ready)
                 {
                     LoadBanners();
@@ -78,7 +77,6 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
         {
             if (!other.CompareTag("Player")) return;
             _eligibleToShow = true;
-            Debug.Log($">>trigger_stay<< {site}");
             GameRunner.Instance.Core.PlayerMenuCandidateManager.Add(new PlayerMenuCandidate()
             {
                 Actions = availableActions,
@@ -93,7 +91,6 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
         {
             if (!other.CompareTag("Player")) return;
             _eligibleToShow = false;
-            Debug.Log($">>trigger_exit<<");
             GameRunner.Instance.Core.PlayerMenuCandidateManager.Remove(new PlayerMenuCandidate()
             {
                 Site = site
