@@ -11,7 +11,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Sites
 {
     public class CentralSiteDoorController : MonoBehaviour
     {
-        private Dictionary<PlayerMenuSite, string> _siteSceneMap = new()
+        private readonly Dictionary<PlayerMenuSite, string> _siteSceneMap = new()
         {
             { PlayerMenuSite.UdonNekoInside11, $"NekoInside11Udon" },
             { PlayerMenuSite.HouseNekoInside18, $"NekoInside18House" },
