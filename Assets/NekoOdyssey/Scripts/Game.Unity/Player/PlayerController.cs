@@ -13,27 +13,26 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
 {
     public class PlayerController : MonoBehaviour
     {
-        [FormerlySerializedAs("blurPlane")] [Header("Game Objects")]
-        public GameObject phoneBlurPlane;
+        public static readonly Vector3 MainPlayerAnchor = new(25, -1.662279f, -25.688f);
 
-        public static Vector3 MainPlayerAnchor = new Vector3(25, -1.662279f, -25.688f);
-
+        private PlayerMovementController _movementController;
+        private PlayerPhoneController _phoneController;
+        private PlayerCaptureController _captureController;
+        private PlayerConversationController _conversationController;
+        
         public GameObject phoneScreen;
         public GameObject captureBlurPlane;
         public GameObject captureScreen;
         public GameObject catPhotoContainer;
         public GameObject catPhoto;
 
-        [Space] [Header("Movement Speed")] public float moveSpeed = 1.5f;
+        [Space]
+        [Header("Movement Speed")]
+        public float moveSpeed = 1.5f;
         public float boostMultiplier = 1.5f;
         public float gravity = -9.81f;
-        [SerializeField] public float gravityMultiplier = 1; // 3.0f;
-
-        private PlayerMovementController _movementController;
-        private PlayerPhoneController _phoneController;
-        private PlayerCaptureController _captureController;
-        private PlayerConversationController _conversationController;
-
+        public float gravityMultiplier = 1f; // 3.0f;
+        
         private void Awake()
         {
             GameRunner.Instance.Core.Player.GameObject = gameObject;
@@ -52,10 +51,6 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
             {
                 _movementController.ForceSetPosition(MainPlayerAnchor);
             }
-        }
-
-        private void Start()
-        {
         }
 
         private void ResetTurnAround()
