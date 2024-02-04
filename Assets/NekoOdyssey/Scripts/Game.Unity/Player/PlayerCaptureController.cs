@@ -69,14 +69,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
             {
                 // _captureScreen.SetActive(true);
                 _captureBlurPlane.SetActive(true);
-                DOTween.To(
-                    () => _captureBlurPlane.GetComponent<MeshRenderer>().material.GetFloat("_FrostIntensity"),
-                    value => _captureBlurPlane.GetComponent<MeshRenderer>().material.SetFloat("_FrostIntensity", value),
-                    0.5f,
-                    0.5f
-                );
-                
-                var canvasGroup = _catPhotoContainer.GetComponent<CanvasGroup>();
+              
+              var canvasGroup = _catPhotoContainer.GetComponent<CanvasGroup>();
                 canvasGroup.alpha = 0f;
                 var rectTransform = _catPhotoContainer.GetComponent<RectTransform>();
                 rectTransform.DOScale(5f, 0);
@@ -88,18 +82,6 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
                 // _captureScreen.SetActive(false);
                 var canvasGroup = _catPhotoContainer.GetComponent<CanvasGroup>();
                 canvasGroup.DOFade(0, .5f);
-                DOTween.Sequence()
-                    .Append(DOTween.To(
-                        () => _captureBlurPlane.GetComponent<MeshRenderer>().material.GetFloat("_FrostIntensity"),
-                        value => _captureBlurPlane.GetComponent<MeshRenderer>().material
-                            .SetFloat("_FrostIntensity", value),
-                        0,
-                        0.5f
-                    ))
-                    .AppendCallback(() =>
-                    {
-                        _captureBlurPlane.SetActive(false);
-                    });
             });
             DOVirtual.DelayedCall(7f, () => { _animator.SetTrigger($"EndCapture"); });
 
