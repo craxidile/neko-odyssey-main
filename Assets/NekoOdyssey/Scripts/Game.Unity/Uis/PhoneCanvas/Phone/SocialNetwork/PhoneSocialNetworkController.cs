@@ -1,14 +1,18 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
+using NekoOdyssey.Scripts.Game.Core.Player.Phone;
 using NekoOdyssey.Scripts.Models;
 using UniRx;
 using UnityEngine;
+using UnityEngine.UI;
 
-namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
+namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone.SocialNetwork
 {
     public class PhoneSocialNetworkController : MonoBehaviour
     {
-        private GameObject _socialFeedCell;
+        private GameObject _gridCell;
+        private ScrollRect _scrollRect;
 
         private readonly List<GameObject> _socialFeedCells = new();
 
@@ -16,7 +20,11 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
         {
             var phoneCanvasController = GameRunner.Instance.Core.Player.Phone.GameObject
                 .GetComponent<PhoneCanvasController>();
-            _socialFeedCell = phoneCanvasController.socialFeedCell;
+            var phoneCanvasUi = phoneCanvasController.phoneUiList
+                .FirstOrDefault(ui => ui.phoneApp == PlayerPhoneApp.SocialNetwork);
+            if (phoneCanvasUi == null) return;
+            _gridCell = phoneCanvasUi.gridCell;
+            _scrollRect = phoneCanvasUi.scrollRect;
             
             DOVirtual.DelayedCall(1f, () =>
             {
@@ -55,14 +63,14 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
             }
 
             var phoneCanvasController = GetComponent<PhoneCanvasController>();
-            var contentPosition = phoneCanvasController.socialFeedScrollRect.content.anchoredPosition;
+            var contentPosition = _scrollRect.content.anchoredPosition;
             contentPosition.y = 0;
-            phoneCanvasController.socialFeedScrollRect.content.anchoredPosition = contentPosition;
+            _scrollRect.content.anchoredPosition = contentPosition;
         }
 
         private void AddSocialFeedCell(SocialFeed feed)
         {
-            var newPostObject = Instantiate(_socialFeedCell, _socialFeedCell.transform.parent);
+            var newPostObject = Instantiate(_gridCell, _gridCell.transform.parent);
             var photoTransform = newPostObject.GetComponent<SocialFeedCellController>().photoTransform;
             var assetBundleName = $"{feed.CatCode.ToLower()}snap";
             if (GameRunner.Instance.AssetMap.TryGetValue(assetBundleName, out var asset))

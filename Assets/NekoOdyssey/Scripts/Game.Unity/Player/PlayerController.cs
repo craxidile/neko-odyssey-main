@@ -40,7 +40,6 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
             _conversationController = gameObject.AddComponent<PlayerConversationController>();
 
             var playerAnchor = FindAnyObjectByType<PlayerAnchor>();
-            var aa = playerAnchor == null ? Vector3.zero : playerAnchor.transform.position;
             _movementController.ForceSetPosition(
                 playerAnchor != null ? playerAnchor.transform.position : MainPlayerAnchor
             );

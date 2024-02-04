@@ -4,11 +4,13 @@ using System.Linq;
 using DG.Tweening;
 using NekoOdyssey.Scripts.Game.Core.Player.Phone;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
+using NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone.PhotoGallery;
+using NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone.SocialNetwork;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
+namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone
 {
     public class PhoneCanvasController : MonoBehaviour
     {
@@ -18,21 +20,11 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
         private const float SlideDelayTimeDelta = 0.5f;
         private const float ContentScrollTimeFactor = 1000f;
 
-        private readonly Dictionary<PlayerPhoneApp, CanvasGroup> _phoneModeCanvasMap = new();
-        private readonly Dictionary<PlayerPhoneApp, ScrollRect> _phoneModeScrollRectMap = new();
+        public List<PhoneCanvasUi> phoneUiList = new();
 
         public Transform openPositionTransform;
         public Transform closePositionTransform;
         public Transform phoneTransform;
-
-        public CanvasGroup socialFeedCanvas;
-        public CanvasGroup photoGalleryCanvas;
-
-        public GameObject socialFeedCell;
-        public GameObject photoGalleryEntryCell;
-
-        public ScrollRect socialFeedScrollRect;
-        public ScrollRect photoGalleryScrollRect;
 
         private bool _active;
         private bool _isOpen;
@@ -69,12 +61,6 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
             GameRunner.Instance.Core.Player.Phone.GameObject = gameObject;
             gameObject.AddComponent<PhoneSocialNetworkController>();
             gameObject.AddComponent<PhonePhotoGalleryController>();
-            
-            _phoneModeCanvasMap.Add(PlayerPhoneApp.SocialNetwork, socialFeedCanvas);
-            _phoneModeCanvasMap.Add(PlayerPhoneApp.PhotoGallery, photoGalleryCanvas);
-            
-            _phoneModeScrollRectMap.Add(PlayerPhoneApp.SocialNetwork, socialFeedScrollRect);
-            _phoneModeScrollRectMap.Add(PlayerPhoneApp.PhotoGallery, photoGalleryScrollRect);
         }
 
         private void Start()
@@ -93,8 +79,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
         private void Update()
         {
             if (!_isOpen) UpdateSwipeAnimation();
-
             if (!_transitionActive) return;
+            
             var targetPosition = Vector3.Lerp(_startPosition, _endPosition, _positionTransitionTimeCount);
             _positionTransitionTimeCount += Time.deltaTime / PositionTransitionDuration;
             phoneTransform.position = targetPosition;
@@ -107,11 +93,13 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
 
         private void ScrollAppPane(Vector2 input)
         {
-            var contentPosition = socialFeedScrollRect.content.anchoredPosition;
-            contentPosition.y -= Time.deltaTime * input.y * ContentScrollTimeFactor;
             var currentApp = GameRunner.Instance.Core.Player.Phone.CurrentApp;
-            if (!_phoneModeScrollRectMap.ContainsKey(currentApp)) return;
-            var scrollRect = _phoneModeScrollRectMap[currentApp];
+            var phoneCanvasUi = phoneUiList.FirstOrDefault(ui => ui.phoneApp == currentApp);
+            if (phoneCanvasUi == null) return;
+
+            var scrollRect = phoneCanvasUi.scrollRect;
+            var contentPosition = scrollRect.content.anchoredPosition;
+            contentPosition.y -= Time.deltaTime * input.y * ContentScrollTimeFactor;
             scrollRect.content.anchoredPosition = contentPosition;
         }
 
@@ -119,19 +107,23 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas
         {
             var previousApp = GameRunner.Instance.Core.Player.Phone.PreviousApp;
             var currentApp = GameRunner.Instance.Core.Player.Phone.CurrentApp;
-            if (!_phoneModeCanvasMap.ContainsKey(previousApp) || !_phoneModeCanvasMap.ContainsKey(currentApp)) return;
+            var prevCanvasUi = phoneUiList.FirstOrDefault(ui => ui.phoneApp == previousApp);
+            var currentCanvasUi = phoneUiList.FirstOrDefault(ui => ui.phoneApp == currentApp);
+            if (prevCanvasUi == null || currentCanvasUi == null) return;
             
-            var prevPhoneAppCanvas = _phoneModeCanvasMap[previousApp];
-            var currentPhoneAppCanvas = _phoneModeCanvasMap[currentApp];
-            if (prevPhoneAppCanvas == currentPhoneAppCanvas) return;
+            if (prevCanvasUi == currentCanvasUi) return;
             
-            prevPhoneAppCanvas.DOFade(0f, AppSwapDuration);
-            currentPhoneAppCanvas.DOFade(1f, AppSwapDuration);
+            prevCanvasUi.canvasGroup.DOFade(0f, AppSwapDuration);
+            currentCanvasUi.canvasGroup.DOFade(1f, AppSwapDuration);
         }
 
         private void UpdateSwipeAnimation()
         {
-            var contentPosition = socialFeedScrollRect.content.position;
+            var currentApp = GameRunner.Instance.Core.Player.Phone.CurrentApp;
+            var phoneCanvasUi = phoneUiList.FirstOrDefault(ui => ui.phoneApp == currentApp);
+            if (phoneCanvasUi == null) return;
+            
+            var contentPosition = phoneCanvasUi.scrollRect.content.position;
             var scrollRectDelta = contentPosition - _tempSlideCheckScrollRectPosition;
             _tempSlideCheckScrollRectPosition = contentPosition;
             if (Mathf.Abs(scrollRectDelta.y) <= ScrollAnimationTriggerDelta) return;

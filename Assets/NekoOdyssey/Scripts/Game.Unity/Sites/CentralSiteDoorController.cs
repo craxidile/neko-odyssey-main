@@ -11,6 +11,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.Sites
 {
     public class CentralSiteDoorController : MonoBehaviour
     {
+        private const float EntryDelay = 1.5f;
+        private const float ExitDelay = 2f;
         private readonly Dictionary<PlayerMenuSite, string> _siteSceneMap = new()
         {
             { PlayerMenuSite.UdonNekoInside11, $"NekoInside11Udon" },
@@ -35,7 +37,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Sites
             
             if (action == PlayerMenuAction.Exit)
             {
-                DOVirtual.DelayedCall(1.5f, () =>
+                DOVirtual.DelayedCall(EntryDelay, () =>
                 {
                     SceneManager.LoadScene($"Neko2", LoadSceneMode.Single);
                     SceneManager.LoadScene($"Neko08", LoadSceneMode.Additive);
@@ -53,7 +55,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Sites
             var sceneName = _siteSceneMap[site];
             if (sceneName == null) return;
 
-            DOVirtual.DelayedCall(2f, () =>
+            DOVirtual.DelayedCall(ExitDelay, () =>
             {
                 var player = GameRunner.Instance.Core.Player;
                 PlayerController.MainPlayerAnchor = player.GameObject.transform.position;
