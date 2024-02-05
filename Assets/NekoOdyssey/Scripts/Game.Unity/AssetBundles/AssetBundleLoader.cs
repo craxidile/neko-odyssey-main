@@ -40,13 +40,13 @@ namespace NekoOdyssey.Scripts.Game.Unity.AssetBundles
 
             var request = AssetBundle.LoadFromFile(bundlePath);
             var asset = request.LoadAllAssets().FirstOrDefault();
+            if (asset == null) return;
 
             foreach (var item in request.LoadAllAssets())
             {
-                if (asset == null) continue;
                 var itemName = item.name.ToLower();
                 var assetMap = GameRunner.Instance.AssetMap;
-                assetMap[itemName] = asset;
+                assetMap[itemName] = item;
             }
         }
 
