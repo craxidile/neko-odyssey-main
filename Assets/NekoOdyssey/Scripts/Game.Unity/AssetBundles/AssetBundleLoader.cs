@@ -10,6 +10,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.AssetBundles
     public class AssetBundleLoader : MonoBehaviour
     {
         private int _loadedAssetCount;
+        private int _totalAssetCount;
 
         private void Awake()
         {
@@ -34,6 +35,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.AssetBundles
             bundleNames.Add($"c04snap");
             bundleNames.Add($"c05snap");
             bundleNames.Add($"c10snap");
+            bundleNames.Add("cat_snaps");
 
             foreach (var action in Enum.GetValues(typeof(PlayerMenuAction)))
             {
@@ -45,11 +47,13 @@ namespace NekoOdyssey.Scripts.Game.Unity.AssetBundles
 
             foreach (var name in bundleNames)
             {
-                StartCoroutine(LoadAssetBundle(name, bundleNames.Count));
+                LoadAssetBundle(name);
             }
+            
+            GameRunner.Instance.SetReady(true);
         }
-
-        private IEnumerator LoadAssetBundle(string name, int length)
+        
+        private void LoadAssetBundle(string name)
         {
             var bundlePath = System.IO.Path.Combine(
                 Application.streamingAssetsPath,
@@ -57,29 +61,18 @@ namespace NekoOdyssey.Scripts.Game.Unity.AssetBundles
                 name
             );
             Debug.Log($">>load<< 00 {name} {System.IO.File.Exists(bundlePath)}");
-            if (!System.IO.File.Exists(bundlePath))
+            if (!System.IO.File.Exists(bundlePath)) return;
+
+            var request = AssetBundle.LoadFromFile(bundlePath);
+            var asset = request.LoadAllAssets().FirstOrDefault();
+
+            foreach (var item in request.LoadAllAssets())
             {
-                _loadedAssetCount++;
-                yield break;
+                if (asset == null) continue;
+                var itemName = item.name.ToLower();
+                var assetMap = GameRunner.Instance.AssetMap;
+                assetMap[itemName] = asset;
             }
-
-            var request = AssetBundle.LoadFromFileAsync(bundlePath);
-            yield return request;
-            var asset = request.assetBundle.LoadAllAssets().FirstOrDefault();
-
-            Debug.Log($">>load<< 01 {name} {asset}");
-            if (asset == null)
-            {
-                _loadedAssetCount++;
-                yield break;
-            }
-
-            GameRunner.Instance.AssetMap.Add(name, asset);
-
-            _loadedAssetCount++;
-
-            Debug.Log($">>loaded<< {_loadedAssetCount} / {length}");
-            if (_loadedAssetCount == length) GameRunner.Instance.SetReady(true);
         }
 
         private void OnDestroy()

@@ -12,8 +12,6 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Capture
     {
         private bool _active;
 
-        private GameObject _captureScreen;
-
         private GameObject _catPhotoContainer;
         private GameObject _catPhoto;
         private Animator _animator;
@@ -92,7 +90,6 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Capture
             });
             DOVirtual.DelayedCall(6f, () =>
             {
-                // _captureScreen.SetActive(false);
                 var canvasGroup = _catPhotoContainer.GetComponent<CanvasGroup>();
                 canvasGroup.DOFade(0, .5f);
 
@@ -134,8 +131,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Capture
 
         public void Awake()
         {
-            var playerController = GameRunner.Instance.Core.Player.GameObject.GetComponent<PlayerController>();
-            _captureScreen = playerController.captureScreen;
+            var player = GameRunner.Instance.Core.Player;
+            var playerController = player.GameObject.GetComponent<PlayerController>();
             _catPhotoContainer = playerController.catPhotoContainer;
             _animator = playerController.GetComponent<Animator>();
             _renderer = playerController.GetComponent<SpriteRenderer>();

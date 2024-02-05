@@ -21,10 +21,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
         private PlayerConversationController _conversationController;
 
         public GameObject phoneScreen;
-        public GameObject captureBlurPlane;
-        public GameObject captureScreen;
         public GameObject catPhotoContainer;
-        public GameObject catPhoto;
 
         [Space] [Header("Movement Speed")] public float moveSpeed = 1.5f;
         public float boostMultiplier = 1.5f;
