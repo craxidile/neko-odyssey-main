@@ -10,76 +10,44 @@ namespace NekoOdyssey.Scripts.Game.Unity.AssetBundles
     public class AssetBundleLoader : MonoBehaviour
     {
         private int _loadedAssetCount;
+        private int _totalAssetCount;
 
         private void Awake()
         {
-            var bundleNames = new List<string>();
-            bundleNames.Add($"dialogcanvas");
-            bundleNames.Add($"a01sleepsnap");
-            bundleNames.Add($"a01snap");
-            bundleNames.Add($"a02snap");
-            bundleNames.Add($"a04snap");
-            bundleNames.Add($"a06snap");
-            bundleNames.Add($"a07snap");
-            bundleNames.Add($"a11snap");
-            bundleNames.Add($"a12snap");
-            bundleNames.Add($"a14snap");
-            bundleNames.Add($"b01snap");
-            bundleNames.Add($"b08snap");
-            bundleNames.Add($"b09snap");
-            bundleNames.Add($"b12boxsnap");
-            bundleNames.Add($"b12snap");
-            bundleNames.Add($"b13snap");
-            bundleNames.Add($"b14snap");
-            bundleNames.Add($"c04snap");
-            bundleNames.Add($"c05snap");
-            bundleNames.Add($"c10snap");
-
-            foreach (var action in Enum.GetValues(typeof(PlayerMenuAction)))
+            var bundleNames = new List<string>
             {
-                if ((PlayerMenuAction)action == PlayerMenuAction.None) continue;
-                var actionName = Enum.GetName(typeof(PlayerMenuAction), action);
-                var bundleName = $"{actionName.ToLower()}action";
-                bundleNames.Add(bundleName);
-            }
+                $"dialogcanvas",
+                $"menu_actions",
+                $"cat_snaps"
+            };
 
-            foreach (var name in bundleNames)
+            foreach (var bundleName in bundleNames)
             {
-                StartCoroutine(LoadAssetBundle(name, bundleNames.Count));
+                LoadAssetBundle(bundleName);
             }
+            
+            GameRunner.Instance.SetReady(true);
         }
-
-        private IEnumerator LoadAssetBundle(string name, int length)
+        
+        private void LoadAssetBundle(string bundleName)
         {
             var bundlePath = System.IO.Path.Combine(
                 Application.streamingAssetsPath,
                 "SwitchAssetBundles",
-                name
+                bundleName
             );
-            Debug.Log($">>load<< 00 {name} {System.IO.File.Exists(bundlePath)}");
-            if (!System.IO.File.Exists(bundlePath))
+            if (!System.IO.File.Exists(bundlePath)) return;
+
+            var request = AssetBundle.LoadFromFile(bundlePath);
+            var asset = request.LoadAllAssets().FirstOrDefault();
+            if (asset == null) return;
+
+            foreach (var item in request.LoadAllAssets())
             {
-                _loadedAssetCount++;
-                yield break;
+                var itemName = item.name.ToLower();
+                var assetMap = GameRunner.Instance.AssetMap;
+                assetMap[itemName] = item;
             }
-
-            var request = AssetBundle.LoadFromFileAsync(bundlePath);
-            yield return request;
-            var asset = request.assetBundle.LoadAllAssets().FirstOrDefault();
-
-            Debug.Log($">>load<< 01 {name} {asset}");
-            if (asset == null)
-            {
-                _loadedAssetCount++;
-                yield break;
-            }
-
-            GameRunner.Instance.AssetMap.Add(name, asset);
-
-            _loadedAssetCount++;
-
-            Debug.Log($">>loaded<< {_loadedAssetCount} / {length}");
-            if (_loadedAssetCount == length) GameRunner.Instance.SetReady(true);
         }
 
         private void OnDestroy()

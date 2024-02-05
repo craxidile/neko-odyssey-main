@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using NekoOdyssey.Scripts;
 using NekoOdyssey.Scripts.Game.Core.PlayerMenu;
 using NekoOdyssey.Scripts.Game.Unity;
 using UniRx;

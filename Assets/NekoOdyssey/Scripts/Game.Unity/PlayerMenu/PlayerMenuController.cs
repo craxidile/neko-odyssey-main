@@ -16,22 +16,21 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
 {
     public class PlayerMenuController : MonoBehaviour
     {
-        public PlayerMenuAction[] availableActions;
-        public PlayerMenuSite site;
-        public bool autoActive;
-
-        private List<GameObject> _banners = new();
+        private const float MenuScale = 1f;
+        private const float MenuGap = MenuScale * .4f;
+        
+        private readonly List<GameObject> _banners = new();
         private bool _eligibleToShow = false;
         private bool _active = false;
 
-        private IDisposable _activeSubscription;
-        private IDisposable _currentActionSubscription;
+        public PlayerMenuAction[] availableActions;
+        public PlayerMenuSite site;
+        public bool autoActive;
 
         private void Awake()
         {
             DOVirtual.DelayedCall(1f, () =>
             {
-                Debug.Log($">>player_menu_ready<< awake");
                 if (GameRunner.Instance.Ready)
                 {
                     LoadBanners();
@@ -58,28 +57,21 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
 
         private void Start()
         {
-            _activeSubscription = GameRunner.Instance.Core.PlayerMenu.OnActive.Subscribe(SetMenuActive);
-            _currentActionSubscription = GameRunner.Instance.Core.PlayerMenu.OnChangeAction
-                .Subscribe(TriggerCurrentAction);
+            GameRunner.Instance.Core.PlayerMenu.OnActive
+                .Subscribe(SetMenuActive)
+                .AddTo(this);
+            GameRunner.Instance.Core.PlayerMenu.OnChangeAction
+                .Subscribe(TriggerCurrentAction)
+                .AddTo(this);
         }
 
-        private void OnDestroy()
-        {
-            _activeSubscription.Dispose();
-            _currentActionSubscription.Dispose();
-        }
-
-        private void OnTriggerEnter(Collider other)
-        {
-            OnTriggerStay(other);
-        }
+        private void OnTriggerEnter(Collider other) => OnTriggerStay(other);
 
         private void OnTriggerStay(Collider other)
         {
             if (!other.CompareTag("Player")) return;
             _eligibleToShow = true;
-            Debug.Log($">>trigger_stay<< {site}");
-            GameRunner.Instance.Core.PlayerMenuCandidateManager.Add(new PlayerMenuCandidate()
+            GameRunner.Instance.Core.PlayerMenuCandidateManager.Add(new PlayerMenuCandidate
             {
                 Actions = availableActions,
                 GameObject = gameObject,
@@ -93,22 +85,18 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
         {
             if (!other.CompareTag("Player")) return;
             _eligibleToShow = false;
-            Debug.Log($">>trigger_exit<<");
-            GameRunner.Instance.Core.PlayerMenuCandidateManager.Remove(new PlayerMenuCandidate()
-            {
-                Site = site
-            });
+            var menuCandidateManager = GameRunner.Instance.Core.PlayerMenuCandidateManager;
+            menuCandidateManager.Remove(new PlayerMenuCandidate { Site = site });
         }
 
         private void TriggerCurrentAction(PlayerMenuAction currentAction)
         {
-            // Debug.Log($">>compare_site<< {GameRunner.Instance.GameCore.PlayerMenu.Site} {site}");
             if (GameRunner.Instance.Core.PlayerMenu.Site != site) return;
             var availableActionList = availableActions.ToList();
             foreach (var action in availableActionList)
             {
                 var index = availableActionList.IndexOf(action);
-                // Debug.Log($">>index<< {index} {action} {_banners.Count}");
+                if (index < 0 || index >= _banners.Count) continue;
                 var banner = _banners[index];
                 if (!banner) continue;
                 var animator = banner.GetComponent<Animator>();
@@ -127,36 +115,28 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
         private void DisplayBanners()
         {
             foreach (var banner in _banners)
-            {
                 banner.SetActive(_eligibleToShow && _active);
-            }
         }
 
         private IEnumerator CreateActionBanner(PlayerMenuAction action, int index, int length)
         {
-            const float scale = 1;
-            const float originalGap = 0.4f;
-            const float gap = scale * originalGap;
-            var originalPosition = new Vector3(0, 0, -gap * (length - 1) / 2);
-            Debug.Log($">>banner_01<<");
+            var originalPosition = new Vector3(0, 0, -MenuGap * (length - 1) / 2);
 
             if (action == PlayerMenuAction.None) yield break;
             var actionName = Enum.GetName(typeof(PlayerMenuAction), action);
+            if (actionName == null) yield break;
             var bundleName = $"{actionName.ToLower()}action";
-            Debug.Log($">>banner_02<<");
 
             if (!GameRunner.Instance.AssetMap.ContainsKey(bundleName)) yield break;
             var bannerAsset = GameRunner.Instance.AssetMap[bundleName];
-            Debug.Log($">>banner_03<<");
 
-            if (bannerAsset == null) yield break;
+            if (!bannerAsset) yield break;
             var banner = Instantiate(bannerAsset, transform) as GameObject;
-            if (banner == null) yield break;
-            Debug.Log($">>banner_04<<");
+            if (!banner) yield break;
 
             var order = length - 1 - index;
-            banner.transform.localPosition = originalPosition + new Vector3(0, 0, order * gap);
-            banner.transform.localScale = new Vector3(scale, scale, scale);
+            banner.transform.localPosition = originalPosition + new Vector3(0, 0, order * MenuGap);
+            banner.transform.localScale = new Vector3(MenuScale, MenuScale, MenuScale);
             banner.GetComponent<SpriteRenderer>().sortingOrder = 999999;
             _banners.Add(banner);
 
