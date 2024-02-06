@@ -43,22 +43,24 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Phone
 
         public void Start()
         {
-            var subscriptions = new List<IDisposable>();
-
-            subscriptions.Add(GameRunner.Instance.PlayerInputHandler.OnMove.Subscribe(HandleScroll));
+            var player = GameRunner.Instance.Core.Player;
+            var playerInputHandler = GameRunner.Instance.PlayerInputHandler;
             
-            subscriptions.Add(GameRunner.Instance.PlayerInputHandler.OnNextMenuTriggerred
+            playerInputHandler.OnMove
+                .Subscribe(HandleScroll)
+                .AddTo(GameRunner.Instance);
+
+            playerInputHandler.OnNextMenuTriggerred
                 .Subscribe(HandleNextMenuInput)
-            );
+                .AddTo(GameRunner.Instance);
 
-            subscriptions.Add(GameRunner.Instance.PlayerInputHandler.OnPrevMenuTriggerred
+            playerInputHandler.OnPrevMenuTriggerred
                 .Subscribe(HandlePreviousMenuInput)
-            );
+                .AddTo(GameRunner.Instance);
 
-            subscriptions.Add(GameRunner.Instance.Core.Player.OnChangeMode.Subscribe(ResetCurrentIndex));
-
-            foreach (var subscription in subscriptions)
-                subscription.AddTo(GameRunner.Instance);
+            player.OnChangeMode
+                .Subscribe(ResetCurrentIndex)
+                .AddTo(GameRunner.Instance);
 
             SocialNetwork.Start();
             PhotoGallery.Start();
