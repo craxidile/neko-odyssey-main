@@ -24,10 +24,6 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
         public Subject<bool> OnRun { get; } = new();
         public Subject<Vector2> OnMove { get; } = new();
 
-        private IDisposable _phoneTriggeredSubscription;
-        private IDisposable _movingSubscription;
-        private IDisposable _runningSubscription;
-        
         public void Bind()
         {
             Phone.Bind();
@@ -43,34 +39,34 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
 
         public void Start()
         {
-            _phoneTriggeredSubscription = GameRunner.Instance.PlayerInputHandler.OnPhoneTriggerred.Subscribe(_ =>
+            GameRunner.Instance.PlayerInputHandler.OnPhoneTriggerred.Subscribe(_ =>
             {
                 if (Mode != PlayerMode.Move && Mode != PlayerMode.Phone) return;
                 Mode = Mode == PlayerMode.Move ? PlayerMode.Phone : PlayerMode.Move;
                 OnChangeMode.OnNext(Mode);
-            });
-            _movingSubscription = GameRunner.Instance.PlayerInputHandler.OnMove.Subscribe(input =>
+            }).AddTo(GameRunner.Instance);
+            
+            GameRunner.Instance.PlayerInputHandler.OnMove.Subscribe(input =>
             {
                 if (Mode != PlayerMode.Move)
                 {
                     OnMove.OnNext(new Vector2(0, 0));
                     return;
                 }
-
                 OnMove.OnNext(input);
-            });
-            _runningSubscription = GameRunner.Instance.PlayerInputHandler.OnSpeedStart.Subscribe(_ =>
+            }).AddTo(GameRunner.Instance);
+            
+            GameRunner.Instance.PlayerInputHandler.OnSpeedStart.Subscribe(_ =>
             {
                 if (Running) return;
-                Running = true;
-                OnRun.OnNext(Running);
-            });
-            _runningSubscription = GameRunner.Instance.PlayerInputHandler.OnSpeedEnd.Subscribe(_ =>
+                OnRun.OnNext(Running = true);
+            }).AddTo(GameRunner.Instance);
+            
+            GameRunner.Instance.PlayerInputHandler.OnSpeedEnd.Subscribe(_ =>
             {
                 if (!Running) return;
-                Running = false;
-                OnRun.OnNext(Running);
-            });
+                OnRun.OnNext(Running = false);
+            }).AddTo(GameRunner.Instance);
 
             Phone.Start();
             Capture.Start();
@@ -82,9 +78,6 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
             Phone.Unbind();
             Capture.Unbind();
             Conversation.Unbind();
-            _phoneTriggeredSubscription.Dispose();
-            _movingSubscription.Dispose();
-            _runningSubscription.Dispose();
         }
     }
 }
