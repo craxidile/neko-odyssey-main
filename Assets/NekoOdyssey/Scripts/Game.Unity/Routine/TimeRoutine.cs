@@ -16,7 +16,7 @@ public class TimeHrMin
     }
     public TimeHrMin(string timeText)
     {
-        Debug.Log($"create timeHrMin with text : {timeText}");
+        //Debug.Log($"create timeHrMin with text : {timeText}");
         timeText = timeText.Replace(':', '.').Replace(';', '.');
         if (!timeText.Contains('.'))
         {
@@ -59,7 +59,7 @@ public class TimeHrMin
 
     public override string ToString()
     {
-        return $"{Hour}:{Minute}";
+        return $"{Hour.ToString().PadLeft(2, '0')}:{Minute.ToString().PadLeft(2, '0')}";
     }
 }
 
@@ -67,8 +67,13 @@ public class TimeRoutine : MonoBehaviour
 {
     [Header("Test")]
     public Day currentDay;
-    [Range(0, 24)] public int currentHours;
-    [Range(0, 60)] public int currentMinute;
+    //[Range(0, 24)] public int currentHours;
+    //[Range(0, 60)] public int currentMinute;
+    [Range(0, 1440)] public int dayMinute;
+
+    [ReadOnlyField]
+    [SerializeField]
+    string currentTimeText;
 
     public static Day day { get; set; } = 0;
     public static TimeHrMin timeHrMin { get; set; } = new TimeHrMin("00.00");
@@ -82,9 +87,9 @@ public class TimeRoutine : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        day = currentDay;
-        timeHrMin.Hour = currentHours;
-        timeHrMin.Minute = currentMinute;
+        //day = currentDay;
+        //timeHrMin.Hour = currentHours;
+        //timeHrMin.Minute = currentMinute;
     }
 
 
@@ -95,5 +100,12 @@ public class TimeRoutine : MonoBehaviour
     public static void PauseTime()
     {
 
+    }
+
+    private void OnValidate()
+    {
+        day = currentDay;
+        SetTime($"{dayMinute / 60}:{dayMinute % 60}");
+        currentTimeText = timeHrMin.ToString();
     }
 }
