@@ -11,7 +11,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Ais.Cat.Behaviours
         public bool IsExecutable => Enabled && Time.time >= _coolDownTime;
         public CatAi CatAi { get; }
         
-        public abstract float CoolDownDelay { get; }
+        public virtual float CoolDownDelay { get; protected set; }
 
         protected BaseCatBehaviour(CatAi catAi)
         {

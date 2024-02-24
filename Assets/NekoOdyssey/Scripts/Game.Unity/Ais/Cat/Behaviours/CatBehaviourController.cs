@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections;
 using System.Linq;
 using UniRx;
 using DG.Tweening;
 using NekoOdyssey.Scripts.DataSerializers.Csv.CatProfile;
 using NekoOdyssey.Scripts.Game.Core.Ais.Cat;
+using NekoOdyssey.Scripts.Game.Core.Ais.Cat.Behaviours;
 using NekoOdyssey.Scripts.Game.Unity.Ais.Cat.Behaviours.CallToFeed;
+using NekoOdyssey.Scripts.Game.Unity.Ais.Cat.Behaviours.Move;
 using NekoOdyssey.Scripts.Game.Unity.AssetBundles;
 using NekoOdyssey.Scripts.Models;
 using UnityEngine;
@@ -63,13 +66,26 @@ namespace NekoOdyssey.Scripts.Game.Unity.Ais.Cat.Behaviours
             CatAi.Start();
             
             gameObject.AddComponent<CallToFeedController>();
+            gameObject.AddComponent<MoveController>();
 
             CatAi.OnFlip.Subscribe(HandleCatFlip);
+            CatAi.OnChangeMode.Subscribe(HandleCatBehaviourModeChange);
         }
 
         private void HandleCatFlip(bool flipped)
         {
             _spriteRenderer.flipX = flipped;
+        }
+
+        private void HandleCatBehaviourModeChange(CatBehaviourMode _)
+        {
+            StartCoroutine(DelayedSetCatPosition());
+        }
+
+        private IEnumerator DelayedSetCatPosition()
+        {
+            yield return null;
+            CatAi.SetCatPosition(transform.position);
         }
         
     }

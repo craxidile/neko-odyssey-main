@@ -13,6 +13,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
     {
         public PlayerMode Mode { get; private set; } = PlayerMode.Move;
         public bool Running { get; private set; } = false;
+        public Vector3 Position { get; private set; }
 
         public PlayerPhone Phone { get; } = new();
         public PlayerCapture Capture { get; } = new();
@@ -23,7 +24,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
         public Subject<PlayerMode> OnChangeMode { get; } = new();
         public Subject<bool> OnRun { get; } = new();
         public Subject<Vector2> OnMove { get; } = new();
-
+        public Subject<Vector3> OnChangePosition { get; } = new();
+ 
         public void Bind()
         {
             Phone.Bind();
@@ -78,6 +80,12 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
             Phone.Unbind();
             Capture.Unbind();
             Conversation.Unbind();
+        }
+
+        public void SetPosition(Vector3 position)
+        {
+            Position = position;
+            OnChangePosition.OnNext(position);
         }
     }
 }
