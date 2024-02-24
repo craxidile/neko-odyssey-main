@@ -1,8 +1,10 @@
-﻿using DG.Tweening;
+﻿using System;
+using DG.Tweening;
 using NekoOdyssey.Scripts.Game.Core.Capture;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 using NekoOdyssey.Scripts.Models;
 using UniRx;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 
@@ -55,7 +57,20 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Capture
                     break;
             }
 
+            var playerPosition = GameRunner.Instance.Core.Player.Position;
+            var capturePosition = GameRunner.Instance.Core.Player.Capture.TargetPosition;
+            var delta = capturePosition - playerPosition;
+            var deltaX = delta.x;
+            var deltaZ = delta.z;
+            var angle = Mathf.Rad2Deg * Mathf.Atan2(Mathf.Abs(deltaZ), Mathf.Abs(deltaX));
+
+
             if (trigger != null) _animator.SetTrigger(trigger);
+            _animator.SetFloat($"FacingToCat", deltaX <= 0f ? 0.0f : 1.0f);
+            _animator.SetFloat($"CaptureAngle", angle);
+            _renderer.flipX = deltaZ > 0f;
+
+            Debug.Log($">>delta_position<< {angle} "); // {deltaX} {deltaZ} >>facing_to_cat<< {trigger} {(deltaX <= 0f ? 0.0f : 1.0f)}");
             DOVirtual.DelayedCall(2f, () =>
             {
                 var mainCamera = Camera.main;
