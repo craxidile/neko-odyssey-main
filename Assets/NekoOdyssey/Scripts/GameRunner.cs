@@ -21,7 +21,7 @@ namespace NekoOdyssey.Scripts
 
         public GameCameras cameras;
 
-        public GameCoreRunner Core { get; } = new();
+        public GameCore Core { get; } = new();
 
         public PlayerInputHandler PlayerInputHandler { get; private set; }
         public UiInputHandler UiInputHandler { get; private set; }

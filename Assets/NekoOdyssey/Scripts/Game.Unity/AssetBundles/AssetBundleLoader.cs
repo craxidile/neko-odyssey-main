@@ -18,7 +18,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.AssetBundles
             {
                 $"dialogcanvas",
                 $"menu_actions",
-                $"cat_snaps"
+                $"cat_snaps",
+                $"cat_profiles"
             };
 
             foreach (var bundleName in bundleNames)
@@ -39,9 +40,6 @@ namespace NekoOdyssey.Scripts.Game.Unity.AssetBundles
             if (!System.IO.File.Exists(bundlePath)) return;
 
             var request = AssetBundle.LoadFromFile(bundlePath);
-            var asset = request.LoadAllAssets().FirstOrDefault();
-            if (asset == null) return;
-
             foreach (var item in request.LoadAllAssets())
             {
                 var itemName = item.name.ToLower();

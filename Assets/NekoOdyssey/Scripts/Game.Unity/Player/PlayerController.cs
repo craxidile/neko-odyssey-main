@@ -42,6 +42,12 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
             );
         }
 
+        private void Update()
+        {
+            var player = GameRunner.Instance.Core.Player;
+            player.SetPosition(transform.position);
+        }
+
         private void ResetTurnAround()
         {
             _movementController.ResetTurnAround();

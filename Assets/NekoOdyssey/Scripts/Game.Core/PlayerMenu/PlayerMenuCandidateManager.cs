@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using NekoOdyssey.Scripts;
 using NekoOdyssey.Scripts.Game.Unity;
 
@@ -10,6 +11,18 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
         
         public List<PlayerMenuCandidate> Candidates { get; } = new();
 
+        public void Bind()
+        {
+        }
+
+        public void Start()
+        {
+        }
+
+        public void Unbind()
+        {
+        }
+        
         public void Add(PlayerMenuCandidate candidate)
         {
             if (Candidates.Any(c => c.Site == candidate.Site))
