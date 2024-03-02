@@ -62,14 +62,15 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Capture
             if (!mainCamera) return;
             var cameraTransform = mainCamera.transform;
             var forward = cameraTransform.forward;
+            var left = -cameraTransform.right;
             
-            Debug.Log($">>forward<< {cameraTransform.forward}");
 
             var playerPosition = GameRunner.Instance.Core.Player.Position;
             var capturePosition = GameRunner.Instance.Core.Player.Capture.TargetPosition;
             var delta = capturePosition - playerPosition;
             var deltaDepth = forward.x != 0f ? forward.x * delta.x : forward.z * delta.z;
-            var deltaSide = forward.x != 0f ? forward.z * delta.z : forward.x * delta.x;
+            var deltaSide = forward.x != 0f ? left.z * delta.z : left.x * delta.x;
+            Debug.Log($">>forward<< {forward} {left} {deltaDepth} {deltaSide}");
             var angle = Mathf.Rad2Deg * Mathf.Atan2(Mathf.Abs(deltaSide), Mathf.Abs(deltaDepth));
 
 
