@@ -10,11 +10,15 @@ namespace NekoOdyssey.Scripts.Game.Unity.Scenes
         {
             if (Application.isEditor) return;
             SceneManager.LoadScene($"Neko2", LoadSceneMode.Single);
+            SceneManager.LoadScene($"Neko03", LoadSceneMode.Additive);
+            SceneManager.LoadScene($"Neko04", LoadSceneMode.Additive);
+            SceneManager.LoadScene($"Neko05", LoadSceneMode.Additive);
             SceneManager.LoadScene($"Neko08", LoadSceneMode.Additive);
+            SceneManager.LoadScene($"Neko09", LoadSceneMode.Additive);
             SceneManager.LoadScene($"CatScene", LoadSceneMode.Additive);
             SceneManager.LoadScene($"SkyBox", LoadSceneMode.Additive);
             SceneManager.LoadScene($"NekoRoad", LoadSceneMode.Additive);
-            SceneManager.LoadScene($"GameMain", LoadSceneMode.Additive);
+            SceneManager.LoadScene($"GameMain2", LoadSceneMode.Additive);
         }
     }
 }
