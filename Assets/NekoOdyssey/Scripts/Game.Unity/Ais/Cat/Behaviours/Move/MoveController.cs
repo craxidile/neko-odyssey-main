@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using NekoOdyssey.Scripts.Game.Core.Ais.Cat;
 using UniRx;
-using UnityEditor.Animations;
 using UnityEngine;
 
 namespace NekoOdyssey.Scripts.Game.Unity.Ais.Cat.Behaviours.Move
@@ -11,12 +10,10 @@ namespace NekoOdyssey.Scripts.Game.Unity.Ais.Cat.Behaviours.Move
         private bool _executing;
 
         private CatAi _catAi;
-        private AnimatorController _animatorController;
         private CatBehaviourController _behaviourController;
 
         private void Awake()
         {
-            _animatorController = GetComponent<AnimatorController>();
             var behaviourController = GetComponent<CatBehaviourController>();
             _catAi = behaviourController.CatAi;
         }

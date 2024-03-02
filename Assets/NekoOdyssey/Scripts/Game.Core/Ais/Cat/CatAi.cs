@@ -5,7 +5,6 @@ using NekoOdyssey.Scripts.Game.Core.Ais.Cat.Behaviours.CallToFeed;
 using NekoOdyssey.Scripts.Game.Core.Ais.Cat.Behaviours.FollowPlayer;
 using NekoOdyssey.Scripts.Models;
 using UniRx;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.UIElements;
 
