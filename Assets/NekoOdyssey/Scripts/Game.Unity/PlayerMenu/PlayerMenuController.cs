@@ -48,10 +48,16 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
 
         private void LoadBanners()
         {
+            if (availableActions.Length > 1)
+                StartCoroutine(CreateActionBanner(PlayerMenuAction.Exclamation, 0, 1, 0));
             for (var i = 0; i < availableActions.Length; i++)
             {
                 var action = availableActions[i];
-                StartCoroutine(CreateActionBanner(action, i, availableActions.Length));
+                StartCoroutine(CreateActionBanner(
+                    action, 
+                    i, availableActions.Length,
+                    availableActions.Length == 1 ? 0 : 1)
+                );
             }
         }
 
@@ -114,11 +120,13 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
 
         private void DisplayBanners()
         {
-            foreach (var banner in _banners)
+            var level0Banners = _banners
+                .Where(banner => banner.GetComponent<PlayerMenuLevel>().level == 0);
+            foreach (var banner in level0Banners)
                 banner.SetActive(_eligibleToShow && _active);
         }
 
-        private IEnumerator CreateActionBanner(PlayerMenuAction action, int index, int length)
+        private IEnumerator CreateActionBanner(PlayerMenuAction action, int index, int length, int level)
         {
             var originalPosition = new Vector3(0, 0, -MenuGap * (length - 1) / 2);
 
@@ -133,6 +141,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
             if (!bannerAsset) yield break;
             var banner = Instantiate(bannerAsset, transform) as GameObject;
             if (!banner) yield break;
+            var menuLevel = banner.AddComponent<PlayerMenuLevel>();
+            if (menuLevel) menuLevel.level = level;
 
             var order = length - 1 - index;
             banner.transform.localPosition = originalPosition + new Vector3(0, 0, order * MenuGap);
