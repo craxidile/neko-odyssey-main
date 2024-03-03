@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NekoOdyssey.Scripts;
 using NekoOdyssey.Scripts.Game.Core.PlayerMenu;
@@ -14,15 +15,13 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
         private PlayerMenuAction _currentAction;
         private PlayerMenuAction[] _actions = Array.Empty<PlayerMenuAction>();
 
-        private IDisposable _nextMenuTriggeredSubscription;
-        private IDisposable _prevMenuTriggeredSubscription;
-        private IDisposable _fireTriggeredSubscription;
-
         public PlayerMenuSite Site { get; set; } = PlayerMenuSite.None;
+        public int MenuLevel { get; private set; } = 0;
         
         public GameObject GameObject { get; set; }
 
         public Subject<bool> OnActive { get; } = new();
+        public Subject<int> OnChangeMenuLevel { get; } = new();
         public Subject<PlayerMenuAction> OnChangeAction { get; } = new();
         public Subject<PlayerMenuAction> OnCommitAction { get; } = new();
 
@@ -31,12 +30,24 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
             _active = active;
             OnActive.OnNext(_active);
             OnChangeAction.OnNext(_currentAction);
+            SetMenuLevel(MenuLevel);
+        }
+
+        public void SetMenuLevel(int level)
+        {
+            MenuLevel = level;
+            OnChangeMenuLevel.OnNext(MenuLevel);
+            Debug.Log($">>menu_level<< actions_length {MenuLevel} {_actions.Length}");
+            if (_actions.Length == 0) return;
+            var aa = level == 0 && _actions.Length > 1 ? PlayerMenuAction.Exclamation : _actions[0];
+            Debug.Log($">>menu_level<< current_action {aa}");
+            SetCurrentAction(level == 0 && _actions.Length > 1 ? PlayerMenuAction.Exclamation : _actions[0]);
         }
 
         public void SetCurrentAction(PlayerMenuAction action)
         {
             _currentAction = action;
-            Debug.Log($">>on_change_action<< {action}");
+            Debug.Log($">>menu_level<< on_change_action {action}");
             OnChangeAction.OnNext(action);
         }
 
@@ -44,7 +55,7 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
         {
             _actions = actions;
             if (_actions.Length == 0) return;
-            SetCurrentAction(actions[0]);
+            SetCurrentAction(MenuLevel == 0 && actions.Length > 1 ? PlayerMenuAction.Exclamation : actions[0]);
         }
 
         public void Reset()
@@ -52,6 +63,7 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
             SetActive(false);
             _currentAction = PlayerMenuAction.None;
             _actions = Array.Empty<PlayerMenuAction>();
+            MenuLevel = 0;
             Site = PlayerMenuSite.None;
         }
 
@@ -62,20 +74,20 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
 
         public void Start()
         {
-            _fireTriggeredSubscription = GameRunner.Instance.PlayerInputHandler.OnFireTriggerred.Subscribe(_ =>
+            GameRunner.Instance.PlayerInputHandler.OnFireTriggerred.Subscribe(_ =>
             {
                 if (!_active || _currentAction == PlayerMenuAction.None) return;
-                SetActive(false);
+                SetActive(MenuLevel == 0 && _actions.Length > 1);
                 OnCommitAction.OnNext(_currentAction);
-            });
-            _nextMenuTriggeredSubscription = GameRunner.Instance.PlayerInputHandler.OnNextMenuTriggerred.Subscribe(_ =>
+            }).AddTo(GameRunner.Instance);
+            GameRunner.Instance.PlayerInputHandler.OnNextMenuTriggerred.Subscribe(_ =>
             {
                 if (!_active || _actions.Length == 0) return;
                 var index = _actions.ToList().IndexOf(_currentAction);
                 index = Math.Min(_actions.Length - 1, index + 1);
                 SetCurrentAction(_actions[index]);
-            });
-            _prevMenuTriggeredSubscription = GameRunner.Instance.PlayerInputHandler.OnPrevMenuTriggerred.Subscribe(_ =>
+            }).AddTo(GameRunner.Instance);
+            GameRunner.Instance.PlayerInputHandler.OnPrevMenuTriggerred.Subscribe(_ =>
             {
                 if (!_active || _actions.Length == 0) return;
                 var index = _actions.ToList().IndexOf(_currentAction);
@@ -87,9 +99,6 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
         public void Unbind()
         {
             Reset();
-            _fireTriggeredSubscription.Dispose();
-            _nextMenuTriggeredSubscription.Dispose();
-            _prevMenuTriggeredSubscription.Dispose();
         }
     }
 }

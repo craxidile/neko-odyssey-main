@@ -18,7 +18,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
     {
         private const float MenuScale = 1f;
         private const float MenuGap = MenuScale * .4f;
-        
+
         private readonly List<GameObject> _banners = new();
         private bool _eligibleToShow = false;
         private bool _active = false;
@@ -54,7 +54,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
             {
                 var action = availableActions[i];
                 StartCoroutine(CreateActionBanner(
-                    action, 
+                    action,
                     i, availableActions.Length,
                     availableActions.Length == 1 ? 0 : 1)
                 );
@@ -68,6 +68,12 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
                 .AddTo(this);
             GameRunner.Instance.Core.PlayerMenu.OnChangeAction
                 .Subscribe(TriggerCurrentAction)
+                .AddTo(this);
+            GameRunner.Instance.Core.PlayerMenu.OnChangeMenuLevel
+                .Subscribe(SetMenuLevel)
+                .AddTo(this);
+            GameRunner.Instance.Core.PlayerMenu.OnCommitAction
+                .Subscribe(HandlePlayerMenuAction)
                 .AddTo(this);
         }
 
@@ -98,12 +104,16 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
         private void TriggerCurrentAction(PlayerMenuAction currentAction)
         {
             if (GameRunner.Instance.Core.PlayerMenu.Site != site) return;
+            Debug.Log($">>menu_level<< current_action {currentAction}");
             var availableActionList = availableActions.ToList();
+            var banners = GameRunner.Instance.Core.PlayerMenu.MenuLevel == 0
+                ? _banners.Take(1).ToList()
+                : _banners.Skip(1).ToList();
             foreach (var action in availableActionList)
             {
                 var index = availableActionList.IndexOf(action);
-                if (index < 0 || index >= _banners.Count) continue;
-                var banner = _banners[index];
+                if (index < 0 || index >= banners.Count) continue;
+                var banner = banners[index];
                 if (!banner) continue;
                 var animator = banner.GetComponent<Animator>();
                 if (!animator) continue;
@@ -115,16 +125,37 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
         {
             if (GameRunner.Instance.Core.PlayerMenu.Site != site) return;
             _active = active;
-            DisplayBanners();
         }
 
-        private void DisplayBanners()
+        private void HandlePlayerMenuAction(PlayerMenuAction action)
         {
-            var level0Banners = _banners
-                .Where(banner => banner.GetComponent<PlayerMenuLevel>().level == 0);
-            foreach (var banner in level0Banners)
-                banner.SetActive(_eligibleToShow && _active);
+            if (_active|| action != PlayerMenuAction.Exclamation) return;
+            Debug.Log($">>menu_level<< 1");
+            GameRunner.Instance.Core.PlayerMenu.SetMenuLevel(1);
         }
+
+        private void SetMenuLevel(int level)
+        {
+            var bannersToDisplay = _banners
+                .Where(banner =>
+                {
+                    var details = banner.GetComponent<PlayerMenuDetails>();
+                    if (!details) return false;
+                    return details.level == level;
+                })
+                .ToList();
+
+            foreach (var banner in _banners)
+                banner.SetActive(_eligibleToShow && _active && bannersToDisplay.Any(b => b == banner));
+        }
+
+        // private void DisplayBanners()
+        // {
+        //     var level0Banners = _banners
+        //         .Where(banner => banner.GetComponent<PlayerMenuDetails>().level == 0);
+        //     foreach (var banner in level0Banners)
+        //         banner.SetActive(_eligibleToShow && _active);
+        // }
 
         private IEnumerator CreateActionBanner(PlayerMenuAction action, int index, int length, int level)
         {
@@ -141,8 +172,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
             if (!bannerAsset) yield break;
             var banner = Instantiate(bannerAsset, transform) as GameObject;
             if (!banner) yield break;
-            var menuLevel = banner.AddComponent<PlayerMenuLevel>();
-            if (menuLevel) menuLevel.level = level;
+            var details = banner.AddComponent<PlayerMenuDetails>();
+            if (details) details.level = level;
 
             var order = length - 1 - index;
             banner.transform.localPosition = originalPosition + new Vector3(0, 0, order * MenuGap);

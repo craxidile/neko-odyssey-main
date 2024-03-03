@@ -2,7 +2,7 @@
 
 namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
 {
-    public class PlayerMenuLevel : MonoBehaviour
+    public class PlayerMenuDetails : MonoBehaviour
     {
         public int level = 0;
     }
