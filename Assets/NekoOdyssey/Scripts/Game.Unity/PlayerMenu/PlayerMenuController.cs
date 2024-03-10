@@ -7,6 +7,7 @@ using Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu;
 using DG.Tweening;
 using UniRx;
 using NekoOdyssey.Scripts.Game.Core.PlayerMenu;
+using NekoOdyssey.Scripts.Game.Unity.AssetBundles;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -29,43 +30,28 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
 
         private void Awake()
         {
-            DOVirtual.DelayedCall(1f, () =>
-            {
-                if (GameRunner.Instance.Ready)
-                {
-                    LoadBanners();
-                }
-                else
-                {
-                    GameRunner.Instance.OnReady.Subscribe(ready =>
-                    {
-                        if (!ready) return;
-                        LoadBanners();
-                    });
-                }
-            });
+            Debug.Log($">>awake<<");
+            AssetBundleUtils.OnReady(LoadBanners);
         }
 
         private void LoadBanners()
         {
             if (availableActions.Length > 1)
-                StartCoroutine(CreateActionBanner(PlayerMenuAction.Exclamation, 0, 1, 0));
+                CreateActionBanner(PlayerMenuAction.Exclamation, 0, 1, 0);
             for (var i = 0; i < availableActions.Length; i++)
             {
                 var action = availableActions[i];
-                StartCoroutine(CreateActionBanner(
+                CreateActionBanner(
                     action,
-                    i, availableActions.Length,
-                    availableActions.Length == 1 ? 0 : 1)
+                    i,
+                    availableActions.Length,
+                    availableActions.Length == 1 ? 0 : 1
                 );
             }
         }
 
         private void Start()
         {
-            GameRunner.Instance.Core.PlayerMenu.OnActive
-                .Subscribe(SetMenuActive)
-                .AddTo(this);
             GameRunner.Instance.Core.PlayerMenu.OnChangeAction
                 .Subscribe(TriggerCurrentAction)
                 .AddTo(this);
@@ -75,6 +61,9 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
             GameRunner.Instance.Core.PlayerMenu.OnCommitAction
                 .Subscribe(HandlePlayerMenuAction)
                 .AddTo(this);
+            GameRunner.Instance.Core.PlayerMenu.OnChangeSiteActive
+                .Subscribe(HandleSiteActiveChange)
+                .AddTo(this);
         }
 
         private void OnTriggerEnter(Collider other) => OnTriggerStay(other);
@@ -82,15 +71,15 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
         private void OnTriggerStay(Collider other)
         {
             if (!other.CompareTag("Player")) return;
-            _eligibleToShow = true;
-            GameRunner.Instance.Core.PlayerMenuCandidateManager.Add(new PlayerMenuCandidate
-            {
-                Actions = availableActions,
-                GameObject = gameObject,
-                Site = site,
-                AutoActive = autoActive,
-                DistanceFromPlayer = Vector3.Distance(other.transform.position, transform.position)
-            });
+                        _eligibleToShow = true;
+                        GameRunner.Instance.Core.PlayerMenuCandidateManager.Add(new PlayerMenuCandidate
+                        {
+                            Actions = availableActions,
+                            GameObject = gameObject,
+                            Site = site,
+                            AutoActive = autoActive,
+                            DistanceFromPlayer = Vector3.Distance(other.transform.position, transform.position)
+                        });
         }
 
         private void OnTriggerExit(Collider other)
@@ -121,21 +110,39 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
             }
         }
 
-        private void SetMenuActive(bool active)
+        private void HandleSiteActiveChange(Tuple<PlayerMenuSite, bool> siteActive)
         {
-            if (GameRunner.Instance.Core.PlayerMenu.Site != site) return;
-            _active = active;
+            var currentSite = siteActive.Item1;
+            if (currentSite != site) return;
+            var active = siteActive.Item2;
+            if (!active)
+            {
+                foreach (var banner in _banners)
+                    banner.SetActive(false);
+                return;
+            }
+
+            var eligibleBanners = _banners.Where(banner =>
+            {
+                var details = banner.GetComponent<PlayerMenuDetails>();
+                if (!details) return false;
+                return details.level == 0;
+            });
+            foreach (var banner in eligibleBanners)
+                banner.SetActive(true);
         }
 
         private void HandlePlayerMenuAction(PlayerMenuAction action)
         {
-            if (_active|| action != PlayerMenuAction.Exclamation) return;
+            if (_active || action != PlayerMenuAction.Exclamation) return;
             Debug.Log($">>menu_level<< 1");
             GameRunner.Instance.Core.PlayerMenu.SetMenuLevel(1);
         }
 
         private void SetMenuLevel(int level)
         {
+            if (GameRunner.Instance.Core.PlayerMenu.Site != site) return;
+            Debug.Log($">>level<< {level}");
             var bannersToDisplay = _banners
                 .Where(banner =>
                 {
@@ -144,34 +151,27 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
                     return details.level == level;
                 })
                 .ToList();
+            if (bannersToDisplay.Count == 0) return;
 
             foreach (var banner in _banners)
-                banner.SetActive(_eligibleToShow && _active && bannersToDisplay.Any(b => b == banner));
+                banner.SetActive(bannersToDisplay.Any(b => b == banner));
         }
 
-        // private void DisplayBanners()
-        // {
-        //     var level0Banners = _banners
-        //         .Where(banner => banner.GetComponent<PlayerMenuDetails>().level == 0);
-        //     foreach (var banner in level0Banners)
-        //         banner.SetActive(_eligibleToShow && _active);
-        // }
-
-        private IEnumerator CreateActionBanner(PlayerMenuAction action, int index, int length, int level)
+        private void CreateActionBanner(PlayerMenuAction action, int index, int length, int level)
         {
             var originalPosition = new Vector3(0, 0, -MenuGap * (length - 1) / 2);
 
-            if (action == PlayerMenuAction.None) yield break;
+            if (action == PlayerMenuAction.None) return;
             var actionName = Enum.GetName(typeof(PlayerMenuAction), action);
-            if (actionName == null) yield break;
+            if (actionName == null) return;
             var bundleName = $"{actionName.ToLower()}action";
 
-            if (!GameRunner.Instance.AssetMap.ContainsKey(bundleName)) yield break;
+            if (!GameRunner.Instance.AssetMap.ContainsKey(bundleName)) return;
             var bannerAsset = GameRunner.Instance.AssetMap[bundleName];
 
-            if (!bannerAsset) yield break;
+            if (!bannerAsset) return;
             var banner = Instantiate(bannerAsset, transform) as GameObject;
-            if (!banner) yield break;
+            if (!banner) return;
             var details = banner.AddComponent<PlayerMenuDetails>();
             if (details) details.level = level;
 

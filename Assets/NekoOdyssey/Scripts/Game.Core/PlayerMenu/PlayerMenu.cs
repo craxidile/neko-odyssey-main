@@ -15,22 +15,34 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
         private PlayerMenuAction _currentAction;
         private PlayerMenuAction[] _actions = Array.Empty<PlayerMenuAction>();
 
-        public PlayerMenuSite Site { get; set; } = PlayerMenuSite.None;
+        public PlayerMenuSite Site { get; private set; } = PlayerMenuSite.None;
         public int MenuLevel { get; private set; } = 0;
         
         public GameObject GameObject { get; set; }
 
-        public Subject<bool> OnActive { get; } = new();
+        // public Subject<bool> OnActive { get; } = new();
         public Subject<int> OnChangeMenuLevel { get; } = new();
+        // public Subject<PlayerMenuSite> OnChangeSite { get; } = new();
         public Subject<PlayerMenuAction> OnChangeAction { get; } = new();
         public Subject<PlayerMenuAction> OnCommitAction { get; } = new();
+        public Subject<Tuple<PlayerMenuSite, bool>> OnChangeSiteActive { get; } = new();
 
         public void SetActive(bool active)
         {
             _active = active;
-            OnActive.OnNext(_active);
+            // OnActive.OnNext(_active);
+            OnChangeSiteActive.OnNext(Tuple.Create(Site, active));
             OnChangeAction.OnNext(_currentAction);
             SetMenuLevel(MenuLevel);
+        }
+
+        public void SetSiteActive(PlayerMenuSite site, bool active)
+        {
+            Site = site;
+            _active = active;
+            MenuLevel = 0;
+            OnChangeMenuLevel.OnNext(MenuLevel);
+            OnChangeSiteActive.OnNext(Tuple.Create(site, active));
         }
 
         public void SetMenuLevel(int level)
@@ -39,8 +51,6 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
             OnChangeMenuLevel.OnNext(MenuLevel);
             Debug.Log($">>menu_level<< actions_length {MenuLevel} {_actions.Length}");
             if (_actions.Length == 0) return;
-            var aa = level == 0 && _actions.Length > 1 ? PlayerMenuAction.Exclamation : _actions[0];
-            Debug.Log($">>menu_level<< current_action {aa}");
             SetCurrentAction(level == 0 && _actions.Length > 1 ? PlayerMenuAction.Exclamation : _actions[0]);
         }
 
@@ -77,8 +87,14 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
             GameRunner.Instance.PlayerInputHandler.OnFireTriggerred.Subscribe(_ =>
             {
                 if (!_active || _currentAction == PlayerMenuAction.None) return;
-                SetActive(MenuLevel == 0 && _actions.Length > 1);
+                // if (MenuLevel == 0 && _actions.Length > 1)
+                //     OnChangeSiteActive.OnNext(Tuple.Create(Site, false));
+                var menuLevel = MenuLevel;
+                var actionsLength = _actions.Length;
                 OnCommitAction.OnNext(_currentAction);
+                Debug.Log($">>menu_vel<< {menuLevel} {actionsLength}");
+                if (menuLevel > 0 || (menuLevel == 0 && actionsLength == 1))
+                    OnChangeSiteActive.OnNext(Tuple.Create(Site, false));
             }).AddTo(GameRunner.Instance);
             GameRunner.Instance.PlayerInputHandler.OnNextMenuTriggerred.Subscribe(_ =>
             {
