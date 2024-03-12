@@ -11,11 +11,13 @@ namespace NekoOdyssey.Scripts.Game.Unity.Ais.Cat.Behaviours.Move
 
         private CatAi _catAi;
         private CatBehaviourController _behaviourController;
+        private Animator _animator;
 
         private void Awake()
         {
             var behaviourController = GetComponent<CatBehaviourController>();
             _catAi = behaviourController.CatAi;
+            _animator = GetComponent<Animator>();
         }
 
         private void Start()
@@ -28,6 +30,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Ais.Cat.Behaviours.Move
         private void HandleFollowPlayer(Vector3 position)
         {
             StartCoroutine(MoveToPosition(position));
+            _animator.SetBool($"Move", true);
         }
 
         private IEnumerator MoveToPosition(Vector3 position)

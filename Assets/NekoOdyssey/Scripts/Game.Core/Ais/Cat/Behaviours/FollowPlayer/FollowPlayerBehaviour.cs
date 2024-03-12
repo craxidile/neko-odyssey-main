@@ -58,6 +58,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Ais.Cat.Behaviours.FollowPlayer
 
             var moveDuration = distanceToTarget / CatAi.Profile.MoveSpeed;
 
+            CatAi.OnFlip.OnNext(CatAi.DeltaXFromPlayer > 0);
             // catAi.SetFlipToTarget(player.transform.position);
             // catAi.animator.SetBool("Move", true);
 
