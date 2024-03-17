@@ -1,6 +1,6 @@
-﻿namespace NekoOdyssey.IO.FileStore.Standard
+﻿namespace NekoOdyssey.Scripts.IO.FileStore.Standard
 {
-    public class StandardFileStore : BaseFileStore
+    public class StandardFileStore : IBaseFileStore
     {
         public void CreateNew(string fileName)
         {

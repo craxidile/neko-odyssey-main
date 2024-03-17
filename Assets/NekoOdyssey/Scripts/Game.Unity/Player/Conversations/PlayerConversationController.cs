@@ -35,7 +35,6 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Conversations
             dialogCanvasController.messageBox.text = GameRunner.Instance.Core.Player.Conversation.Dialog;
         }
 
-
         public void Awake()
         {
             var playerController = GameRunner.Instance.Core.Player.GameObject.GetComponent<PlayerController>();

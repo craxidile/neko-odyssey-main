@@ -1,4 +1,4 @@
-﻿namespace NekoOdyssey.IO.FileStore.Nintendo
+﻿namespace NekoOdyssey.Scripts.IO.FileStore.Nintendo
 {
     public class NintendoFileStore
     {

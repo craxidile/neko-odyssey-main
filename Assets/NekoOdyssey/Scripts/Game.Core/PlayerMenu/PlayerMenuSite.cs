@@ -42,6 +42,8 @@
         MST01,
         BK01,
         RMChef01,
-        RM01
+        RM01,
+        Man02,
+        Man03,
     }
 }

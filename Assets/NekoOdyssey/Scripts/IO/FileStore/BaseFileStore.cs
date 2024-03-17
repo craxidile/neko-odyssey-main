@@ -1,6 +1,6 @@
-﻿namespace NekoOdyssey.IO.FileStore
+﻿namespace NekoOdyssey.Scripts.IO.FileStore
 {
-    public interface BaseFileStore
+    public interface IBaseFileStore
     {
         void CreateNew(string fileName);
         void Load<T>(string fileName);
