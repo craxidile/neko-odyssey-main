@@ -11,7 +11,7 @@ public class NpcRoutineManager : MonoBehaviour
     //GameObject testEventPoint;
 
     //EventDetail _eventDetail;
-    List<EventDetail> allEvents = new List<EventDetail>();
+
 
 
     private void Awake()
@@ -57,6 +57,7 @@ public class NpcRoutineManager : MonoBehaviour
 
 
         //csv loader
+        var newNpc = new NpcData(testCSV.name.ToLower());
 
         string[] lines = testCSV.text.Split('\n');
 
@@ -98,26 +99,35 @@ public class NpcRoutineManager : MonoBehaviour
 
             EventDetail newEventDetail = new EventDetail(dayList, eventTimeList[0], eventTimeList[1], tragetEventPoint);
 
-            allEvents.Add(newEventDetail);
+            //WorldRoutineManager.allNpcEvents.Add(newEventDetail);
+            newNpc.npcRoutineEvents.Add(newEventDetail);
         }
 
+        WorldRoutineManager.npcDatas.Add(newNpc);
+        Debug.Log($"Add npc {newNpc.npcName}");
+
+    }
+
+    public void InitializedRoutine()
+    {
 
     }
 
 
     void Update()
     {
-        foreach (var eventDetail in allEvents)
-        {
-            if (eventDetail.IsInEventTime(TimeRoutine.day, TimeRoutine.timeHrMin))
-            {
-                eventDetail.targetEventPoint.gameObject.SetActive(true);
-            }
-            else
-            {
-                eventDetail.targetEventPoint.gameObject.SetActive(false);
-            }
-        }
+        //foreach (var eventDetail in WorldRoutineManager.allNpcEvents)
+        //{
+        //    if (eventDetail.IsInEventTime(TimeRoutine.day, TimeRoutine.timeHrMin))
+        //    {
+        //        eventDetail.targetEventPoint.gameObject.SetActive(true);
+        //    }
+        //    else
+        //    {
+        //        eventDetail.targetEventPoint.gameObject.SetActive(false);
+        //    }
+        //}
+
         //if (_eventDetail != null && testEventPoint != null)
         //{
         //    if (_eventDetail.IsInEventTime(TimeRoutine.day, TimeRoutine.timeHrMin))
@@ -132,6 +142,7 @@ public class NpcRoutineManager : MonoBehaviour
 
 
     }
+
 }
 
 

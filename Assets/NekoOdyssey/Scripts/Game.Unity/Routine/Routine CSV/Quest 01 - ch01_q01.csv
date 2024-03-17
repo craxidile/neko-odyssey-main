@@ -1,0 +1,11 @@
+Quest Id,Quest Id Required,Day,Time,Target EventPoint,Related Characters,Rewards
+ch01_quest01_start,-,Mon Tue Wed Thu Fri Sat Sun,14.00-18.30,npc_ch01_q01_womanSweep,npc01_woman,
+ch01_quest01_chat_01,ch01_quest01_start,Mon Tue Wed ,11.00-12.30,npc_ch01_q01_womanVendingMachine,npc01_woman,
+ch01_quest01_chat_01_repeat,ch01_quest01_chat_01,Mon Tue Wed ,11.00-18.30,npc_ch01_q01_womanVendingMachine,npc01_woman,
+ch01_quest01_catFeed_1,ch01_quest01_chat_01,Mon Tue Wed ,11.00-18.30,ch01_quest01_catFeed_1,cat_catFeed1,
+ch01_quest01_catFeed_2,ch01_quest01_chat_01,Mon Tue Wed ,11.00-18.30,ch01_quest01_catFeed_2,cat_catFeed2,
+ch01_quest01_catFeed_3,ch01_quest01_chat_01,Mon Tue Wed ,11.00-18.30,ch01_quest01_catFeed_3,cat_catFeed3,
+ch01_quest01_chat_02,ch01_quest01_catFeed_1+ch01_quest01_catFeed_2+ch01_quest01_catFeed_3,Mon Tue Wed ,11.00-18.30,npc_ch01_q01_womanVendingMachine,npc01_woman,
+ch01_quest01_chat_03,ch01_quest01_chat_02,Mon Tue Wed ,11.00-18.30,npc_ch01_q01_womanFrontHouse,npc01_woman,
+ch01_quest01_chat_04,ch01_quest01_chat_03+Onigiri*3,Mon Tue Wed ,11.00-18.30,npc_ch01_q01_womanFrontHouse,npc01_woman,
+ch01_quest01_complete,ch01_quest01_chat_04,Mon Tue Wed ,11.00-18.30,npc_ch01_q01_womanFrontHouse,npc01_woman,Onigiri*3

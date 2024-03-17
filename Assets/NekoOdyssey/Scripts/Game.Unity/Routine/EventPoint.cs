@@ -4,12 +4,16 @@ using UnityEngine;
 
 public class EventPoint : MonoBehaviour
 {
+    public enum EventPointType { Npc, Area }
+    public EventPointType eventType;
+
     static Dictionary<string, EventPoint> AllEventPoint = new Dictionary<string, EventPoint>();
 
 
     private void Awake()
     {
         AllEventPoint.Add(name, this);
+        gameObject.SetActive(false);
     }
 
 

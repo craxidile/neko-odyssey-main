@@ -66,14 +66,15 @@ public class TimeHrMin
 public class TimeRoutine : MonoBehaviour
 {
     [Header("Test")]
-    public Day currentDay;
+    public TimeScriptable timeScriptable;
+    //public Day currentDay;
     //[Range(0, 24)] public int currentHours;
     //[Range(0, 60)] public int currentMinute;
-    [Range(0, 1440)] public int dayMinute;
+    //[Range(0, 1440)] public int dayMinute;
 
-    [ReadOnlyField]
-    [SerializeField]
-    string currentTimeText;
+    //[ReadOnlyField]
+    //[SerializeField]
+    //string currentTimeText;
 
     public static Day day { get; set; } = 0;
     public static TimeHrMin timeHrMin { get; set; } = new TimeHrMin("00.00");
@@ -90,6 +91,13 @@ public class TimeRoutine : MonoBehaviour
         //day = currentDay;
         //timeHrMin.Hour = currentHours;
         //timeHrMin.Minute = currentMinute;
+
+
+
+
+        day = timeScriptable.currentDay;
+        SetTime($"{timeScriptable.dayMinute / 60}:{timeScriptable.dayMinute % 60}");
+        timeScriptable.currentTimeText = timeHrMin.ToString();
     }
 
 
@@ -104,8 +112,13 @@ public class TimeRoutine : MonoBehaviour
 
     private void OnValidate()
     {
-        day = currentDay;
-        SetTime($"{dayMinute / 60}:{dayMinute % 60}");
-        currentTimeText = timeHrMin.ToString();
+        //day = currentDay;
+        //SetTime($"{dayMinute / 60}:{dayMinute % 60}");
+        //currentTimeText = timeHrMin.ToString();
+    }
+
+    private void OnDrawGizmos()
+    {
+        Update();
     }
 }
