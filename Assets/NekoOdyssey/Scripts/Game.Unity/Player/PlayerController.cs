@@ -2,6 +2,7 @@
 using NekoOdyssey.Scripts.Game.Unity.Player.Capture;
 using NekoOdyssey.Scripts.Game.Unity.Player.Conversations;
 using NekoOdyssey.Scripts.Game.Unity.Player.Movement;
+using NekoOdyssey.Scripts.Game.Unity.Player.Petting;
 using NekoOdyssey.Scripts.Game.Unity.Player.Phone;
 using UniRx;
 using UniRx.Triggers;
@@ -20,6 +21,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
         private PlayerPhoneController _phoneController;
         private PlayerCaptureController _captureController;
         private PlayerConversationController _conversationController;
+        private PlayerPettingController _pettingController;
 
         public GameObject phoneScreen;
         public GameObject catPhotoContainer;
@@ -36,6 +38,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
             _phoneController = gameObject.AddComponent<PlayerPhoneController>();
             _captureController = gameObject.AddComponent<PlayerCaptureController>();
             _conversationController = gameObject.AddComponent<PlayerConversationController>();
+            _pettingController = gameObject.AddComponent<PlayerPettingController>();
 
             var playerAnchor = FindAnyObjectByType<PlayerAnchor>();
             _movementController.ForceSetPosition(
