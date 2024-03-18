@@ -1,6 +1,7 @@
 ﻿using System;
 using NekoOdyssey.Scripts.Game.Core.Player.Capture;
 using NekoOdyssey.Scripts.Game.Core.Player.Conversation;
+using NekoOdyssey.Scripts.Game.Core.Player.Petting;
 using NekoOdyssey.Scripts.Game.Core.Player.Phone;
 using NekoOdyssey.Scripts.Game.Unity;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
@@ -17,6 +18,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
 
         public PlayerPhone Phone { get; } = new();
         public PlayerCapture Capture { get; } = new();
+        public PlayerPetting Petting { get; } = new();
         public PlayerConversation Conversation { get; } = new();
 
         public GameObject GameObject { get; set; }

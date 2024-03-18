@@ -2,6 +2,7 @@
 using NekoOdyssey.Scripts.Game.Unity.Player.Capture;
 using NekoOdyssey.Scripts.Game.Unity.Player.Conversations;
 using NekoOdyssey.Scripts.Game.Unity.Player.Movement;
+using NekoOdyssey.Scripts.Game.Unity.Player.Petting;
 using NekoOdyssey.Scripts.Game.Unity.Player.Phone;
 using UniRx;
 using UniRx.Triggers;
@@ -13,17 +14,14 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
 {
     public class PlayerController : MonoBehaviour
     {
-        //Zone2
-        //public static Vector3 MainPlayerAnchor = new(27, -1.6f, -13f);
-        //Zone3
-        // public static Vector3 MainPlayerAnchor = new(25, -1.662279f, -25.688f);
-        //Zone4
-        public static Vector3 MainPlayerAnchor = new(28, -1.65f, -41.5f);
-        
+
+        // public static Vector3 MainPlayerAnchor = new(27, -1.6f, -13f);
+        public static Vector3 MainPlayerAnchor = new(25, -1.662279f, -25.688f);
         private PlayerMovementController _movementController;
         private PlayerPhoneController _phoneController;
         private PlayerCaptureController _captureController;
         private PlayerConversationController _conversationController;
+        private PlayerPettingController _pettingController;
 
         public GameObject phoneScreen;
         public GameObject catPhotoContainer;
@@ -40,6 +38,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
             _phoneController = gameObject.AddComponent<PlayerPhoneController>();
             _captureController = gameObject.AddComponent<PlayerCaptureController>();
             _conversationController = gameObject.AddComponent<PlayerConversationController>();
+            _pettingController = gameObject.AddComponent<PlayerPettingController>();
 
             var playerAnchor = FindAnyObjectByType<PlayerAnchor>();
             _movementController.ForceSetPosition(

@@ -16,11 +16,13 @@ namespace NekoOdyssey.Scripts.Game.Unity.Ais.Cat.Behaviours.CallToFeed
 
         private CatAi _catAi;
         private CatBehaviourController _behaviourController;
+        private Animator _animator;
 
         private void Awake()
         {
             var behaviourController = GetComponent<CatBehaviourController>();
             _catAi = behaviourController.CatAi;
+            _animator = GetComponent<Animator>();
         }
 
         private void Start()
@@ -34,8 +36,14 @@ namespace NekoOdyssey.Scripts.Game.Unity.Ais.Cat.Behaviours.CallToFeed
         {
             if (_executing) return;
             _executing = true;
-            DOVirtual.DelayedCall(Random.Range(0.5f, 2f), () =>
+            _animator.SetBool($"Move", false);
+            DOVirtual.DelayedCall(.1f, () =>
             {
+                _animator.SetBool($"Hungry", true);
+            });
+            DOVirtual.DelayedCall(Random.Range(.8f, 2f), () =>
+            {
+                _animator.SetBool($"Hungry", false);
                 _executing = false;
             });
         }
