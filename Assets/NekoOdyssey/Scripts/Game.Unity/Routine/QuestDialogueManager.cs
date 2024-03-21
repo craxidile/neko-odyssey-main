@@ -32,15 +32,15 @@ public class QuestDialogueManager : MonoBehaviour
 
             string[] lines = dialogueCSV.text.Split('\n');
 
-            int indexColumn = 0, jumpColumn = -1, actorColumn = 2, firstTextColumn = 3;
+            int indexColumn = -1, jumpColumn = -1, actorColumn = 0, firstTextColumn = 1;
             var columnHeaders = lines[0].Trim().Split(',');
             for (int i = 0; i < columnHeaders.Length; i++)
             {
                 var columnText = columnHeaders[i];
-                if (columnText.Equals("Index")) indexColumn = i;
-                if (columnText.Equals("Jump")) jumpColumn = i;
-                if (columnText.Equals("Actor")) actorColumn = i;
-                if (columnText.Equals("Th")) firstTextColumn = i;
+                if (columnText.ToLowerInvariant().Equals("index")) indexColumn = i;
+                if (columnText.ToLowerInvariant().Equals("jump")) jumpColumn = i;
+                if (columnText.ToLowerInvariant().Equals("actor")) actorColumn = i;
+                if (columnText.ToLowerInvariant().Equals("th")) firstTextColumn = i;
             }
 
 
@@ -57,12 +57,15 @@ public class QuestDialogueManager : MonoBehaviour
 
 
                 //process
-                var indexText = row[indexColumn];
+                var indexText = "0";
+                if (indexColumn >= 0)
+                    indexText = row[indexColumn];
+
                 var actor = row[actorColumn];
                 var messageText = row[firstTextColumn];
 
                 var choiceTargetText = "";
-                if (jumpColumn > 0)
+                if (jumpColumn >= 0)
                     choiceTargetText = row[jumpColumn];
 
 
@@ -90,7 +93,7 @@ public class QuestDialogueGroup
 
     public List<QuestDialogue> questDialogues = new List<QuestDialogue>();
 
-    string _lastestDialogueIndex;
+    //string _lastestDialogueIndex;
 
     public QuestDialogueGroup(string questId)
     {
@@ -99,26 +102,60 @@ public class QuestDialogueGroup
 
 
     int _currentDialogueIndex = 0;
+    QuestDialogue _lastestDialogue;
+    public bool isCanceled { get; set; } = false;
+    public void JumpTo(QuestDialogue currentDialogue)
+    {
+        var listIndex = questDialogues.IndexOf(currentDialogue);
+        Debug.Log($"dialogue Jump to list index {listIndex} : {currentDialogue.messageIndex}, {currentDialogue.actor}, {currentDialogue.message}");
+
+        _currentDialogueIndex = listIndex;
+    }
+    public QuestDialogue GetNextDialogue(QuestDialogue previosDialogue)
+    {
+        var nextDialogueGroup = GetDialogueGroup(previosDialogue.choiceTarget);
+        var jumpDialogue = nextDialogueGroup.FirstOrDefault();
+        JumpTo(jumpDialogue);
+        Debug.Log($"GetNextDialogue with condition {_currentDialogueIndex} : {previosDialogue.messageIndex}, {previosDialogue.actor}, {previosDialogue.message}");
+
+        _lastestDialogue = jumpDialogue;
+        _currentDialogueIndex++;
+        return jumpDialogue;
+    }
     public QuestDialogue GetNextDialogue()
     {
-        if (_currentDialogueIndex + 1 < questDialogues.Count)
+        if (_currentDialogueIndex < questDialogues.Count)
         {
+            var nextDialogue = questDialogues[_currentDialogueIndex];
+
+            Debug.Log($"GetNextDialogue : {_lastestDialogue?.message}, {nextDialogue?.message}");
+
             _currentDialogueIndex++;
+            if (_lastestDialogue == null) return nextDialogue;
 
-            var targetDialogue = questDialogues[_currentDialogueIndex];
-            _lastestDialogueIndex = targetDialogue.choiceTarget;
+            if (!_lastestDialogue.choiceTarget.Equals(""))
+            {
+                return GetNextDialogue(_lastestDialogue);
+            }
+            else
+            if (_lastestDialogue.messageIndex.Equals(nextDialogue.messageIndex))
+            {
+                return nextDialogue;
+            }
+            //_lastestDialogueIndex = targetDialogue.choiceTarget;
 
-            return targetDialogue;
         }
-        else
-        {
-            _currentDialogueIndex = 0;
-            return null;
-        }
+
+
+        _currentDialogueIndex = 0;
+        _lastestDialogue = null;
+        return null;
+
     }
 
     public QuestDialogue[] GetDialogueGroup(string index)
     {
+        Debug.Log($"GetDialogueGroup : {index}");
         return questDialogues.Where(dialogue => dialogue.messageIndex == index).ToArray();
     }
 }

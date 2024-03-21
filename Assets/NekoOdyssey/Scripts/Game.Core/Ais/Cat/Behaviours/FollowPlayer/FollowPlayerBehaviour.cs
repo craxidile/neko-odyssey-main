@@ -21,7 +21,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Ais.Cat.Behaviours.FollowPlayer
 
         public override void Start()
         {
-            Debug.Log($">>modes<< follow_player start");
+            //Debug.Log($">>modes<< follow_player start");
             _targetPositionOnArea = Vector3.zero;
             _catPositionSubscription = CatAi.OnChangeCatPosition
                 .Subscribe(HandleCatPosition);
@@ -36,7 +36,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Ais.Cat.Behaviours.FollowPlayer
 
             if (_targetPositionOnArea == Vector3.zero)
             {
-                Debug.Log($">>modes<< call_to_feed initialize");
+                //Debug.Log($">>modes<< call_to_feed initialize");
                 var randStandDistance = Random.Range(MinDistance, MaxDistance);
 
                 var targetPosition = playerPosition + (catPosition - playerPosition).normalized * randStandDistance;
@@ -49,7 +49,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Ais.Cat.Behaviours.FollowPlayer
 
             if (Vector3.Distance(_targetPositionOnArea, catPosition) <= 0.01f)
             {
-                Debug.Log($">>modes<< call_to_feed end");
+                //Debug.Log($">>modes<< call_to_feed end");
                 End();
                 return;
             }

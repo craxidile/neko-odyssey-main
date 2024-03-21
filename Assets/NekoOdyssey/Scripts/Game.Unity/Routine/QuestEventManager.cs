@@ -81,11 +81,22 @@ public class QuestEventManager : MonoBehaviour
             newQuestEventDetail.questId = questKey.ToLower();
             var questKeyConditions = questKeyConditionsText.Replace(' ', '-').Replace('+', '-').Split('-').ToList();
             newQuestEventDetail.questIdConditions = new List<string>();
+            newQuestEventDetail.questIdConditionsExclude = new List<string>();
             foreach (var questCondition in questKeyConditions)
             {
                 if (!string.IsNullOrEmpty(questCondition))
                 {
-                    newQuestEventDetail.questIdConditions.Add(questCondition);
+                    if (questCondition.StartsWith("!"))
+                    {
+                        var condition = questCondition.Substring(1);
+                        newQuestEventDetail.questIdConditionsExclude.Add(condition.ToLower());
+
+                    }
+                    else
+                    {
+                        newQuestEventDetail.questIdConditions.Add(questCondition.ToLower());
+
+                    }
                 }
             }
 
@@ -140,6 +151,38 @@ public class QuestEventManager : MonoBehaviour
         //}
         #endregion
     }
+
+
+    public bool CheckQuestCondition(QuestEventDetail questDetail)
+    {
+        if (questDetail.questIdConditions.Count > 0)
+        {
+            if (questDetail.questIdConditions.Any(condition => !ownedQuestKey.Contains(condition))) //check player quest owned quest id
+            {
+                return false;
+            }
+
+            foreach (var key in questDetail.questIdConditions)//check for player inventory item
+            {
+                //if (!playerInventory.contains(key))
+                //{
+                //return false;
+                //}
+            }
+
+        }
+
+
+
+
+        if (questDetail.questIdConditionsExclude.Count > 0 && questDetail.questIdConditionsExclude.Any(condition => ownedQuestKey.Contains(condition)))
+        {
+            return false;
+        }
+
+
+        return true;
+    }
 }
 
 
@@ -155,6 +198,7 @@ public class QuestEventDetail : EventDetail
 
     public string questId;
     public List<string> questIdConditions;
+    public List<string> questIdConditionsExclude;
 
     public List<string> relatedCharacters;
 

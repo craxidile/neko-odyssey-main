@@ -22,7 +22,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Ais.Cat.Behaviours.CallToFeed
 
         public override void Start()
         {
-            Debug.Log(">>modes<< call_to_feed start");
+            //Debug.Log(">>modes<< call_to_feed start");
             _calling = false;
             _playerDistanceSubscription = CatAi.OnChangePlayerDistance
                 .Subscribe(HandlePlayerDistance)
@@ -33,7 +33,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Ais.Cat.Behaviours.CallToFeed
         {
             if (_calling || CatAi.Mode != CatBehaviourMode.CallToFeed) return;
             _calling = true;
-            Debug.Log(">>modes<< call_to_feed operate");
+            //Debug.Log(">>modes<< call_to_feed operate");
             var playerInRange = distance <= EligibleDistanceFromPlayer;
             if (!playerInRange || !IsExecutable)
             {
@@ -49,7 +49,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Ais.Cat.Behaviours.CallToFeed
         private void End()
         {
             _playerDistanceSubscription.Dispose();
-            Debug.Log(">>modes<< call_to_feed end");
+            //Debug.Log(">>modes<< call_to_feed end");
             _calling = false;
             CatAi.OnFinishBehaviour.OnNext(Unit.Default);
         }

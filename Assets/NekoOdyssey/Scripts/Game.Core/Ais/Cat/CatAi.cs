@@ -72,9 +72,9 @@ namespace NekoOdyssey.Scripts.Game.Core.Ais.Cat
             var modeIndex = modes.IndexOf(Mode);
             var nextIndex = (modeIndex + 1) % modes.Count;
             var nextMode = modes[nextIndex];
-            Debug.Log($">>modes<< finish_behaviour {Mode} next {nextMode}");
+            //Debug.Log($">>modes<< finish_behaviour {Mode} next {nextMode}");
             var nextBehaviour = Behaviours[nextMode];
-            Debug.Log($">>modes<< next_behaviour {nextBehaviour}");
+            //Debug.Log($">>modes<< next_behaviour {nextBehaviour}");
             nextBehaviour.Start();
             SetMode(nextMode);
         }

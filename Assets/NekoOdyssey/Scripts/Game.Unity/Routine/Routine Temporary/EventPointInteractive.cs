@@ -25,6 +25,8 @@ public class EventPointInteractive : MonoBehaviour
         var player = NekoOdyssey.Scripts.GameRunner.Instance.Core.Player.GameObject;
         var thisPointDistance = Vector3.Distance(this.transform.position, player.transform.position);
 
+        Debug.DrawLine(this.transform.position, player.transform.position, Color.red);
+        Debug.DrawLine(NearestPoint.transform.position + (Vector3.up * 0.3f), player.transform.position, Color.yellow);
 
         if (thisPointDistance <= interactiveDistance) //inside range
         {
@@ -41,10 +43,13 @@ public class EventPointInteractive : MonoBehaviour
             {
                 var nearestPointDistance = Vector3.Distance(NearestPoint.transform.position, player.transform.position);
 
-                if (thisPointDistance < nearestPointDistance)
+                if (thisPointDistance <= nearestPointDistance)
                 {
                     NearestPoint = this;
                 }
+
+               
+                
             }
 
         }
