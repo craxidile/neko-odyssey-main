@@ -146,6 +146,8 @@ public class WorldRoutineManager : MonoBehaviour
 
                                         //Debug.Log($"Check index : {dialogueGroup._currentDialogueIndex}");
                                     });
+
+                                    ChatBalloonManager.instance.HideChatBalloon();
                                 }
                                 else
                                 {
@@ -170,6 +172,9 @@ public class WorldRoutineManager : MonoBehaviour
                             {
                                 //complete talking
                                 //restore player control
+                                ChatBalloonManager.instance.HideChatBalloon();
+
+
                                 if (!dialogueGroup.isCanceled)
                                 {
                                     Debug.Log("Complete dialogue");
@@ -183,6 +188,7 @@ public class WorldRoutineManager : MonoBehaviour
                                     Debug.Log("Cancel dialogue");
                                     dialogueGroup.isCanceled = false;
                                 }
+
 
                             }
 
