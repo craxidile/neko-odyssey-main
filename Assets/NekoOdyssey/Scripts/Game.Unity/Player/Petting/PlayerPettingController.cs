@@ -90,6 +90,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Petting
             {
                 _animator.SetBool(petMode, false);
                 _animator.SetLayerWeight(_animator.GetLayerIndex($"Petting"), 0);
+                GameRunner.Instance.Core.PlayerMenu.SetCurrentSiteActive();
                 GameRunner.Instance.Core.Player.SetMode(PlayerMode.Move);
             });
         }

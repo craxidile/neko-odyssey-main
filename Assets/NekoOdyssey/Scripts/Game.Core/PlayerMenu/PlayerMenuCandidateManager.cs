@@ -72,7 +72,9 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
             Debug.Log($">>set_site_active<< {selectedCandidate.Site} true");
             currentPlayerMenu.SetActions(selectedCandidate.Actions);
             if (selectedCandidate.AutoActive)
+            {
                 currentPlayerMenu.SetSiteActive(selectedCandidate.Site, true);
+            }
         }
         
     }

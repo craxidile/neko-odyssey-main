@@ -145,9 +145,10 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Capture
             {
                 _animator.SetTrigger($"EndCapture");
             });
-
+            
             DOVirtual.DelayedCall(8f, () =>
             {
+                GameRunner.Instance.Core.PlayerMenu.SetCurrentSiteActive();
                 GameRunner.Instance.Core.Player.SetMode(PlayerMode.Move);
             });
         }

@@ -4,6 +4,7 @@ using System.Linq;
 using NekoOdyssey.Scripts;
 using NekoOdyssey.Scripts.Game.Core.PlayerMenu;
 using NekoOdyssey.Scripts.Game.Unity;
+using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 using UniRx;
 using UnityEngine;
 
@@ -40,13 +41,13 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
         {
             Site = site;
             _active = active;
-            MenuLevel = 0;
-            OnChangeMenuLevel.OnNext(MenuLevel);
+            SetMenuLevel(0);
             OnChangeSiteActive.OnNext(Tuple.Create(site, active));
         }
 
         public void SetMenuLevel(int level)
         {
+            GameRunner.Instance.Core.Player.SetMode(level == 0 ? PlayerMode.Move : PlayerMode.Submenu);
             MenuLevel = level;
             OnChangeMenuLevel.OnNext(MenuLevel);
             Debug.Log($">>menu_level<< actions_length {MenuLevel} {_actions.Length}");
@@ -68,6 +69,11 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
             SetCurrentAction(MenuLevel == 0 && actions.Length > 1 ? PlayerMenuAction.Exclamation : actions[0]);
         }
 
+        public void SetCurrentSiteActive()
+        {
+            SetSiteActive(Site, true);
+        }
+
         public void Reset()
         {
             SetActive(false);
@@ -84,6 +90,12 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
 
         public void Start()
         {
+            GameRunner.Instance.PlayerInputHandler.OnCancelTriggerred.Subscribe(_ =>
+            {
+                if (GameRunner.Instance.Core.Player.Mode != PlayerMode.Submenu) return;
+                GameRunner.Instance.Core.Player.SetMode(PlayerMode.Move);
+                SetCurrentSiteActive();
+            });
             GameRunner.Instance.PlayerInputHandler.OnFireTriggerred.Subscribe(_ =>
             {
                 if (!_active || _currentAction == PlayerMenuAction.None) return;

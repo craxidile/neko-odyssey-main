@@ -37,5 +37,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.Inputs
         public IObservable<Unit> OnFireTriggerred => this.UpdateAsObservable()
             .Where(_ => InputActions.Player.Fire.triggered);
         
+        public IObservable<Unit> OnCancelTriggerred => this.UpdateAsObservable()
+            .Where(_ => InputActions.Player.Cancel.triggered);
+        
     }
 }

@@ -71,15 +71,15 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
         private void OnTriggerStay(Collider other)
         {
             if (!other.CompareTag("Player")) return;
-                        _eligibleToShow = true;
-                        GameRunner.Instance.Core.PlayerMenuCandidateManager.Add(new PlayerMenuCandidate
-                        {
-                            Actions = availableActions,
-                            GameObject = gameObject,
-                            Site = site,
-                            AutoActive = autoActive,
-                            DistanceFromPlayer = Vector3.Distance(other.transform.position, transform.position)
-                        });
+            _eligibleToShow = true;
+            GameRunner.Instance.Core.PlayerMenuCandidateManager.Add(new PlayerMenuCandidate
+            {
+                Actions = availableActions,
+                GameObject = gameObject,
+                Site = site,
+                AutoActive = autoActive,
+                DistanceFromPlayer = Vector3.Distance(other.transform.position, transform.position)
+            });
         }
 
         private void OnTriggerExit(Collider other)
