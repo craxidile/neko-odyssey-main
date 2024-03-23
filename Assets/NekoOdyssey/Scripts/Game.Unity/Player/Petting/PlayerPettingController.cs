@@ -86,7 +86,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Petting
             _animator.SetFloat($"CaptureAngle", angle);
             _renderer.flipX = deltaSide > 0f;
 
-            DOVirtual.DelayedCall(2f, () =>
+            DOVirtual.DelayedCall(4f, () =>
             {
                 _animator.SetBool(petMode, false);
                 _animator.SetLayerWeight(_animator.GetLayerIndex($"Petting"), 0);
