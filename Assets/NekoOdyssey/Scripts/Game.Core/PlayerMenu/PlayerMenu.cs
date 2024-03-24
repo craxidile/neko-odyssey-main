@@ -57,6 +57,7 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
 
         public void SetCurrentAction(PlayerMenuAction action)
         {
+            Debug.Log($">>vel_vel<< current_action {action}");
             _currentAction = action;
             Debug.Log($">>menu_level<< on_change_action {action}");
             OnChangeAction.OnNext(action);
@@ -101,6 +102,7 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
                 if (!_active || _currentAction == PlayerMenuAction.None) return;
                 // if (MenuLevel == 0 && _actions.Length > 1)
                 //     OnChangeSiteActive.OnNext(Tuple.Create(Site, false));
+                Debug.Log($">>vel_vel<< menu_level: {MenuLevel} action_length: {_actions.Length} current_action: {_currentAction}");
                 var menuLevel = MenuLevel;
                 var actionsLength = _actions.Length;
                 OnCommitAction.OnNext(_currentAction);
@@ -110,14 +112,16 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
             }).AddTo(GameRunner.Instance);
             GameRunner.Instance.PlayerInputHandler.OnNextMenuTriggerred.Subscribe(_ =>
             {
-                if (!_active || _actions.Length == 0) return;
+                var mode = GameRunner.Instance.Core.Player.Mode;
+                if (mode != PlayerMode.Submenu || !_active || _actions.Length == 0) return;
                 var index = _actions.ToList().IndexOf(_currentAction);
                 index = Math.Min(_actions.Length - 1, index + 1);
                 SetCurrentAction(_actions[index]);
             }).AddTo(GameRunner.Instance);
             GameRunner.Instance.PlayerInputHandler.OnPrevMenuTriggerred.Subscribe(_ =>
             {
-                if (!_active || _actions.Length == 0) return;
+                var mode = GameRunner.Instance.Core.Player.Mode;
+                if (mode != PlayerMode.Submenu || !_active || _actions.Length == 0) return;
                 var index = _actions.ToList().IndexOf(_currentAction);
                 index = Math.Max(0, index - 1);
                 SetCurrentAction(_actions[index]);
