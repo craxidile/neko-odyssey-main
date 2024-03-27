@@ -18,7 +18,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Scenes
             SceneManager.LoadScene($"CatScene", LoadSceneMode.Additive);
             SceneManager.LoadScene($"SkyBox", LoadSceneMode.Additive);
             SceneManager.LoadScene($"NekoRoad", LoadSceneMode.Additive);
-            SceneManager.LoadScene($"GameMain2", LoadSceneMode.Additive);
+            SceneManager.LoadScene($"GameMain", LoadSceneMode.Additive);
         }
     }
 }
