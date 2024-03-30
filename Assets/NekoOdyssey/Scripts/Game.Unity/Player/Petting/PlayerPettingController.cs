@@ -11,6 +11,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Petting
 {
     public class PlayerPettingController : MonoBehaviour
     {
+        private const float PettingDelay = 4f;
+        
         private bool _active;
 
         private GameObject _catPhoto;
@@ -30,6 +32,9 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Petting
             GameRunner.Instance.Core.Player.OnChangeMode
                 .Subscribe(SetActive)
                 .AddTo(this);
+            GameRunner.Instance.Core.Player.Petting.OnFinishPetting
+                .Subscribe(HandlePettingEnd)
+                .AddTo(this);
         }
 
 
@@ -45,7 +50,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Petting
         private void HandlePetting()
         {
             _animator.SetLayerWeight(_animator.GetLayerIndex($"Petting"), 1f);
-            
+
             Debug.Log($">>pet_mode<< {GameRunner.Instance.Core.Player.Petting.Mode}");
             string petMode;
             switch (GameRunner.Instance.Core.Player.Petting.Mode)
@@ -86,13 +91,12 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Petting
             _animator.SetFloat($"CaptureAngle", angle);
             _renderer.flipX = deltaSide > 0f;
 
-            DOVirtual.DelayedCall(4f, () =>
-            {
-                _animator.SetBool(petMode, false);
-                _animator.SetLayerWeight(_animator.GetLayerIndex($"Petting"), 0);
-                GameRunner.Instance.Core.PlayerMenu.SetCurrentSiteActive();
-                GameRunner.Instance.Core.Player.SetMode(PlayerMode.Move);
-            });
+            DOVirtual.DelayedCall(PettingDelay, () => { _animator.SetBool(petMode, false); });
+        }
+
+        private void HandlePettingEnd(Unit _)
+        {
+            _animator.SetLayerWeight(_animator.GetLayerIndex($"Petting"), 0);
         }
     }
 }
