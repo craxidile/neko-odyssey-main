@@ -43,6 +43,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Petting
 
             _petting.Mode = attributes.pettingMode;
             _petting.TargetPosition = attributes.pettingAnchor.position;
+            GameRunner.Instance.Core.Cats.CurrentCatCode = attributes.catCode;
             
             _player.SetMode(PlayerMode.Pet);
         }

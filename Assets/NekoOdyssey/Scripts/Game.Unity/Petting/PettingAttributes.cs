@@ -7,5 +7,6 @@ namespace NekoOdyssey.Scripts.Game.Unity.Petting
     {
         public Transform pettingAnchor;
         public PettingMode pettingMode;
+        public string catCode;
     }
 }
