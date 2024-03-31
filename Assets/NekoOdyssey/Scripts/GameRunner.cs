@@ -28,6 +28,7 @@ namespace NekoOdyssey.Scripts
         public UiInputHandler UiInputHandler { get; private set; }
         public Dictionary<string, Object> AssetMap { get; } = new();
         public bool Ready { get; private set; } = false;
+        
         public Subject<bool> OnReady { get; } = new();
 
         public GameRunner()

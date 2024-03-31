@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NekoOdyssey.Scripts.Game.Core.Player.Capture;
 using NekoOdyssey.Scripts.Game.Core.Player.Conversation;
 using NekoOdyssey.Scripts.Game.Core.Player.Petting;
