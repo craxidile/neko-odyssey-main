@@ -49,9 +49,7 @@ public class QuestDialogueManager : MonoBehaviour
                 var line = lines[i];
                 Debug.Log($"load csv line : {line}");
 
-                string[] values = line.Trim().Split(',');
-
-                List<string> row = new List<string>(values);
+                List<string> row = line.Trim().Split(',').ToList();
 
                 if (string.IsNullOrEmpty(row.FirstOrDefault())) continue;
 
@@ -66,7 +64,7 @@ public class QuestDialogueManager : MonoBehaviour
 
                 var choiceTargetText = "";
                 if (jumpColumn >= 0)
-                    choiceTargetText = row[jumpColumn];
+                    choiceTargetText = row[jumpColumn].Replace("-", "");
 
 
                 var newQuestDialogue = new QuestDialogue(indexText,

@@ -27,10 +27,14 @@ public class QuestEventManager : MonoBehaviour
 
     public void InitializedQuestEvent()
     {
-        #region CSV Loader        
-        //csv loader
+        LoadQuestCSV(testCSV);
+    }
 
-        string[] lines = testCSV.text.Split('\n');
+    public void LoadQuestCSV(TextAsset textAsset)
+    {
+        QuestGroup newQuestGroup = new QuestGroup();
+
+        string[] lines = textAsset.text.Split('\n');
 
         for (int i = 1; i < lines.Length; i++)
         {
@@ -51,6 +55,8 @@ public class QuestEventManager : MonoBehaviour
             var timeText = row[3];
             var eventPointKey = row[4];
             var releatedCharactersText = row[5];
+            var releatedCharactersDisableRoutine = row[6];
+            var rewards = row[7];
 
 
             var convertedDayText = dayText.Replace(' ', '-').Replace(':', '-').Replace(';', '-');
@@ -77,7 +83,9 @@ public class QuestEventManager : MonoBehaviour
             var convertedReleatedCharactersText = releatedCharactersText.Replace(' ', '-').Replace(':', '-').Replace(';', '-');
             var releatedCharacters = convertedReleatedCharactersText.ToLower().Split('-').ToList();
 
-            QuestEventDetail newQuestEventDetail = new QuestEventDetail(dayList, eventTimeList[0], eventTimeList[1], tragetEventPoint, releatedCharacters);
+            var isRoutineDisable = bool.Parse(releatedCharactersDisableRoutine);
+
+            QuestEventDetail newQuestEventDetail = new QuestEventDetail(dayList, eventTimeList[0], eventTimeList[1], tragetEventPoint);
             newQuestEventDetail.questId = questKey.ToLower();
             var questKeyConditions = questKeyConditionsText.Replace(' ', '-').Replace('+', '-').Split('-').ToList();
             newQuestEventDetail.questIdConditions = new List<string>();
@@ -99,57 +107,18 @@ public class QuestEventManager : MonoBehaviour
                     }
                 }
             }
+            foreach (var relatedCharacter in releatedCharacters)
+            {
+                newQuestEventDetail.relatedCharacters.Add(relatedCharacter);
+                newQuestEventDetail.relatedCharactersRoutineDisable.Add(relatedCharacter, isRoutineDisable);
+            }
 
             WorldRoutineManager.allQuestEvents.Add(newQuestEventDetail);
+
+            newQuestGroup.questEventDetails.Add(newQuestEventDetail);
         }
 
-        #endregion
-
-
-        #region QuestData
-        //foreach (var questData in testQuestData)
-        //{
-        //    //process
-        //    var questKey = questData.questId;
-        //    var questKeyConditions = questData.questIdRequired;
-        //    var dayText = questData.dayText;
-        //    var timeText = questData.timeText;
-        //    var eventPointKey = questData.targetEventPoint;
-        //    var releatedCharactersText = questData.relatedCharacters;
-
-
-        //    var convertedDayText = dayText.Replace(' ', '-').Replace(':', '-').Replace(';', '-');
-        //    var dayAvaliables = convertedDayText.Split('-');
-        //    HashSet<Day> dayList = new HashSet<Day>();
-
-        //    foreach (var day in dayAvaliables)
-        //    {
-        //        if (System.Enum.TryParse(day, true, out Day dayResult))
-        //        {
-        //            dayList.Add(dayResult);
-        //        }
-        //    }
-
-        //    var convertedTimeText = timeText.Replace(' ', '-').Replace('_', '-');
-        //    var targetTimes = convertedTimeText.Split('-');
-        //    TimeHrMin[] eventTimeList = new TimeHrMin[] { new TimeHrMin(targetTimes[0]), new TimeHrMin(targetTimes[1]) };
-
-
-        //    var tragetEventPoint = EventPoint.GetEventPoint(eventPointKey);
-
-
-
-        //    var convertedReleatedCharactersText = releatedCharactersText.Replace(' ', '-').Replace(':', '-').Replace(';', '-');
-        //    var releatedCharacters = convertedReleatedCharactersText.ToLower().Split('-').ToList();
-
-        //    QuestEventDetail newQuestEventDetail = new QuestEventDetail(dayList, eventTimeList[0], eventTimeList[1], tragetEventPoint, releatedCharacters);
-        //    newQuestEventDetail.questKey = questKey;
-        //    newQuestEventDetail.questKeyConditions = questKeyConditions.Replace(' ', '-').Replace('_', '-').Split('-').ToList();
-
-        //    WorldRoutineManager.allQuestEvents.Add(newQuestEventDetail);
-
-        //}
-        #endregion
+        WorldRoutineManager.allQuestGroups.Add(newQuestGroup);
     }
 
 
@@ -186,8 +155,10 @@ public class QuestEventManager : MonoBehaviour
 }
 
 
-public class QuestEventDetailGroup
+public class QuestGroup
 {
+    public enum QuestStatus { Disable, Avaliable, InProgress, Completed }
+    public QuestStatus questStatus = QuestStatus.Disable;
     public List<QuestEventDetail> questEventDetails = new List<QuestEventDetail>();
 }
 public class QuestEventDetail : EventDetail
@@ -201,15 +172,17 @@ public class QuestEventDetail : EventDetail
     public List<string> questIdConditionsExclude;
 
     public List<string> relatedCharacters;
+    public Dictionary<string, bool> relatedCharactersRoutineDisable;
 
-    public QuestEventDetail(HashSet<Day> eventDays, TimeHrMin eventTimeStart, TimeHrMin eventTimeEnd, EventPoint targetEventPoint, List<string> relatedCharacters) : base(eventDays, eventTimeStart, eventTimeEnd, targetEventPoint)
+    public QuestEventDetail(HashSet<Day> eventDays, TimeHrMin eventTimeStart, TimeHrMin eventTimeEnd, EventPoint targetEventPoint) : base(eventDays, eventTimeStart, eventTimeEnd, targetEventPoint)
     {
         this.eventDays = eventDays;
         this.eventTimeStart = eventTimeStart;
         this.eventTimeEnd = eventTimeEnd;
         this.targetEventPoint = targetEventPoint;
 
-        this.relatedCharacters = relatedCharacters;
+        this.relatedCharacters = new List<string>();
+        this.relatedCharactersRoutineDisable = new Dictionary<string, bool>();
     }
 
     //public bool IsInEventTime(Day currentDay, TimeHrMin currentTime)

@@ -7,6 +7,7 @@ public class WorldRoutineManager : MonoBehaviour
 {
     public static List<NpcData> npcDatas = new List<NpcData>();
     public static List<QuestEventDetail> allQuestEvents = new List<QuestEventDetail>();
+    public static List<QuestGroup> allQuestGroups = new List<QuestGroup>();
     public static Dictionary<string, QuestDialogueGroup> allQuestDialogueGroup = new Dictionary<string, QuestDialogueGroup>();
     //public static List<EventDetail> allNpcEvents = new List<EventDetail>();
 
@@ -51,33 +52,24 @@ public class WorldRoutineManager : MonoBehaviour
             _delayTargetTime = Time.time + 2;
         }
 
+        UpdateWorld();
+    }
+
+    public void UpdateWorld()
+    {
         foreach (var npcData in npcDatas) //reset story state
         {
             npcData.routineEnable = true;
         }
 
-        //for (int i = allQuestEvents.Count - 1; i >= 0; i--)
-        //{
-        //    var questEventDetail = allQuestEvents[i];
-        //}
         foreach (var questEventDetail in allQuestEvents) //enable story event
         {
-            if (questEventManager.ownedQuestKey.Contains(questEventDetail.questId))
+            if (questEventManager.ownedQuestKey.Contains(questEventDetail.questId)) //already complete
             {
                 continue;
             }
 
-            bool conditionMatch = questEventManager.CheckQuestCondition(questEventDetail);
-
-            //bool conditionMatch = true;
-            //if (questEventDetail.questIdConditions.Count > 0 && questEventDetail.questIdConditions.Any(condition => !questEventManager.ownedQuestKey.Contains(condition)))
-            //{
-            //    conditionMatch = false;
-            //}
-            //if (questEventDetail.questIdConditionsExclude.Count > 0 && questEventDetail.questIdConditionsExclude.Any(condition => questEventManager.ownedQuestKey.Contains(condition)))
-            //{
-            //    conditionMatch = false;
-            //}
+            bool conditionMatch = questEventManager.CheckQuestCondition(questEventDetail); //check quest key condition
 
             if (conditionMatch)
             {
@@ -206,6 +198,16 @@ public class WorldRoutineManager : MonoBehaviour
                 else
                 {
                     questEventDetail.targetEventPoint?.gameObject.SetActive(false);
+
+                    foreach (var keyValue in questEventDetail.relatedCharactersRoutineDisable)
+                    {
+                        if (keyValue.Value == true)
+                        {
+                            var npcData = npcDatas.Find(npc => npc.npcName == keyValue.Key);
+                            npcData.routineEnable = false;
+                        }
+
+                    }
                 }
 
                 //break;
