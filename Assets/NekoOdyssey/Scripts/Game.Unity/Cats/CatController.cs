@@ -19,11 +19,11 @@ namespace NekoOdyssey.Scripts.Game.Unity.Cat
             emoji.SetActive(false);
             _emojiAnimator = emoji.GetComponent<Animator>();
 
-            _cat = GameRunner.Instance.Core.Cats.RegisterCat(code);
         }
 
         private void Start()
         {
+            _cat = GameRunner.Instance.Core.Cats.RegisterCat(code);
             _cat.OnChangeEmotion
                 .Subscribe(HandleEmotion)
                 .AddTo(this);
