@@ -1,10 +1,8 @@
-﻿using System;
-using NekoOdyssey.Scripts.Game.Core.Cat;
+﻿using NekoOdyssey.Scripts.Game.Core.Cat;
 using UniRx;
-using UnityEditor.Animations;
 using UnityEngine;
 
-namespace NekoOdyssey.Scripts.Game.Unity.Cat
+namespace NekoOdyssey.Scripts.Game.Unity.Cats
 {
     public class CatController : MonoBehaviour
     {
@@ -31,16 +29,16 @@ namespace NekoOdyssey.Scripts.Game.Unity.Cat
 
         private void HandleEmotion(CatEmotion emotion)
         {
-            AnimatorController animatorController = null;
+            RuntimeAnimatorController animatorController = null;
             switch (emotion)
             {
                 case CatEmotion.Love:
                     animatorController = GameRunner.Instance.AssetMap["LoveLoveAnimator".ToLower()]
-                        as AnimatorController;
+                        as RuntimeAnimatorController;
                     break;
                 case CatEmotion.BadTempered:
                     animatorController = GameRunner.Instance.AssetMap["AngryAnimator".ToLower()]
-                        as AnimatorController;
+                        as RuntimeAnimatorController;
                     break;
                 case CatEmotion.Hungry:
                     break;
