@@ -12,6 +12,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Ais.Cat.Behaviours.FollowPlayer
         private const float MaxDistance = .6f;
 
         private float _coolDownDelay = 0f;
+        private Vector3? _readyToWalkPosition;
         private Vector3? _targetPositionOnArea;
         private IDisposable _catPositionSubscription;
 
@@ -22,12 +23,22 @@ namespace NekoOdyssey.Scripts.Game.Core.Ais.Cat.Behaviours.FollowPlayer
         public override void Start()
         {
             //Debug.Log($">>modes<< follow_player start");
+            CatAi.SetReadyToWalk(false);
             _targetPositionOnArea = null;
-            _catPositionSubscription = CatAi
-                .OnChangeCatPosition
-                .Subscribe(HandleCatPosition);
+
+            CatAi.OnChangeCatPosition
+                .Subscribe(HandleCatPosition)
+                .AddTo(GameRunner.Instance);
+            CatAi.OnReadyToWalk
+                .Subscribe(HandleReadyToWalk)
+                .AddTo(GameRunner.Instance);
         }
 
+        private void HandleReadyToWalk(bool ready)
+        {
+            if (_readyToWalkPosition == null);
+            CatAi.OnCatMove.OnNext(_readyToWalkPosition.Value);
+        }
 
         private void HandleCatPosition(Vector3 catPosition)
         {
@@ -40,10 +51,10 @@ namespace NekoOdyssey.Scripts.Game.Core.Ais.Cat.Behaviours.FollowPlayer
                 Debug.Log($">>change_mode<< target_position {_targetPositionOnArea}");
                 var playerRefPosition = playerPosition;
                 playerRefPosition.y = catPosition.y;
-                Debug.Log($">>distance<< {Vector3.Distance(catPosition, playerRefPosition)}");
+                Debug.Log($">>change_mode<< >>distance<< {Vector3.Distance(catPosition, playerRefPosition)}");
                 if (Vector3.Distance(catPosition, playerRefPosition) <= 0.65f)
                 {
-                    Debug.Log($">>distance<< exit");
+                    Debug.Log($">>chane_mode<< >>distance<< exit");
                     End();
                     return;
                 }
@@ -68,13 +79,6 @@ namespace NekoOdyssey.Scripts.Game.Core.Ais.Cat.Behaviours.FollowPlayer
                 return;
             }
 
-            var moveDuration = distanceToTarget / CatAi.Profile.MoveSpeed;
-
-            // catAi.SetFlipToTarget(player.transform.position);
-            // catAi.animator.SetBool("Move", true);
-
-            // CoolDown(moveDuration);
-
             var moveDirection = (_targetPositionOnArea.Value - catPosition).normalized;
             var moveRange = Mathf.Min(
                 CatAi.Profile.MoveSpeed * Time.deltaTime,
@@ -82,17 +86,27 @@ namespace NekoOdyssey.Scripts.Game.Core.Ais.Cat.Behaviours.FollowPlayer
             );
 
             var nextPosition = moveDirection * moveRange;
-            nextPosition.y = 0; // catPosition.y;
+            nextPosition.y = 0;
 
-            CatAi.OnCatMove.OnNext(nextPosition);
+            if (CatAi.ReadyToWalk)
+            {
+                CatAi.OnCatMove.OnNext(nextPosition);
+            }
+            else if (_readyToWalkPosition == null)
+            {
+                Debug.Log($">>change_mode<< start_moving");
+                _readyToWalkPosition = nextPosition;
+                CatAi.OnCatStartMoving.OnNext(default);
+            }
         }
 
 
         private void End()
         {
-            Debug.Log($">>move_end<<");
-            _catPositionSubscription.Dispose();
+            Debug.Log($">>change_mode<< end");
+            _catPositionSubscription?.Dispose();
             _targetPositionOnArea = null;
+            _readyToWalkPosition = null;
             CatAi.OnFinishBehaviour.OnNext(CatBehaviourMode.FollowPlayer);
         }
     }

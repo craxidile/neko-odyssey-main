@@ -18,7 +18,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Ais.Cat.Behaviours
     {
         private readonly string _catProfilesAssetName = $"cat_profiles";
 
-        private SpriteRenderer _spriteRenderer;
+        private SpriteRenderer _renderer;
         
         public string catCode;
 
@@ -26,7 +26,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Ais.Cat.Behaviours
 
         private void Awake()
         {
-            _spriteRenderer = GetComponent<SpriteRenderer>();
+            _renderer = GetComponent<SpriteRenderer>();
         }
 
         private void Start()
@@ -70,7 +70,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Ais.Cat.Behaviours
             
             CatAi.OnChangeMode.Subscribe(HandleCatBehaviourModeChange);
 
-            DOVirtual.DelayedCall(1f, () =>
+            DOVirtual.DelayedCall(.5f, () =>
             {
                 CatAi.Start();
             });

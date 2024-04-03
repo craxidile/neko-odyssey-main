@@ -33,8 +33,14 @@ namespace NekoOdyssey.Scripts.Game.Unity.Ais.Cat.Behaviours.Move
             _catAi.OnFlip
                 .Subscribe(HandleFlip)
                 .AddTo(this);
+            _catAi.OnReadyToWalk
+                .Subscribe(HandleReadyToWalk)
+                .AddTo(this);
             _catAi.OnChangeMode
                 .Subscribe(HandleModeChange)
+                .AddTo(this);
+            _catAi.OnCatStartMoving
+                .Subscribe(HandleStartMoving)
                 .AddTo(this);
             _catAi.OnCatMove
                 .Subscribe(HandleMove)
@@ -50,28 +56,30 @@ namespace NekoOdyssey.Scripts.Game.Unity.Ais.Cat.Behaviours.Move
         {
             _running = _catAi.Mode == CatBehaviourMode.FollowPlayer;
             if (!_running && _currentCoroutine != null) StopCoroutine(_currentCoroutine);
-            if (_running) _catAi.WaitingToWalk = true;
             if (!_running) _animator.SetBool($"Move", false);
+        }
+
+        private void HandleStartMoving(Unit _)
+        {
+            if (!_running) return;
+            _animator.SetBool($"Move", true);
+        }
+
+        private void HandleReadyToWalk(bool ready)
+        {
+            if (!_running || !ready) return;
+            _renderer.flipX = _flipped;
         }
 
         private void HandleMove(Vector3 position)
         {
-            _animator.SetBool($"Move", true);
+            if (!_running) return;
+            transform.Translate(position, Space.World);
             _currentCoroutine = StartCoroutine(MoveToPosition(position));
         }
 
         private IEnumerator MoveToPosition(Vector3 position)
         {
-            if (!_running) yield break;
-            if (_catAi.WaitingToWalk)
-            {
-                yield return null;
-                _catAi.SetCatPosition(transform.position);
-                yield break;
-            }
-
-            _renderer.flipX = _flipped;
-            transform.Translate(position, Space.World);
             yield return null;
             _catAi.SetCatPosition(transform.position);
         }
