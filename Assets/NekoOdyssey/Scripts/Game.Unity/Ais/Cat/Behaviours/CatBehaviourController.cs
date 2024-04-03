@@ -63,18 +63,17 @@ namespace NekoOdyssey.Scripts.Game.Unity.Ais.Cat.Behaviours
             var catProfile = serializer.DeserializeLines(text, index);
             
             CatAi = ais.RegisterCatAi(catProfile);
-            CatAi.Start();
+            CatAi.GameObject = gameObject;
             
             gameObject.AddComponent<CallToFeedController>();
             gameObject.AddComponent<MoveController>();
-
-            CatAi.OnFlip.Subscribe(HandleCatFlip);
+            
             CatAi.OnChangeMode.Subscribe(HandleCatBehaviourModeChange);
-        }
 
-        private void HandleCatFlip(bool flipped)
-        {
-            _spriteRenderer.flipX = flipped;
+            DOVirtual.DelayedCall(1f, () =>
+            {
+                CatAi.Start();
+            });
         }
 
         private void HandleCatBehaviourModeChange(CatBehaviourMode _)
