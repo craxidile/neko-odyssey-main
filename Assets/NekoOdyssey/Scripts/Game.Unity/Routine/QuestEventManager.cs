@@ -5,7 +5,8 @@ using System.Linq;
 
 public class QuestEventManager : MonoBehaviour
 {
-    public TextAsset testCSV;
+    public TextAsset[] testQuestCSV;
+    public TextAsset testQuestRelationship;
 
     [Header("Test Quest Key")]
     public List<string> ownedQuestKey = new List<string>();
@@ -27,12 +28,16 @@ public class QuestEventManager : MonoBehaviour
 
     public void InitializedQuestEvent()
     {
-        LoadQuestCSV(testCSV);
+        foreach (var questCSV in testQuestCSV)
+        {
+            LoadQuestCSV(questCSV);
+        }
+        LoadQuestRelationshipCSV(testQuestRelationship);
     }
 
     public void LoadQuestCSV(TextAsset textAsset)
     {
-        QuestGroup newQuestGroup = new QuestGroup();
+        QuestGroup newQuestGroup = new QuestGroup(textAsset.name);
 
         string[] lines = textAsset.text.Split('\n');
 
@@ -56,7 +61,7 @@ public class QuestEventManager : MonoBehaviour
             var eventPointKey = row[4];
             var releatedCharactersText = row[5];
             var releatedCharactersDisableRoutine = row[6];
-            var rewards = row[7];
+            var rewardText = row[7];
 
 
             var convertedDayText = dayText.Replace(' ', '-').Replace(':', '-').Replace(';', '-');
@@ -85,6 +90,9 @@ public class QuestEventManager : MonoBehaviour
 
             var isRoutineDisable = bool.Parse(releatedCharactersDisableRoutine);
 
+            var rewards = rewardText.Replace(' ', '+').Replace('-', '+').Replace(':', '-').Replace(';', '-')
+                                        .Split('+').ToList();
+
             QuestEventDetail newQuestEventDetail = new QuestEventDetail(dayList, eventTimeList[0], eventTimeList[1], tragetEventPoint);
             newQuestEventDetail.questId = questKey.ToLower();
             var questKeyConditions = questKeyConditionsText.Replace(' ', '-').Replace('+', '-').Split('-').ToList();
@@ -112,6 +120,22 @@ public class QuestEventManager : MonoBehaviour
                 newQuestEventDetail.relatedCharacters.Add(relatedCharacter);
                 newQuestEventDetail.relatedCharactersRoutineDisable.Add(relatedCharacter, isRoutineDisable);
             }
+            foreach (var reward in rewards)
+            {
+                if (string.IsNullOrEmpty(reward)) continue;
+
+                var rewardNameAndQuantity = reward.Split('*');
+                var itemName = rewardNameAndQuantity[0];
+                int itemQuantity = 0;
+                if (rewardNameAndQuantity.Length > 1)
+                {
+                    itemQuantity = int.Parse(rewardNameAndQuantity[1]);
+                }
+
+                newQuestEventDetail.stepRewards.Add(itemName, itemQuantity);
+
+                Debug.Log($"Quest step {newQuestEventDetail.questId} reward is : {itemName} x {itemQuantity}");
+            }
 
             WorldRoutineManager.allQuestEvents.Add(newQuestEventDetail);
 
@@ -121,9 +145,94 @@ public class QuestEventManager : MonoBehaviour
         WorldRoutineManager.allQuestGroups.Add(newQuestGroup);
     }
 
+    public void LoadQuestRelationshipCSV(TextAsset textAsset)
+    {
+        string[] lines = textAsset.text.Split('\n');
+
+        for (int i = 1; i < lines.Length; i++)
+        {
+            var line = lines[i];
+            Debug.Log($"load csv line : {line}");
+
+            string[] values = line.Trim().Split(',');
+
+            List<string> row = new List<string>(values);
+
+            if (string.IsNullOrEmpty(row.FirstOrDefault())) continue;
+
+
+            var questKey = row[0]; //column 0
+            var questKeyConditionsText = row[1]; //column 1
+
+            var targetQuestDetail = WorldRoutineManager.allQuestGroups.Find(quest => quest.questGroupId == questKey);
+
+            if (targetQuestDetail == null)
+            {
+                Debug.LogError($"Original quest data of {questKey} cannot be found");
+                continue;
+            }
+
+            var questKeyConditions = questKeyConditionsText.Replace(' ', '-').Replace('+', '-').Split('-').ToList();
+            targetQuestDetail.questIdConditions = new List<string>();
+            targetQuestDetail.questIdConditionsExclude = new List<string>();
+            foreach (var questCondition in questKeyConditions)
+            {
+                if (!string.IsNullOrEmpty(questCondition))
+                {
+                    if (questCondition.StartsWith("!"))
+                    {
+                        var condition = questCondition.Substring(1);
+                        targetQuestDetail.questIdConditionsExclude.Add(condition.ToLower());
+
+                    }
+                    else
+                    {
+                        targetQuestDetail.questIdConditions.Add(questCondition.ToLower());
+
+                    }
+                }
+            }
+
+
+            ConvertConditionText(questKeyConditionsText, out List<string> conditionText, out List<string> conditionExcludeText);
+
+            Debug.Log($"ConvertConditionText : {conditionText.FirstOrDefault()} , {conditionExcludeText.FirstOrDefault()}");
+        }
+    }
+
+    public void ConvertConditionText(string originalText, out List<string> conditionText, out List<string> conditionExcludeText)
+    {
+        conditionText = new List<string>();
+        conditionExcludeText = new List<string>();
+
+        var questKeyConditions = originalText.Replace(' ', '-').Replace('+', '-').Split('-').ToList();
+        foreach (var questCondition in questKeyConditions)
+        {
+            if (!string.IsNullOrEmpty(questCondition))
+            {
+                if (questCondition.StartsWith("!"))
+                {
+                    var condition = questCondition.Substring(1);
+                    conditionExcludeText.Add(condition.ToLower());
+
+                }
+                else
+                {
+                    conditionText.Add(questCondition.ToLower());
+
+                }
+            }
+        }
+    }
+
 
     public bool CheckQuestCondition(QuestEventDetail questDetail)
     {
+        foreach (var condition in questDetail.questIdConditions)
+        {
+            Debug.Log($"CheckQuestCondition {condition}");
+
+        }
         if (questDetail.questIdConditions.Count > 0)
         {
             if (questDetail.questIdConditions.Any(condition => !ownedQuestKey.Contains(condition))) //check player quest owned quest id
@@ -152,14 +261,86 @@ public class QuestEventManager : MonoBehaviour
 
         return true;
     }
+    public bool CheckQuestCondition(List<string> conditionList, List<string> conditionExcludeList)
+    {
+        if (conditionList.Count > 0)
+        {
+            foreach (var condition in conditionList)
+            {
+                if (!ownedQuestKey.Contains(condition))
+                {
+                    //if (playerInventory.Contains(key))
+                    //{
+
+
+                    //return true;
+
+                    //}
+                    //else
+                    //{
+                    return false;
+                    //}
+                }
+                else
+                {
+
+                }
+            }
+
+            if (conditionList.Any(condition => !ownedQuestKey.Contains(condition))) //check player quest owned quest id
+            {
+                return false;
+            }
+
+            foreach (var key in conditionList)//check for player inventory item
+            {
+                //if (!playerInventory.contains(key))
+                //{
+                //return false;
+                //}
+            }
+
+        }
+
+
+
+
+        if (conditionExcludeList.Count > 0)
+        {
+            foreach (var condition in conditionExcludeList)
+            {
+                if (ownedQuestKey.Contains(condition))
+                {
+                    return false;
+
+                }
+            }
+        }
+
+
+        return true;
+    }
 }
 
 
 public class QuestGroup
 {
+    public string questGroupId;
     public enum QuestStatus { Disable, Avaliable, InProgress, Completed }
     public QuestStatus questStatus = QuestStatus.Disable;
-    public List<QuestEventDetail> questEventDetails = new List<QuestEventDetail>();
+    public List<QuestEventDetail> questEventDetails;
+
+    public List<string> questIdConditions;
+    public List<string> questIdConditionsExclude;
+
+    public QuestGroup(string questGroupId)
+    {
+        this.questGroupId = questGroupId;
+
+        questEventDetails = new List<QuestEventDetail>();
+        questIdConditions = new List<string>();
+        questIdConditionsExclude = new List<string>();
+    }
 }
 public class QuestEventDetail : EventDetail
 {
@@ -174,6 +355,8 @@ public class QuestEventDetail : EventDetail
     public List<string> relatedCharacters;
     public Dictionary<string, bool> relatedCharactersRoutineDisable;
 
+    public Dictionary<string, int> stepRewards;
+
     public QuestEventDetail(HashSet<Day> eventDays, TimeHrMin eventTimeStart, TimeHrMin eventTimeEnd, EventPoint targetEventPoint) : base(eventDays, eventTimeStart, eventTimeEnd, targetEventPoint)
     {
         this.eventDays = eventDays;
@@ -183,6 +366,7 @@ public class QuestEventDetail : EventDetail
 
         this.relatedCharacters = new List<string>();
         this.relatedCharactersRoutineDisable = new Dictionary<string, bool>();
+        this.stepRewards = new Dictionary<string, int>();
     }
 
     //public bool IsInEventTime(Day currentDay, TimeHrMin currentTime)

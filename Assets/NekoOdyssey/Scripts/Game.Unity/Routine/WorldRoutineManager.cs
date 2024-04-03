@@ -37,24 +37,27 @@ public class WorldRoutineManager : MonoBehaviour
     void Start()
     {
         InitializedSceneEventPoint();
+
+        Invoke(nameof(UpdateWorld), 1f);
     }
 
-    float _delayTargetTime = 0;
+    //float _delayTargetTime = 0;
     // Update is called once per frame
     void Update()
     {
-        if (Time.time < _delayTargetTime)
-        {
-            return;
-        }
-        else
-        {
-            _delayTargetTime = Time.time + 2;
-        }
+        //if (Time.time < _delayTargetTime)
+        //{
+        //    return;
+        //}
+        //else
+        //{
+        //    _delayTargetTime = Time.time + 2;
+        //}
 
-        UpdateWorld();
+        //UpdateWorld();
     }
 
+    [ContextMenu("UpdateWorld")]
     public void UpdateWorld()
     {
         foreach (var npcData in npcDatas) //reset story state
@@ -62,6 +65,16 @@ public class WorldRoutineManager : MonoBehaviour
             npcData.routineEnable = true;
         }
 
+        foreach (var questGroup in allQuestGroups)
+        {
+            bool conditionMatch = questEventManager.CheckQuestCondition(questEventDetail);
+
+
+            foreach (var questEventDetail in questGroup.questEventDetails)
+            {
+
+            }
+        }
         foreach (var questEventDetail in allQuestEvents) //enable story event
         {
             if (questEventManager.ownedQuestKey.Contains(questEventDetail.questId)) //already complete
@@ -174,6 +187,8 @@ public class WorldRoutineManager : MonoBehaviour
                                     questEventManager.ownedQuestKey.Add(questEventDetail.questId);
 
                                     questEventDetail.targetEventPoint?.gameObject.SetActive(false);
+
+                                    UpdateWorld();
                                 }
                                 else
                                 {
