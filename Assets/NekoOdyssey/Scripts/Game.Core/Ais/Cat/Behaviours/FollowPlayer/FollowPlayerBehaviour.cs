@@ -14,7 +14,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Ais.Cat.Behaviours.FollowPlayer
         private float _coolDownDelay = 0f;
         private Vector3 _targetPositionOnArea = Vector3.zero;
         private IDisposable _catPositionSubscription;
-        
+
         public FollowPlayerBehaviour(CatAi catAi) : base(catAi)
         {
         }
@@ -31,7 +31,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Ais.Cat.Behaviours.FollowPlayer
         private void HandleCatPosition(Vector3 catPosition)
         {
             if (CatAi.Mode != CatBehaviourMode.FollowPlayer) return;
-            
+
             var playerPosition = GameRunner.Instance.Core.Player.Position;
 
             if (_targetPositionOnArea == Vector3.zero)
@@ -49,7 +49,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Ais.Cat.Behaviours.FollowPlayer
 
             if (Vector3.Distance(_targetPositionOnArea, catPosition) <= 0.01f)
             {
-                //Debug.Log($">>modes<< call_to_feed end");
+                Debug.Log($">>modes<< call_to_feed end");
                 End();
                 return;
             }
@@ -62,13 +62,15 @@ namespace NekoOdyssey.Scripts.Game.Core.Ais.Cat.Behaviours.FollowPlayer
             // catAi.SetFlipToTarget(player.transform.position);
             // catAi.animator.SetBool("Move", true);
 
-            // CoolDown(moveDuration);
+            CoolDown(moveDuration);
 
             var moveDirection = (_targetPositionOnArea - catPosition).normalized;
             var moveRange = Mathf.Min(
                 CatAi.Profile.MoveSpeed * Time.deltaTime,
                 Vector3.Distance(catPosition, _targetPositionOnArea)
             );
+
+            //Debug.Log($"move range {moveRange} ({Time.time})");
 
             var nextPosition = moveDirection * moveRange;
             nextPosition.y = 0; // catPosition.y;
