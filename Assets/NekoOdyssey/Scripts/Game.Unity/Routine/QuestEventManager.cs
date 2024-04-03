@@ -5,8 +5,8 @@ using System.Linq;
 
 public class QuestEventManager : MonoBehaviour
 {
-    public TextAsset[] testQuestCSV;
-    public TextAsset testQuestRelationship;
+    //public TextAsset[] testQuestCSV;
+    //public TextAsset testQuestRelationship;
 
     [Header("Test Quest Key")]
     public List<string> ownedQuestKey = new List<string>();
@@ -28,11 +28,11 @@ public class QuestEventManager : MonoBehaviour
 
     public void InitializedQuestEvent()
     {
-        foreach (var questCSV in testQuestCSV)
+        foreach (var csv in WorldRoutineManager.Instance.csvHolder.allQuestsCSV)
         {
-            LoadQuestCSV(questCSV);
+            LoadQuestCSV(csv);
         }
-        LoadQuestRelationshipCSV(testQuestRelationship);
+        LoadQuestRelationshipCSV(WorldRoutineManager.Instance.csvHolder.questRelationshipCSV);
     }
 
     public void LoadQuestCSV(TextAsset textAsset)
@@ -142,7 +142,7 @@ public class QuestEventManager : MonoBehaviour
             newQuestGroup.questEventDetails.Add(newQuestEventDetail);
         }
 
-        WorldRoutineManager.allQuestGroups.Add(newQuestGroup);
+        WorldRoutineManager.allQuestGroups.Add(newQuestGroup.questGroupId, newQuestGroup);
     }
 
     public void LoadQuestRelationshipCSV(TextAsset textAsset)
@@ -164,7 +164,7 @@ public class QuestEventManager : MonoBehaviour
             var questKey = row[0]; //column 0
             var questKeyConditionsText = row[1]; //column 1
 
-            var targetQuestDetail = WorldRoutineManager.allQuestGroups.Find(quest => quest.questGroupId == questKey);
+            WorldRoutineManager.allQuestGroups.TryGetValue(questKey, out var targetQuestDetail);
 
             if (targetQuestDetail == null)
             {
@@ -226,42 +226,42 @@ public class QuestEventManager : MonoBehaviour
     }
 
 
-    public bool CheckQuestCondition(QuestEventDetail questDetail)
-    {
-        foreach (var condition in questDetail.questIdConditions)
-        {
-            Debug.Log($"CheckQuestCondition {condition}");
+    public bool CheckQuestKeyAndItem(QuestEventDetail questDetail) => CheckQuestKeyAndItem(questDetail.questIdConditions, questDetail.questIdConditionsExclude);
+    //{
+    //foreach (var condition in questDetail.questIdConditions)
+    //{
+    //    Debug.Log($"CheckQuestCondition {condition}");
 
-        }
-        if (questDetail.questIdConditions.Count > 0)
-        {
-            if (questDetail.questIdConditions.Any(condition => !ownedQuestKey.Contains(condition))) //check player quest owned quest id
-            {
-                return false;
-            }
+    //}
+    //if (questDetail.questIdConditions.Count > 0)
+    //{
+    //    if (questDetail.questIdConditions.Any(condition => !ownedQuestKey.Contains(condition))) //check player quest owned quest id
+    //    {
+    //        return false;
+    //    }
 
-            foreach (var key in questDetail.questIdConditions)//check for player inventory item
-            {
-                //if (!playerInventory.contains(key))
-                //{
-                //return false;
-                //}
-            }
+    //    foreach (var key in questDetail.questIdConditions)//check for player inventory item
+    //    {
+    //        //if (!playerInventory.contains(key))
+    //        //{
+    //        //return false;
+    //        //}
+    //    }
 
-        }
-
-
+    //}
 
 
-        if (questDetail.questIdConditionsExclude.Count > 0 && questDetail.questIdConditionsExclude.Any(condition => ownedQuestKey.Contains(condition)))
-        {
-            return false;
-        }
 
 
-        return true;
-    }
-    public bool CheckQuestCondition(List<string> conditionList, List<string> conditionExcludeList)
+    //if (questDetail.questIdConditionsExclude.Count > 0 && questDetail.questIdConditionsExclude.Any(condition => ownedQuestKey.Contains(condition)))
+    //{
+    //    return false;
+    //}
+
+
+    //return true;
+    //}
+    public bool CheckQuestKeyAndItem(List<string> conditionList, List<string> conditionExcludeList)
     {
         if (conditionList.Count > 0)
         {
@@ -269,40 +269,21 @@ public class QuestEventManager : MonoBehaviour
             {
                 if (!ownedQuestKey.Contains(condition))
                 {
-                    //if (playerInventory.Contains(key))
+                    //if (!playerInventory.Contains(key))
                     //{
 
 
-                    //return true;
+                    return false;
 
                     //}
                     //else
                     //{
-                    return false;
+                    //return true;
                     //}
                 }
-                else
-                {
 
-                }
             }
-
-            if (conditionList.Any(condition => !ownedQuestKey.Contains(condition))) //check player quest owned quest id
-            {
-                return false;
-            }
-
-            foreach (var key in conditionList)//check for player inventory item
-            {
-                //if (!playerInventory.contains(key))
-                //{
-                //return false;
-                //}
-            }
-
         }
-
-
 
 
         if (conditionExcludeList.Count > 0)
@@ -312,7 +293,6 @@ public class QuestEventManager : MonoBehaviour
                 if (ownedQuestKey.Contains(condition))
                 {
                     return false;
-
                 }
             }
         }
@@ -327,7 +307,7 @@ public class QuestGroup
 {
     public string questGroupId;
     public enum QuestStatus { Disable, Avaliable, InProgress, Completed }
-    public QuestStatus questStatus = QuestStatus.Disable;
+    public QuestStatus questStatus;
     public List<QuestEventDetail> questEventDetails;
 
     public List<string> questIdConditions;
@@ -337,6 +317,7 @@ public class QuestGroup
     {
         this.questGroupId = questGroupId;
 
+        questStatus = QuestStatus.Disable;
         questEventDetails = new List<QuestEventDetail>();
         questIdConditions = new List<string>();
         questIdConditionsExclude = new List<string>();

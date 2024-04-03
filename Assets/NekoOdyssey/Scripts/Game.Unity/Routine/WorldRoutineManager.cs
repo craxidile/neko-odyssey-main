@@ -7,12 +7,13 @@ public class WorldRoutineManager : MonoBehaviour
 {
     public static List<NpcData> npcDatas = new List<NpcData>();
     public static List<QuestEventDetail> allQuestEvents = new List<QuestEventDetail>();
-    public static List<QuestGroup> allQuestGroups = new List<QuestGroup>();
+    public static Dictionary<string, QuestGroup> allQuestGroups = new Dictionary<string, QuestGroup>();
     public static Dictionary<string, QuestDialogueGroup> allQuestDialogueGroup = new Dictionary<string, QuestDialogueGroup>();
     //public static List<EventDetail> allNpcEvents = new List<EventDetail>();
 
 
 
+    public CSVHolderScriptable csvHolder;
 
 
     [SerializeField] QuestEventManager questEventManager { get; set; }
@@ -60,32 +61,34 @@ public class WorldRoutineManager : MonoBehaviour
     [ContextMenu("UpdateWorld")]
     public void UpdateWorld()
     {
+        UpdateQuestEvent();
+
+        UpdateNpcRoutine();
+
+    }
+
+    void UpdateQuestEvent()
+    {
         foreach (var npcData in npcDatas) //reset story state
         {
             npcData.routineEnable = true;
         }
 
-        foreach (var questGroup in allQuestGroups)
+        foreach (var questGroup in allQuestGroups.Values)
         {
-            bool conditionMatch = questEventManager.CheckQuestCondition(questEventDetail);
-
+            if (questGroup.questStatus == QuestGroup.QuestStatus.Completed) continue;
+            if (questGroup.questStatus == QuestGroup.QuestStatus.Disable)
+            {
+                if (!questEventManager.CheckQuestKeyAndItem(questGroup.questIdConditions, questGroup.questIdConditionsExclude)) continue;
+                questGroup.questStatus = QuestGroup.QuestStatus.Avaliable;
+            }
 
             foreach (var questEventDetail in questGroup.questEventDetails)
             {
+                if (questEventManager.ownedQuestKey.Contains(questEventDetail.questId)) continue;//already complete
 
-            }
-        }
-        foreach (var questEventDetail in allQuestEvents) //enable story event
-        {
-            if (questEventManager.ownedQuestKey.Contains(questEventDetail.questId)) //already complete
-            {
-                continue;
-            }
+                if (!questEventManager.CheckQuestKeyAndItem(questEventDetail)) continue;//check quest key condition
 
-            bool conditionMatch = questEventManager.CheckQuestCondition(questEventDetail); //check quest key condition
-
-            if (conditionMatch)
-            {
                 if (questEventDetail.IsInEventTime(TimeRoutine.day, TimeRoutine.timeHrMin))
                 {
                     questEventDetail.targetEventPoint?.gameObject.SetActive(true);
@@ -225,14 +228,13 @@ public class WorldRoutineManager : MonoBehaviour
                     }
                 }
 
-                //break;
             }
-            //else
-            //{
-            //    questEventDetail.targetEventPoint?.gameObject.SetActive(false);
-            //}
-        }
 
+        }
+    }
+
+    void UpdateNpcRoutine()
+    {
         foreach (var npcData in npcDatas) //do routine for other npcs
         {
             if (npcData.routineEnable)
