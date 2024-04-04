@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NekoOdyssey.Scripts.Game.Core.Ais.Cat.Behaviours;
 using NekoOdyssey.Scripts.Game.Core.Ais.Cat.Behaviours.CallToFeed;
@@ -14,19 +15,22 @@ namespace NekoOdyssey.Scripts.Game.Core.Ais.Cat
     {
         public float DeltaXFromPlayer { get; private set; }
         public float PlayerDistance { get; private set; } = 0;
+        public bool ReadyToWalk { get; private set; } = false;
         public Vector3 CatPosition { get; private set; } = Vector3.zero;
         public CatProfile Profile { get; private set; }
         public CatBehaviourMode Mode { get; private set; } = CatBehaviourMode.None;
-        public bool WaitingToWalk { get; set; }
         public Dictionary<CatBehaviourMode, ICatBehaviour> Behaviours { get; } = new();
 
         public Subject<CatBehaviourMode> OnChangeMode { get; } = new();
         public Subject<Vector3> OnChangeCatPosition { get; } = new();
+        public Subject<Vector3> OnChangeCatStartPosition { get; } = new();
         public Subject<float> OnChangePlayerDistance { get; } = new();
         public Subject<bool> OnFlip { get; } = new();
         public Subject<float> OnCallToFeed { get; } = new();
+        public Subject<Unit> OnCatStartMoving { get; } = new();
         public Subject<Vector3> OnCatMove { get; } = new();
         public Subject<CatBehaviourMode> OnFinishBehaviour { get; } = new();
+        public Subject<bool> OnReadyToWalk { get; } = new();
 
         public GameObject GameObject { get; set; }
         
@@ -65,6 +69,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Ais.Cat
 
         private void HandleBehaviourFinish(CatBehaviourMode mode)
         {
+            Debug.Log($">>change_mode<< behaviour_finished");
             if (Behaviours.Count == 1)
             {
                 Behaviours.Values.First().Start();
@@ -74,7 +79,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Ais.Cat
             var modeIndex = modes.IndexOf(Mode);
             var nextIndex = (modeIndex + 1) % modes.Count;
             var nextMode = modes[nextIndex];
-            //Debug.Log($">>modes<< finish_behaviour {Mode} next {nextMode}");
+            Debug.Log($">>change_mode<< finish_behaviour {Mode} next {nextMode}");
             var nextBehaviour = Behaviours[nextMode];
             //Debug.Log($">>modes<< next_behaviour {nextBehaviour}");
             SetMode(nextMode);
@@ -83,22 +88,33 @@ namespace NekoOdyssey.Scripts.Game.Core.Ais.Cat
 
         private void SetMode(CatBehaviourMode mode)
         {
-            Debug.Log($">>change_mode<< set {mode}");
             Mode = mode;
             OnChangeMode.OnNext(mode);
         }
 
+        public void SetCatStartPosition(Vector3 position)
+        {
+            CatPosition = position;
+            OnChangeCatStartPosition.OnNext(position);
+        }
+        
         public void SetCatPosition(Vector3 position)
         {
             CatPosition = position;
             OnChangeCatPosition.OnNext(position);
         }
-
+        
         public void SetPlayerDistance(float distance, float deltaX)
         {
             PlayerDistance = distance;
             DeltaXFromPlayer = deltaX;
             OnChangePlayerDistance.OnNext(distance);
+        }
+
+        public void SetReadyToWalk(bool ready)
+        {
+            ReadyToWalk = ready;
+            OnReadyToWalk.OnNext(ready);
         }
         
     }

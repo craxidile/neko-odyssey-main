@@ -12,8 +12,12 @@ namespace NekoOdyssey.Scripts.Game.Core.Ais.Cat.Behaviours.FollowPlayer
         private const float MaxDistance = .6f;
 
         private float _coolDownDelay = 0f;
+        private Vector3? _readyToWalkPosition;
         private Vector3? _targetPositionOnArea;
+
+        private IDisposable _catStartPositionSubscription;
         private IDisposable _catPositionSubscription;
+        private IDisposable _readyToWalkSubscription;
 
         public FollowPlayerBehaviour(CatAi catAi) : base(catAi)
         {
@@ -21,78 +25,109 @@ namespace NekoOdyssey.Scripts.Game.Core.Ais.Cat.Behaviours.FollowPlayer
 
         public override void Start()
         {
-            //Debug.Log($">>modes<< follow_player start");
+            CatAi.SetReadyToWalk(false);
             _targetPositionOnArea = null;
-            _catPositionSubscription = CatAi
-                .OnChangeCatPosition
-                .Subscribe(HandleCatPosition);
+
+            _catStartPositionSubscription = CatAi.OnChangeCatStartPosition
+                .Subscribe(HandleCatStartPosition)
+                .AddTo(GameRunner.Instance);
+            _catPositionSubscription = CatAi.OnChangeCatPosition
+                .Subscribe(HandleCatPosition)
+                .AddTo(GameRunner.Instance);
+            _readyToWalkSubscription = CatAi.OnReadyToWalk
+                .Subscribe(HandleReadyToWalk)
+                .AddTo(GameRunner.Instance);
         }
 
-
-        private void HandleCatPosition(Vector3 catPosition)
+        private void HandleCatStartPosition(Vector3 catPosition)
         {
             if (CatAi.Mode != CatBehaviourMode.FollowPlayer) return;
+            
+            _readyToWalkPosition = null;
 
             var playerPosition = GameRunner.Instance.Core.Player.Position;
-
-            if (_targetPositionOnArea == null)
-            {
-                Debug.Log($">>change_mode<< target_position {_targetPositionOnArea}");
-                var playerRefPosition = playerPosition;
-                playerRefPosition.y = catPosition.y;
-                Debug.Log($">>distance<< {Vector3.Distance(catPosition, playerRefPosition)}");
-                if (Vector3.Distance(catPosition, playerRefPosition) <= 0.65f)
-                {
-                    Debug.Log($">>distance<< exit");
-                    End();
-                    return;
-                }
-
-                var randStandDistance = Random.Range(MinDistance, MaxDistance);
-                var targetPosition = playerPosition + (catPosition - playerPosition).normalized * randStandDistance;
-                targetPosition.y = catPosition.y;
-
-                var catAreas = GameRunner.Instance.Core.Areas;
-                var closestPoint = catAreas.CalculateClosestPoint(targetPosition);
-                closestPoint.y = catPosition.y;
-                _targetPositionOnArea = closestPoint;
-
-                CatAi.OnFlip.OnNext(CatAi.DeltaXFromPlayer > 0);
-            }
-
-            var distanceToTarget = Vector3.Distance(catPosition, _targetPositionOnArea.Value);
-
-            if (distanceToTarget <= 0.1f)
+            var playerRefPosition = playerPosition;
+            playerRefPosition.y = catPosition.y;
+            if (Vector3.Distance(catPosition, playerRefPosition) <= 0.65f)
             {
                 End();
                 return;
             }
 
-            var moveDuration = distanceToTarget / CatAi.Profile.MoveSpeed;
+            var randStandDistance = Random.Range(MinDistance, MaxDistance);
+            var targetPosition = playerPosition + (catPosition - playerPosition).normalized * randStandDistance;
+            targetPosition.y = catPosition.y;
 
-            // catAi.SetFlipToTarget(player.transform.position);
-            // catAi.animator.SetBool("Move", true);
+            var catAreas = GameRunner.Instance.Core.Areas;
+            var closestPoint = catAreas.CalculateClosestPoint(targetPosition);
+            closestPoint.y = catPosition.y;
+            _targetPositionOnArea = closestPoint;
 
-            // CoolDown(moveDuration);
+            CatAi.OnFlip.OnNext(CatAi.DeltaXFromPlayer > 0);
 
-            var moveDirection = (_targetPositionOnArea.Value - catPosition).normalized;
+            var nextPosition = CalculateNextPosition(catPosition, _targetPositionOnArea.Value);
+            if (nextPosition == null)
+            {
+                End();
+                return;
+            }
+
+            _readyToWalkPosition = nextPosition;
+            CatAi.OnCatStartMoving.OnNext(default);
+        }
+
+        private void HandleCatPosition(Vector3 catPosition)
+        {
+            if (CatAi.Mode != CatBehaviourMode.FollowPlayer) return;
+
+            if (_targetPositionOnArea == null)
+            {
+                End();
+                return;
+            }
+
+            var nextPosition = CalculateNextPosition(catPosition, _targetPositionOnArea.Value);
+            Debug.Log($">>change_mode<< next_position {nextPosition}");
+            if (nextPosition == null)
+            {
+                End();
+                return;
+            }
+
+            if (_targetPositionOnArea != null) CatAi.OnCatMove.OnNext(nextPosition.Value);
+        }
+
+        private void HandleReadyToWalk(bool ready)
+        {
+            if (CatAi.Mode != CatBehaviourMode.FollowPlayer || _readyToWalkPosition == null) return;
+            CatAi.OnCatMove.OnNext(_readyToWalkPosition.Value);
+        }
+
+        private Vector3? CalculateNextPosition(Vector3 catPosition, Vector3 targetPosition)
+        {
+            var distanceToTarget = Vector3.Distance(catPosition, targetPosition);
+            if (distanceToTarget <= 0.1f) return null;
+
+            var moveDirection = (targetPosition - catPosition).normalized;
             var moveRange = Mathf.Min(
                 CatAi.Profile.MoveSpeed * Time.deltaTime,
-                Vector3.Distance(catPosition, _targetPositionOnArea.Value)
+                Vector3.Distance(catPosition, targetPosition)
             );
 
             var nextPosition = moveDirection * moveRange;
-            nextPosition.y = 0; // catPosition.y;
+            nextPosition.y = 0;
 
-            CatAi.OnCatMove.OnNext(nextPosition);
+            return nextPosition;
         }
-
 
         private void End()
         {
-            Debug.Log($">>move_end<<");
-            _catPositionSubscription.Dispose();
+            Debug.Log($">>change_mode<< end");
+            _catStartPositionSubscription?.Dispose();
+            _catPositionSubscription?.Dispose();
+            _readyToWalkSubscription?.Dispose();
             _targetPositionOnArea = null;
+            _readyToWalkPosition = null;
             CatAi.OnFinishBehaviour.OnNext(CatBehaviourMode.FollowPlayer);
         }
     }
