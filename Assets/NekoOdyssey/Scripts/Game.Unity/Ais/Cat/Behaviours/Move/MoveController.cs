@@ -74,12 +74,12 @@ namespace NekoOdyssey.Scripts.Game.Unity.Ais.Cat.Behaviours.Move
         private void HandleMove(Vector3 position)
         {
             if (!_running) return;
-            transform.Translate(position, Space.World);
             _currentCoroutine = StartCoroutine(MoveToPosition(position));
         }
 
         private IEnumerator MoveToPosition(Vector3 position)
         {
+            transform.Translate(position, Space.World);
             yield return null;
             _catAi.SetCatPosition(transform.position);
         }

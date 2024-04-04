@@ -23,6 +23,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Ais.Cat
 
         public Subject<CatBehaviourMode> OnChangeMode { get; } = new();
         public Subject<Vector3> OnChangeCatPosition { get; } = new();
+        public Subject<Vector3> OnChangeCatStartPosition { get; } = new();
         public Subject<float> OnChangePlayerDistance { get; } = new();
         public Subject<bool> OnFlip { get; } = new();
         public Subject<float> OnCallToFeed { get; } = new();
@@ -87,18 +88,22 @@ namespace NekoOdyssey.Scripts.Game.Core.Ais.Cat
 
         private void SetMode(CatBehaviourMode mode)
         {
-            Debug.Log($">>change_mode<< set {mode}");
             Mode = mode;
             OnChangeMode.OnNext(mode);
         }
 
+        public void SetCatStartPosition(Vector3 position)
+        {
+            CatPosition = position;
+            OnChangeCatStartPosition.OnNext(position);
+        }
+        
         public void SetCatPosition(Vector3 position)
         {
-            Debug.Log($">>cat_position<< {position}");
             CatPosition = position;
             OnChangeCatPosition.OnNext(position);
         }
-
+        
         public void SetPlayerDistance(float distance, float deltaX)
         {
             PlayerDistance = distance;
