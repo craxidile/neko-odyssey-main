@@ -29,9 +29,11 @@ namespace NekoOdyssey.Scripts.Game.Core.Ais.Cat.Behaviours.FollowPlayer
             _targetPositionOnArea = null;
 
             _catStartPositionSubscription = CatAi.OnChangeCatStartPosition
-                .Subscribe(HandleCatStartPosition);
+                .Subscribe(HandleCatStartPosition)
+                .AddTo(GameRunner.Instance);
             _catPositionSubscription = CatAi.OnChangeCatPosition
-                .Subscribe(HandleCatPosition);
+                .Subscribe(HandleCatPosition)
+                .AddTo(GameRunner.Instance);
             _readyToWalkSubscription = CatAi.OnReadyToWalk
                 .Subscribe(HandleReadyToWalk)
                 .AddTo(GameRunner.Instance);
