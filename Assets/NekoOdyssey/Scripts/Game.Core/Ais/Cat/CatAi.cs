@@ -74,7 +74,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Ais.Cat
             var nextMode = modes[nextIndex];
             //Debug.Log($">>modes<< finish_behaviour {Mode} next {nextMode}");
             var nextBehaviour = Behaviours[nextMode];
-            Debug.Log($">>modes<< next_behaviour {nextBehaviour}");
+            //Debug.Log($">>modes<< next_behaviour {nextBehaviour}");
             nextBehaviour.Start();
             SetMode(nextMode);
         }

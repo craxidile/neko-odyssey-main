@@ -49,7 +49,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Ais.Cat.Behaviours.FollowPlayer
 
             if (Vector3.Distance(_targetPositionOnArea, catPosition) <= 0.01f)
             {
-                Debug.Log($">>modes<< call_to_feed end");
+                //Debug.Log($">>modes<< call_to_feed end");
                 End();
                 return;
             }

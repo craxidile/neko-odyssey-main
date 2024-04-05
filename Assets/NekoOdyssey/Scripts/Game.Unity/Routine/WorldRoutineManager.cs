@@ -164,6 +164,7 @@ public class WorldRoutineManager : MonoBehaviour
                                     if (targetActor != null)
                                     {
                                         ChatBalloonManager.instance.ShowChatBalloon(targetActor.transform, dialogueMessage.message);
+                                        NekoOdyssey.Scripts.GameRunner.Instance.Core.Player.SetMode(NekoOdyssey.Scripts.Game.Unity.Game.Core.PlayerMode.Conversation);
                                     }
                                     else
                                     {
@@ -181,7 +182,7 @@ public class WorldRoutineManager : MonoBehaviour
                                 //complete talking
                                 //restore player control
                                 ChatBalloonManager.instance.HideChatBalloon();
-
+                                NekoOdyssey.Scripts.GameRunner.Instance.Core.Player.SetMode(NekoOdyssey.Scripts.Game.Unity.Game.Core.PlayerMode.Move);
 
                                 if (!dialogueGroup.isCanceled)
                                 {
@@ -251,5 +252,11 @@ public class WorldRoutineManager : MonoBehaviour
         questEventManager.InitializedQuestEvent();
         npcRoutineManager.InitializedRoutine();
         questDialogueManager.InitializedQuestDialogue();
+    }
+
+
+    public void testHideBlackScene(GameObject targetObject)
+    {
+        Debug.Log(targetObject.name);
     }
 }

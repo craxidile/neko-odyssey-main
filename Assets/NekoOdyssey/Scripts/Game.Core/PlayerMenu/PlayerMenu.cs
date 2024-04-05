@@ -49,7 +49,7 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
         {
             MenuLevel = level;
             OnChangeMenuLevel.OnNext(MenuLevel);
-            Debug.Log($">>menu_level<< actions_length {MenuLevel} {_actions.Length}");
+            //Debug.Log($">>menu_level<< actions_length {MenuLevel} {_actions.Length}");
             if (_actions.Length == 0) return;
             SetCurrentAction(level == 0 && _actions.Length > 1 ? PlayerMenuAction.Exclamation : _actions[0]);
         }
