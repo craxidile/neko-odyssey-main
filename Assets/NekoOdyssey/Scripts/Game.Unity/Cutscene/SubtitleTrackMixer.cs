@@ -31,9 +31,10 @@ public class SubtitleTrackMixer : PlayableBehaviour
                     if (input.waitPlayerSummit)
                     {
                         var director = (playable.GetGraph().GetResolver() as PlayableDirector);
-                        while (director.state != PlayState.Paused)
+                        while (director.state != PlayState.Paused && !input.isPaused)
                         {
                             Debug.Log($">>behavior<< pausing");
+                            input.isPaused = true;
                             director.Pause();
                         }
                     }

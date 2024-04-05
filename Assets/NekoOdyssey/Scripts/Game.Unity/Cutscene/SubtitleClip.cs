@@ -17,6 +17,7 @@ public class SubtitleClip : PlayableAsset
         SubtitleBehaviour subtitleBehaviour = playable.GetBehaviour();
         subtitleBehaviour.lineIndexID = lineIndexID;
         subtitleBehaviour.waitPlayerSummit = waitPlayerSummit;
+        subtitleBehaviour.isPaused = false;
 
         return playable;
     }
