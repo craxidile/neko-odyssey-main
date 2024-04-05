@@ -100,17 +100,23 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-    public static void FunctionA(GameObject posRef)
+    public static void NextDialogue(GameObject posRef)
     {
         Debug.Log("function A gameOject :" + posRef);
+
+        //ChatBalloonManager.instance.ShowChatBalloon(posRef.transform, "Text1");
     }
     public static void StartDialogue()
     {
         Debug.Log("Start Dialogue");
+
+        
     }
     public static void EndDialogue()
     {
         Debug.Log("End Dialogue");
+
+        //ChatBalloonManager.instance.HideChatBalloon();
     }
 
     public static bool IsEndDialogue { get; set; }

@@ -33,12 +33,12 @@ public class DialogueTrackMixer : PlayableBehaviour
                         while (director.state != PlayState.Paused && !input.isPaused)
                         {
                             Debug.Log($">>behavior<< pausing");
-                            DialogueManager.FunctionA(input.PositionReference);
                             DialogueManager.IsEndDialogue = input.endDialogue;
                             if (input.startDialogue)
                             {
                                 DialogueManager.StartDialogue();
                             }
+                            DialogueManager.NextDialogue(input.PositionReference);
                             input.isPaused = true;
                             director.Pause();
                         }
@@ -51,12 +51,12 @@ public class DialogueTrackMixer : PlayableBehaviour
     }
     public override void OnBehaviourPlay(Playable playable, FrameData info)
     {
-        Debug.Log(">>behavior<< play");
+        //Debug.Log(">>behavior<< play");
         var duration = playable.GetDuration();
         playable.SetTime(duration);
     }
     public override void OnBehaviourPause(Playable playable, FrameData info)
     {
-        Debug.Log($">>behavior<< pause");
+        //Debug.Log($">>behavior<< pause");
     }
 }
