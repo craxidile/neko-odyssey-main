@@ -8,4 +8,5 @@ public class SubtitleBehaviour : PlayableBehaviour
     public string lineIndexID;
     public bool waitPlayerSummit;
     public bool isPaused;
+    public GameObject balloonPopUpPosition;
 }

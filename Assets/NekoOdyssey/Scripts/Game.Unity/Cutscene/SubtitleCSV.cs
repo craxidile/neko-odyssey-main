@@ -137,6 +137,9 @@ public class SubtitleCSV : MonoBehaviour
 
         return "";
     }
-
+    public static void FunctionA(GameObject Position)
+    {
+        Debug.Log("function A gameOject :" + Position.ToString());
+    }
 
 }
