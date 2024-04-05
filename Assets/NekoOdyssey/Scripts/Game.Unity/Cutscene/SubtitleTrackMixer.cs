@@ -34,6 +34,7 @@ public class SubtitleTrackMixer : PlayableBehaviour
                         while (director.state != PlayState.Paused && !input.isPaused)
                         {
                             Debug.Log($">>behavior<< pausing");
+                            SubtitleCSV.FunctionA(input.balloonPopUpPosition);
                             input.isPaused = true;
                             director.Pause();
                         }
