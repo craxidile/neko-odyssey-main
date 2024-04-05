@@ -1,16 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.UI;
 
-public class SubtitleTrackMixer : PlayableBehaviour
+public class DialogueTrackMixer : PlayableBehaviour
 {
     public override void ProcessFrame(Playable playable, FrameData info, object playerData)
     {
-        TextMeshProUGUI text = playerData as TextMeshProUGUI;
+        var text = playerData as Text;
         string currentText = "";
-        float currentAlpha = 0f;
 
         if (!text) { return; }
 
@@ -21,20 +20,25 @@ public class SubtitleTrackMixer : PlayableBehaviour
 
             if (inputWeight > 0f)
             {
-                ScriptPlayable<SubtitleBehaviour> inputPlayable = (ScriptPlayable<SubtitleBehaviour>)playable.GetInput(i);
-                SubtitleBehaviour input = inputPlayable.GetBehaviour();
-                var textData = SubtitleCSV.GetDialogue(input.lineIndexID);
+                ScriptPlayable<DialogueBehaviour> inputPlayable = (ScriptPlayable<DialogueBehaviour>)playable.GetInput(i);
+                DialogueBehaviour input = inputPlayable.GetBehaviour();
+                var textData = DialogueManager.GetDialogue(input.lineIndexID);
                 currentText = textData.DialogueSentance;
-                currentAlpha = inputWeight;
-                if(Application.isPlaying)
+                if (Application.isPlaying)
                 {
                     if (input.waitPlayerSummit)
                     {
+
                         var director = (playable.GetGraph().GetResolver() as PlayableDirector);
                         while (director.state != PlayState.Paused && !input.isPaused)
                         {
                             Debug.Log($">>behavior<< pausing");
-                            SubtitleCSV.FunctionA(input.balloonPopUpPosition);
+                            DialogueManager.FunctionA(input.PositionReference);
+                            DialogueManager.IsEndDialogue = input.endDialogue;
+                            if (input.startDialogue)
+                            {
+                                DialogueManager.StartDialogue();
+                            }
                             input.isPaused = true;
                             director.Pause();
                         }
@@ -44,7 +48,6 @@ public class SubtitleTrackMixer : PlayableBehaviour
         }
 
         text.text = currentText;
-        text.alpha = currentAlpha;
     }
     public override void OnBehaviourPlay(Playable playable, FrameData info)
     {

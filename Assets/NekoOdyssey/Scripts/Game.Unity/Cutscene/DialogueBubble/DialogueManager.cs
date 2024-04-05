@@ -1,14 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.Playables;
-using UnityEngine.UIElements;
-using UnityEngine.Windows;
-using Input = UnityEngine.Input;
-public enum languageType
+
+public enum languageTypeDialogue
 {
     English,
     Japanese,
@@ -25,13 +21,13 @@ public class DialogueData
     }
 }
 
-public class SubtitleCSV : MonoBehaviour
+public class DialogueManager : MonoBehaviour
 {
-
-    private PlayableDirector director;
+    int languageColumnIndex = 1;
+    public PlayableDirector director;
     //languege  
-    public languageType language = languageType.English;
-    public static languageType globalLanguage = languageType.English;
+    public languageTypeDialogue language = languageTypeDialogue.English;
+    public static languageTypeDialogue globalLanguage = languageTypeDialogue.English;
 
     public void UpdateGlobalLanguage()
     {
@@ -42,7 +38,6 @@ public class SubtitleCSV : MonoBehaviour
     // Dialogue
     [SerializeField] TextAsset DialogueAsset;
 
-    int languageColumnIndex = 1;
 
     static Dictionary<string, DialogueData> AllDialogueData = new Dictionary<string, DialogueData>();
 
@@ -65,6 +60,10 @@ public class SubtitleCSV : MonoBehaviour
         {
             director.Play();
             Debug.Log($">>behavior<< play after get key down");
+            if (IsEndDialogue)
+            {
+                EndDialogue();
+            }
         }
     }
 
@@ -73,8 +72,6 @@ public class SubtitleCSV : MonoBehaviour
         string[] data = DialogueAsset.text.Split(('\n')).ToArray();
         CheckColumnIndex(data[0]);
 
-
-
         for (int i = 1; i < data.Length; i++)
         {
             string[] row = data[i].Split((',')).ToArray();
@@ -82,10 +79,6 @@ public class SubtitleCSV : MonoBehaviour
             DialogueData newDialogueData = new DialogueData();
 
             string dialogue = row[languageColumnIndex];
-
-            dialogue = dialogue.Replace(';', ',');
-            dialogue = dialogue.Replace("[n]", "\n");
-            dialogue = dialogue.Replace("[N]", "\n");
             newDialogueData.DialogueSentance = dialogue;
 
             AllDialogueData.Add(row[0], newDialogueData);
@@ -107,39 +100,20 @@ public class SubtitleCSV : MonoBehaviour
         }
     }
 
-    public static string ReadCSV(TextAsset textAsset, string rowIndexId)
+    public static void FunctionA(GameObject posRef)
     {
-        string[] data = textAsset.text.Split(('\n')).ToArray();
-
-        var firstrow = data[0].Split((',')).ToArray();
-
-        int languageColumnIndex = 0;
-
-        for (int i = 0; i < firstrow.Length; i++)
-        {
-            if (firstrow[i].ToLower() == "Th")
-            {
-                languageColumnIndex = i;
-            }
-
-
-        }
-
-        for (int i = 1; i < data.Length; i++)
-        {
-            var row = data[i].Split((',')).ToArray();
-
-            if (row[0] == rowIndexId)
-            {
-                return row[languageColumnIndex];
-            }
-        }
-
-        return "";
+        Debug.Log("function A gameOject :" + posRef);
     }
-    public static void FunctionA(GameObject Position)
+    public static void StartDialogue()
     {
-        Debug.Log("function A gameOject :" + Position.ToString());
+        Debug.Log("Start Dialogue");
     }
+    public static void EndDialogue()
+    {
+        Debug.Log("End Dialogue");
+    }
+
+    public static bool IsEndDialogue { get; set; }
 
 }
+
