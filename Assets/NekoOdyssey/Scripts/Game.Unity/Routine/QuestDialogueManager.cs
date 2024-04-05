@@ -5,8 +5,8 @@ using System.Linq;
 
 public class QuestDialogueManager : MonoBehaviour
 {
-    public TextAsset combineCSV;
-    public TextAsset[] multiCSV;
+    //public TextAsset combineCSV;
+    //public TextAsset[] multiCSV;
 
 
     void Start()
@@ -26,7 +26,7 @@ public class QuestDialogueManager : MonoBehaviour
     {
         //csv loader
 
-        foreach (var dialogueCSV in multiCSV)
+        foreach (var dialogueCSV in WorldRoutineManager.Instance.csvHolder.allQuestDialoguesCSV)
         {
             var questDialogueGroup = new QuestDialogueGroup(dialogueCSV.name.ToLower().Replace("_dialogue", ""));
 

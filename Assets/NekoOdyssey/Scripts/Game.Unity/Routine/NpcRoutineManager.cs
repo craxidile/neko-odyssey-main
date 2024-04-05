@@ -5,7 +5,7 @@ using System.Linq;
 
 public class NpcRoutineManager : MonoBehaviour
 {
-    public TextAsset testCSV;
+    //public TextAsset testCSV;
     //public string dayText, timeText;
     //public string eventPointKey;
     //GameObject testEventPoint;
@@ -56,10 +56,23 @@ public class NpcRoutineManager : MonoBehaviour
 
 
 
-        //csv loader
-        var newNpc = new NpcData(testCSV.name.ToLower());
 
-        string[] lines = testCSV.text.Split('\n');
+    }
+
+    public void InitializedRoutine()
+    {
+        foreach (var csv in WorldRoutineManager.Instance.csvHolder.routinesCSV)
+        {
+            LoadRoutineCSV(csv);
+        }
+    }
+
+    void LoadRoutineCSV(TextAsset textAsset)
+    {
+        //csv loader
+        var newNpc = new NpcData(textAsset.name.ToLower());
+
+        string[] lines = textAsset.text.Split('\n');
 
         for (int i = 1; i < lines.Length; i++)
         {
@@ -105,12 +118,6 @@ public class NpcRoutineManager : MonoBehaviour
 
         WorldRoutineManager.npcDatas.Add(newNpc);
         Debug.Log($"Add npc {newNpc.npcName}");
-
-    }
-
-    public void InitializedRoutine()
-    {
-
     }
 
 
