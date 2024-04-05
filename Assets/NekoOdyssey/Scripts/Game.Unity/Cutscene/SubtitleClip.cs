@@ -8,6 +8,7 @@ public class SubtitleClip : PlayableAsset
 {
     public string lineIndexID;
     public bool waitPlayerSummit;
+    public GameObject balloonPopUpPosition;
 
     public SubtitleBehaviour template = new SubtitleBehaviour();
 
@@ -17,6 +18,8 @@ public class SubtitleClip : PlayableAsset
         SubtitleBehaviour subtitleBehaviour = playable.GetBehaviour();
         subtitleBehaviour.lineIndexID = lineIndexID;
         subtitleBehaviour.waitPlayerSummit = waitPlayerSummit;
+        subtitleBehaviour.isPaused = false;
+        subtitleBehaviour.balloonPopUpPosition = balloonPopUpPosition;
 
         return playable;
     }

@@ -8,12 +8,16 @@ using UnityEngine.Playables;
 [ExecuteAlways]
 public class PrintAnimationNames : MonoBehaviour
 {
-    public Animator who; 
+    public Animator anim; 
     public PlayableDirector director;
 
+    private void Awake()
+    {
+        anim = GetComponent<Animator>();
+    }
     void Update()
     {
-        if (who == null)
+        if (anim == null)
             return;
 
         director = GetComponent<PlayableDirector>();
@@ -25,7 +29,7 @@ public class PrintAnimationNames : MonoBehaviour
         for (int i = 0; i < animationOutputs; i++)
         {
             var output = (AnimationPlayableOutput)director.playableGraph.GetOutputByType<AnimationPlayableOutput>(i);
-            if (output.GetTarget() != who)
+            if (output.GetTarget() != anim)
                 continue;
 
             var root = output.GetSourcePlayable();

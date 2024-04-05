@@ -19,8 +19,6 @@ public class DialogueData
 {
     public string DialogueSentance;
 
-    public bool HideCharacterSprite = true;
-
     public string[] GetDialogueSentanceSeperateLine()
     {
         return DialogueSentance.Split(('\n')).ToArray();
@@ -60,9 +58,10 @@ public class SubtitleCSV : MonoBehaviour
         LoadDialogueCSV();
     }
 
+
     private void Update()
     {
-        if (director.state == PlayState.Paused && Input.GetKeyDown(KeyCode.F))
+        if (director.state == PlayState.Paused && Input.anyKeyDown)
         {
             director.Play();
             Debug.Log($">>behavior<< play after get key down");
@@ -118,7 +117,7 @@ public class SubtitleCSV : MonoBehaviour
 
         for (int i = 0; i < firstrow.Length; i++)
         {
-            if (firstrow[i].ToLower() == "TH")
+            if (firstrow[i].ToLower() == "Th")
             {
                 languageColumnIndex = i;
             }
@@ -137,6 +136,10 @@ public class SubtitleCSV : MonoBehaviour
         }
 
         return "";
+    }
+    public static void FunctionA(GameObject Position)
+    {
+        Debug.Log("function A gameOject :" + Position.ToString());
     }
 
 }
