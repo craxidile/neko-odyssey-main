@@ -7,6 +7,7 @@ using DG.Tweening;
 public class ChatBalloonManager : MonoBehaviour
 {
     public GameObject balloonPrefab;
+    public float balloonScaleTime = 0.3f;
 
     public static ChatBalloonManager instance { get; private set; }
 
@@ -74,6 +75,11 @@ public class ChatBalloonManager : MonoBehaviour
 
             chatBalloonDatas.Add(newBalloonData);
 
+
+            var originalScale = newBalloon.transform.localScale;
+            newBalloon.transform.localScale = Vector3.zero;
+            newBalloon.transform.DOScale(originalScale, balloonScaleTime).SetEase(Ease.OutExpo);
+
         }
 
         _lastestBalloon = newBalloonData;
@@ -97,6 +103,13 @@ public class ChatBalloonManager : MonoBehaviour
     public void HideChatBalloon()
     {
         chatBalloonDatas.Remove(_lastestBalloon);
-        Destroy(_lastestBalloon.chatBalloon.gameObject);
+
+        var targetObject = _lastestBalloon;
+        targetObject.chatBalloonObject.transform.DOScale(0, balloonScaleTime).SetEase(Ease.OutExpo).OnComplete(() =>
+        {
+            Destroy(targetObject.chatBalloon.gameObject);
+        });
+
+
     }
 }
