@@ -5,6 +5,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.DialogCanvas
 {
     public class DialogCanvasController : MonoBehaviour
     {
-        public  Text messageBox;
+        public Text messageBox;
+        public Animator animator;
     }
 }
