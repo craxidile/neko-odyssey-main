@@ -165,7 +165,8 @@ public class WorldRoutineManager : MonoBehaviour
                                     if (targetActor != null)
                                     {
                                         ChatBalloonManager.instance.ShowChatBalloon(targetActor.transform, dialogueMessage.message);
-                                        //NekoOdyssey.Scripts.GameRunner.Instance.Core.Player.SetMode(NekoOdyssey.Scripts.Game.Unity.Game.Core.PlayerMode.Conversation);
+                                        NekoOdyssey.Scripts.GameRunner.Instance.Core.PlayerMenu.GameObject = targetActor.gameObject;
+                                        NekoOdyssey.Scripts.GameRunner.Instance.Core.Player.SetMode(NekoOdyssey.Scripts.Game.Unity.Game.Core.PlayerMode.Conversation);
                                     }
                                     else
                                     {
