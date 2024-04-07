@@ -377,6 +377,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2badb1832224822a7b4f08ef23afa2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cameras:
+    mainCamera: {fileID: 0}
+    playerCamera: {fileID: 0}
 --- !u!4 &30628579
 Transform:
   m_ObjectHideFlags: 0
@@ -520,12 +523,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a8ae723389f47c698eb7f1cf247d958, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  phoneUiList: []
   openPositionTransform: {fileID: 203741455}
   closePositionTransform: {fileID: 1880921557}
   phoneTransform: {fileID: 787327729}
-  socialFeedCell: {fileID: 942298748}
-  photoGalleryEntryCell: {fileID: 1721455212}
-  socialFeedScrollRect: {fileID: 1144502779}
 --- !u!114 &88669094
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1590,7 +1591,7 @@ Transform:
   m_GameObject: {fileID: 388222586}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -0.5209999, y: 0.026721478, z: 0.5699997}
+  m_LocalPosition: {x: 0, y: -0.457, z: 0}
   m_LocalScale: {x: 1.25, y: 1.25, z: 1.25}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2114,7 +2115,7 @@ Transform:
   m_GameObject: {fileID: 469494785}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -0.5209999, y: 0.026721478, z: 0.5699997}
+  m_LocalPosition: {x: 0, y: -0.415, z: 0}
   m_LocalScale: {x: 1.25, y: 1.25, z: 1.25}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3173,11 +3174,6 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!1 &942298748 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6379659464923299221, guid: 67a288a02afe2a843b50c24b22f62c9c, type: 3}
-  m_PrefabInstance: {fileID: 387570427}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &942298749 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 969909619759570552, guid: 67a288a02afe2a843b50c24b22f62c9c, type: 3}
@@ -6366,11 +6362,6 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!1 &1721455212 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8364476954938773517, guid: b4d939a1822013142b42a8571286eec7, type: 3}
-  m_PrefabInstance: {fileID: 132886205}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &1721455213 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1643159283689844778, guid: b4d939a1822013142b42a8571286eec7, type: 3}

@@ -64,9 +64,9 @@ namespace NekoOdyssey.Scripts.Game.Unity.Birds
 
         public void FlipSprite(Vector3 target)
         {
-            Debug.Log("target" + target);
+            //Debug.Log("target" + target);
             var pos = transform.position;
-            Debug.Log("pos" + pos);
+            //Debug.Log("pos" + pos);
             var rot = transform.eulerAngles.y;
             if (rot == 0)
             {
