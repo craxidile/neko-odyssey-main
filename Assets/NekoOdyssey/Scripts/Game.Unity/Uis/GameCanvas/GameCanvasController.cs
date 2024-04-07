@@ -40,11 +40,15 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
         // Start is called before the first frame update
         void Start()
         {
-            phoneButton.onClick.AddListener(() => { GameRunner.Instance.Core.Player.SetMode(PlayerMode.Phone); });
-            // bagButton.onClick.AddListener(() =>
-            // {
-            //     UiHandler.Bag.opend = true;
-            // });
+            phoneButton.onClick.AddListener(() =>
+            {
+                Debug.Log($">>click_button<< phone");
+                var currentMode = GameRunner.Instance.Core.Player.Mode;
+                GameRunner.Instance.Core.Player.SetMode(
+                    currentMode != PlayerMode.Phone ? PlayerMode.Phone : PlayerMode.Move
+                );
+            });
+            bagButton.onClick.AddListener(() => { Debug.Log($">>click_button<< bag"); });
         }
 
         // Update is called once per frame
