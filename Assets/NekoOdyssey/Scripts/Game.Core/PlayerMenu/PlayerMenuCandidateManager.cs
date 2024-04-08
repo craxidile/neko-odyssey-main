@@ -57,7 +57,7 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
 
         private void ReorderAndSetPlayerMenu()
         {
-            Debug.Log($">>set_site_active<< reorder");
+            //Debug.Log($">>set_site_active<< reorder");
             var candidates = Candidates.OrderBy(c => c.DistanceFromPlayer);
             var selectedCandidate = candidates.FirstOrDefault();
             if (selectedCandidate == null) return;
