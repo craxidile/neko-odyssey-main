@@ -76,9 +76,10 @@ public class ChatBalloonManager : MonoBehaviour
             chatBalloonDatas.Add(newBalloonData);
 
 
-            var originalScale = newBalloon.transform.localScale;
-            newBalloon.transform.localScale = Vector3.zero;
-            newBalloon.transform.DOScale(originalScale, balloonScaleTime).SetEase(Ease.OutExpo);
+            //var originalScale = newBalloon.transform.localScale;
+            //newBalloon.transform.localScale = Vector3.zero;
+            //newBalloon.transform.DOScale(originalScale, balloonScaleTime).SetEase(Ease.OutExpo);
+            //chatBalloon.animator.SetTrigger("OpenTrigger");
 
         }
 
@@ -105,11 +106,12 @@ public class ChatBalloonManager : MonoBehaviour
         chatBalloonDatas.Remove(_lastestBalloon);
 
         var targetObject = _lastestBalloon;
-        targetObject.chatBalloonObject.transform.DOScale(0, balloonScaleTime).SetEase(Ease.OutExpo).OnComplete(() =>
-        {
-            Destroy(targetObject.chatBalloon.gameObject);
-        });
-
+        //targetObject.chatBalloonObject.transform.DOScale(0, balloonScaleTime).SetEase(Ease.OutExpo).OnComplete(() =>
+        //{
+        //    Destroy(targetObject.chatBalloon.gameObject);
+        //});
+        targetObject.chatBalloon.animator.SetTrigger("OpenTrigger");
+        DOVirtual.DelayedCall(1, () => { Destroy(targetObject.chatBalloon.gameObject); });
 
     }
 }

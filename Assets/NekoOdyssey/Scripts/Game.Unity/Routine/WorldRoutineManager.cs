@@ -140,6 +140,7 @@ public class WorldRoutineManager : MonoBehaviour
                                             if (targetActor != null)
                                             {
                                                 ChatBalloonManager.instance.ShowChatBalloon(targetActor.transform, dialogueMessage.message);
+                                                //NekoOdyssey.Scripts.GameRunner.Instance.Core.Player.SetMode(NekoOdyssey.Scripts.Game.Unity.Game.Core.PlayerMode.Conversation);
                                             }
                                             else
                                             {
@@ -164,6 +165,7 @@ public class WorldRoutineManager : MonoBehaviour
                                     if (targetActor != null)
                                     {
                                         ChatBalloonManager.instance.ShowChatBalloon(targetActor.transform, dialogueMessage.message);
+                                        NekoOdyssey.Scripts.GameRunner.Instance.Core.PlayerMenu.GameObject = targetActor.gameObject;
                                         NekoOdyssey.Scripts.GameRunner.Instance.Core.Player.SetMode(NekoOdyssey.Scripts.Game.Unity.Game.Core.PlayerMode.Conversation);
                                     }
                                     else
@@ -182,7 +184,7 @@ public class WorldRoutineManager : MonoBehaviour
                                 //complete talking
                                 //restore player control
                                 ChatBalloonManager.instance.HideChatBalloon();
-                                NekoOdyssey.Scripts.GameRunner.Instance.Core.Player.SetMode(NekoOdyssey.Scripts.Game.Unity.Game.Core.PlayerMode.Move);
+                                //NekoOdyssey.Scripts.GameRunner.Instance.Core.Player.SetMode(NekoOdyssey.Scripts.Game.Unity.Game.Core.PlayerMode.Move);
 
                                 if (!dialogueGroup.isCanceled)
                                 {
