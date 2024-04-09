@@ -33,12 +33,12 @@ public class DialogueTrackMixer : PlayableBehaviour
                         while (director.state != PlayState.Paused && !input.isPaused)
                         {
                             Debug.Log($">>behavior<< pausing");
-                            DialogueManager.IsEndDialogue = input.endDialogue;
-                            if (input.startDialogue)
-                            {
-                                DialogueManager.StartDialogue();
-                            }
-                            DialogueManager.NextDialogue(input.PositionReference);
+                            //DialogueManager.IsEndDialogue = input.endDialogue;
+                            //if (input.startDialogue)
+                            //{
+                            //    DialogueManager.StartDialogue();
+                            //}
+                            //DialogueManager.NextDialogue(input.PositionReference);
                             input.isPaused = true;
                             director.Pause();
                         }

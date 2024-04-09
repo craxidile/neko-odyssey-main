@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NpcUpdateAnimator : MonoBehaviour
+public class CatUpdateAnimator : MonoBehaviour
 {
     [HideInInspector]
     public Animator animator;
-    public enum poseType { stand_frontside, sit_frontside, sit_back, sit_back_face, work_look }
+    public enum poseType { stand_frontside, sit_frontside, stand_hungry, sit_hungry }
     public poseType pose;
     private void Awake()
     {
@@ -19,21 +19,18 @@ public class NpcUpdateAnimator : MonoBehaviour
         {
             animator.SetTrigger("sit_frontside");
         }
-        else if (pose == poseType.sit_back)
+        else if (pose == poseType.stand_hungry)
         {
-            animator.SetTrigger("sit_back");
+            animator.SetTrigger("stand_hungry)");
         }
-        else if (pose == poseType.sit_back_face)
+        else if (pose == poseType.sit_hungry)
         {
-            animator.SetTrigger("sit_back_face");
-        }
-        else if (pose == poseType.work_look)
-        {
-            animator.SetTrigger("work_look");
+            animator.SetTrigger("sit_hungry");
         }
     }
-    private void Update()
+    void Update()
     {
+        animator = GetComponent<Animator>();
         if (pose == poseType.stand_frontside)
         {
             animator.SetTrigger("stand_frontside");
@@ -42,17 +39,13 @@ public class NpcUpdateAnimator : MonoBehaviour
         {
             animator.SetTrigger("sit_frontside");
         }
-        else if (pose == poseType.sit_back)
+        else if (pose == poseType.stand_hungry)
         {
-            animator.SetTrigger("sit_back");
+            animator.SetTrigger("stand_hungry)");
         }
-        else if (pose == poseType.sit_back_face)
+        else if (pose == poseType.sit_hungry)
         {
-            animator.SetTrigger("sit_back_face");
-        }
-        else if (pose == poseType.work_look)
-        {
-            animator.SetTrigger("work_look");
+            animator.SetTrigger("sit_hungry");
         }
     }
 }
