@@ -25,14 +25,14 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Conversations
             if (!_active) return;
 
             if (!GameRunner.Instance.AssetMap.ContainsKey("dialogcanvas")) return;
-            
+
             _dialogCanvas = Instantiate(
                 GameRunner.Instance.AssetMap["dialogcanvas"],
                 GameRunner.Instance.Core.PlayerMenu.GameObject.transform
             ) as GameObject;
             Debug.Log($">>dialog_canvas<< {_dialogCanvas}");
             var dialogCanvasController = _dialogCanvas.GetComponent<DialogCanvasController>();
-            dialogCanvasController.messageBox.text = GameRunner.Instance.Core.Player.Conversation.Dialog;
+            dialogCanvasController.SetText(GameRunner.Instance.Core.Player.Conversation.Dialog);
         }
 
         public void Awake()

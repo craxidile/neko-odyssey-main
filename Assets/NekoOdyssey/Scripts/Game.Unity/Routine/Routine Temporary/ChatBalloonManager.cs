@@ -49,7 +49,8 @@ public class ChatBalloonManager : MonoBehaviour
         var newBalloonData = chatBalloonDatas.Find(balloonData => balloonData.parent == parent);
         if (newBalloonData != null)
         {
-            newBalloonData.chatBalloon.messageBox.text = message;
+            //newBalloonData.chatBalloon.messageBox.text = message;
+            newBalloonData.chatBalloon.SetText(message);
             newBalloonData.message = message;
             newBalloonData.startTime = Time.time;
         }
@@ -59,7 +60,7 @@ public class ChatBalloonManager : MonoBehaviour
             newBalloon.transform.localPosition = Vector3.up * 0.5f;
 
             var chatBalloon = newBalloon.GetComponent<NekoOdyssey.Scripts.Game.Unity.Uis.DialogCanvas.DialogCanvasController>();
-            chatBalloon.messageBox.text = message;
+            chatBalloon.SetText(message);
 
             var canvasGroup = newBalloon.GetComponentInChildren<CanvasGroup>();
 
@@ -95,10 +96,10 @@ public class ChatBalloonManager : MonoBehaviour
 
 
         //force update chat balloon frame
-        Canvas.ForceUpdateCanvases();
-        var layoutGroup = newBalloonData.chatBalloonObject.GetComponentInChildren<UnityEngine.UI.LayoutGroup>();
-        layoutGroup.enabled = false;
-        layoutGroup.enabled = true;
+        //Canvas.ForceUpdateCanvases();
+        //var layoutGroup = newBalloonData.chatBalloonObject.GetComponentInChildren<UnityEngine.UI.LayoutGroup>();
+        //layoutGroup.enabled = false;
+        //layoutGroup.enabled = true;
     }
 
     public void HideChatBalloon()

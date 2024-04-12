@@ -184,7 +184,7 @@ public class WorldRoutineManager : MonoBehaviour
                                 //complete talking
                                 //restore player control
                                 ChatBalloonManager.instance.HideChatBalloon();
-                                //NekoOdyssey.Scripts.GameRunner.Instance.Core.Player.SetMode(NekoOdyssey.Scripts.Game.Unity.Game.Core.PlayerMode.Move);
+                                NekoOdyssey.Scripts.GameRunner.Instance.Core.Player.SetMode(NekoOdyssey.Scripts.Game.Unity.Game.Core.PlayerMode.Move);
 
                                 if (!dialogueGroup.isCanceled)
                                 {
