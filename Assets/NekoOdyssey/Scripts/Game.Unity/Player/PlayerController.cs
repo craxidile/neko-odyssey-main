@@ -16,7 +16,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
     {
 
         //public static Vector3 MainPlayerAnchor = new(27, -1.6f, -13f);
-        public static Vector3 MainPlayerAnchor = new(25, -1.662279f, -25.688f);
+        //public static Vector3 MainPlayerAnchor = new(25, -1.662279f, -25.688f);
+        public static Vector3 MainPlayerAnchor = new(28, -1.662279f, -41.5f);
         private PlayerMovementController _movementController;
         private PlayerPhoneController _phoneController;
         private PlayerCaptureController _captureController;
