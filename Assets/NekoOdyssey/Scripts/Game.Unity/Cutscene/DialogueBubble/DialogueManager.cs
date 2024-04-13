@@ -23,6 +23,8 @@ public class DialogueData
 
 public class DialogueManager : MonoBehaviour
 {
+    public static DialogueManager instancee;
+    public bool nextDialogue;
     int languageColumnIndex = 1;
     public PlayableDirector director;
     //languege  
@@ -38,14 +40,13 @@ public class DialogueManager : MonoBehaviour
     // Dialogue
     [SerializeField] TextAsset DialogueAsset;
 
-
+    
     static Dictionary<string, DialogueData> AllDialogueData = new Dictionary<string, DialogueData>();
 
     public static DialogueData GetDialogue(string lineIndexID)
     {
         return AllDialogueData[lineIndexID];
     }
-
     private void Awake()
     {
         director = GetComponent<PlayableDirector>();
@@ -53,17 +54,14 @@ public class DialogueManager : MonoBehaviour
         LoadDialogueCSV();
     }
 
+    
 
     private void Update()
     {
-        if (director.state == PlayState.Paused && Input.anyKeyDown)
+        if (/*director.state == PlayState.Paused && */Input.anyKeyDown && !nextDialogue)
         {
-            director.Play();
-            Debug.Log($">>behavior<< play after get key down");
-            //if (IsEndDialogue)
-            //{
-            //    EndDialogue();
-            //}
+            nextDialogue = true;
+            Debug.Log($">>behavior<< play continue after get key down");
         }
     }
 
@@ -99,26 +97,6 @@ public class DialogueManager : MonoBehaviour
             }
         }
     }
-
-    //public static void NextDialogue(GameObject posRef)
-    //{
-    //    Debug.Log("function A gameOject :" + posRef);
-
-    //}
-    //public static void StartDialogue()
-    //{
-    //    Debug.Log("Start Dialogue");
-
-        
-    //}
-    //public static void EndDialogue()
-    //{
-    //    Debug.Log("End Dialogue");
-
-    //    //ChatBalloonManager.instance.HideChatBalloon();
-    //}
-
-    //public static bool IsEndDialogue { get; set; }
 
 }
 
