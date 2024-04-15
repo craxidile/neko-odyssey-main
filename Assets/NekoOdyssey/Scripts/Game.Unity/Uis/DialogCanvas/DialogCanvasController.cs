@@ -8,7 +8,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.DialogCanvas
     public class DialogCanvasController : MonoBehaviour
     {
         public Text messageBox;
-        public Animator animator;
+        [SerializeField] Animator animator;
 
 
         public void SetText(string text)
@@ -21,6 +21,11 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.DialogCanvas
 
 
 
+        }
+
+        public void SetOpened(bool isOpen)
+        {
+            animator.SetBool("OpenTrigger", isOpen);
         }
     }
 }

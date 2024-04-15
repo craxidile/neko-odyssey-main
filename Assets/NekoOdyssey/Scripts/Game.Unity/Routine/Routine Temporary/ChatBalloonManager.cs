@@ -111,7 +111,8 @@ public class ChatBalloonManager : MonoBehaviour
         //{
         //    Destroy(targetObject.chatBalloon.gameObject);
         //});
-        targetObject.chatBalloon.animator.SetTrigger("OpenTrigger");
+        //targetObject.chatBalloon.animator.SetTrigger("OpenTrigger");
+        targetObject.chatBalloon.SetOpened(false);
         DOVirtual.DelayedCall(1, () => { Destroy(targetObject.chatBalloon.gameObject); });
 
     }
