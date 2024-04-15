@@ -1742,6 +1742,7 @@ GameObject:
   m_Component:
   - component: {fileID: 485688509}
   - component: {fileID: 485688510}
+  - component: {fileID: 485688511}
   m_Layer: 0
   m_Name: Phase01_Scene04
   m_TagString: Untagged
@@ -1800,6 +1801,20 @@ PlayableDirector:
     - b496487d92da1314490080af53c3547f: {fileID: 1463493644}
     - 55f74768c4b672b4fbd1f2f14494c7a3: {fileID: 1463493644}
     - 72b2dabef5748ef45b4328ab0fd029f3: {fileID: 1340118065}
+--- !u!114 &485688511
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 485688508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c54b6296cb149d34889f4665789f8fc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  director: {fileID: 0}
+  isDone: 0
 --- !u!1 &612884558
 GameObject:
   m_ObjectHideFlags: 0
@@ -2869,7 +2884,7 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60.000004
-  orthographic: 1
+  orthographic: 0
   orthographic size: 5
   m_Depth: 0
   m_CullingMask:
@@ -2894,8 +2909,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 910305875}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -12, y: 0, z: 12.750004}
+  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
+  m_LocalPosition: {x: 61.101, y: -1.2, z: -11.446}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3383,6 +3398,7 @@ GameObject:
   - component: {fileID: 1070239355}
   - component: {fileID: 1070239354}
   - component: {fileID: 1070239356}
+  - component: {fileID: 1070239357}
   m_Layer: 0
   m_Name: Phase01_Scene02
   m_TagString: Untagged
@@ -3499,10 +3515,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a851123401674164ab4b782e01c4af3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextDialogue: 0
   director: {fileID: 1070239354}
+  nextDialogue: 0
   language: 0
   DialogueAsset: {fileID: 4900000, guid: 71e3827838da3dc418e7fca12803a184, type: 3}
+--- !u!114 &1070239357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1070239353}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c54b6296cb149d34889f4665789f8fc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  director: {fileID: 0}
+  isDone: 0
 --- !u!1 &1101709099
 GameObject:
   m_ObjectHideFlags: 0
@@ -3514,7 +3544,7 @@ GameObject:
   - component: {fileID: 1101709100}
   - component: {fileID: 1101709101}
   - component: {fileID: 1101709102}
-  - component: {fileID: 1101709104}
+  - component: {fileID: 1101709103}
   m_Layer: 0
   m_Name: Phase01_Scene01
   m_TagString: Untagged
@@ -3629,8 +3659,6 @@ PlayableDirector:
     value: {fileID: 1570057589}
   - key: {fileID: -5169452635251768371, guid: 906dcbe12bd97d341a6eadd1b9eda1c2, type: 2}
     value: {fileID: 1570057588}
-  - key: {fileID: 779047875269249765, guid: 906dcbe12bd97d341a6eadd1b9eda1c2, type: 2}
-    value: {fileID: 0}
   - key: {fileID: -3785270706442776295, guid: 906dcbe12bd97d341a6eadd1b9eda1c2, type: 2}
     value: {fileID: 1101709102}
   m_ExposedReferences:
@@ -3671,32 +3699,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a851123401674164ab4b782e01c4af3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextDialogue: 0
   director: {fileID: 0}
+  nextDialogue: 0
   language: 3
   DialogueAsset: {fileID: 4900000, guid: 3ee4f69fe5cfedf468ee543c7424154d, type: 3}
---- !u!95 &1101709104
-Animator:
-  serializedVersion: 7
+--- !u!114 &1101709103
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1101709099}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c54b6296cb149d34889f4665789f8fc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  director: {fileID: 0}
+  isDone: 0
 --- !u!1 &1111251734
 GameObject:
   m_ObjectHideFlags: 0
@@ -4598,7 +4618,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7125326301716471586, guid: e1fffb291d15a5645b2e7b8853a872b4, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 224
       objectReference: {fileID: 0}
     - target: {fileID: 7125326301716471586, guid: e1fffb291d15a5645b2e7b8853a872b4, type: 3}
       propertyPath: m_AnchoredPosition.y

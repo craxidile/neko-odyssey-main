@@ -23,11 +23,13 @@ public class DialogueData
 
 public class DialogueManager : MonoBehaviour
 {
-    public static DialogueManager instancee;
-    public bool nextDialogue;
-    int languageColumnIndex = 1;
+    public static DialogueManager instance;
     public PlayableDirector director;
+    public bool nextDialogue;
+
     //languege  
+    int languageColumnIndex = 1;
+   
     public languageTypeDialogue language = languageTypeDialogue.English;
     public static languageTypeDialogue globalLanguage = languageTypeDialogue.English;
 
