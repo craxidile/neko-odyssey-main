@@ -9,6 +9,7 @@ using UniRx;
 using NekoOdyssey.Scripts.Game.Core.PlayerMenu;
 using NekoOdyssey.Scripts.Game.Unity.AssetBundles;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Object = UnityEngine.Object;
@@ -26,11 +27,14 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
 
         public PlayerMenuAction[] availableActions;
         public PlayerMenuSite site;
+        public string siteName;
+        public string activeAtSiteName;
         public bool autoActive;
 
         private void Awake()
         {
-            Debug.Log($">>awake<<");
+            if (string.IsNullOrEmpty(siteName)) siteName = Guid.NewGuid().ToString();
+            Debug.Log($">>awake<< {siteName}");
             AssetBundleUtils.OnReady(LoadBanners);
         }
 
@@ -61,8 +65,11 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
             GameRunner.Instance.Core.PlayerMenu.OnCommitAction
                 .Subscribe(HandlePlayerMenuAction)
                 .AddTo(this);
-            GameRunner.Instance.Core.PlayerMenu.OnChangeSiteActive
-                .Subscribe(HandleSiteActiveChange)
+            // GameRunner.Instance.Core.PlayerMenu.OnChangeSiteActive
+            //     .Subscribe(HandleSiteActiveChange)
+            //     .AddTo(this);
+            GameRunner.Instance.Core.PlayerMenu.OnChangeSiteNameActive
+                .Subscribe(HandleSiteNameActiveChange)
                 .AddTo(this);
         }
 
@@ -71,12 +78,14 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
         private void OnTriggerStay(Collider other)
         {
             if (!other.CompareTag("Player")) return;
+            if (Site.Core.Site.Site.CurrentSite.Name != activeAtSiteName) return;
             _eligibleToShow = true;
             GameRunner.Instance.Core.PlayerMenuCandidateManager.Add(new PlayerMenuCandidate
             {
                 Actions = availableActions,
                 GameObject = gameObject,
-                Site = site,
+                // Site = site,
+                SiteName = siteName,
                 AutoActive = autoActive,
                 DistanceFromPlayer = Vector3.Distance(other.transform.position, transform.position)
             });
@@ -85,14 +94,17 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
         private void OnTriggerExit(Collider other)
         {
             if (!other.CompareTag("Player")) return;
+            if (Site.Core.Site.Site.CurrentSite.Name != activeAtSiteName) return;
             _eligibleToShow = false;
             var menuCandidateManager = GameRunner.Instance.Core.PlayerMenuCandidateManager;
-            menuCandidateManager.Remove(new PlayerMenuCandidate { Site = site });
+            // menuCandidateManager.Remove(new PlayerMenuCandidate { Site = site });
+            menuCandidateManager.Remove(new PlayerMenuCandidate { SiteName = siteName });
         }
 
         private void TriggerCurrentAction(PlayerMenuAction currentAction)
         {
-            if (GameRunner.Instance.Core.PlayerMenu.Site != site) return;
+            // if (GameRunner.Instance.Core.PlayerMenu.Site != site) return;
+            if (GameRunner.Instance.Core.PlayerMenu.SiteName != siteName) return;
             Debug.Log($">>menu_level<< current_action {currentAction}");
             var availableActionList = availableActions.ToList();
             var banners = GameRunner.Instance.Core.PlayerMenu.MenuLevel == 0
@@ -110,10 +122,32 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
             }
         }
 
-        private void HandleSiteActiveChange(Tuple<PlayerMenuSite, bool> siteActive)
+        // private void HandleSiteActiveChange(Tuple<PlayerMenuSite, bool> siteActive)
+        // {
+        //     var currentSite = siteActive.Item1;
+        //     if (currentSite != site) return;
+        //     var active = siteActive.Item2;
+        //     if (!active)
+        //     {
+        //         foreach (var banner in _banners)
+        //             banner.SetActive(false);
+        //         return;
+        //     }
+        //
+        //     var eligibleBanners = _banners.Where(banner =>
+        //     {
+        //         var details = banner.GetComponent<PlayerMenuDetails>();
+        //         if (!details) return false;
+        //         return details.level == 0;
+        //     });
+        //     foreach (var banner in eligibleBanners)
+        //         banner.SetActive(true);
+        // }
+
+        private void HandleSiteNameActiveChange(Tuple<string, bool> siteActive)
         {
-            var currentSite = siteActive.Item1;
-            if (currentSite != site) return;
+            var currentSiteName = siteActive.Item1;
+            if (currentSiteName != siteName) return;
             var active = siteActive.Item2;
             if (!active)
             {
@@ -141,7 +175,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
 
         private void SetMenuLevel(int level)
         {
-            if (GameRunner.Instance.Core.PlayerMenu.Site != site) return;
+            // if (GameRunner.Instance.Core.PlayerMenu.Site != site) return;
+            if (GameRunner.Instance.Core.PlayerMenu.SiteName != siteName) return;
             Debug.Log($">>level<< {level}");
             var bannersToDisplay = _banners
                 .Where(banner =>

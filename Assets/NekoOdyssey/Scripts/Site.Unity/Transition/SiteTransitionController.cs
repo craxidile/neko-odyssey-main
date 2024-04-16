@@ -11,6 +11,11 @@ namespace NekoOdyssey.Scripts.Site.Unity.Transition
     {
         private static bool _screenInitialized;
 
+        private void Awake()
+        {
+            InitializeScreen();
+        }
+
         private void Start()
         {
             if (SiteRunner.Instance.Core.Site.Ready)
@@ -41,6 +46,7 @@ namespace NekoOdyssey.Scripts.Site.Unity.Transition
             var currentSite = Core.Site.Site.CurrentSite;
 
             var scenes = currentSite.Scenes.OrderBy(s => s.Id);
+            
 
             var mainScene = scenes.FirstOrDefault();
             if (mainScene == null) return;

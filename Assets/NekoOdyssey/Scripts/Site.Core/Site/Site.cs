@@ -41,8 +41,10 @@ namespace NekoOdyssey.Scripts.Site.Core.Site
         private void InitializeSite()
         {
             if (CurrentSite != null) return;
-            // SetSite("Intro");
-            SetSite("GamePlayZone4_01");
+            // SetSite("Intro", false);
+            // SetSite("GamePlayZone4_01", false);
+            // SetSite("GamePlayZone4_02", false);
+            SetSite("GamePlayZone6_01", false);
         }
 
         public void MoveToNextSite()
@@ -54,7 +56,7 @@ namespace NekoOdyssey.Scripts.Site.Core.Site
             SetSite(nextSiteName);
         }
 
-        public void SetSite(string siteName)
+        public void SetSite(string siteName, bool reload = true)
         {
             Database.Domains.Sites.Entities.SiteEntity.Models.Site site;
             using (var siteDbContext = new SitesDbContext(new() { CopyRequired = false, ReadOnly = true }))
@@ -65,7 +67,7 @@ namespace NekoOdyssey.Scripts.Site.Core.Site
 
             if (site == null) return;
             CurrentSite = site;
-            OnChangeSite.OnNext(site);
+            if (reload) OnChangeSite.OnNext(site);
         }
     }
 }

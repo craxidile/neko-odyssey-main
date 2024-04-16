@@ -1,6 +1,6 @@
-﻿namespace NekoOdyssey.Scripts.Database.Domains.Sites.Entities.SiteEntity.Models
+﻿namespace NekoOdyssey.Scripts.Database.Commons.Models
 {
-    public enum Direction
+    public enum FacingDirection
     {
         None = '\0',
         North = 'N',

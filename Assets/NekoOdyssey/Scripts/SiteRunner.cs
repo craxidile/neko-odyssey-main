@@ -1,5 +1,6 @@
 ﻿using System;
 using NekoOdyssey.Scripts.Site.Core;
+using NekoOdyssey.Scripts.Site.Unity.Transition;
 using UnityEngine;
 
 namespace NekoOdyssey.Scripts
@@ -18,6 +19,7 @@ namespace NekoOdyssey.Scripts
         private void Awake()
         {
             Core.Bind();
+            gameObject.AddComponent<SiteReloadController>();
         }
 
         private void Start()

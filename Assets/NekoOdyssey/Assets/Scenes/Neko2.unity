@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 0.287
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.07255471, g: 0.14542495, b: 0.22903498, a: 0.287}
+  m_IndirectSpecularColor: {r: 0.07256248, g: 0.14544846, b: 0.22907726, a: 0.287}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2958,6 +2958,38 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3abba4c1ce502404fabc7eb9167b8fb6, type: 3}
+--- !u!1 &925058878
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 925058879}
+  m_Layer: 0
+  m_Name: Zone4Actions
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &925058879
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 925058878}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.7071068, y: -0.7071068, z: 0, w: 0}
+  m_LocalPosition: {x: 27.31, y: -0.3, z: -25.77}
+  m_LocalScale: {x: 1, y: 1, z: 3.6719148}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1098456205}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &966570842
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3480,6 +3512,77 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4579454407841743219, guid: 919153b4ec963f24594be3af005f380b, type: 3}
+--- !u!1 &1098456204
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1098456205}
+  - component: {fileID: 1098456207}
+  - component: {fileID: 1098456206}
+  m_Layer: 0
+  m_Name: LeftActions
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1098456205
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1098456204}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.5, y: 0.5, z: -0.5, w: -0.5}
+  m_LocalPosition: {x: 1.218, y: -41.39, z: -4.206}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 925058879}
+  m_LocalEulerAnglesHint: {x: 90, y: 180, z: -90}
+--- !u!114 &1098456206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1098456204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a4ec80f51c543b185cea23812e7ebe0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  availableActions: 09000000
+  site: 2
+  siteName: CutSceneZone4_01
+  activeAtSiteName: GamePlayZone4_01
+  autoActive: 1
+--- !u!65 &1098456207
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1098456204}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!4 &1146684231 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3115959153730484500, guid: 1cba41167bcb01745bf6e0f1951a187b, type: 3}
@@ -18147,6 +18250,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   availableActions: 04000000
   site: 7
+  siteName: RamenShopInside01
+  activeAtSiteName: GamePlayZone6_01
   autoActive: 1
 --- !u!4 &4205860533368060780
 Transform:
@@ -21996,6 +22101,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   availableActions: 04000000
   site: 2
+  siteName: UdonNekoInside11
+  activeAtSiteName: GamePlayZone6_01
   autoActive: 1
 --- !u!1 &5536861096941645155
 GameObject:
@@ -22606,6 +22713,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   availableActions: 04000000
   site: 3
+  siteName: HouseNekoInside18
+  activeAtSiteName: GamePlayZone6_01
   autoActive: 1
 --- !u!1 &5850489722747987460
 GameObject:
@@ -27521,6 +27630,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   availableActions: 04000000
   site: 5
+  siteName: FlagShopInside19
+  activeAtSiteName: GamePlayZone6_01
   autoActive: 1
 --- !u!1 &7178114112477708804
 GameObject:
@@ -27781,7 +27892,7 @@ GameObject:
   - component: {fileID: 8710229903730188600}
   - component: {fileID: 8710229903730188601}
   m_Layer: 0
-  m_Name: N07Actions
+  m_Name: A07Actions
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27977,6 +28088,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   availableActions: 04000000
   site: 4
+  siteName: GroceryStoreInside12
+  activeAtSiteName: GamePlayZone6_01
   autoActive: 1
 --- !u!23 &7358938726995635353
 MeshRenderer:
@@ -32238,6 +32351,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   availableActions: 01000000
   site: 1
+  siteName: 
+  activeAtSiteName: GamePlayZone6_01
   autoActive: 0
 --- !u!65 &8710229903730188601
 BoxCollider:
@@ -33312,6 +33427,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   availableActions: 04000000
   site: 6
+  siteName: BookStoreInside07
+  activeAtSiteName: GamePlayZone6_01
   autoActive: 1
 --- !u!23 &9076356565234731793
 MeshRenderer:
@@ -34003,4 +34120,5 @@ SceneRoots:
   - {fileID: 355707262}
   - {fileID: 1840459096}
   - {fileID: 6828768590362449864}
+  - {fileID: 925058879}
   - {fileID: 661909108}

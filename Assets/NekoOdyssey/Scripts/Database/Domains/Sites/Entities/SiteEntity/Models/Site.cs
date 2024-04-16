@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using NekoOdyssey.Scripts.Database.Domains.Sites.Entities.SiteSceneEntity;
+using NekoOdyssey.Scripts.Database.Commons.Models;
 using NekoOdyssey.Scripts.Database.Domains.Sites.Entities.SiteSceneEntity.Models;
 using SpatiumInteractive.Libraries.Unity.GRU.Base;
 using SpatiumInteractive.Libraries.Unity.GRU.Contracts;
@@ -27,24 +27,24 @@ namespace NekoOdyssey.Scripts.Database.Domains.Sites.Entities.SiteEntity.Models
         public string PlayerFacing { get; set; }
 
         [Ignore]
-        public Direction PlayerFacingDirection
+        public FacingDirection PlayerFacingDirection
         {
             get
             {
-                if (PlayerFacing == null) return Direction.None;
-                return (Direction)PlayerFacing[0];
+                if (PlayerFacing == null) return FacingDirection.None;
+                return (FacingDirection)PlayerFacing[0];
             }
         }
 
         public string LightFacing { get; set; }
 
         [Ignore]
-        public Direction LightFacingDirection
+        public FacingDirection LightFacingDirection
         {
             get
             {
-                if (LightFacing == null) return Direction.None;
-                return (Direction)LightFacing[0];
+                if (LightFacing == null) return FacingDirection.None;
+                return (FacingDirection)LightFacing[0];
             }
         }
 

@@ -25,7 +25,9 @@ namespace NekoOdyssey.Scripts.Game.Unity.Sites
             
         private void Start()
         {
-            GameRunner.Instance.Core.PlayerMenu.OnCommitAction.Subscribe(HandlePlayerMenuAction);
+            GameRunner.Instance.Core.PlayerMenu.OnCommitAction
+                .Subscribe(HandlePlayerMenuAction)
+                .AddTo(this);
         }
 
         private void HandlePlayerMenuAction(PlayerMenuAction action)
@@ -49,19 +51,19 @@ namespace NekoOdyssey.Scripts.Game.Unity.Sites
                 return;
             }
 
-            var site = GameRunner.Instance.Core.PlayerMenu.Site;
-            if (!_siteSceneMap.ContainsKey(site)) return;
-            
-            var sceneName = _siteSceneMap[site];
-            if (sceneName == null) return;
-
-            DOVirtual.DelayedCall(ExitDelay, () =>
-            {
-                var player = GameRunner.Instance.Core.Player;
-                PlayerController.MainPlayerAnchor = player.GameObject.transform.position;
-                SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
-                SceneManager.LoadScene($"GameMain", LoadSceneMode.Additive);
-            });
+            // var site = GameRunner.Instance.Core.PlayerMenu.Site;
+            // if (!_siteSceneMap.ContainsKey(site)) return;
+            //
+            // var sceneName = _siteSceneMap[site];
+            // if (sceneName == null) return;
+            //
+            // DOVirtual.DelayedCall(ExitDelay, () =>
+            // {
+            //     var player = GameRunner.Instance.Core.Player;
+            //     PlayerController.MainPlayerAnchor = player.GameObject.transform.position;
+            //     SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
+            //     SceneManager.LoadScene($"GameMain", LoadSceneMode.Additive);
+            // });
         }
     }
 }
