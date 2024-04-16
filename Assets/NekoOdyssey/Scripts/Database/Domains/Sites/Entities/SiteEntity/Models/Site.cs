@@ -24,23 +24,35 @@ namespace NekoOdyssey.Scripts.Database.Domains.Sites.Entities.SiteEntity.Models
 
         public float? PlayerZ { get; set; }
 
-        public string FacingDirection { get; set; }
+        public string PlayerFacing { get; set; }
+
+        [Ignore]
+        public Direction PlayerFacingDirection
+        {
+            get
+            {
+                if (PlayerFacing == null) return Direction.None;
+                return (Direction)PlayerFacing[0];
+            }
+        }
+
+        public string LightFacing { get; set; }
+
+        [Ignore]
+        public Direction LightFacingDirection
+        {
+            get
+            {
+                if (LightFacing == null) return Direction.None;
+                return (Direction)LightFacing[0];
+            }
+        }
 
         [ForeignKey(typeof(Site))] [Indexed] public int? NextSiteId { get; set; }
 
         [Indexed] public string NextSiteName { get; set; }
 
         [Ignore] public virtual Site NextSite { get; set; }
-
-        [Ignore]
-        public PlayerFacing Facing
-        {
-            get
-            {
-                if (FacingDirection == null) return PlayerFacing.None;
-                return (PlayerFacing)FacingDirection[0];
-            }
-        }
 
         [Ignore] public virtual ICollection<SiteScene> Scenes { get; set; }
 
@@ -56,13 +68,15 @@ namespace NekoOdyssey.Scripts.Database.Domains.Sites.Entities.SiteEntity.Models
         public Site(
             string name,
             Vector3 position,
-            string facing
+            string playerFacing,
+            string lightFacing
         ) : this(name)
         {
             PlayerX = position.x;
             PlayerY = position.y;
             PlayerZ = position.z;
-            FacingDirection = facing;
+            PlayerFacing = playerFacing;
+            LightFacing = lightFacing;
         }
 
         public override string ToString()

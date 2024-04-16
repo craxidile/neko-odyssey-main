@@ -16,13 +16,14 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
     {
 //Start here
         //public static Vector3 MainPlayerAnchor = new(75, -1.6f, -9.5f); 
-        
+
 //Next
         // public static Vector3 MainPlayerAnchor = new(60, -1.6f, -11f);       
-        
-        
+
+
 //BackUp Location
         public static Vector3 MainPlayerAnchor = new(25, -1.662279f, -25.688f);
+
         // public static Vector3 MainPlayerAnchor = new(28, -1.662279f, -41.5f);
         private PlayerMovementController _movementController;
         private PlayerPhoneController _phoneController;
@@ -46,6 +47,26 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
             _captureController = gameObject.AddComponent<PlayerCaptureController>();
             _conversationController = gameObject.AddComponent<PlayerConversationController>();
             _pettingController = gameObject.AddComponent<PlayerPettingController>();
+
+            InitializePosition();
+        }
+
+        private void InitializePosition()
+        {
+            var currentSite = Site.Core.Site.Site.CurrentSite;
+            if (currentSite == null) return;
+
+            if (
+                currentSite.PlayerX != null ||
+                currentSite.PlayerY != null ||
+                currentSite.PlayerZ != null
+            )
+            {
+                _movementController.ForceSetPosition(
+                    new Vector3(currentSite.PlayerX.Value, currentSite.PlayerY.Value, currentSite.PlayerZ.Value)
+                );
+                return;
+            }
 
             var playerAnchor = FindAnyObjectByType<PlayerAnchor>();
             _movementController.ForceSetPosition(

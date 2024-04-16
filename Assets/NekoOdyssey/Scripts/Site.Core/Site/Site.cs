@@ -41,7 +41,8 @@ namespace NekoOdyssey.Scripts.Site.Core.Site
         private void InitializeSite()
         {
             if (CurrentSite != null) return;
-            SetSite("Prologue");
+            // SetSite("Intro");
+            SetSite("GamePlayZone4_01");
         }
 
         public void MoveToNextSite()
