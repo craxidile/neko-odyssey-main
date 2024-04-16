@@ -3,6 +3,7 @@ using System.Collections;
 using DG.Tweening;
 using UniRx;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace NekoOdyssey.Scripts.Game.Core.Ais.Cat.Behaviours.CallToFeed
 {
@@ -10,6 +11,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Ais.Cat.Behaviours.CallToFeed
     {
         private const float EligibleDistanceFromPlayer = 1f;
         private const float CoolDownConstantDelay = 0f;
+        private const float BackoffDelay = 1f;
 
         private bool _calling;
         private IDisposable _playerDistanceSubscription;
@@ -22,9 +24,9 @@ namespace NekoOdyssey.Scripts.Game.Core.Ais.Cat.Behaviours.CallToFeed
 
         public override void Start()
         {
-            Debug.Log(">>modes<< call_to_feed start");
             _calling = false;
-            _playerDistanceSubscription = CatAi.OnChangePlayerDistance
+            _playerDistanceSubscription = CatAi
+                .OnChangePlayerDistance
                 .Subscribe(HandlePlayerDistance)
                 .AddTo(GameRunner.Instance);
         }
@@ -33,25 +35,24 @@ namespace NekoOdyssey.Scripts.Game.Core.Ais.Cat.Behaviours.CallToFeed
         {
             if (_calling || CatAi.Mode != CatBehaviourMode.CallToFeed) return;
             _calling = true;
-            Debug.Log(">>modes<< call_to_feed operate");
             var playerInRange = distance <= EligibleDistanceFromPlayer;
             if (!playerInRange || !IsExecutable)
             {
-                End();
+                DOVirtual.DelayedCall(BackoffDelay, End);
                 return;
             }
             CatAi.OnFlip.OnNext(CatAi.DeltaXFromPlayer > 0);
-            CatAi.OnCallToFeed.OnNext(default);
+            var delay = Random.Range(2f, 4f);
+            CatAi.OnCallToFeed.OnNext(delay);
             CoolDown(0);
-            DOVirtual.DelayedCall(4f, End);
+            DOVirtual.DelayedCall(delay + BackoffDelay, End);
         }
 
         private void End()
         {
             _playerDistanceSubscription.Dispose();
-            Debug.Log(">>modes<< call_to_feed end");
             _calling = false;
-            CatAi.OnFinishBehaviour.OnNext(Unit.Default);
+            CatAi.OnFinishBehaviour.OnNext(CatBehaviourMode.CallToFeed);
         }
     }
 }
