@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using UniRx;
 using UnityEngine;
 
@@ -10,9 +11,10 @@ namespace NekoOdyssey.Scripts.Site.Unity.Transition
         {
             if (SiteRunner.Instance.Core.Site.Ready)
             {
-                HandleSiteReady(default);
+                LoadScenes();
                 return;
             }
+
             SiteRunner.Instance.Core.Site.OnReady
                 .Subscribe(HandleSiteReady)
                 .AddTo(this);
@@ -20,13 +22,22 @@ namespace NekoOdyssey.Scripts.Site.Unity.Transition
 
         private void HandleSiteReady(Unit _)
         {
+            LoadScenes();
+        }
+
+        private void LoadScenes()
+        {
             var currentSite = Core.Site.Site.CurrentSite;
-            var scenes = currentSite.Scenes;
-            foreach (var scene in scenes)
-            {
-                var sceneName = scene.Name;
-                Debug.Log($">>load_scene<< {sceneName}");
-            }
+            var scenes = currentSite.Scenes.OrderBy(s => s.Id);
+            var mainScene = scenes.FirstOrDefault();
+            if (mainScene == null) return;
+            var otherScenes = scenes.Skip(1);
+            
+            // foreach (var scene in scenes)
+            // {
+            //     var sceneName = scene.Name;
+            //     Debug.Log($">>load_scene<< {sceneName}");
+            // }
         }
     }
 }

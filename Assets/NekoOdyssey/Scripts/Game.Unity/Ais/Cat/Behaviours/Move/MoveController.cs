@@ -82,6 +82,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.Ais.Cat.Behaviours.Move
             transform.Translate(position, Space.World);
             yield return null;
             _catAi.SetCatPosition(transform.position);
+
+            //Debug.Log($"MoveToPosition {position} ({Time.time})");
         }
     }
 }
