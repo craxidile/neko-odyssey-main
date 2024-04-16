@@ -8,5 +8,6 @@
         Menu,
         Capture,
         Conversation,
+        QuestConversation,
     }
 }

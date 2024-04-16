@@ -57,7 +57,7 @@ public class ChatBalloonManager : MonoBehaviour
         else
         {
             var newBalloon = Instantiate(balloonPrefab, parent);
-            newBalloon.transform.localPosition = Vector3.up * 0.5f;
+            //newBalloon.transform.localPosition = Vector3.up * 0.5f;
 
             var chatBalloon = newBalloon.GetComponent<NekoOdyssey.Scripts.Game.Unity.Uis.DialogCanvas.DialogCanvasController>();
             chatBalloon.SetText(message);
