@@ -14,8 +14,6 @@ using SpatiumInteractive.Libraries.Unity.GRU.Contracts;
 using SpatiumInteractive.Libraries.Unity.GRU.Domain;
 using SQLite4Unity3d;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.Switch;
 
 namespace NekoOdyssey.Scripts.Database
 {

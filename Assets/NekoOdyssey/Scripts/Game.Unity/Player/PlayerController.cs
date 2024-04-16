@@ -18,12 +18,12 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
         //public static Vector3 MainPlayerAnchor = new(75, -1.6f, -9.5f); 
         
 //Next
-        public static Vector3 MainPlayerAnchor = new(60, -1.6f, -11f);       
+        // public static Vector3 MainPlayerAnchor = new(60, -1.6f, -11f);       
         
         
 //BackUp Location
-        //public static Vector3 MainPlayerAnchor = new(25, -1.662279f, -25.688f);
-        //public static Vector3 MainPlayerAnchor = new(28, -1.662279f, -41.5f);
+        public static Vector3 MainPlayerAnchor = new(25, -1.662279f, -25.688f);
+        // public static Vector3 MainPlayerAnchor = new(28, -1.662279f, -41.5f);
         private PlayerMovementController _movementController;
         private PlayerPhoneController _phoneController;
         private PlayerCaptureController _captureController;
