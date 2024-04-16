@@ -8,12 +8,16 @@ using UnityEngine.Windows;
 
 public class DialogueTrackMixer : PlayableBehaviour
 {
+    public override void PrepareFrame(Playable playable, FrameData info)
+    {
+        base.PrepareFrame(playable, info);
+    }
     public override void ProcessFrame(Playable playable, FrameData info, object playerData)
     {
-        var text = playerData as DialogCanvasController;
+        var canvasController = playerData as DialogCanvasController;
         string currentText = "";
 
-        if (!text) { return; }
+        if (!canvasController) { return; }
 
         int inputCount = playable.GetInputCount();
         for (int i = 0; i < inputCount; i++)
@@ -42,7 +46,7 @@ public class DialogueTrackMixer : PlayableBehaviour
             }
         }
 
-        text.SetText(currentText);
+        canvasController.SetText(currentText);
     }
     //public override void OnBehaviourPlay(Playable playable, FrameData info)
     //{
