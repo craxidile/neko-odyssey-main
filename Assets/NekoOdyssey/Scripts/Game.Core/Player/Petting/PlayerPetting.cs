@@ -27,7 +27,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Petting
         public void Finish()
         {
             OnFinishPetting.OnNext(Unit.Default);
-            GameRunner.Instance.Core.PlayerMenu.SetCurrentSiteActive();
+            // GameRunner.Instance.Core.PlayerMenu.SetCurrentSiteActive();
+            GameRunner.Instance.Core.PlayerMenu.SetCurrentSiteNameActive();
             GameRunner.Instance.Core.Player.SetMode(PlayerMode.Move);
         }
     }

@@ -42,7 +42,7 @@ namespace NekoOdyssey.Scripts
             PlayerInputHandler = gameObject.AddComponent<PlayerInputHandler>();
             PlayerInputHandler.InputActions = _inputActions;
 
-            gameObject.AddComponent<CentralSiteDoorController>();
+            gameObject.AddComponent<CentralSiteActionController>();
             gameObject.AddComponent<CentralCaptureActionHandler>();
             gameObject.AddComponent<CentralConversationActionHandler>();
             gameObject.AddComponent<CentralPlayerPettingHandler>();

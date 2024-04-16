@@ -69,7 +69,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Ais.Cat
 
         private void HandleBehaviourFinish(CatBehaviourMode mode)
         {
-            Debug.Log($">>change_mode<< behaviour_finished");
+            // Debug.Log($">>change_mode<< behaviour_finished");
             if (Behaviours.Count == 1)
             {
                 Behaviours.Values.First().Start();
@@ -79,7 +79,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Ais.Cat
             var modeIndex = modes.IndexOf(Mode);
             var nextIndex = (modeIndex + 1) % modes.Count;
             var nextMode = modes[nextIndex];
-            Debug.Log($">>change_mode<< finish_behaviour {Mode} next {nextMode}");
+            // Debug.Log($">>change_mode<< finish_behaviour {Mode} next {nextMode}");
             var nextBehaviour = Behaviours[nextMode];
             //Debug.Log($">>modes<< next_behaviour {nextBehaviour}");
             SetMode(nextMode);

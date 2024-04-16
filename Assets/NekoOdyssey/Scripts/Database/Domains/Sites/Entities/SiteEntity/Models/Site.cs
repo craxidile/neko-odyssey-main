@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using NekoOdyssey.Scripts.Database.Domains.Sites.Entities.SiteSceneEntity;
+using NekoOdyssey.Scripts.Database.Commons.Models;
 using NekoOdyssey.Scripts.Database.Domains.Sites.Entities.SiteSceneEntity.Models;
 using SpatiumInteractive.Libraries.Unity.GRU.Base;
 using SpatiumInteractive.Libraries.Unity.GRU.Contracts;
@@ -24,23 +24,35 @@ namespace NekoOdyssey.Scripts.Database.Domains.Sites.Entities.SiteEntity.Models
 
         public float? PlayerZ { get; set; }
 
-        public string FacingDirection { get; set; }
+        public string PlayerFacing { get; set; }
+
+        [Ignore]
+        public FacingDirection PlayerFacingDirection
+        {
+            get
+            {
+                if (PlayerFacing == null) return FacingDirection.None;
+                return (FacingDirection)PlayerFacing[0];
+            }
+        }
+
+        public string LightFacing { get; set; }
+
+        [Ignore]
+        public FacingDirection LightFacingDirection
+        {
+            get
+            {
+                if (LightFacing == null) return FacingDirection.None;
+                return (FacingDirection)LightFacing[0];
+            }
+        }
 
         [ForeignKey(typeof(Site))] [Indexed] public int? NextSiteId { get; set; }
 
         [Indexed] public string NextSiteName { get; set; }
 
         [Ignore] public virtual Site NextSite { get; set; }
-
-        [Ignore]
-        public PlayerFacing Facing
-        {
-            get
-            {
-                if (FacingDirection == null) return PlayerFacing.None;
-                return (PlayerFacing)FacingDirection[0];
-            }
-        }
 
         [Ignore] public virtual ICollection<SiteScene> Scenes { get; set; }
 
@@ -56,13 +68,15 @@ namespace NekoOdyssey.Scripts.Database.Domains.Sites.Entities.SiteEntity.Models
         public Site(
             string name,
             Vector3 position,
-            string facing
+            string playerFacing,
+            string lightFacing
         ) : this(name)
         {
             PlayerX = position.x;
             PlayerY = position.y;
             PlayerZ = position.z;
-            FacingDirection = facing;
+            PlayerFacing = playerFacing;
+            LightFacing = lightFacing;
         }
 
         public override string ToString()

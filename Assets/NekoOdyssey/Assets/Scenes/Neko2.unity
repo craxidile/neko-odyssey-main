@@ -292,6 +292,38 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 64221410}
   m_Mesh: {fileID: -7387706064836869012, guid: 80984d7797dc97444b7d7b02482d9d2e, type: 3}
+--- !u!1 &134484762
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 134484763}
+  m_Layer: 0
+  m_Name: Zone4Actions
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &134484763
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 134484762}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 27.027285, y: -1.21625, z: -30.147861}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 420769152}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &144867590
 GameObject:
   m_ObjectHideFlags: 0
@@ -610,7 +642,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: a983c10ef93b8d049a632b86e0489123, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: a983c10ef93b8d049a632b86e0489123, type: 3}
       propertyPath: m_RootOrder
@@ -1235,6 +1267,77 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ee2b9f8ffc4405540bb5e285672a5797, type: 3}
+--- !u!1 &420769151
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 420769152}
+  - component: {fileID: 420769154}
+  - component: {fileID: 420769153}
+  m_Layer: 0
+  m_Name: StartAction
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &420769152
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 420769151}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 41.86, y: -0.23699999, z: 21.16}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 134484763}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!114 &420769153
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 420769151}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a4ec80f51c543b185cea23812e7ebe0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  availableActions: 09000000
+  site: 2
+  siteName: CutSceneZone4_01
+  activeAtSiteName: GamePlayZone4_01
+  autoActive: 1
+--- !u!65 &420769154
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 420769151}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &443650051
 GameObject:
   m_ObjectHideFlags: 0
@@ -2746,75 +2849,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5df09b35615bbb64cbcedabdf0fe2a82, type: 3}
   m_PrefabInstance: {fileID: 2080225638}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &859641387
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 859641388}
-  - component: {fileID: 859641390}
-  - component: {fileID: 859641389}
-  m_Layer: 0
-  m_Name: FisheryAction
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &859641388
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 859641387}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 29.3, y: -0.38, z: 16}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6828768590362449864}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &859641389
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 859641387}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2a4ec80f51c543b185cea23812e7ebe0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  availableActions: 04000000
-  site: 8
-  autoActive: 1
---- !u!65 &859641390
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 859641387}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.6891365, y: 1, z: 0.9447422}
-  m_Center: {x: -0.4836216, y: 0, z: 0}
 --- !u!1001 &869060296
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14076,6 +14110,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   availableActions: 04000000
   site: 7
+  siteName: 
+  activeAtSiteName: 
   autoActive: 1
 --- !u!4 &4205860533368060780
 Transform:
@@ -15480,7 +15516,7 @@ GameObject:
   - component: {fileID: 5075033521200051385}
   - component: {fileID: 7172763661553182547}
   m_Layer: 0
-  m_Name: BakeryAction
+  m_Name: FlagShopAction
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16469,7 +16505,7 @@ Transform:
   m_GameObject: {fileID: 4962395647481709316}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.489, y: -0.237, z: 0.696}
+  m_LocalPosition: {x: -0.135, y: -0.237, z: 1.678}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -16637,6 +16673,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   availableActions: 04000000
   site: 2
+  siteName: 
+  activeAtSiteName: 
   autoActive: 1
 --- !u!1 &5536861096941645155
 GameObject:
@@ -17081,6 +17119,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   availableActions: 04000000
   site: 3
+  siteName: 
+  activeAtSiteName: 
   autoActive: 1
 --- !u!1 &5850489722747987460
 GameObject:
@@ -19318,7 +19358,6 @@ Transform:
   - {fileID: 1599191031063005134}
   - {fileID: 7579893558121698273}
   - {fileID: 5415266796284084292}
-  - {fileID: 859641388}
   - {fileID: 7672789140775608443}
   - {fileID: 1671598220557897571}
   m_Father: {fileID: 0}
@@ -20409,7 +20448,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   availableActions: 04000000
-  site: 8
+  site: 5
+  siteName: 
+  activeAtSiteName: 
   autoActive: 1
 --- !u!1 &7183117987299772248
 GameObject:
@@ -20752,6 +20793,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   availableActions: 04000000
   site: 4
+  siteName: 
+  activeAtSiteName: 
   autoActive: 1
 --- !u!1 &7361767072432685655
 GameObject:
@@ -23989,6 +24032,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   availableActions: 01000000
   site: 1
+  siteName: 
+  activeAtSiteName: 
   autoActive: 0
 --- !u!65 &8710229903730188601
 BoxCollider:
@@ -24800,6 +24845,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   availableActions: 04000000
   site: 6
+  siteName: 
+  activeAtSiteName: 
   autoActive: 1
 --- !u!23 &9076356565234731793
 MeshRenderer:
@@ -25392,5 +25439,6 @@ SceneRoots:
   - {fileID: 157126185}
   - {fileID: 355707262}
   - {fileID: 1840459096}
+  - {fileID: 134484763}
   - {fileID: 6828768590362449864}
   - {fileID: 661909108}
