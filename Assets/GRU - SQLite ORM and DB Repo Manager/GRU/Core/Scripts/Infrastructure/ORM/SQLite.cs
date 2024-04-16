@@ -191,6 +191,7 @@ namespace SQLite4Unity3d
 		public SQLiteConnection (string databasePath, bool storeDateTimeAsTicks = false)
 			: this (databasePath, SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create, storeDateTimeAsTicks)
 		{
+            UnityEngine.Debug.Log($">>db<< path {databasePath}");
 		}
 
 		/// <summary>
@@ -231,6 +232,7 @@ namespace SQLite4Unity3d
 
 			Handle = handle;
 			if (r != SQLite3.Result.OK) {
+				UnityEngine.Debug.Log($">>db<< open_failed {r}");
 				throw SQLiteException.New (r, String.Format ("Could not open database file: {0} ({1})", DatabasePath, r));
 			}
 			_open = true;
@@ -268,11 +270,13 @@ namespace SQLite4Unity3d
 
 		public void EnableLoadExtension(int onoff)
 		{
+#if !UNITY_SWITCH || UNITY_EDITOR
 			SQLite3.Result r = SQLite3.EnableLoadExtension(Handle, onoff);
 			if (r != SQLite3.Result.OK) {
 				string msg = SQLite3.GetErrmsg (Handle);
 				throw SQLiteException.New (r, msg);
 			}
+#endif
 		}
 
 		static byte[] GetNullTerminatedUtf8 (string s)
@@ -2864,6 +2868,7 @@ namespace SQLite4Unity3d
 		private TableQuery<T> AddSelect<U>()
 		{
 			var selectExpr = _selector;
+			UnityEngine.Debug.Log($">>db<< select {selectExpr != null}");
 			if (selectExpr.NodeType == ExpressionType.Lambda)
 			{
 				var lambda = (LambdaExpression)selectExpr;
@@ -3377,49 +3382,69 @@ namespace SQLite4Unity3d
 			MultiThread = 2,
 			Serialized = 3
 		}
+		
+		public enum SQLiteNlibDirectoryType : int
+		{
+			Data = 1, // SQLITE_NLIB_DATA_DIRECTORY_TYPE
+			Temp = 2, // SQLITE_NLIB_TEMP_DIRECTORY_TYPE
+		}
+
+
+#if UNITY_SWITCH && !UNITY_EDITOR
+		private const string DLL_NAME = "__Internal";
+
+		[DllImport(DLL_NAME, EntryPoint = "sqlite3_nlib_set_directory", CallingConvention = CallingConvention.Cdecl)]
+		public static extern Result NlibSetDirectory(SQLiteNlibDirectoryType type, string dir);
+#else
+		private const string DLL_NAME = "sqlite3";
+#endif	
 
 #if !USE_CSHARP_SQLITE && !USE_WP8_NATIVE_SQLITE
-		[DllImport("sqlite3", EntryPoint = "sqlite3_open", CallingConvention=CallingConvention.Cdecl)]
+		[DllImport(DLL_NAME, EntryPoint = "sqlite3_open", CallingConvention=CallingConvention.Cdecl)]
 		public static extern Result Open ([MarshalAs(UnmanagedType.LPStr)] string filename, out IntPtr db);
 
-		[DllImport("sqlite3", EntryPoint = "sqlite3_open_v2", CallingConvention=CallingConvention.Cdecl)]
+		[DllImport(DLL_NAME, EntryPoint = "sqlite3_open_v2", CallingConvention=CallingConvention.Cdecl)]
 		public static extern Result Open ([MarshalAs(UnmanagedType.LPStr)] string filename, out IntPtr db, int flags, IntPtr zvfs);
 		
-		[DllImport("sqlite3", EntryPoint = "sqlite3_open_v2", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport(DLL_NAME, EntryPoint = "sqlite3_open_v2", CallingConvention = CallingConvention.Cdecl)]
 		public static extern Result Open(byte[] filename, out IntPtr db, int flags, IntPtr zvfs);
 
-		[DllImport("sqlite3", EntryPoint = "sqlite3_open16", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport(DLL_NAME, EntryPoint = "sqlite3_open16", CallingConvention = CallingConvention.Cdecl)]
 		public static extern Result Open16([MarshalAs(UnmanagedType.LPWStr)] string filename, out IntPtr db);
 
-		[DllImport("sqlite3", EntryPoint = "sqlite3_enable_load_extension", CallingConvention=CallingConvention.Cdecl)]
+#if !UNITY_SWITCH || UNITY_EDITOR
+		[DllImport(DLL_NAME, EntryPoint = "sqlite3_enable_load_extension", CallingConvention=CallingConvention.Cdecl)]
 		public static extern Result EnableLoadExtension (IntPtr db, int onoff);
+#endif
 
-		[DllImport("sqlite3", EntryPoint = "sqlite3_close", CallingConvention=CallingConvention.Cdecl)]
+		[DllImport(DLL_NAME, EntryPoint = "sqlite3_close", CallingConvention=CallingConvention.Cdecl)]
 		public static extern Result Close (IntPtr db);
 		
-		[DllImport("sqlite3", EntryPoint = "sqlite3_initialize", CallingConvention=CallingConvention.Cdecl)]
+		[DllImport(DLL_NAME, EntryPoint = "sqlite3_initialize", CallingConvention=CallingConvention.Cdecl)]
 		public static extern Result Initialize();
 						
-		[DllImport("sqlite3", EntryPoint = "sqlite3_shutdown", CallingConvention=CallingConvention.Cdecl)]
+		[DllImport(DLL_NAME, EntryPoint = "sqlite3_shutdown", CallingConvention=CallingConvention.Cdecl)]
 		public static extern Result Shutdown();
 		
-		[DllImport("sqlite3", EntryPoint = "sqlite3_config", CallingConvention=CallingConvention.Cdecl)]
+		[DllImport(DLL_NAME, EntryPoint = "sqlite3_config", CallingConvention=CallingConvention.Cdecl)]
 		public static extern Result Config (ConfigOption option);
 
-		[DllImport("sqlite3", EntryPoint = "sqlite3_win32_set_directory", CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Unicode)]
+#if !UNITY_SWITCH || UNITY_EDITOR
+		[DllImport(DLL_NAME, EntryPoint = "sqlite3_win32_set_directory", CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Unicode)]
 		public static extern int SetDirectory (uint directoryType, string directoryPath);
+#endif
 
-		[DllImport("sqlite3", EntryPoint = "sqlite3_busy_timeout", CallingConvention=CallingConvention.Cdecl)]
+		[DllImport(DLL_NAME, EntryPoint = "sqlite3_busy_timeout", CallingConvention=CallingConvention.Cdecl)]
 		public static extern Result BusyTimeout (IntPtr db, int milliseconds);
 
-		[DllImport("sqlite3", EntryPoint = "sqlite3_changes", CallingConvention=CallingConvention.Cdecl)]
+		[DllImport(DLL_NAME, EntryPoint = "sqlite3_changes", CallingConvention=CallingConvention.Cdecl)]
 		public static extern int Changes (IntPtr db);
 
-		[DllImport("sqlite3", EntryPoint = "sqlite3_prepare_v2", CallingConvention=CallingConvention.Cdecl)]
+		[DllImport(DLL_NAME, EntryPoint = "sqlite3_prepare_v2", CallingConvention=CallingConvention.Cdecl)]
 		public static extern Result Prepare2 (IntPtr db, [MarshalAs(UnmanagedType.LPStr)] string sql, int numBytes, out IntPtr stmt, IntPtr pzTail);
 
 #if NETFX_CORE
-		[DllImport ("sqlite3", EntryPoint = "sqlite3_prepare_v2", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport (DLL_NAME, EntryPoint = "sqlite3_prepare_v2", CallingConvention = CallingConvention.Cdecl)]
 		public static extern Result Prepare2 (IntPtr db, byte[] queryBytes, int numBytes, out IntPtr stmt, IntPtr pzTail);
 #endif
 
@@ -3438,19 +3463,19 @@ namespace SQLite4Unity3d
 			return stmt;
 		}
 
-		[DllImport("sqlite3", EntryPoint = "sqlite3_step", CallingConvention=CallingConvention.Cdecl)]
+		[DllImport(DLL_NAME, EntryPoint = "sqlite3_step", CallingConvention=CallingConvention.Cdecl)]
 		public static extern Result Step (IntPtr stmt);
 
-		[DllImport("sqlite3", EntryPoint = "sqlite3_reset", CallingConvention=CallingConvention.Cdecl)]
+		[DllImport(DLL_NAME, EntryPoint = "sqlite3_reset", CallingConvention=CallingConvention.Cdecl)]
 		public static extern Result Reset (IntPtr stmt);
 
-		[DllImport("sqlite3", EntryPoint = "sqlite3_finalize", CallingConvention=CallingConvention.Cdecl)]
+		[DllImport(DLL_NAME, EntryPoint = "sqlite3_finalize", CallingConvention=CallingConvention.Cdecl)]
 		public static extern Result Finalize (IntPtr stmt);
 
-		[DllImport("sqlite3", EntryPoint = "sqlite3_last_insert_rowid", CallingConvention=CallingConvention.Cdecl)]
+		[DllImport(DLL_NAME, EntryPoint = "sqlite3_last_insert_rowid", CallingConvention=CallingConvention.Cdecl)]
 		public static extern long LastInsertRowid (IntPtr db);
 
-		[DllImport("sqlite3", EntryPoint = "sqlite3_errmsg16", CallingConvention=CallingConvention.Cdecl)]
+		[DllImport(DLL_NAME, EntryPoint = "sqlite3_errmsg16", CallingConvention=CallingConvention.Cdecl)]
 		public static extern IntPtr Errmsg (IntPtr db);
 
 		public static string GetErrmsg (IntPtr db)
@@ -3458,62 +3483,62 @@ namespace SQLite4Unity3d
 			return Marshal.PtrToStringUni (Errmsg (db));
 		}
 
-		[DllImport("sqlite3", EntryPoint = "sqlite3_bind_parameter_index", CallingConvention=CallingConvention.Cdecl)]
+		[DllImport(DLL_NAME, EntryPoint = "sqlite3_bind_parameter_index", CallingConvention=CallingConvention.Cdecl)]
 		public static extern int BindParameterIndex (IntPtr stmt, [MarshalAs(UnmanagedType.LPStr)] string name);
 
-		[DllImport("sqlite3", EntryPoint = "sqlite3_bind_null", CallingConvention=CallingConvention.Cdecl)]
+		[DllImport(DLL_NAME, EntryPoint = "sqlite3_bind_null", CallingConvention=CallingConvention.Cdecl)]
 		public static extern int BindNull (IntPtr stmt, int index);
 
-		[DllImport("sqlite3", EntryPoint = "sqlite3_bind_int", CallingConvention=CallingConvention.Cdecl)]
+		[DllImport(DLL_NAME, EntryPoint = "sqlite3_bind_int", CallingConvention=CallingConvention.Cdecl)]
 		public static extern int BindInt (IntPtr stmt, int index, int val);
 
-		[DllImport("sqlite3", EntryPoint = "sqlite3_bind_int64", CallingConvention=CallingConvention.Cdecl)]
+		[DllImport(DLL_NAME, EntryPoint = "sqlite3_bind_int64", CallingConvention=CallingConvention.Cdecl)]
 		public static extern int BindInt64 (IntPtr stmt, int index, long val);
 
-		[DllImport("sqlite3", EntryPoint = "sqlite3_bind_double", CallingConvention=CallingConvention.Cdecl)]
+		[DllImport(DLL_NAME, EntryPoint = "sqlite3_bind_double", CallingConvention=CallingConvention.Cdecl)]
 		public static extern int BindDouble (IntPtr stmt, int index, double val);
 
-		[DllImport("sqlite3", EntryPoint = "sqlite3_bind_text16", CallingConvention=CallingConvention.Cdecl, CharSet = CharSet.Unicode)]
+		[DllImport(DLL_NAME, EntryPoint = "sqlite3_bind_text16", CallingConvention=CallingConvention.Cdecl, CharSet = CharSet.Unicode)]
 		public static extern int BindText (IntPtr stmt, int index, [MarshalAs(UnmanagedType.LPWStr)] string val, int n, IntPtr free);
 
-		[DllImport("sqlite3", EntryPoint = "sqlite3_bind_blob", CallingConvention=CallingConvention.Cdecl)]
+		[DllImport(DLL_NAME, EntryPoint = "sqlite3_bind_blob", CallingConvention=CallingConvention.Cdecl)]
 		public static extern int BindBlob (IntPtr stmt, int index, byte[] val, int n, IntPtr free);
 
-		[DllImport("sqlite3", EntryPoint = "sqlite3_column_count", CallingConvention=CallingConvention.Cdecl)]
+		[DllImport(DLL_NAME, EntryPoint = "sqlite3_column_count", CallingConvention=CallingConvention.Cdecl)]
 		public static extern int ColumnCount (IntPtr stmt);
 
-		[DllImport("sqlite3", EntryPoint = "sqlite3_column_name", CallingConvention=CallingConvention.Cdecl)]
+		[DllImport(DLL_NAME, EntryPoint = "sqlite3_column_name", CallingConvention=CallingConvention.Cdecl)]
 		public static extern IntPtr ColumnName (IntPtr stmt, int index);
 
-		[DllImport("sqlite3", EntryPoint = "sqlite3_column_name16", CallingConvention=CallingConvention.Cdecl)]
+		[DllImport(DLL_NAME, EntryPoint = "sqlite3_column_name16", CallingConvention=CallingConvention.Cdecl)]
 		static extern IntPtr ColumnName16Internal (IntPtr stmt, int index);
 		public static string ColumnName16(IntPtr stmt, int index)
 		{
 			return Marshal.PtrToStringUni(ColumnName16Internal(stmt, index));
 		}
 
-		[DllImport("sqlite3", EntryPoint = "sqlite3_column_type", CallingConvention=CallingConvention.Cdecl)]
+		[DllImport(DLL_NAME, EntryPoint = "sqlite3_column_type", CallingConvention=CallingConvention.Cdecl)]
 		public static extern ColType ColumnType (IntPtr stmt, int index);
 
-		[DllImport("sqlite3", EntryPoint = "sqlite3_column_int", CallingConvention=CallingConvention.Cdecl)]
+		[DllImport(DLL_NAME, EntryPoint = "sqlite3_column_int", CallingConvention=CallingConvention.Cdecl)]
 		public static extern int ColumnInt (IntPtr stmt, int index);
 
-		[DllImport("sqlite3", EntryPoint = "sqlite3_column_int64", CallingConvention=CallingConvention.Cdecl)]
+		[DllImport(DLL_NAME, EntryPoint = "sqlite3_column_int64", CallingConvention=CallingConvention.Cdecl)]
 		public static extern long ColumnInt64 (IntPtr stmt, int index);
 
-		[DllImport("sqlite3", EntryPoint = "sqlite3_column_double", CallingConvention=CallingConvention.Cdecl)]
+		[DllImport(DLL_NAME, EntryPoint = "sqlite3_column_double", CallingConvention=CallingConvention.Cdecl)]
 		public static extern double ColumnDouble (IntPtr stmt, int index);
 
-		[DllImport("sqlite3", EntryPoint = "sqlite3_column_text", CallingConvention=CallingConvention.Cdecl)]
+		[DllImport(DLL_NAME, EntryPoint = "sqlite3_column_text", CallingConvention=CallingConvention.Cdecl)]
 		public static extern IntPtr ColumnText (IntPtr stmt, int index);
 
-		[DllImport("sqlite3", EntryPoint = "sqlite3_column_text16", CallingConvention=CallingConvention.Cdecl)]
+		[DllImport(DLL_NAME, EntryPoint = "sqlite3_column_text16", CallingConvention=CallingConvention.Cdecl)]
 		public static extern IntPtr ColumnText16 (IntPtr stmt, int index);
 
-		[DllImport("sqlite3", EntryPoint = "sqlite3_column_blob", CallingConvention=CallingConvention.Cdecl)]
+		[DllImport(DLL_NAME, EntryPoint = "sqlite3_column_blob", CallingConvention=CallingConvention.Cdecl)]
 		public static extern IntPtr ColumnBlob (IntPtr stmt, int index);
 
-		[DllImport("sqlite3", EntryPoint = "sqlite3_column_bytes", CallingConvention=CallingConvention.Cdecl)]
+		[DllImport(DLL_NAME, EntryPoint = "sqlite3_column_bytes", CallingConvention=CallingConvention.Cdecl)]
 		public static extern int ColumnBytes (IntPtr stmt, int index);
 
 		public static string ColumnString (IntPtr stmt, int index)
@@ -3530,10 +3555,10 @@ namespace SQLite4Unity3d
 			return result;
 		}
 
-		[DllImport ("sqlite3", EntryPoint = "sqlite3_extended_errcode", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport (DLL_NAME, EntryPoint = "sqlite3_extended_errcode", CallingConvention = CallingConvention.Cdecl)]
 		public static extern ExtendedResult ExtendedErrCode (IntPtr db);
 
-		[DllImport ("sqlite3", EntryPoint = "sqlite3_libversion_number", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport (DLL_NAME, EntryPoint = "sqlite3_libversion_number", CallingConvention = CallingConvention.Cdecl)]
 		public static extern int LibVersionNumber ();
 #else
 		public static Result Open(string filename, out Sqlite3DatabaseHandle db)
