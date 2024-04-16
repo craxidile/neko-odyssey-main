@@ -7,9 +7,9 @@ public class NpcData
     public string npcName;
 
     public bool routineEnable;
-    public List<EventDetail> npcRoutineEvents = new List<EventDetail>();
+    public List<RoutineEventDetail> npcRoutineEvents = new List<RoutineEventDetail>();
 
-    EventDetail _cureentEvent;
+    RoutineEventDetail _cureentEvent;
     public QuestDialogueGroup dialogueGroup { get; set; }
 
     public NpcData(string npcName = "npc")
@@ -44,16 +44,20 @@ public class NpcData
         }
 
     }
-    public void UpdateRoutine()
+    public RoutineEventDetail UpdateRoutine()
     {
         for (int i = npcRoutineEvents.Count - 1; i >= 0; i--)
         {
             var eventDetail = npcRoutineEvents[i];
+            Debug.Log("UpdateRoutine 0");
+            if (!WorldRoutineManager.Instance.questEventManager.CheckQuestKeyAndItem(eventDetail.keyIdConditions, eventDetail.keyIdConditionsExclude)) continue;
+            Debug.Log("UpdateRoutine 1");
+
 
             if (eventDetail.IsInEventTime(TimeRoutine.day, TimeRoutine.timeHrMin))
             {
                 SwtichEvent(eventDetail);
-                return;
+                return eventDetail;
             }
             //else
             //{
@@ -62,9 +66,10 @@ public class NpcData
         }
 
         SwtichEvent(null);
+        return null;
     }
 
-    public void SwtichEvent(EventDetail newEvent)
+    public void SwtichEvent(RoutineEventDetail newEvent)
     {
         if (newEvent != _cureentEvent)
         {

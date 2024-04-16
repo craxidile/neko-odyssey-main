@@ -93,11 +93,9 @@ public class QuestEventManager : MonoBehaviour
             var rewards = rewardText.Replace(' ', '+').Replace('-', '+').Replace(':', '-').Replace(';', '-')
                                         .Split('+').ToList();
 
-            QuestEventDetail newQuestEventDetail = new QuestEventDetail(dayList, eventTimeList[0], eventTimeList[1], tragetEventPoint);
-            newQuestEventDetail.questId = questKey.ToLower();
             var questKeyConditions = questKeyConditionsText.Replace(' ', '-').Replace('+', '-').Split('-').ToList();
-            newQuestEventDetail.questIdConditions = new List<string>();
-            newQuestEventDetail.questIdConditionsExclude = new List<string>();
+            var keyIdConditions = new List<string>();
+            var keyIdConditionsExclude = new List<string>();
             foreach (var questCondition in questKeyConditions)
             {
                 if (!string.IsNullOrEmpty(questCondition))
@@ -105,16 +103,21 @@ public class QuestEventManager : MonoBehaviour
                     if (questCondition.StartsWith("!"))
                     {
                         var condition = questCondition.Substring(1);
-                        newQuestEventDetail.questIdConditionsExclude.Add(condition.ToLower());
+                        keyIdConditionsExclude.Add(condition.ToLower());
 
                     }
                     else
                     {
-                        newQuestEventDetail.questIdConditions.Add(questCondition.ToLower());
+                        keyIdConditions.Add(questCondition.ToLower());
 
                     }
                 }
             }
+
+
+            QuestEventDetail newQuestEventDetail = new QuestEventDetail(dayList, eventTimeList[0], eventTimeList[1], tragetEventPoint, keyIdConditions, keyIdConditionsExclude);
+            newQuestEventDetail.questId = questKey.ToLower();
+
             foreach (var relatedCharacter in releatedCharacters)
             {
                 newQuestEventDetail.relatedCharacters.Add(relatedCharacter);
@@ -226,7 +229,7 @@ public class QuestEventManager : MonoBehaviour
     }
 
 
-    public bool CheckQuestKeyAndItem(QuestEventDetail questDetail) => CheckQuestKeyAndItem(questDetail.questIdConditions, questDetail.questIdConditionsExclude);
+    public bool CheckQuestKeyAndItem(QuestEventDetail questDetail) => CheckQuestKeyAndItem(questDetail.keyIdConditions, questDetail.keyIdConditionsExclude);
     //{
     //foreach (var condition in questDetail.questIdConditions)
     //{
@@ -330,20 +333,19 @@ public class QuestEventDetail : EventDetail
     //public EventPoint targetEventPoint;
 
     public string questId;
-    public List<string> questIdConditions;
-    public List<string> questIdConditionsExclude;
 
     public List<string> relatedCharacters;
     public Dictionary<string, bool> relatedCharactersRoutineDisable;
 
     public Dictionary<string, int> stepRewards;
 
-    public QuestEventDetail(HashSet<Day> eventDays, TimeHrMin eventTimeStart, TimeHrMin eventTimeEnd, EventPoint targetEventPoint) : base(eventDays, eventTimeStart, eventTimeEnd, targetEventPoint)
+    public QuestEventDetail(HashSet<Day> eventDays, TimeHrMin eventTimeStart, TimeHrMin eventTimeEnd, EventPoint targetEventPoint, List<string> keyIdConditions, List<string> keyIdConditionsExclude)
+        : base(eventDays, eventTimeStart, eventTimeEnd, targetEventPoint, keyIdConditions, keyIdConditionsExclude)
     {
-        this.eventDays = eventDays;
-        this.eventTimeStart = eventTimeStart;
-        this.eventTimeEnd = eventTimeEnd;
-        this.targetEventPoint = targetEventPoint;
+        //this.eventDays = eventDays;
+        //this.eventTimeStart = eventTimeStart;
+        //this.eventTimeEnd = eventTimeEnd;
+        //this.targetEventPoint = targetEventPoint;
 
         this.relatedCharacters = new List<string>();
         this.relatedCharactersRoutineDisable = new Dictionary<string, bool>();

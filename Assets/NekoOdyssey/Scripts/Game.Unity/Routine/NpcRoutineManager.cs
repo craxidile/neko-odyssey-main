@@ -85,9 +85,11 @@ public class NpcRoutineManager : MonoBehaviour
 
             if (string.IsNullOrEmpty(row.FirstOrDefault())) continue;
 
-            var dayText = row[1]; //column 1
-            var timeText = row[2]; //column 2
-            var eventPointKey = row[3];
+            var routineDialogueKey = row[0];
+            var questKeyConditionsText = row[1];
+            var dayText = row[2];
+            var timeText = row[3];
+            var eventPointKey = row[4];
 
 
             var convertedDayText = dayText.Replace(' ', '-').Replace(':', '-').Replace(';', '-');
@@ -110,7 +112,30 @@ public class NpcRoutineManager : MonoBehaviour
             var tragetEventPoint = EventPoint.GetEventPoint(eventPointKey);
 
 
-            EventDetail newEventDetail = new EventDetail(dayList, eventTimeList[0], eventTimeList[1], tragetEventPoint);
+            var questKeyConditions = questKeyConditionsText.Replace(' ', '-').Replace('+', '-').Split('-').ToList();
+            var keyIdConditions = new List<string>();
+            var keyIdConditionsExclude = new List<string>();
+            foreach (var questCondition in questKeyConditions)
+            {
+                if (!string.IsNullOrEmpty(questCondition))
+                {
+                    if (questCondition.StartsWith("!"))
+                    {
+                        var condition = questCondition.Substring(1);
+                        keyIdConditionsExclude.Add(condition.ToLower());
+
+                    }
+                    else
+                    {
+                        keyIdConditions.Add(questCondition.ToLower());
+
+                    }
+                }
+            }
+
+            var newEventDetail = new RoutineEventDetail(dayList, eventTimeList[0], eventTimeList[1], tragetEventPoint, keyIdConditions, keyIdConditionsExclude);
+
+            newEventDetail.dialogueKey = routineDialogueKey.ToLower();
 
             //WorldRoutineManager.allNpcEvents.Add(newEventDetail);
             newNpc.npcRoutineEvents.Add(newEventDetail);
@@ -159,12 +184,18 @@ public class EventDetail
     public TimeHrMin eventTimeStart, eventTimeEnd;
     public EventPoint targetEventPoint;
 
-    public EventDetail(HashSet<Day> eventDays, TimeHrMin eventTimeStart, TimeHrMin eventTimeEnd, EventPoint targetEventPoint)
+    public List<string> keyIdConditions;
+    public List<string> keyIdConditionsExclude;
+
+    public EventDetail(HashSet<Day> eventDays, TimeHrMin eventTimeStart, TimeHrMin eventTimeEnd, EventPoint targetEventPoint, List<string> keyIdConditions, List<string> keyIdConditionsExclude)
     {
         this.eventDays = eventDays;
         this.eventTimeStart = eventTimeStart;
         this.eventTimeEnd = eventTimeEnd;
         this.targetEventPoint = targetEventPoint;
+
+        this.keyIdConditions = keyIdConditions;
+        this.keyIdConditionsExclude = keyIdConditionsExclude;
     }
 
     public bool IsInEventTime(Day currentDay, TimeHrMin currentTime)
@@ -174,5 +205,16 @@ public class EventDetail
             return eventTimeStart <= currentTime && currentTime <= eventTimeEnd;
         }
         return false;
+    }
+}
+
+
+public class RoutineEventDetail : EventDetail
+{
+    public string dialogueKey;
+
+    public RoutineEventDetail(HashSet<Day> eventDays, TimeHrMin eventTimeStart, TimeHrMin eventTimeEnd, EventPoint targetEventPoint, List<string> keyIdConditions, List<string> keyIdConditionsExclude)
+        : base(eventDays, eventTimeStart, eventTimeEnd, targetEventPoint, keyIdConditions, keyIdConditionsExclude)
+    {
     }
 }

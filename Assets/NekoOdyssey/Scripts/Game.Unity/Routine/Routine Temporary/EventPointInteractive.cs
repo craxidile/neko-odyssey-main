@@ -48,8 +48,8 @@ public class EventPointInteractive : MonoBehaviour
                     NearestPoint = this;
                 }
 
-               
-                
+
+
             }
 
         }
@@ -57,7 +57,17 @@ public class EventPointInteractive : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.yellow;
+        //Gizmos.color = Color.yellow;
+        //Gizmos.DrawWireSphere(transform.position, interactiveDistance);
+
+
+        var gizColor = Color.yellow;
+
+        gizColor.a = 0.5f;
+        Gizmos.color = gizColor;
         Gizmos.DrawWireSphere(transform.position, interactiveDistance);
+        gizColor.a = 0.1f;
+        Gizmos.color = gizColor;
+        Gizmos.DrawSphere(transform.position, interactiveDistance);
     }
 }
