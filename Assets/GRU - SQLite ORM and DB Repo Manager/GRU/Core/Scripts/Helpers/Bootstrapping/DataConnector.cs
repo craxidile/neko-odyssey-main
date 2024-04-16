@@ -43,6 +43,10 @@ namespace Database.Repository
 
 #if UNITY_EDITOR
             var dbFilePath = string.Format("{0}/{1}", databasePath, databaseName);
+#elif UNITY_SWITCH
+            SQLite3.NlibSetDirectory(SQLite3.SQLiteNlibDirectoryType.Data, "save:");
+            var dbFilePath = databaseName;
+            Debug.Log($">>db<< browse_data_save {dbFilePath}");
 #else
         var filepath = string.Format("{0}/{1}", Application.persistentDataPath, databaseName);
 
@@ -65,6 +69,7 @@ namespace Database.Repository
 
         var dbFilePath = filepath;
 #endif
+            Debug.Log($">>db_file_path<< {dbFilePath}");
             _connection = new SQLiteConnection(dbFilePath, SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create);
             GRUDebugger.LogSuccess(MessageConfig.Debugging.Success.SUCCESS_MESSAGE_DB_CONNECTION_ESTABLISHED + dbFilePath);
         }

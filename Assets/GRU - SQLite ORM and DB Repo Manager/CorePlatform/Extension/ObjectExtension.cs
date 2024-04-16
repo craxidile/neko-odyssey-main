@@ -2,7 +2,10 @@
 using System.Reflection;
 using System;
 using SpatiumInteractive.Libraries.Unity.Platform.Helpers;
-using Unity.Plastic.Newtonsoft.Json;
+using UnityEngine;
+using Object = System.Object;
+
+// using Unity.Plastic.Newtonsoft.Json;
 
 namespace SpatiumInteractive.Libraries.Unity.Platform.Extensions
 {
@@ -73,8 +76,10 @@ namespace SpatiumInteractive.Libraries.Unity.Platform.Extensions
                 if (obj1 == null || obj2 == null) return false;
             }
             if ((obj1 == null && obj2 != null) || (obj1 != null && obj2 == null)) return false;
-            var obj1Serialized = JsonConvert.SerializeObject(obj1);
-            var obj2Serialized = JsonConvert.SerializeObject(obj2);
+            // var obj1Serialized = JsonConvert.SerializeObject(obj1);
+            // var obj2Serialized = JsonConvert.SerializeObject(obj2);
+            var obj1Serialized = JsonUtility.ToJson(obj1);
+            var obj2Serialized = JsonUtility.ToJson(obj2);
 
             return obj1Serialized == obj2Serialized;
         }
