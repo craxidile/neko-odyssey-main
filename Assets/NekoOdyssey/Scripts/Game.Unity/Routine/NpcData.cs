@@ -54,7 +54,7 @@ public class NpcData
             Debug.Log("UpdateRoutine 1");
 
 
-            if (eventDetail.IsInEventTime(TimeRoutine.day, TimeRoutine.timeHrMin))
+            if (eventDetail.IsInEventTime(TimeRoutine.day, TimeRoutine.currentTime))
             {
                 SwtichEvent(eventDetail);
                 return eventDetail;

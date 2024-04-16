@@ -202,7 +202,8 @@ public class EventDetail
     {
         if (eventDays.Contains(currentDay))
         {
-            return eventTimeStart <= currentTime && currentTime <= eventTimeEnd;
+            //return eventTimeStart <= currentTime && currentTime <= eventTimeEnd;
+            return currentTime.inBetweenTime(eventTimeStart, eventTimeEnd);
         }
         return false;
     }

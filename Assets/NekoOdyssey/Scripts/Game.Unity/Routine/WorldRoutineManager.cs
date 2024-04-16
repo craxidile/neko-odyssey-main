@@ -95,7 +95,7 @@ public class WorldRoutineManager : MonoBehaviour
 
                 if (!questEventManager.CheckQuestKeyAndItem(questEventDetail)) continue;//check quest key condition
 
-                if (questEventDetail.IsInEventTime(TimeRoutine.day, TimeRoutine.timeHrMin))
+                if (questEventDetail.IsInEventTime(TimeRoutine.day, TimeRoutine.currentTime))
                 {
                     questEventDetail.targetEventPoint?.gameObject.SetActive(true);
 

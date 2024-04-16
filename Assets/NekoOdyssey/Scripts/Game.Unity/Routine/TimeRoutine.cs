@@ -61,6 +61,25 @@ public class TimeHrMin
     {
         return $"{Hour.ToString().PadLeft(2, '0')}:{Minute.ToString().PadLeft(2, '0')}";
     }
+
+    public bool inBetweenTime(TimeHrMin startTime, TimeHrMin endTime)
+    {
+        return startTime <= this && this <= endTime;
+    }
+    public bool inBetweenTime(string timeText)
+    {
+        var convertedTimeText = timeText.Replace(' ', '-').Replace('_', '-');
+        var targetTimes = convertedTimeText.Split('-');
+        if (targetTimes.Length < 2)
+        {
+            Debug.Log($"check time failed : {timeText}");
+            return false;
+        }
+        TimeHrMin[] eventTimeList = new TimeHrMin[] { new TimeHrMin(targetTimes[0]), new TimeHrMin(targetTimes[1]) };
+        var startTime = eventTimeList[0];
+        var endTime = eventTimeList[1];
+        return inBetweenTime(startTime, endTime);
+    }
 }
 
 public class TimeRoutine : MonoBehaviour
@@ -77,7 +96,7 @@ public class TimeRoutine : MonoBehaviour
     //string currentTimeText;
 
     public static Day day { get; set; } = 0;
-    public static TimeHrMin timeHrMin { get; set; } = new TimeHrMin("00.00");
+    public static TimeHrMin currentTime { get; set; } = new TimeHrMin("00.00");
 
     // Start is called before the first frame update
     void Start()
@@ -97,13 +116,13 @@ public class TimeRoutine : MonoBehaviour
 
         day = timeScriptable.currentDay;
         SetTime($"{timeScriptable.dayMinute / 60}:{timeScriptable.dayMinute % 60}");
-        timeScriptable.currentTimeText = timeHrMin.ToString();
+        timeScriptable.currentTimeText = currentTime.ToString();
     }
 
 
     public static void SetTime(string timeText)
     {
-        timeHrMin = new TimeHrMin(timeText);
+        currentTime = new TimeHrMin(timeText);
     }
     public static void PauseTime()
     {
