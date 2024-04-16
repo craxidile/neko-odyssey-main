@@ -78,7 +78,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
         private void OnTriggerStay(Collider other)
         {
             if (!other.CompareTag("Player")) return;
-            if (Site.Core.Site.Site.CurrentSite.Name != activeAtSiteName) return;
+            if (!string.IsNullOrEmpty(activeAtSiteName) && Site.Core.Site.Site.CurrentSite.Name != activeAtSiteName)
+                return;
             _eligibleToShow = true;
             GameRunner.Instance.Core.PlayerMenuCandidateManager.Add(new PlayerMenuCandidate
             {
@@ -94,7 +95,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
         private void OnTriggerExit(Collider other)
         {
             if (!other.CompareTag("Player")) return;
-            if (Site.Core.Site.Site.CurrentSite.Name != activeAtSiteName) return;
+            if (!string.IsNullOrEmpty(activeAtSiteName) && Site.Core.Site.Site.CurrentSite.Name != activeAtSiteName)
+                return;
             _eligibleToShow = false;
             var menuCandidateManager = GameRunner.Instance.Core.PlayerMenuCandidateManager;
             // menuCandidateManager.Remove(new PlayerMenuCandidate { Site = site });

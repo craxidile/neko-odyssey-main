@@ -87,7 +87,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Ais.Cat.Behaviours.FollowPlayer
             }
 
             var nextPosition = CalculateNextPosition(catPosition, _targetPositionOnArea.Value);
-            Debug.Log($">>change_mode<< next_position {nextPosition}");
+            // Debug.Log($">>change_mode<< next_position {nextPosition}");
             if (nextPosition == null)
             {
                 End();
@@ -122,7 +122,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Ais.Cat.Behaviours.FollowPlayer
 
         private void End()
         {
-            Debug.Log($">>change_mode<< end");
+            // Debug.Log($">>change_mode<< end");
             _catStartPositionSubscription?.Dispose();
             _catPositionSubscription?.Dispose();
             _readyToWalkSubscription?.Dispose();

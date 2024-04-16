@@ -81,7 +81,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Ais.Cat.Behaviours
 
         private IEnumerator DelayedSetCatStartPosition()
         {
-            Debug.Log($">>change_mode<< cat_start_position");
+            // Debug.Log($">>change_mode<< cat_start_position");
             yield return null;
             CatAi.SetCatStartPosition(transform.position);
         }

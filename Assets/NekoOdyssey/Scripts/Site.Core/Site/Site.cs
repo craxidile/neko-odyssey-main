@@ -1,6 +1,7 @@
 ﻿using NekoOdyssey.Scripts.Database.Domains.Sites;
 using NekoOdyssey.Scripts.Database.Domains.Sites.Entities.SiteEntity.Repo;
 using UniRx;
+using UnityEngine;
 
 namespace NekoOdyssey.Scripts.Site.Core.Site
 {
@@ -8,6 +9,7 @@ namespace NekoOdyssey.Scripts.Site.Core.Site
     {
         private bool _databaseInitialized;
 
+        public static Database.Domains.Sites.Entities.SiteEntity.Models.Site PreviousSite { get; private set; }
         public static Database.Domains.Sites.Entities.SiteEntity.Models.Site CurrentSite { get; private set; }
 
         public bool Ready { get; private set; }
@@ -56,8 +58,22 @@ namespace NekoOdyssey.Scripts.Site.Core.Site
             SetSite(nextSiteName);
         }
 
+        public void MoveToPreviousSite(Vector3? previousPosition)
+        {
+            CurrentSite = PreviousSite;
+            if (previousPosition != null)
+            {
+                CurrentSite.PlayerX = previousPosition.Value.x;
+                CurrentSite.PlayerY = previousPosition.Value.y;
+                CurrentSite.PlayerZ = previousPosition.Value.z;
+            }
+            PreviousSite = null;
+            OnChangeSite.OnNext(CurrentSite);
+        }
+
         public void SetSite(string siteName, bool reload = true)
         {
+            PreviousSite = CurrentSite;
             Database.Domains.Sites.Entities.SiteEntity.Models.Site site;
             using (var siteDbContext = new SitesDbContext(new() { CopyRequired = false, ReadOnly = true }))
             {
