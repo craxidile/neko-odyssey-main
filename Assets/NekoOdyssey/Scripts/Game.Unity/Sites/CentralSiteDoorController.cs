@@ -21,6 +21,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.Sites
             { PlayerMenuSite.FlagShopInside19, $"NekoInside19FlagShop" },
             { PlayerMenuSite.BookStoreInside07, $"NekoInside07BookStore" },
             { PlayerMenuSite.RamenShopInside01, $"NekoInside01" },
+            { PlayerMenuSite.NekoInside26Bakery, $"NekoInside26Bakery" },
+            { PlayerMenuSite.NekoInside15TaxiStation, $"NekoInside15TaxiStation" },
         };
             
         private void Start()
