@@ -1,3 +1,4 @@
+using NekoOdyssey.Scripts.Game.Unity.Uis.DialogCanvas;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,9 @@ public class DialogueData
 public class DialogueManager : MonoBehaviour
 {
     public static DialogueManager instance;
+    [HideInInspector]
     public PlayableDirector director;
+    public DialogCanvasController canvasController;
     public bool nextDialogue;
 
     //languege  
@@ -63,6 +66,7 @@ public class DialogueManager : MonoBehaviour
         if (/*director.state == PlayState.Paused && */Input.anyKeyDown && !nextDialogue)
         {
             nextDialogue = true;
+            canvasController.SetOpened(false);
             Debug.Log($">>behavior<< play continue after get key down");
         }
     }

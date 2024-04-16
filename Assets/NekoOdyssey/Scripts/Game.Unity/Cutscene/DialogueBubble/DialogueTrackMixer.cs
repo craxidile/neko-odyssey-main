@@ -14,10 +14,10 @@ public class DialogueTrackMixer : PlayableBehaviour
     }
     public override void ProcessFrame(Playable playable, FrameData info, object playerData)
     {
-        var dialogueCanvas = playerData as DialogCanvasController;
+        var canvasController = playerData as DialogCanvasController;
         string currentText = "";
 
-        if (!dialogueCanvas) { return; }
+        if (!canvasController) { return; }
 
         int inputCount = playable.GetInputCount();
         for (int i = 0; i < inputCount; i++)
@@ -46,7 +46,7 @@ public class DialogueTrackMixer : PlayableBehaviour
             }
         }
 
-        dialogueCanvas.SetText(currentText);
+        canvasController.SetText(currentText);
     }
     //public override void OnBehaviourPlay(Playable playable, FrameData info)
     //{
