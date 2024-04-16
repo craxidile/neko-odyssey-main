@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using NekoOdyssey.Scripts;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.SceneManagement;
 
 public class CutSceneManager : MonoBehaviour
 {
@@ -27,6 +29,6 @@ public class CutSceneManager : MonoBehaviour
     {
         isDone = true;
         Debug.Log("CutScene is Done");
-        
+        SiteRunner.Instance.Core.Site.MoveToNextSite();
     }
 }

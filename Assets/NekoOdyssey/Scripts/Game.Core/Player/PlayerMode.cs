@@ -6,8 +6,10 @@
         Phone,
         Bag,
         Menu,
+        Submenu,
         Capture,
         Conversation,
+        Pet,
         QuestConversation,
     }
 }

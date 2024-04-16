@@ -7,7 +7,8 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
     public class PlayerMenuCandidate
     {
         public PlayerMenuAction[] Actions { get; set; }
-        public PlayerMenuSite Site { get; set; } = PlayerMenuSite.None;
+        // public PlayerMenuSite Site { get; set; } = PlayerMenuSite.None;
+        public string SiteName { get; set; } = null;
         public GameObject GameObject { get; set; }
         public bool AutoActive { get; set; } = false;
         public float DistanceFromPlayer { get; set; } = float.MaxValue;
@@ -15,7 +16,7 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
         public void CopyFrom(PlayerMenuCandidate other)
         {
             Actions = other.Actions;
-            Site = other.Site;
+            SiteName = other.SiteName;
             GameObject = other.GameObject;
             AutoActive = other.AutoActive;
             DistanceFromPlayer = other.DistanceFromPlayer;

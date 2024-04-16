@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.17883006, g: 0.22392084, b: 0.30580437, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -281,7 +281,7 @@ Transform:
   m_GameObject: {fileID: 155729721}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -39.5, y: -1.4, z: -2}
+  m_LocalPosition: {x: -8.5, y: -1.221, z: 10.32}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6827,6 +6827,8 @@ GameObject:
   - component: {fileID: 2058983944}
   - component: {fileID: 2058983943}
   - component: {fileID: 2058983945}
+  - component: {fileID: 2058983947}
+  - component: {fileID: 2058983946}
   m_Layer: 0
   m_Name: StoryIntro
   m_TagString: Untagged
@@ -6996,6 +6998,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   language: 3
   SubtitleAsset: {fileID: 4900000, guid: 8cd43ce896738dc43b464b237a10d7cd, type: 3}
+--- !u!114 &2058983946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2058983942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a92684a316654f71a4ba52110ed1fde9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2058983947
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2058983942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c54b6296cb149d34889f4665789f8fc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  director: {fileID: 0}
+  isDone: 0
 --- !u!1 &2073979347
 GameObject:
   m_ObjectHideFlags: 3
