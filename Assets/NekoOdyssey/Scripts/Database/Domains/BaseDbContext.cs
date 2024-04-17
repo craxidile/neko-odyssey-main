@@ -21,7 +21,11 @@ namespace NekoOdyssey.Scripts.Database.Domains
         protected BaseDbContext(string databaseName, DbContextOptions options)
         {
             _databaseName = databaseName;
+#if UNITY_EDITOR
+            _databasePath = Application.persistentDataPath;
+#else
             _databasePath = Application.streamingAssetsPath;
+#endif
             Debug.Log($">>database_path<< {_databasePath}");
             Debug.Log($">>database_name<< {_databaseName}");
             _options = options;
@@ -32,12 +36,18 @@ namespace NekoOdyssey.Scripts.Database.Domains
 
         private void CopyDatabase()
         {
-            if (!_options.CopyRequired) return;
-#if UNITY_SWITCH && !UNITY_EDITOR
+            if (_options.CopyMode == DbCopyMode.DoNotCopy) return;
             var fileName = $"{_databaseName}.db";
+#if UNITY_EDITOR
+            var sourceFilePath = $"{Application.streamingAssetsPath}/{fileName}";
+            var destFilePath = $"{_databasePath}/{fileName}";
+            if (_options.CopyMode == DbCopyMode.CopyIfNotExists && File.Exists(destFilePath)) return;
+            Debug.Log($">>copy_database<< {_databaseName}");
+            File.Copy(sourceFilePath, destFilePath);
+#elif UNITY_SWITCH
             var filePath = $"{_databasePath}/{fileName}";
             Debug.Log($">>file_path<< {filePath}");
-            // if (NintendoFileHandler.Exists(_databaseName)) return;
+            if (_options.CopyMode == DbCopyMode.CopyIfNotExists && NintendoFileHandler.Exists(_databaseName)) return;
             var dbData = File.ReadAllBytes(filePath);
             NintendoFileHandler.SaveRaw(dbData, fileName);
 #endif
