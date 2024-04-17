@@ -53,7 +53,7 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
 
         public void SetSiteNameActive(string siteName, bool active)
         {
-            SiteName = siteName;
+            SiteName = !active ? null : siteName;
             _active = active;
             SetMenuLevel(0);
             OnChangeSiteNameActive.OnNext(Tuple.Create(siteName, active));
@@ -123,12 +123,9 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
                 if (!_active || _currentAction == PlayerMenuAction.None) return;
                 // if (MenuLevel == 0 && _actions.Length > 1)
                 //     OnChangeSiteActive.OnNext(Tuple.Create(Site, false));
-                Debug.Log(
-                    $">>vel_vel<< menu_level: {MenuLevel} action_length: {_actions.Length} current_action: {_currentAction}");
                 var menuLevel = MenuLevel;
                 var actionsLength = _actions.Length;
                 OnCommitAction.OnNext(_currentAction);
-                Debug.Log($">>commit<< {_currentAction} {menuLevel} {actionsLength}");
                 if (menuLevel > 0 || (menuLevel == 0 && actionsLength == 1))
                     // OnChangeSiteActive.OnNext(Tuple.Create(Site, false));
                     OnChangeSiteNameActive.OnNext(Tuple.Create(SiteName, false));

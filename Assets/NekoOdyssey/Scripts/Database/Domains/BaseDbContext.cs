@@ -18,20 +18,21 @@ namespace NekoOdyssey.Scripts.Database.Domains
 
         public SQLiteConnection Context { get; }
 
-        protected BaseDbContext(string databaseName, DbContextOptions options) 
+        protected BaseDbContext(string databaseName, DbContextOptions options)
         {
             _databaseName = databaseName;
             _databasePath = Application.streamingAssetsPath;
             Debug.Log($">>database_path<< {_databasePath}");
             Debug.Log($">>database_name<< {_databaseName}");
             _options = options;
-            if (options.CopyRequired) CopyDatabase();
+            CopyDatabase();
             var connector = new DataConnector(_databaseName, _databasePath);
             Context = connector.GetConnection();
         }
 
         private void CopyDatabase()
         {
+            if (!_options.CopyRequired) return;
 #if UNITY_SWITCH && !UNITY_EDITOR
             var fileName = $"{_databaseName}.db";
             var filePath = $"{_databasePath}/{fileName}";
@@ -44,8 +45,8 @@ namespace NekoOdyssey.Scripts.Database.Domains
 
         private void CommitDatabase()
         {
+            if (_options.ReadOnly) return;
 #if UNITY_SWITCH && !UNITY_EDITOR
-            if (_options.CopyRequired) return;
             NintendoFileHandler.Commit();
 #endif
         }
