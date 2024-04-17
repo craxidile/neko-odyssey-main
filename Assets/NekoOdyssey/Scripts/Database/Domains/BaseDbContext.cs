@@ -43,7 +43,7 @@ namespace NekoOdyssey.Scripts.Database.Domains
             var destFilePath = $"{_databasePath}/{fileName}";
             if (_options.CopyMode == DbCopyMode.CopyIfNotExists && File.Exists(destFilePath)) return;
             Debug.Log($">>copy_database<< {_databaseName}");
-            File.Copy(sourceFilePath, destFilePath);
+            File.Copy(sourceFilePath, destFilePath, true);
 #elif UNITY_SWITCH
             var filePath = $"{_databasePath}/{fileName}";
             Debug.Log($">>file_path<< {filePath}");
