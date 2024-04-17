@@ -37,7 +37,7 @@ namespace NekoOdyssey.Scripts.Site.Core.Site
         private void InitializeDatabase()
         {
             if (_databaseInitialized) return;
-            using (new SitesDbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = true }));
+            using (new SitesDbContext(new() { CopyMode = DbCopyMode.ForceCopy, ReadOnly = false }));
             _databaseInitialized = true;
         }
 
