@@ -19,7 +19,7 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
             PlayerMenuAction.Left,
             PlayerMenuAction.Right,
         };
-        
+
         private bool _active;
         private PlayerMenuAction _currentAction;
         private PlayerMenuAction[] _actions = Array.Empty<PlayerMenuAction>();
@@ -31,14 +31,11 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
         public GameObject GameObject { get; set; }
 
         // public Subject<bool> OnActive { get; } = new();
-        public Subject<int> OnChangeMenuLevel { get; } = new();
-
         // public Subject<PlayerMenuSite> OnChangeSite { get; } = new();
-        public Subject<PlayerMenuAction> OnChangeAction { get; } = new();
-
-        public Subject<PlayerMenuAction> OnCommitAction { get; } = new();
-
         // public Subject<Tuple<PlayerMenuSite, bool>> OnChangeSiteActive { get; } = new();
+        public Subject<int> OnChangeMenuLevel { get; } = new();
+        public Subject<PlayerMenuAction> OnChangeAction { get; } = new();
+        public Subject<PlayerMenuAction> OnCommitAction { get; } = new();
         public Subject<Tuple<string, bool>> OnChangeSiteNameActive { get; } = new();
 
         public void SetActive(bool active)
@@ -96,7 +93,7 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
         // {
         //     SetSiteActive(Site, true);
         // }
-        
+
         public void SetCurrentSiteNameActive()
         {
             SetSiteNameActive(SiteName, true);
@@ -119,48 +116,68 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
 
         public void Start()
         {
-            GameRunner.Instance.PlayerInputHandler.OnCancelTriggerred.Subscribe(_ =>
-            {
-                if (GameRunner.Instance.Core.Player.Mode != PlayerMode.Submenu) return;
-                GameRunner.Instance.Core.Player.SetMode(PlayerMode.Move);
-                // SetCurrentSiteActive();
-                SetCurrentSiteNameActive();
-            });
-            GameRunner.Instance.PlayerInputHandler.OnFireTriggerred.Subscribe(_ =>
-            {
-                if (!_active || _currentAction == PlayerMenuAction.None) return;
-                // if (MenuLevel == 0 && _actions.Length > 1)
-                //     OnChangeSiteActive.OnNext(Tuple.Create(Site, false));
-                var menuLevel = MenuLevel;
-                var actionsLength = _actions.Length;
-                OnCommitAction.OnNext(_currentAction);
-                if (menuLevel > 0 || (menuLevel == 0 && actionsLength == 1))
-                    // OnChangeSiteActive.OnNext(Tuple.Create(Site, false));
-                    OnChangeSiteNameActive.OnNext(Tuple.Create(SiteName, false));
-                if (ActionsToStopPlayer.Contains(_currentAction))
-                    GameRunner.Instance.Core.Player.SetMode(PlayerMode.Stop);
-            }).AddTo(GameRunner.Instance);
-            GameRunner.Instance.PlayerInputHandler.OnNextMenuTriggerred.Subscribe(_ =>
-            {
-                var mode = GameRunner.Instance.Core.Player.Mode;
-                if (mode != PlayerMode.Submenu || !_active || _actions.Length == 0) return;
-                var index = _actions.ToList().IndexOf(_currentAction);
-                index = Math.Min(_actions.Length - 1, index + 1);
-                SetCurrentAction(_actions[index]);
-            }).AddTo(GameRunner.Instance);
-            GameRunner.Instance.PlayerInputHandler.OnPrevMenuTriggerred.Subscribe(_ =>
-            {
-                var mode = GameRunner.Instance.Core.Player.Mode;
-                if (mode != PlayerMode.Submenu || !_active || _actions.Length == 0) return;
-                var index = _actions.ToList().IndexOf(_currentAction);
-                index = Math.Max(0, index - 1);
-                SetCurrentAction(_actions[index]);
-            });
+            // Commit Action
+            GameRunner.Instance.PlayerInputHandler.OnFireTriggerred
+                .Subscribe(_ => { CommitAction(); })
+                .AddTo(GameRunner.Instance);
+            // Cancel Action
+            GameRunner.Instance.PlayerInputHandler.OnCancelTriggerred
+                .Subscribe(_ => { CancelAction(); })
+                .AddTo(GameRunner.Instance);
+            // Previous Action
+            GameRunner.Instance.PlayerInputHandler.OnNextMenuTriggerred
+                .Subscribe(_ => { SelectPreviousAction(); })
+                .AddTo(GameRunner.Instance);
+            // Next Action
+            GameRunner.Instance.PlayerInputHandler.OnPrevMenuTriggerred
+                .Subscribe(_ => { SelectNextAction(); })
+                .AddTo(GameRunner.Instance);
         }
 
         public void Unbind()
         {
             Reset();
+        }
+
+        private void CancelAction()
+        {
+            if (GameRunner.Instance.Core.Player.Mode != PlayerMode.Submenu) return;
+            GameRunner.Instance.Core.Player.SetMode(PlayerMode.Move);
+            // SetCurrentSiteActive();
+            SetCurrentSiteNameActive();
+        }
+
+        private void CommitAction()
+        {
+            if (!_active || _currentAction == PlayerMenuAction.None) return;
+            // if (MenuLevel == 0 && _actions.Length > 1)
+            //     OnChangeSiteActive.OnNext(Tuple.Create(Site, false));
+            var menuLevel = MenuLevel;
+            var actionsLength = _actions.Length;
+            OnCommitAction.OnNext(_currentAction);
+            if (menuLevel > 0 || (menuLevel == 0 && actionsLength == 1))
+                // OnChangeSiteActive.OnNext(Tuple.Create(Site, false));
+                OnChangeSiteNameActive.OnNext(Tuple.Create(SiteName, false));
+            if (ActionsToStopPlayer.Contains(_currentAction))
+                GameRunner.Instance.Core.Player.SetMode(PlayerMode.Stop);
+        }
+
+        private void SelectPreviousAction()
+        {
+            var mode = GameRunner.Instance.Core.Player.Mode;
+            if (mode != PlayerMode.Submenu || !_active || _actions.Length == 0) return;
+            var index = _actions.ToList().IndexOf(_currentAction);
+            index = Math.Min(_actions.Length - 1, index + 1);
+            SetCurrentAction(_actions[index]);
+        }
+
+        private void SelectNextAction()
+        {
+            var mode = GameRunner.Instance.Core.Player.Mode;
+            if (mode != PlayerMode.Submenu || !_active || _actions.Length == 0) return;
+            var index = _actions.ToList().IndexOf(_currentAction);
+            index = Math.Max(0, index - 1);
+            SetCurrentAction(_actions[index]);
         }
     }
 }
