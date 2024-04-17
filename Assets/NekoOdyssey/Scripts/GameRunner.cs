@@ -6,6 +6,7 @@ using NekoOdyssey.Scripts.Game.Unity.Cameras;
 using NekoOdyssey.Scripts.Game.Unity.Capture;
 using NekoOdyssey.Scripts.Game.Unity.Conversations;
 using NekoOdyssey.Scripts.Game.Unity.Inputs;
+using NekoOdyssey.Scripts.Game.Unity.Petting;
 using NekoOdyssey.Scripts.Game.Unity.Sites;
 using UniRx;
 using UnityEngine;
@@ -27,6 +28,7 @@ namespace NekoOdyssey.Scripts
         public UiInputHandler UiInputHandler { get; private set; }
         public Dictionary<string, Object> AssetMap { get; } = new();
         public bool Ready { get; private set; } = false;
+        
         public Subject<bool> OnReady { get; } = new();
 
         public GameRunner()
@@ -40,9 +42,10 @@ namespace NekoOdyssey.Scripts
             PlayerInputHandler = gameObject.AddComponent<PlayerInputHandler>();
             PlayerInputHandler.InputActions = _inputActions;
 
-            gameObject.AddComponent<CentralSiteDoorController>();
+            gameObject.AddComponent<CentralSiteActionController>();
             gameObject.AddComponent<CentralCaptureActionHandler>();
             gameObject.AddComponent<CentralConversationActionHandler>();
+            gameObject.AddComponent<CentralPlayerPettingHandler>();
             gameObject.AddComponent<AssetBundleLoader>();
             
             Core.Bind();

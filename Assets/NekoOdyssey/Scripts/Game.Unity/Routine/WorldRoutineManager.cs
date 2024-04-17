@@ -7,12 +7,13 @@ public class WorldRoutineManager : MonoBehaviour
 {
     public static List<NpcData> npcDatas = new List<NpcData>();
     public static List<QuestEventDetail> allQuestEvents = new List<QuestEventDetail>();
-    public static List<QuestGroup> allQuestGroups = new List<QuestGroup>();
+    public static Dictionary<string, QuestGroup> allQuestGroups = new Dictionary<string, QuestGroup>();
     public static Dictionary<string, QuestDialogueGroup> allQuestDialogueGroup = new Dictionary<string, QuestDialogueGroup>();
     //public static List<EventDetail> allNpcEvents = new List<EventDetail>();
 
 
 
+    public CSVHolderScriptable csvHolder;
 
 
     [SerializeField] QuestEventManager questEventManager { get; set; }
@@ -37,42 +38,57 @@ public class WorldRoutineManager : MonoBehaviour
     void Start()
     {
         InitializedSceneEventPoint();
+
+        Invoke(nameof(UpdateWorld), 1f);
     }
 
-    float _delayTargetTime = 0;
+    //float _delayTargetTime = 0;
     // Update is called once per frame
     void Update()
     {
-        if (Time.time < _delayTargetTime)
-        {
-            return;
-        }
-        else
-        {
-            _delayTargetTime = Time.time + 2;
-        }
+        //if (Time.time < _delayTargetTime)
+        //{
+        //    return;
+        //}
+        //else
+        //{
+        //    _delayTargetTime = Time.time + 2;
+        //}
 
-        UpdateWorld();
+        //UpdateWorld();
     }
 
+    [ContextMenu("UpdateWorld")]
     public void UpdateWorld()
+    {
+        UpdateQuestEvent();
+
+        UpdateNpcRoutine();
+
+    }
+
+    void UpdateQuestEvent()
     {
         foreach (var npcData in npcDatas) //reset story state
         {
             npcData.routineEnable = true;
         }
 
-        foreach (var questEventDetail in allQuestEvents) //enable story event
+        foreach (var questGroup in allQuestGroups.Values)
         {
-            if (questEventManager.ownedQuestKey.Contains(questEventDetail.questId)) //already complete
+            if (questGroup.questStatus == QuestGroup.QuestStatus.Completed) continue;
+            if (questGroup.questStatus == QuestGroup.QuestStatus.Disable)
             {
-                continue;
+                if (!questEventManager.CheckQuestKeyAndItem(questGroup.questIdConditions, questGroup.questIdConditionsExclude)) continue;
+                questGroup.questStatus = QuestGroup.QuestStatus.Avaliable;
             }
 
-            bool conditionMatch = questEventManager.CheckQuestCondition(questEventDetail); //check quest key condition
-
-            if (conditionMatch)
+            foreach (var questEventDetail in questGroup.questEventDetails)
             {
+                if (questEventManager.ownedQuestKey.Contains(questEventDetail.questId)) continue;//already complete
+
+                if (!questEventManager.CheckQuestKeyAndItem(questEventDetail)) continue;//check quest key condition
+
                 if (questEventDetail.IsInEventTime(TimeRoutine.day, TimeRoutine.timeHrMin))
                 {
                     questEventDetail.targetEventPoint?.gameObject.SetActive(true);
@@ -124,6 +140,7 @@ public class WorldRoutineManager : MonoBehaviour
                                             if (targetActor != null)
                                             {
                                                 ChatBalloonManager.instance.ShowChatBalloon(targetActor.transform, dialogueMessage.message);
+                                                //NekoOdyssey.Scripts.GameRunner.Instance.Core.Player.SetMode(NekoOdyssey.Scripts.Game.Unity.Game.Core.PlayerMode.Conversation);
                                             }
                                             else
                                             {
@@ -148,6 +165,8 @@ public class WorldRoutineManager : MonoBehaviour
                                     if (targetActor != null)
                                     {
                                         ChatBalloonManager.instance.ShowChatBalloon(targetActor.transform, dialogueMessage.message);
+                                        NekoOdyssey.Scripts.GameRunner.Instance.Core.PlayerMenu.GameObject = targetActor.gameObject;
+                                        NekoOdyssey.Scripts.GameRunner.Instance.Core.Player.SetMode(NekoOdyssey.Scripts.Game.Unity.Game.Core.PlayerMode.Conversation);
                                     }
                                     else
                                     {
@@ -165,7 +184,7 @@ public class WorldRoutineManager : MonoBehaviour
                                 //complete talking
                                 //restore player control
                                 ChatBalloonManager.instance.HideChatBalloon();
-
+                                NekoOdyssey.Scripts.GameRunner.Instance.Core.Player.SetMode(NekoOdyssey.Scripts.Game.Unity.Game.Core.PlayerMode.Move);
 
                                 if (!dialogueGroup.isCanceled)
                                 {
@@ -174,6 +193,8 @@ public class WorldRoutineManager : MonoBehaviour
                                     questEventManager.ownedQuestKey.Add(questEventDetail.questId);
 
                                     questEventDetail.targetEventPoint?.gameObject.SetActive(false);
+
+                                    UpdateWorld();
                                 }
                                 else
                                 {
@@ -210,14 +231,13 @@ public class WorldRoutineManager : MonoBehaviour
                     }
                 }
 
-                //break;
             }
-            //else
-            //{
-            //    questEventDetail.targetEventPoint?.gameObject.SetActive(false);
-            //}
-        }
 
+        }
+    }
+
+    void UpdateNpcRoutine()
+    {
         foreach (var npcData in npcDatas) //do routine for other npcs
         {
             if (npcData.routineEnable)
@@ -234,5 +254,11 @@ public class WorldRoutineManager : MonoBehaviour
         questEventManager.InitializedQuestEvent();
         npcRoutineManager.InitializedRoutine();
         questDialogueManager.InitializedQuestDialogue();
+    }
+
+
+    public void testHideBlackScene(GameObject targetObject)
+    {
+        Debug.Log(targetObject.name);
     }
 }

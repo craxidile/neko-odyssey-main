@@ -7,6 +7,7 @@ using DG.Tweening;
 public class ChatBalloonManager : MonoBehaviour
 {
     public GameObject balloonPrefab;
+    public float balloonScaleTime = 0.3f;
 
     public static ChatBalloonManager instance { get; private set; }
 
@@ -48,7 +49,8 @@ public class ChatBalloonManager : MonoBehaviour
         var newBalloonData = chatBalloonDatas.Find(balloonData => balloonData.parent == parent);
         if (newBalloonData != null)
         {
-            newBalloonData.chatBalloon.messageBox.text = message;
+            //newBalloonData.chatBalloon.messageBox.text = message;
+            newBalloonData.chatBalloon.SetText(message);
             newBalloonData.message = message;
             newBalloonData.startTime = Time.time;
         }
@@ -58,7 +60,7 @@ public class ChatBalloonManager : MonoBehaviour
             newBalloon.transform.localPosition = Vector3.up * 0.5f;
 
             var chatBalloon = newBalloon.GetComponent<NekoOdyssey.Scripts.Game.Unity.Uis.DialogCanvas.DialogCanvasController>();
-            chatBalloon.messageBox.text = message;
+            chatBalloon.SetText(message);
 
             var canvasGroup = newBalloon.GetComponentInChildren<CanvasGroup>();
 
@@ -74,6 +76,12 @@ public class ChatBalloonManager : MonoBehaviour
 
             chatBalloonDatas.Add(newBalloonData);
 
+
+            //var originalScale = newBalloon.transform.localScale;
+            //newBalloon.transform.localScale = Vector3.zero;
+            //newBalloon.transform.DOScale(originalScale, balloonScaleTime).SetEase(Ease.OutExpo);
+            //chatBalloon.animator.SetTrigger("OpenTrigger");
+
         }
 
         _lastestBalloon = newBalloonData;
@@ -88,15 +96,24 @@ public class ChatBalloonManager : MonoBehaviour
 
 
         //force update chat balloon frame
-        Canvas.ForceUpdateCanvases();
-        var layoutGroup = newBalloonData.chatBalloonObject.GetComponentInChildren<UnityEngine.UI.LayoutGroup>();
-        layoutGroup.enabled = false;
-        layoutGroup.enabled = true;
+        //Canvas.ForceUpdateCanvases();
+        //var layoutGroup = newBalloonData.chatBalloonObject.GetComponentInChildren<UnityEngine.UI.LayoutGroup>();
+        //layoutGroup.enabled = false;
+        //layoutGroup.enabled = true;
     }
 
     public void HideChatBalloon()
     {
         chatBalloonDatas.Remove(_lastestBalloon);
-        Destroy(_lastestBalloon.chatBalloon.gameObject);
+
+        var targetObject = _lastestBalloon;
+        //targetObject.chatBalloonObject.transform.DOScale(0, balloonScaleTime).SetEase(Ease.OutExpo).OnComplete(() =>
+        //{
+        //    Destroy(targetObject.chatBalloon.gameObject);
+        //});
+        //targetObject.chatBalloon.animator.SetTrigger("OpenTrigger");
+        targetObject.chatBalloon.SetOpened(false);
+        DOVirtual.DelayedCall(1, () => { Destroy(targetObject.chatBalloon.gameObject); });
+
     }
 }

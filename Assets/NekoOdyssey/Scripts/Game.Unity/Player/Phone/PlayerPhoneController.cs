@@ -23,7 +23,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Phone
 
             _phoneScreen.SetActive(_active);
             var playerCamera = GameRunner.Instance.cameras.playerCamera;
-            playerCamera.gameObject.SetActive(_active);
+            if (playerCamera != null) playerCamera.gameObject.SetActive(_active);
 
             if (_active) _animator.SetLayerWeight(_animator.GetLayerIndex($"Phone"), 1f);
 

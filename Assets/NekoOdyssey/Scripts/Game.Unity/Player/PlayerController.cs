@@ -2,6 +2,7 @@
 using NekoOdyssey.Scripts.Game.Unity.Player.Capture;
 using NekoOdyssey.Scripts.Game.Unity.Player.Conversations;
 using NekoOdyssey.Scripts.Game.Unity.Player.Movement;
+using NekoOdyssey.Scripts.Game.Unity.Player.Petting;
 using NekoOdyssey.Scripts.Game.Unity.Player.Phone;
 using UniRx;
 using UniRx.Triggers;
@@ -13,13 +14,22 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
 {
     public class PlayerController : MonoBehaviour
     {
+//Start here
+        //public static Vector3 MainPlayerAnchor = new(75, -1.6f, -9.5f); 
 
-        // public static Vector3 MainPlayerAnchor = new(27, -1.6f, -13f);
+//Next
+        // public static Vector3 MainPlayerAnchor = new(60, -1.6f, -11f);       
+
+
+//BackUp Location
         public static Vector3 MainPlayerAnchor = new(25, -1.662279f, -25.688f);
+
+        // public static Vector3 MainPlayerAnchor = new(28, -1.662279f, -41.5f);
         private PlayerMovementController _movementController;
         private PlayerPhoneController _phoneController;
         private PlayerCaptureController _captureController;
         private PlayerConversationController _conversationController;
+        private PlayerPettingController _pettingController;
 
         public GameObject phoneScreen;
         public GameObject catPhotoContainer;
@@ -36,6 +46,27 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
             _phoneController = gameObject.AddComponent<PlayerPhoneController>();
             _captureController = gameObject.AddComponent<PlayerCaptureController>();
             _conversationController = gameObject.AddComponent<PlayerConversationController>();
+            _pettingController = gameObject.AddComponent<PlayerPettingController>();
+
+            InitializePosition();
+        }
+
+        private void InitializePosition()
+        {
+            var currentSite = Site.Core.Site.Site.CurrentSite;
+            if (currentSite == null) return;
+
+            if (
+                currentSite.PlayerX != null ||
+                currentSite.PlayerY != null ||
+                currentSite.PlayerZ != null
+            )
+            {
+                _movementController.ForceSetPosition(
+                    new Vector3(currentSite.PlayerX.Value, currentSite.PlayerY.Value, currentSite.PlayerZ.Value)
+                );
+                return;
+            }
 
             var playerAnchor = FindAnyObjectByType<PlayerAnchor>();
             _movementController.ForceSetPosition(

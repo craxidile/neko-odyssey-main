@@ -1,6 +1,7 @@
 ﻿using Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu;
 using NekoOdyssey.Scripts.Game.Core.Ais;
 using NekoOdyssey.Scripts.Game.Core.Areas;
+using NekoOdyssey.Scripts.Game.Core.Cat;
 using NekoOdyssey.Scripts.Game.Core.Scene;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 using UnityEngine;
@@ -10,6 +11,7 @@ namespace NekoOdyssey.Scripts.Game.Core
     public class GameCore
     {
         public Player.Player Player { get; } = new();
+        public CatCollection Cats { get; } = new();
         public GameAis Ais { get; } = new();
         public GameAreas Areas { get; } = new();
         public Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu.PlayerMenu PlayerMenu { get; } = new();

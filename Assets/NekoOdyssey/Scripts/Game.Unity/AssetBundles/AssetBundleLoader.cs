@@ -19,7 +19,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.AssetBundles
                 $"dialogcanvas",
                 $"menu_actions",
                 $"cat_snaps",
-                $"cat_profiles"
+                $"cat_profiles",
+                $"cat_emotions"
             };
 
             foreach (var bundleName in bundleNames)
@@ -44,6 +45,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.AssetBundles
             {
                 var itemName = item.name.ToLower();
                 var assetMap = GameRunner.Instance.AssetMap;
+                Debug.Log($">>item_name<< {itemName}");
                 assetMap[itemName] = item;
             }
         }
