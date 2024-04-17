@@ -10,5 +10,6 @@
         Capture,
         Conversation,
         Pet,
+        Stop,
     }
 }
