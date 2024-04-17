@@ -20,6 +20,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Scenes
             // SceneManager.LoadScene($"Neko04", LoadSceneMode.Additive);
             // SceneManager.LoadScene($"Neko05", LoadSceneMode.Additive);
             SceneManager.LoadScene($"Neko08", LoadSceneMode.Additive);
+            SceneManager.LoadScene($"Neko09", LoadSceneMode.Additive);
             // SceneManager.LoadScene($"Neko09", LoadSceneMode.Additive);
             SceneManager.LoadScene($"CatScene", LoadSceneMode.Additive);
             SceneManager.LoadScene($"SkyBox", LoadSceneMode.Additive);
