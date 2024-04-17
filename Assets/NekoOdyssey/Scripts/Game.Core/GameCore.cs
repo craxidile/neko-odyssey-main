@@ -11,6 +11,7 @@ namespace NekoOdyssey.Scripts.Game.Core
     public class GameCore
     {
         public Player.Player Player { get; } = new();
+        public Metadata.Metadata Metadata { get; } = new();
         public CatCollection Cats { get; } = new();
         public GameAis Ais { get; } = new();
         public GameAreas Areas { get; } = new();
@@ -20,6 +21,7 @@ namespace NekoOdyssey.Scripts.Game.Core
         
         public void Bind()
         {
+            Metadata.Bind();
             Player.Bind();
             Ais.Bind();
             Areas.Bind();
@@ -30,6 +32,7 @@ namespace NekoOdyssey.Scripts.Game.Core
 
         public void Start()
         {
+            Metadata.Start();
             Player.Start();
             Ais.Start();
             Areas.Start();
@@ -40,6 +43,7 @@ namespace NekoOdyssey.Scripts.Game.Core
 
         public void Unbind()
         {
+            Metadata.Unbind();
             Player.Unbind();
             Ais.Unbind();
             Areas.Unbind();

@@ -1,4 +1,5 @@
-﻿using NekoOdyssey.Scripts.Database.Domains.Sites;
+﻿using NekoOdyssey.Scripts.Database.Domains;
+using NekoOdyssey.Scripts.Database.Domains.Sites;
 using NekoOdyssey.Scripts.Database.Domains.Sites.Entities.SiteEntity.Repo;
 using UniRx;
 using UnityEngine;
@@ -36,7 +37,7 @@ namespace NekoOdyssey.Scripts.Site.Core.Site
         private void InitializeDatabase()
         {
             if (_databaseInitialized) return;
-            using (new SitesDbContext(new() { CopyRequired = true, ReadOnly = true })) ;
+            using (new SitesDbContext(new() { CopyMode = DbCopyMode.ForceCopy, ReadOnly = false }));
             _databaseInitialized = true;
         }
 
@@ -76,7 +77,7 @@ namespace NekoOdyssey.Scripts.Site.Core.Site
         {
             PreviousSite = CurrentSite;
             Database.Domains.Sites.Entities.SiteEntity.Models.Site site;
-            using (var siteDbContext = new SitesDbContext(new() { CopyRequired = false, ReadOnly = true }))
+            using (var siteDbContext = new SitesDbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = true }))
             {
                 var siteRepo = new SiteRepo(siteDbContext);
                 site = siteRepo.FindByName(siteName);
