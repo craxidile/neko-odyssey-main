@@ -119,6 +119,14 @@ public class TimeRoutine : MonoBehaviour
         timeScriptable.currentTimeText = currentTime.ToString();
     }
 
+    public static bool inBetweenDayAndTime(List<Day> checkDay, string checkTime)
+    {
+        if (checkDay.Contains(day))
+        {
+            return currentTime.inBetweenTime(checkTime);
+        }
+        return false;
+    }
 
     public static void SetTime(string timeText)
     {

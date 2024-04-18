@@ -23,6 +23,9 @@ public class WorldRoutineManager : MonoBehaviour
 
     public static PlayerChoiceDialogueController playerChoiceDialogueController { get; set; }
 
+
+    public static List<DayNightTimeActivator> dayNightTimeActivators { get; set; } = new List<DayNightTimeActivator>();
+
     public static WorldRoutineManager Instance { get; private set; } //move this part to central later //or maybe move this whole class
 
     private void Awake()
@@ -30,6 +33,7 @@ public class WorldRoutineManager : MonoBehaviour
         questEventManager = GetComponent<QuestEventManager>();
         npcRoutineManager = GetComponent<NpcRoutineManager>();
         questDialogueManager = GetComponent<QuestDialogueManager>();
+
         Instance = this;
     }
 
@@ -56,6 +60,11 @@ public class WorldRoutineManager : MonoBehaviour
         //}
 
         //UpdateWorld();
+
+        foreach (var dnta in dayNightTimeActivators)
+        {
+            dnta.CheckActivation();
+        }
     }
 
     public QuestDialogueGroup GetDialogueGroup(string groupId)
