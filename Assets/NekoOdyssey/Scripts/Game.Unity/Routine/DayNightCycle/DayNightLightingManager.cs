@@ -19,7 +19,15 @@ public class DayNightLightingManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        foreach (var dnData in dayNightDatas)
+        {
+            var scene = SceneManager.GetSceneByName(dnData.sceneName);
 
+            if (scene.IsValid())
+            {
+                SceneManager.UnloadSceneAsync(scene);
+            }
+        }
     }
 
     // Update is called once per frame
