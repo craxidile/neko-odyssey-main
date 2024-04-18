@@ -111,12 +111,15 @@ public class TimeRoutine : MonoBehaviour
         //timeHrMin.Hour = currentHours;
         //timeHrMin.Minute = currentMinute;
 
-
+        ProcessTime();
 
 
         day = timeScriptable.currentDay;
         SetTime($"{timeScriptable.dayMinute / 60}:{timeScriptable.dayMinute % 60}");
         timeScriptable.currentTimeText = currentTime.ToString();
+
+
+
     }
 
     public static bool inBetweenDayAndTime(List<Day> checkDay, string checkTime)
@@ -137,15 +140,29 @@ public class TimeRoutine : MonoBehaviour
 
     }
 
-    private void OnValidate()
+
+    public void ProcessTime()
     {
-        //day = currentDay;
-        //SetTime($"{dayMinute / 60}:{dayMinute % 60}");
-        //currentTimeText = timeHrMin.ToString();
+        var secondPerSecond = (60 / (timeScriptable.timeSecondPerGameHour / 60));
+        var nectSecondValue = Time.deltaTime * secondPerSecond;
+
+
+        timeScriptable.dayMinute += Mathf.RoundToInt(nectSecondValue);
     }
+
+
+
+    //private void OnValidate()
+    //{
+    //     day = timeScriptable.currentDay;
+    //    SetTime($"{timeScriptable.dayMinute / 60}:{timeScriptable.dayMinute % 60}");
+    //    timeScriptable.currentTimeText = currentTime.ToString();
+    //}
 
     private void OnDrawGizmos()
     {
-        Update();
+        day = timeScriptable.currentDay;
+        SetTime($"{timeScriptable.dayMinute / 60}:{timeScriptable.dayMinute % 60}");
+        timeScriptable.currentTimeText = currentTime.ToString();
     }
 }

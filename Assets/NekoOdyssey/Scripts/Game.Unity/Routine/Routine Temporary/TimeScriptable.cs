@@ -12,4 +12,6 @@ public class TimeScriptable : ScriptableObject
     [ReadOnlyField]
     [SerializeField]
     public string currentTimeText;
+
+    public float timeSecondPerGameHour = 240;
 }
