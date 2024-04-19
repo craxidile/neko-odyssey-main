@@ -1,0 +1,11 @@
+Quest Id,Quest Id Required,Day,Time,Target EventPoint,Related Characters,Disable Routine,Rewards
+test_quest01_start,-,Mon Tue Wed Thu Fri Sat Sun,11.00-13.30,npc_ch01_q01_womanSweep,npc01_woman,FALSE,
+test_quest01_chat_01,test_quest01_start,Mon Tue Wed ,11.00-13.30,npc_ch01_q01_womanVendingMachine,npc01_woman,FALSE,
+test_quest01_chat_01_repeat,test_quest01_chat_01+!test_quest01_chat_02,Mon Tue Wed ,11.00-14.30,npc_ch01_q01_womanVendingMachine,npc01_woman,FALSE,
+test_quest01_catFeed_1,test_quest01_chat_01,Mon Tue Wed ,11.00-14.30,ch01_quest01_catFeed_1,cat_catFeed1,FALSE,
+test_quest01_catFeed_2,test_quest01_chat_01,Mon Tue Wed ,11.00-14.30,ch01_quest01_catFeed_2,cat_catFeed2,FALSE,
+test_quest01_catFeed_3,test_quest01_chat_01,Mon Tue Wed ,11.00-14.30,ch01_quest01_catFeed_3,cat_catFeed3,FALSE,
+test_quest01_chat_02,test_quest01_catFeed_1+test_quest01_catFeed_2+test_quest01_catFeed_3,Mon Tue Wed ,11.00-18.30,npc_ch01_q01_womanVendingMachine,npc01_woman,FALSE,
+test_quest01_chat_03,test_quest01_chat_02,Mon Tue Wed ,11.00-18.30,npc_ch01_q01_womanFrontHouse,npc01_woman,FALSE,Coin*300+Popularity*87
+test_quest01_chat_03_repeat,test_quest01_chat_03+!test_quest01_complete,Mon Tue Wed ,11.00-18.30,npc_ch01_q01_womanFrontHouse,npc01_woman,FALSE,
+test_quest01_complete,test_quest01_chat_03+Onigiri*3,Mon Tue Wed ,11.00-18.30,npc_ch01_q01_womanFrontHouse,npc01_woman,FALSE,Onigiri*3

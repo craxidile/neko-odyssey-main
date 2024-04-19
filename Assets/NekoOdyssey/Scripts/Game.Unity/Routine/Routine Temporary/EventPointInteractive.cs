@@ -22,11 +22,13 @@ public class EventPointInteractive : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (NekoOdyssey.Scripts.GameRunner.Instance == null) return;
+
         var player = NekoOdyssey.Scripts.GameRunner.Instance.Core.Player.GameObject;
         var thisPointDistance = Vector3.Distance(this.transform.position, player.transform.position);
 
-        Debug.DrawLine(this.transform.position, player.transform.position, Color.red);
-        Debug.DrawLine(NearestPoint.transform.position + (Vector3.up * 0.3f), player.transform.position, Color.yellow);
+        //Debug.DrawLine(this.transform.position, player.transform.position, Color.red);
+        //Debug.DrawLine(NearestPoint.transform.position + (Vector3.up * 0.3f), player.transform.position, Color.yellow);
 
         if (thisPointDistance <= interactiveDistance) //inside range
         {
