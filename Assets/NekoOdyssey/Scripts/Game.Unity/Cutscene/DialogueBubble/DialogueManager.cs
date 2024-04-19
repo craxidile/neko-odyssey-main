@@ -1,3 +1,4 @@
+using NekoOdyssey.Scripts.Game.Unity.Uis.DialogCanvas;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,10 +7,11 @@ using UnityEngine.Playables;
 
 public enum languageTypeDialogue
 {
-    English,
-    Japanese,
-    Chinese,
-    Thai
+    TH,
+    EN,
+    JP,
+    S_CN,
+    T_CN,
 }
 public class DialogueData
 {
@@ -24,19 +26,21 @@ public class DialogueData
 public class DialogueManager : MonoBehaviour
 {
     public static DialogueManager instance;
+    [HideInInspector]
     public PlayableDirector director;
+    public DialogCanvasController canvasController;
     public bool nextDialogue;
 
     //languege  
     int languageColumnIndex = 1;
    
-    public languageTypeDialogue language = languageTypeDialogue.English;
-    public static languageTypeDialogue globalLanguage = languageTypeDialogue.English;
+    public languageTypeDialogue language = languageTypeDialogue.EN;
+    public static languageTypeDialogue globalLanguage = languageTypeDialogue.EN;
 
     public void UpdateGlobalLanguage()
     {
         Debug.Log($"ChangeLanguage : {language} / {globalLanguage}");
-        language = globalLanguage;
+        //language = globalLanguage;
     }
 
     // Dialogue
@@ -63,6 +67,7 @@ public class DialogueManager : MonoBehaviour
         if (/*director.state == PlayState.Paused && */Input.anyKeyDown && !nextDialogue)
         {
             nextDialogue = true;
+            canvasController.SetOpened(false);
             Debug.Log($">>behavior<< play continue after get key down");
         }
     }
@@ -79,6 +84,7 @@ public class DialogueManager : MonoBehaviour
             DialogueData newDialogueData = new DialogueData();
 
             string dialogue = row[languageColumnIndex];
+            dialogue = dialogue.Replace(';', ',');
             newDialogueData.DialogueSentance = dialogue;
 
             AllDialogueData.Add(row[0], newDialogueData);
