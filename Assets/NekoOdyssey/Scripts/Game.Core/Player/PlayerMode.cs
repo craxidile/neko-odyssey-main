@@ -9,7 +9,8 @@
         Submenu,
         Capture,
         Conversation,
-        Pet,
         QuestConversation,
+        Pet,
+        Stop,
     }
 }

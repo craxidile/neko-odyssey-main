@@ -16,28 +16,6 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Phone
         private SpriteRenderer _renderer;
         private DepthOfField _depthOfField;
 
-        private void SetActive(PlayerMode mode)
-        {
-            _previousActive = _active;
-            _active = mode == PlayerMode.Phone;
-
-            _phoneScreen.SetActive(_active);
-            var playerCamera = GameRunner.Instance.cameras.playerCamera;
-            if (playerCamera != null) playerCamera.gameObject.SetActive(_active);
-
-            if (_active) _animator.SetLayerWeight(_animator.GetLayerIndex($"Phone"), 1f);
-
-            switch (_previousActive)
-            {
-                case false when _active:
-                    AnimateOpening();
-                    break;
-                case true when !_active:
-                    AnimateClosing();
-                    break;
-            }
-        }
-
         private void Awake()
         {
             var player = GameRunner.Instance.Core.Player;
@@ -60,6 +38,28 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Phone
             var playerCamera = GameRunner.Instance.cameras.playerCamera;
             if (!playerCamera || !playerCamera.gameObject.activeSelf) return;
             playerCamera.fieldOfView = mainCamera.fieldOfView;
+        }
+
+        private void SetActive(PlayerMode mode)
+        {
+            _previousActive = _active;
+            _active = mode == PlayerMode.Phone;
+
+            _phoneScreen.SetActive(_active);
+            var playerCamera = GameRunner.Instance.cameras.playerCamera;
+            if (playerCamera != null) playerCamera.gameObject.SetActive(_active);
+
+            if (_active) _animator.SetLayerWeight(_animator.GetLayerIndex($"Phone"), 1f);
+
+            switch (_previousActive)
+            {
+                case false when _active:
+                    AnimateOpening();
+                    break;
+                case true when !_active:
+                    AnimateClosing();
+                    break;
+            }
         }
 
         private void AnimateOpening()

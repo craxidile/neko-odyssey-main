@@ -4,6 +4,8 @@ namespace NekoOdyssey.Scripts.Constants
 {
     public class AppConstants
     {
+        public const string Version = "0.1.0";
+        
         public static string BaseAppFilePath { get; private set; } = null;
 
         public static void Intialize()

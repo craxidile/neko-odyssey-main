@@ -126,7 +126,7 @@ namespace NekoOdyssey.Scripts.Database
 //             NintendoFileHandler.Commit();
 // #endif
 
-            using (var siteDbContext = new SitesDbContext(new() { ReadOnly = true, CopyRequired = true }))
+            using (var siteDbContext = new SitesDbContext(new() { ReadOnly = true, CopyMode = DbCopyMode.ForceCopy }))
             {
                 var siteRepo = new SiteRepo(siteDbContext);
                 var site = siteRepo.FindByName("Prologue");
@@ -135,7 +135,7 @@ namespace NekoOdyssey.Scripts.Database
                 _logs.Add(site.ToString());
             }
 
-            using (var siteDbContext = new SitesDbContext(new() { ReadOnly = true, CopyRequired = false }))
+            using (var siteDbContext = new SitesDbContext(new() { ReadOnly = true, CopyMode = DbCopyMode.ForceCopy }))
             {
                 var siteRepo = new SiteRepo(siteDbContext);
                 var site = siteRepo.FindByName("Prologue");

@@ -39,7 +39,7 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
             {
                 Candidates.Add(candidate);
             }
-
+            
             ReorderAndSetPlayerMenu();
         }
 
@@ -87,6 +87,7 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
             currentPlayerMenu.SetActions(selectedCandidate.Actions);
             if (selectedCandidate.AutoActive)
             {
+                Debug.Log($">>site_name_active<< {selectedCandidate.SiteName}");
                 // currentPlayerMenu.SetSiteActive(selectedCandidate.Site, true);
                 currentPlayerMenu.SetSiteNameActive(selectedCandidate.SiteName, true);
             }

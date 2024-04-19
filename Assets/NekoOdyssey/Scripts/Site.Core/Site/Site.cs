@@ -1,4 +1,5 @@
-﻿using NekoOdyssey.Scripts.Database.Domains.Sites;
+﻿using NekoOdyssey.Scripts.Database.Domains;
+using NekoOdyssey.Scripts.Database.Domains.Sites;
 using NekoOdyssey.Scripts.Database.Domains.Sites.Entities.SiteEntity.Repo;
 using UniRx;
 using UnityEngine;
@@ -13,7 +14,7 @@ namespace NekoOdyssey.Scripts.Site.Core.Site
         public static Database.Domains.Sites.Entities.SiteEntity.Models.Site CurrentSite { get; private set; }
 
         public bool Ready { get; private set; }
-        
+
         public Subject<Unit> OnReady { get; } = new();
         public Subject<Database.Domains.Sites.Entities.SiteEntity.Models.Site> OnChangeSite { get; } = new();
 
@@ -36,7 +37,7 @@ namespace NekoOdyssey.Scripts.Site.Core.Site
         private void InitializeDatabase()
         {
             if (_databaseInitialized) return;
-            using (new SitesDbContext(new() { CopyRequired = true, ReadOnly = true })) ;
+            using (new SitesDbContext(new() { CopyMode = DbCopyMode.ForceCopy, ReadOnly = false }));
             _databaseInitialized = true;
         }
 
@@ -44,9 +45,9 @@ namespace NekoOdyssey.Scripts.Site.Core.Site
         {
             if (CurrentSite != null) return;
             // SetSite("Intro", false);
-            //SetSite("GamePlayZone4_01", false);
+            // SetSite("GamePlayZone4_01", false);
             // SetSite("GamePlayZone4_02", false);
-             SetSite("GamePlayZone6_01", false);
+            SetSite("GamePlayZone6_01", false);
         }
 
         public void MoveToNextSite()
@@ -67,6 +68,7 @@ namespace NekoOdyssey.Scripts.Site.Core.Site
                 CurrentSite.PlayerY = previousPosition.Value.y;
                 CurrentSite.PlayerZ = previousPosition.Value.z;
             }
+
             PreviousSite = null;
             OnChangeSite.OnNext(CurrentSite);
         }
@@ -75,7 +77,7 @@ namespace NekoOdyssey.Scripts.Site.Core.Site
         {
             PreviousSite = CurrentSite;
             Database.Domains.Sites.Entities.SiteEntity.Models.Site site;
-            using (var siteDbContext = new SitesDbContext(new() { CopyRequired = false, ReadOnly = true }))
+            using (var siteDbContext = new SitesDbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = true }))
             {
                 var siteRepo = new SiteRepo(siteDbContext);
                 site = siteRepo.FindByName(siteName);

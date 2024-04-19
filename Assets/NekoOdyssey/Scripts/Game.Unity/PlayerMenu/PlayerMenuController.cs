@@ -20,9 +20,9 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
     {
         private const float MenuScale = 1f;
         private const float MenuGap = MenuScale * .4f;
+        private const int SortingOrder = 999999;
 
         private readonly List<GameObject> _banners = new();
-        private bool _eligibleToShow = false;
         private bool _active = false;
 
         public PlayerMenuAction[] availableActions;
@@ -80,7 +80,6 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
             if (!other.CompareTag("Player")) return;
             if (!string.IsNullOrEmpty(activeAtSiteName) && Site.Core.Site.Site.CurrentSite.Name != activeAtSiteName)
                 return;
-            _eligibleToShow = true;
             GameRunner.Instance.Core.PlayerMenuCandidateManager.Add(new PlayerMenuCandidate
             {
                 Actions = availableActions,
@@ -97,7 +96,6 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
             if (!other.CompareTag("Player")) return;
             if (!string.IsNullOrEmpty(activeAtSiteName) && Site.Core.Site.Site.CurrentSite.Name != activeAtSiteName)
                 return;
-            _eligibleToShow = false;
             var menuCandidateManager = GameRunner.Instance.Core.PlayerMenuCandidateManager;
             // menuCandidateManager.Remove(new PlayerMenuCandidate { Site = site });
             menuCandidateManager.Remove(new PlayerMenuCandidate { SiteName = siteName });
@@ -215,7 +213,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
             var order = length - 1 - index;
             banner.transform.localPosition = originalPosition + new Vector3(0, 0, order * MenuGap);
             banner.transform.localScale = new Vector3(MenuScale, MenuScale, MenuScale);
-            banner.GetComponent<SpriteRenderer>().sortingOrder = 999999;
+            banner.GetComponent<SpriteRenderer>().sortingOrder = SortingOrder;
             _banners.Add(banner);
 
             banner.SetActive(false);
