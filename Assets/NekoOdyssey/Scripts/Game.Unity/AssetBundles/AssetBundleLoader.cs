@@ -20,7 +20,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.AssetBundles
                 $"menu_actions",
                 $"cat_snaps",
                 $"cat_profiles",
-                $"cat_emotions"
+                $"cat_emotions",
+                $"scriptableobject"
             };
 
             foreach (var bundleName in bundleNames)

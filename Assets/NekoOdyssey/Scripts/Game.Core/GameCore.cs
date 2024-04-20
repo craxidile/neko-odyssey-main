@@ -4,6 +4,7 @@ using NekoOdyssey.Scripts.Game.Core.Areas;
 using NekoOdyssey.Scripts.Game.Core.Cat;
 using NekoOdyssey.Scripts.Game.Core.Scene;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
+using NekoOdyssey.Scripts.Game.Core.Routine;
 using UnityEngine;
 
 namespace NekoOdyssey.Scripts.Game.Core
@@ -18,7 +19,11 @@ namespace NekoOdyssey.Scripts.Game.Core
         public Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu.PlayerMenu PlayerMenu { get; } = new();
         public PlayerMenuCandidateManager PlayerMenuCandidateManager { get; } = new();
         public GameScene GameScene { get; } = new();
-        
+
+
+        public Routine.Routine Routine { get; } = new(); //**Linias Edit
+
+
         public void Bind()
         {
             Metadata.Bind();
@@ -28,6 +33,8 @@ namespace NekoOdyssey.Scripts.Game.Core
             PlayerMenu.Bind();
             PlayerMenuCandidateManager.Bind();
             GameScene.Bind();
+
+            Routine.Bind();
         }
 
         public void Start()
@@ -39,6 +46,8 @@ namespace NekoOdyssey.Scripts.Game.Core
             PlayerMenu.Start();
             PlayerMenuCandidateManager.Start();
             GameScene.Start();
+
+            Routine.Start();
         }
 
         public void Unbind()
@@ -50,7 +59,9 @@ namespace NekoOdyssey.Scripts.Game.Core
             PlayerMenu.Unbind();
             PlayerMenuCandidateManager.Unbind();
             GameScene.Unbind();
+
+            Routine.Unbind();
         }
-        
+
     }
 }
