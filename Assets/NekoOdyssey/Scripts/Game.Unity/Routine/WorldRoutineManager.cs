@@ -362,7 +362,12 @@ public class WorldRoutineManager : MonoBehaviour
             {
                 var enabledRoutine = npcData.UpdateRoutine();
 
-                AddRoutineDialogue(enabledRoutine.targetEventPoint, enabledRoutine.dialogueKey);
+                if (enabledRoutine != null)
+                {
+                    Debug.Log($"add routine target = {enabledRoutine.targetEventPoint.name} , dialogue = {enabledRoutine.dialogueKey}");
+                    AddRoutineDialogue(enabledRoutine.targetEventPoint, enabledRoutine.dialogueKey);
+
+                }
             }
         }
     }

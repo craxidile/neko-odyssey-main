@@ -49,9 +49,9 @@ public class NpcData
         for (int i = npcRoutineEvents.Count - 1; i >= 0; i--)
         {
             var eventDetail = npcRoutineEvents[i];
-            Debug.Log("UpdateRoutine 0");
+            //Debug.Log("UpdateRoutine 0");
             if (!WorldRoutineManager.Instance.questEventManager.CheckQuestKeyAndItem(eventDetail.keyIdConditions, eventDetail.keyIdConditionsExclude)) continue;
-            Debug.Log("UpdateRoutine 1");
+            //Debug.Log("UpdateRoutine 1");
 
 
             if (eventDetail.IsInEventTime(TimeRoutine.day, TimeRoutine.currentTime))
