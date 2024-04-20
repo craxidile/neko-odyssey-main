@@ -31,12 +31,12 @@ namespace NekoOdyssey.Scripts.Game.Unity.AssetBundles
             
             GameRunner.Instance.SetReady(true);
         }
-        
+
         private void LoadAssetBundle(string bundleName)
         {
             var bundlePath = System.IO.Path.Combine(
                 Application.streamingAssetsPath,
-                "SwitchAssetBundles",
+                "StandaloneWindows",
                 bundleName
             );
             if (!System.IO.File.Exists(bundlePath)) return;
