@@ -61,7 +61,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
 
         private void InitializeItems()
         {
-            SetItemType(GameRunner.Instance.Core.MasterData.ItemsMasterData.ItemTypes.First(it => it.IsAll));
+            SetDefaultItemType();
             CreateRandomItems();
         }
 
@@ -89,6 +89,12 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
             OnChangeItemType.OnNext(CurrentItemType);
             if (eligibleToSelectFirstItem)
                 DOVirtual.DelayedCall(.3f, () => SelectItem(FilteredItems.FirstOrDefault()));
+        }
+
+        public void SetDefaultItemType()
+        {
+            SetItemType(GameRunner.Instance.Core.MasterData.ItemsMasterData.ItemTypes.First(it => it.IsAll));
+            DOVirtual.DelayedCall(.3f, () => SelectItem(FilteredItems.FirstOrDefault()));
         }
 
         public void SelectItem(Item item)

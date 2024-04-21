@@ -181,6 +181,10 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Bag
             }
 
             _active = mode == PlayerMode.OpenBag;
+            if (_active)
+            {
+                GameRunner.Instance.Core.Player.Bag.SetDefaultItemType();
+            }
             DOVirtual.DelayedCall(_active ? .6f : 0, () =>
             {
                 _canvasGroup = GetComponent<CanvasGroup>();
