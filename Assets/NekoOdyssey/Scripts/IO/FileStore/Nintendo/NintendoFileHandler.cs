@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace NekoOdyssey.Scripts.IO.FileStore.Nintendo
 {
+#if UNITY_SWITCH
     /// <summary>
     /// This static class handles all initialization and error handling for reading and writing save data.
     /// Although this sample only saves and loads string data, the same concept can be used to save other data types
@@ -458,4 +459,5 @@ namespace NekoOdyssey.Scripts.IO.FileStore.Nintendo
             return true;
         }
     }
+#endif
 }

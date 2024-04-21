@@ -5,8 +5,11 @@
         public const string DbMetadataVersion = "1";
         public const string DbMetadataName = "metadata";
         
-        public const string DbSiteVersion = "1";
+        public const string DbSitesVersion = "1";
         public const string DbSitesName = "sites";
+
+        public const string DbItemsVersion = "1";
+        public const string DbItemsName = "items";
 
         public const string DbSaveVersion = "1";
         public const string DbSaveVersion001Name = "save_v001";

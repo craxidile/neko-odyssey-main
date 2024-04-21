@@ -5,6 +5,21 @@ namespace NekoOdyssey.Scripts.Constants
     public class AppConstants
     {
         public const string Version = "0.1.0";
+
+        public const string WindowsAssetBundlesFolder = "StandaloneWindows";
+        public const string SwitchAssetBundlesFolder = "Switch";
+
+        public static string AssetBundlesFolder
+        {
+            get
+            {
+#if UNITY_SWITCH
+                return SwitchAssetBundlesFolder;
+#else
+                return WindowsAssetBundlesFolder;
+#endif
+            }
+        }
         
         public static string BaseAppFilePath { get; private set; } = null;
 

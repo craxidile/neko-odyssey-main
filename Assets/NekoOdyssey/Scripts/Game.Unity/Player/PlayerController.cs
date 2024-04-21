@@ -35,7 +35,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
         private PlayerConversationController _conversationController;
         private PlayerPettingController _pettingController;
 
-        public GameObject zoomAnchor;
+        public GameObject phoneCameraAnchor;
+        public GameObject bagCameraAnchor;
         public GameObject catPhotoContainer;
 
         [Space] [Header("Movement Speed")] public float moveSpeed = 1.5f;
