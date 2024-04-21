@@ -84,18 +84,18 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
 
         private void HandlePhoneClick()
         {
-            // var currentMode = GameRunner.Instance.Core.Player.Mode;
-            // GameRunner.Instance.Core.Player.SetMode(
-            //     currentMode != PlayerMode.Phone ? PlayerMode.Phone : PlayerMode.Move
-            // );
+            var currentMode = GameRunner.Instance.Core.Player.Mode;
+            GameRunner.Instance.Core.Player.SetMode(
+                currentMode != PlayerMode.Phone ? PlayerMode.Phone : PlayerMode.Move
+            );
         }
 
         private void HandleBackClick()
         {
-            // var currentMode = GameRunner.Instance.Core.Player.Mode;
-            // GameRunner.Instance.Core.Player.SetMode(
-            //     currentMode != PlayerMode.Phone ? PlayerMode.Phone : PlayerMode.Move
-            // );
+            var currentMode = GameRunner.Instance.Core.Player.Mode;
+            GameRunner.Instance.Core.Player.SetMode(
+                currentMode != PlayerMode.Phone ? PlayerMode.Phone : PlayerMode.Move
+            );
         }
 
         void CheckActivation()
