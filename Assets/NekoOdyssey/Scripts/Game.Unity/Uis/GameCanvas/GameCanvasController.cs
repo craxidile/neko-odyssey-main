@@ -43,10 +43,6 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
         {
             phoneButton.onClick.AddListener(HandlePhoneClick);
             bagButton.onClick.AddListener(HandleBackClick);
-
-            GameRunner.Instance.Core.Player.OnChangeMode
-                .Subscribe(HandlePlayerModeChange)
-                .AddTo(this);
         }
 
         // Update is called once per frame
@@ -76,26 +72,14 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
             testNumber = (int)Time.time;
         }
 
-        private void HandlePlayerModeChange(PlayerMode mode)
-        {
-            phoneButton.enabled = mode != PlayerMode.Phone && mode != PlayerMode.OpenBag;
-            bagButton.enabled = mode != PlayerMode.Phone && mode != PlayerMode.OpenBag;
-        }
-
         private void HandlePhoneClick()
         {
-            var currentMode = GameRunner.Instance.Core.Player.Mode;
-            GameRunner.Instance.Core.Player.SetMode(
-                currentMode != PlayerMode.Phone ? PlayerMode.Phone : PlayerMode.Move
-            );
+            GameRunner.Instance.Core.Player.SetPhoneMode();
         }
 
         private void HandleBackClick()
         {
-            var currentMode = GameRunner.Instance.Core.Player.Mode;
-            GameRunner.Instance.Core.Player.SetMode(
-                currentMode != PlayerMode.Phone ? PlayerMode.Phone : PlayerMode.Move
-            );
+            GameRunner.Instance.Core.Player.SetBagMode();
         }
 
         void CheckActivation()

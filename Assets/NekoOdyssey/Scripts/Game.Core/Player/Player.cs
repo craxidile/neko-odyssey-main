@@ -48,11 +48,11 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
         public void Start()
         {
             GameRunner.Instance.PlayerInputHandler.OnPhoneTriggerred
-                .Subscribe(_ => HandlePhone())
+                .Subscribe(_ => SetPhoneMode())
                 .AddTo(GameRunner.Instance);
 
             GameRunner.Instance.PlayerInputHandler.OnBagTriggerred
-                .Subscribe(_ => HandleBag())
+                .Subscribe(_ => SetBagMode())
                 .AddTo(GameRunner.Instance);
 
             GameRunner.Instance.PlayerInputHandler.OnMove
@@ -87,7 +87,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
             GameRunner.Instance.Core.PlayerMenu.SetMenuLevel(0);
         }
 
-        private void HandlePhone()
+        public void SetPhoneMode()
         {
             ResetPlayerSubmenu();
             if (Mode != PlayerMode.Move && Mode != PlayerMode.Phone) return;
@@ -95,7 +95,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
             OnChangeMode.OnNext(Mode);
         }
 
-        private void HandleBag()
+        public void SetBagMode()
         {
             ResetPlayerSubmenu();
             if (Mode != PlayerMode.Move && Mode != PlayerMode.OpenBag) return;
