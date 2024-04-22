@@ -29,6 +29,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Bag
         private readonly Dictionary<Item, GameObject> _animatingItemButtonMap = new();
         private readonly List<Item> _itemsToMove = new();
 
+        private GameObject _lastSelectedObject;
         private bool _active;
         private bool _isOpen;
         private bool _transitionActive;
@@ -86,6 +87,17 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Bag
                 _canvasGroup.alpha = 1; // !_active && !_transitionActive ? 0 : 1;
                 _canvasGroup.interactable = _isOpen;
                 _canvasGroup.blocksRaycasts = _isOpen;
+            }
+
+            if (!_active) return;
+
+            if (!hoverFrame.activeSelf ||  EventSystem.current.currentSelectedGameObject == null)
+            {
+                EventSystem.current.SetSelectedGameObject(_lastSelectedObject);
+            }
+            else
+            {
+                _lastSelectedObject = EventSystem.current.currentSelectedGameObject;
             }
 
             if (!hoverFrame.activeSelf) return;
