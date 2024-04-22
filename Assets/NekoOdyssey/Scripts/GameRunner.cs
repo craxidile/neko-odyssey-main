@@ -28,7 +28,7 @@ namespace NekoOdyssey.Scripts
         public UiInputHandler UiInputHandler { get; private set; }
         public Dictionary<string, Object> AssetMap { get; } = new();
         public bool Ready { get; private set; } = false;
-        
+
         public Subject<bool> OnReady { get; } = new();
 
         public GameRunner()
@@ -47,7 +47,9 @@ namespace NekoOdyssey.Scripts
             gameObject.AddComponent<CentralConversationActionHandler>();
             gameObject.AddComponent<CentralPlayerPettingHandler>();
             gameObject.AddComponent<AssetBundleLoader>();
-            
+
+            new GameObject("Time Controller").AddComponent<NekoOdyssey.Scripts.Game.Core.Routine.TimeRoutine>().transform.SetParent(transform);
+
             Core.Bind();
         }
 
@@ -61,14 +63,14 @@ namespace NekoOdyssey.Scripts
         private void Start()
         {
             Core.Start();
-            
+
             var boundary = FindAnyObjectByType<CameraBoundary>();
             if (boundary != null && Camera.main != null)
             {
                 var confiner = Camera.main.GetComponent<CinemachineConfiner>();
                 confiner.m_BoundingVolume = boundary.GetComponent<BoxCollider>();
             }
-            
+
             var cameraAnchor = FindAnyObjectByType<CameraAnchor>();
             if (cameraAnchor != null && Camera.main != null)
             {

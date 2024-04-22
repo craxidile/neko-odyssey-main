@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using DG.Tweening;
+using NekoOdyssey.Scripts;
 
 public class ChatBalloonManager : MonoBehaviour
 {
-    public GameObject balloonPrefab;
-    public float balloonScaleTime = 0.3f;
+    //public GameObject balloonPrefab;
+    public const float balloonScaleTime = 0.3f;
 
     public static ChatBalloonManager instance { get; private set; }
 
@@ -56,7 +57,14 @@ public class ChatBalloonManager : MonoBehaviour
         }
         else
         {
-            var newBalloon = Instantiate(balloonPrefab, parent);
+            if (!GameRunner.Instance.AssetMap.ContainsKey("dialogcanvas")) return;
+
+            //var newBalloon = Instantiate(balloonPrefab, parent);
+            var newBalloon = Instantiate(
+                GameRunner.Instance.AssetMap["dialogcanvas"],
+                GameRunner.Instance.Core.PlayerMenu.GameObject.transform
+             , parent) as GameObject;
+
             //newBalloon.transform.localPosition = Vector3.up * 0.5f;
 
             var chatBalloon = newBalloon.GetComponent<NekoOdyssey.Scripts.Game.Unity.Uis.DialogCanvas.DialogCanvasController>();

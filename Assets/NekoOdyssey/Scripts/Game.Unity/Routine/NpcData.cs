@@ -2,83 +2,86 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NpcData
+namespace NekoOdyssey.Scripts.Game.Core.Routine
 {
-    public string npcName;
-
-    public bool routineEnable;
-    public List<RoutineEventDetail> npcRoutineEvents = new List<RoutineEventDetail>();
-
-    RoutineEventDetail _cureentEvent;
-    public QuestDialogueGroup dialogueGroup { get; set; }
-
-    public NpcData(string npcName = "npc")
+    public class NpcData
     {
-        this.npcName = npcName;
-    }
+        public string npcName;
 
+        public bool routineEnable;
+        public List<RoutineEventDetail> npcRoutineEvents = new List<RoutineEventDetail>();
 
-    //public EventDetail GetEvent()
-    //{
-    //    foreach (var eventDetail in npcRoutineEvents)
-    //    {
-    //        if (eventDetail.IsInEventTime(TimeRoutine.day, TimeRoutine.timeHrMin))
-    //        {
-    //            return eventDetail;
-    //        }
-    //    }
+        RoutineEventDetail _cureentEvent;
+        public QuestDialogueGroup dialogueGroup { get; set; }
 
-    //    return null;
-    //}
-
-    public void HideAllRoutine()
-    {
-        SwtichEvent(null);
-        foreach (var eventDetail in npcRoutineEvents)
+        public NpcData(string npcName = "npc")
         {
-            var targetEventObject = eventDetail.targetEventPoint.gameObject;
-            if (targetEventObject.activeSelf)
+            this.npcName = npcName;
+        }
+
+
+        //public EventDetail GetEvent()
+        //{
+        //    foreach (var eventDetail in npcRoutineEvents)
+        //    {
+        //        if (eventDetail.IsInEventTime(TimeRoutine.day, TimeRoutine.timeHrMin))
+        //        {
+        //            return eventDetail;
+        //        }
+        //    }
+
+        //    return null;
+        //}
+
+        public void HideAllRoutine()
+        {
+            SwtichEvent(null);
+            foreach (var eventDetail in npcRoutineEvents)
             {
-                targetEventObject.SetActive(false);
+                var targetEventObject = eventDetail.targetEventPoint.gameObject;
+                if (targetEventObject.activeSelf)
+                {
+                    targetEventObject.SetActive(false);
+                }
             }
+
         }
-
-    }
-    public RoutineEventDetail UpdateRoutine()
-    {
-        for (int i = npcRoutineEvents.Count - 1; i >= 0; i--)
+        public RoutineEventDetail UpdateRoutine()
         {
-            var eventDetail = npcRoutineEvents[i];
-            //Debug.Log("UpdateRoutine 0");
-            if (!WorldRoutineManager.Instance.questEventManager.CheckQuestKeyAndItem(eventDetail.keyIdConditions, eventDetail.keyIdConditionsExclude)) continue;
-            //Debug.Log("UpdateRoutine 1");
-
-
-            if (eventDetail.IsInEventTime(TimeRoutine.day, TimeRoutine.currentTime))
+            for (int i = npcRoutineEvents.Count - 1; i >= 0; i--)
             {
-                SwtichEvent(eventDetail);
-                return eventDetail;
+                var eventDetail = npcRoutineEvents[i];
+                //Debug.Log("UpdateRoutine 0");
+                if (!GameRunner.Instance.Core.Routine.questEventManager.CheckQuestKeyAndItem(eventDetail.keyIdConditions, eventDetail.keyIdConditionsExclude)) continue;
+                //Debug.Log("UpdateRoutine 1");
+
+
+                if (eventDetail.IsInEventTime(TimeRoutine.day, TimeRoutine.currentTime))
+                {
+                    SwtichEvent(eventDetail);
+                    return eventDetail;
+                }
+                //else
+                //{
+                //    eventDetail.targetEventPoint.gameObject.SetActive(false);
+                //}
             }
-            //else
-            //{
-            //    eventDetail.targetEventPoint.gameObject.SetActive(false);
-            //}
+
+            SwtichEvent(null);
+            return null;
         }
 
-        SwtichEvent(null);
-        return null;
-    }
-
-    public void SwtichEvent(RoutineEventDetail newEvent)
-    {
-        if (newEvent != _cureentEvent)
+        public void SwtichEvent(RoutineEventDetail newEvent)
         {
-            _cureentEvent?.targetEventPoint.gameObject.SetActive(false);
-            _cureentEvent = newEvent;
+            if (newEvent != _cureentEvent)
+            {
+                _cureentEvent?.targetEventPoint.gameObject.SetActive(false);
+                _cureentEvent = newEvent;
 
-            newEvent?.targetEventPoint.gameObject.SetActive(true);
+                newEvent?.targetEventPoint.gameObject.SetActive(true);
+
+            }
 
         }
-
     }
 }

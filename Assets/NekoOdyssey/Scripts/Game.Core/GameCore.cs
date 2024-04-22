@@ -4,7 +4,6 @@ using NekoOdyssey.Scripts.Game.Core.Areas;
 using NekoOdyssey.Scripts.Game.Core.Cat;
 using NekoOdyssey.Scripts.Game.Core.Scene;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
-using NekoOdyssey.Scripts.Game.Core.Routine;
 using UnityEngine;
 
 namespace NekoOdyssey.Scripts.Game.Core

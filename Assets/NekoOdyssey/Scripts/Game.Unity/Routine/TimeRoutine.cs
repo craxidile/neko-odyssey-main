@@ -82,87 +82,96 @@ public class TimeHrMin
     }
 }
 
-public class TimeRoutine : MonoBehaviour
+namespace NekoOdyssey.Scripts.Game.Core.Routine
 {
-    [Header("Test")]
-    public TimeScriptable timeScriptable;
-    //public Day currentDay;
-    //[Range(0, 24)] public int currentHours;
-    //[Range(0, 60)] public int currentMinute;
-    //[Range(0, 1440)] public int dayMinute;
-
-    //[ReadOnlyField]
-    //[SerializeField]
-    //string currentTimeText;
-
-    public static Day day { get; set; } = 0;
-    public static TimeHrMin currentTime { get; set; } = new TimeHrMin("00.00");
-
-    // Start is called before the first frame update
-    void Start()
+    public class TimeRoutine : MonoBehaviour
     {
+        public const int MaxDayMinute = 1440;
 
-    }
+        public Day currentDay;
+        [Range(0, MaxDayMinute)] public int dayMinute;
+        float _dayMinuteFloat = 500;
 
-    // Update is called once per frame
-    void Update()
-    {
-        //day = currentDay;
-        //timeHrMin.Hour = currentHours;
-        //timeHrMin.Minute = currentMinute;
+        [ReadOnlyField]
+        [SerializeField]
+        public string currentTimeText;
 
-        ProcessTime();
+        public float timeSecondPerGameHour = 240;
+        //public static TimeScriptable timeScriptable;
 
+        public static Day day { get; set; } = 0;
+        public static TimeHrMin currentTime { get; set; } = new TimeHrMin("00.00");
 
-        day = timeScriptable.currentDay;
-        SetTime($"{timeScriptable.dayMinute / 60}:{timeScriptable.dayMinute % 60}");
-        timeScriptable.currentTimeText = currentTime.ToString();
-
-
-
-    }
-
-    public static bool inBetweenDayAndTime(List<Day> checkDay, string checkTime)
-    {
-        if (checkDay.Contains(day))
+        // Start is called before the first frame update
+        public void Start()
         {
-            return currentTime.inBetweenTime(checkTime);
+
         }
-        return false;
-    }
 
-    public static void SetTime(string timeText)
-    {
-        currentTime = new TimeHrMin(timeText);
-    }
-    public static void PauseTime()
-    {
+        // Update is called once per frame
+        public void Update()
+        {
+            //if (timeScriptable == null) return;
+            //day = currentDay;
+            //timeHrMin.Hour = currentHours;
+            //timeHrMin.Minute = currentMinute;
 
-    }
-
-
-    public void ProcessTime()
-    {
-        var secondPerSecond = (60 / (timeScriptable.timeSecondPerGameHour / 60));
-        var nectSecondValue = Time.deltaTime * secondPerSecond;
+            ProcessTime();
 
 
-        timeScriptable.dayMinute += Mathf.RoundToInt(nectSecondValue);
-    }
+            day = currentDay;
+            SetTime($"{dayMinute / 60}:{dayMinute % 60}");
+            currentTimeText = currentTime.ToString();
+
+
+            //Debug.Log($"current time : {currentTimeText}");
+        }
+
+        public static bool inBetweenDayAndTime(List<Day> checkDay, string checkTime)
+        {
+            if (checkDay.Contains(day))
+            {
+                return currentTime.inBetweenTime(checkTime);
+            }
+            return false;
+        }
+
+        public static void SetTime(string timeText)
+        {
+            currentTime = new TimeHrMin(timeText);
+        }
+        public static void PauseTime()
+        {
+
+        }
+
+
+        public void ProcessTime()
+        {
+            var secondPerSecond = (60 / (timeSecondPerGameHour / 60));
+            var nectSecondValue = Time.deltaTime * secondPerSecond;
+
+
+            _dayMinuteFloat += nectSecondValue;
+            if (_dayMinuteFloat > MaxDayMinute)
+            {
+                _dayMinuteFloat = 0;
+            }
+            dayMinute = Mathf.RoundToInt(_dayMinuteFloat);
+        }
 
 
 
-    //private void OnValidate()
-    //{
-    //     day = timeScriptable.currentDay;
-    //    SetTime($"{timeScriptable.dayMinute / 60}:{timeScriptable.dayMinute % 60}");
-    //    timeScriptable.currentTimeText = currentTime.ToString();
-    //}
+        private void OnValidate()
+        {
+            _dayMinuteFloat = dayMinute;
+        }
 
-    private void OnDrawGizmos()
-    {
-        day = timeScriptable.currentDay;
-        SetTime($"{timeScriptable.dayMinute / 60}:{timeScriptable.dayMinute % 60}");
-        timeScriptable.currentTimeText = currentTime.ToString();
+        private void OnDrawGizmos()
+        {
+            day = currentDay;
+            SetTime($"{dayMinute / 60}:{dayMinute % 60}");
+            currentTimeText = currentTime.ToString();
+        }
     }
 }
