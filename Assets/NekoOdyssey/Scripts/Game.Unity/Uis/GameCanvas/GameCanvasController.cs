@@ -103,9 +103,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
             if (isActive != canvasGroup.interactable)
             {
                 canvasGroup.interactable = isActive;
-
                 var targetAlpha = isActive ? 1 : 0;
-
                 canvasGroup.DOFade(targetAlpha, 0.3f);
             }
         }

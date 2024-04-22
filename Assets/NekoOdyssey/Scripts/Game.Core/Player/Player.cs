@@ -81,8 +81,15 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
             Conversation.Unbind();
         }
 
+        private void ResetPlayerSubmenu()
+        {
+            if (Mode != PlayerMode.Submenu) return;
+            GameRunner.Instance.Core.PlayerMenu.SetMenuLevel(0);
+        }
+
         private void HandlePhone()
         {
+            ResetPlayerSubmenu();
             if (Mode != PlayerMode.Move && Mode != PlayerMode.Phone) return;
             Mode = Mode == PlayerMode.Move ? PlayerMode.Phone : PlayerMode.Move;
             OnChangeMode.OnNext(Mode);
@@ -90,6 +97,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
 
         private void HandleBag()
         {
+            ResetPlayerSubmenu();
             if (Mode != PlayerMode.Move && Mode != PlayerMode.OpenBag) return;
             Mode = Mode == PlayerMode.Move ? PlayerMode.OpenBag : PlayerMode.Stop;
             OnChangeMode.OnNext(Mode);

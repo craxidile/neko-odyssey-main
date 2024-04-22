@@ -224,8 +224,12 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Bag
             hoverFrame.transform.position = itemButton.transform.position;
 
             var controller = itemButton.GetComponent<ItemButtonController>();
-            if (EventSystem.current.currentSelectedGameObject != controller.button.gameObject)
-                EventSystem.current.SetSelectedGameObject(controller.button.gameObject);
+            if (
+                controller != null &&
+                controller.button != null &&
+                EventSystem.current != null &&
+                EventSystem.current.currentSelectedGameObject != controller.button.gameObject
+            ) EventSystem.current.SetSelectedGameObject(controller.button.gameObject);
         }
 
         private void HandleItemPositions(Dictionary<Item, Vector3> itemPositions)
