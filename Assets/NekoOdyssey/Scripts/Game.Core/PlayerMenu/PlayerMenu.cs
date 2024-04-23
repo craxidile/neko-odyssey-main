@@ -18,6 +18,8 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
             PlayerMenuAction.Exit,
             PlayerMenuAction.Left,
             PlayerMenuAction.Right,
+            PlayerMenuAction.Up,
+            PlayerMenuAction.Down,
             PlayerMenuAction.LeftEnter,
             PlayerMenuAction.RightEnter,
             PlayerMenuAction.LeftExit,
