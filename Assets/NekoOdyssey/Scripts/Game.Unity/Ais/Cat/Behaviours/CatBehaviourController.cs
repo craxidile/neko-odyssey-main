@@ -18,7 +18,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Ais.Cat.Behaviours
     {
         private readonly string _catProfilesAssetName = $"cat_profiles";
 
-        private SpriteRenderer _spriteRenderer;
+        private SpriteRenderer _renderer;
         
         public string catCode;
 
@@ -26,7 +26,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Ais.Cat.Behaviours
 
         private void Awake()
         {
-            _spriteRenderer = GetComponent<SpriteRenderer>();
+            _renderer = GetComponent<SpriteRenderer>();
         }
 
         private void Start()
@@ -63,29 +63,27 @@ namespace NekoOdyssey.Scripts.Game.Unity.Ais.Cat.Behaviours
             var catProfile = serializer.DeserializeLines(text, index);
             
             CatAi = ais.RegisterCatAi(catProfile);
-            CatAi.Start();
+            CatAi.GameObject = gameObject;
             
             gameObject.AddComponent<CallToFeedController>();
             gameObject.AddComponent<MoveController>();
-
-            CatAi.OnFlip.Subscribe(HandleCatFlip);
+            
             CatAi.OnChangeMode.Subscribe(HandleCatBehaviourModeChange);
+
+            DOVirtual.DelayedCall(.2f, () => CatAi.Start());
         }
 
-        private void HandleCatFlip(bool flipped)
+        private void HandleCatBehaviourModeChange(CatBehaviourMode mode)
         {
-            _spriteRenderer.flipX = flipped;
+            if (mode != CatBehaviourMode.FollowPlayer && mode != CatBehaviourMode.FollowPath) return;
+            StartCoroutine(DelayedSetCatStartPosition());
         }
 
-        private void HandleCatBehaviourModeChange(CatBehaviourMode _)
+        private IEnumerator DelayedSetCatStartPosition()
         {
-            StartCoroutine(DelayedSetCatPosition());
-        }
-
-        private IEnumerator DelayedSetCatPosition()
-        {
+            // Debug.Log($">>change_mode<< cat_start_position");
             yield return null;
-            CatAi.SetCatPosition(transform.position);
+            CatAi.SetCatStartPosition(transform.position);
         }
         
     }

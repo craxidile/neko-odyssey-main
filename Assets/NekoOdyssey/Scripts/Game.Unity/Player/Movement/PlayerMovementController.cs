@@ -31,7 +31,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Movement
         {
             _active = mode == PlayerMode.Move;
 
-            if (!_active) return;
+            if (!_active || !_animator) return;
             _animator.SetLayerWeight(_animator.GetLayerIndex($"Phone"), 0f);
             _animator.SetLayerWeight(_animator.GetLayerIndex($"Capture"), 0f);
         }

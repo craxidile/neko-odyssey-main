@@ -10,6 +10,8 @@
         FlagShopInside19,
         BookStoreInside07,
         RamenShopInside01,
+        NekoInside26Bakery,
+        NekoInside15TaxiStation,
         A01,
         A06,
         B12Box,

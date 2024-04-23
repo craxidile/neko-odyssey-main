@@ -4,13 +4,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 
+using NekoOdyssey.Scripts.Game.Core.Routine;
+
 public class PlayerChoiceDialogueController : MonoBehaviour
 {
     [SerializeField] GameObject uiChoicePrefab;
     List<Button> buttons = new List<Button>();
     private void Awake()
     {
-        WorldRoutineManager.playerChoiceDialogueController = this;
+        Routine.playerChoiceDialogueController = this;
 
         buttons = new List<Button>()
         {

@@ -19,7 +19,9 @@ namespace NekoOdyssey.Scripts.Game.Unity.AssetBundles
                 $"dialogcanvas",
                 $"menu_actions",
                 $"cat_snaps",
-                $"cat_profiles"
+                $"cat_profiles",
+                $"cat_emotions",
+                $"scriptableobject"
             };
 
             foreach (var bundleName in bundleNames)
@@ -29,12 +31,12 @@ namespace NekoOdyssey.Scripts.Game.Unity.AssetBundles
             
             GameRunner.Instance.SetReady(true);
         }
-        
+
         private void LoadAssetBundle(string bundleName)
         {
             var bundlePath = System.IO.Path.Combine(
                 Application.streamingAssetsPath,
-                "SwitchAssetBundles",
+                "StandaloneWindows",
                 bundleName
             );
             if (!System.IO.File.Exists(bundlePath)) return;
@@ -44,6 +46,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.AssetBundles
             {
                 var itemName = item.name.ToLower();
                 var assetMap = GameRunner.Instance.AssetMap;
+                Debug.Log($">>item_name<< {itemName}");
                 assetMap[itemName] = item;
             }
         }

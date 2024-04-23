@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class EventPoint : MonoBehaviour
 {
-    public enum EventPointType { Npc, Area }
-    public EventPointType eventType;
+    //public enum EventPointType { Npc, Area, Other }
+    //public EventPointType eventType { get; set; }
 
     static Dictionary<string, EventPoint> AllEventPoint = new Dictionary<string, EventPoint>();
 

@@ -26,6 +26,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.DialogCanvas
         public void SetOpened(bool isOpen)
         {
             animator.SetBool("OpenTrigger", isOpen);
+
+            //gameObject.transform.localScale = Vector3.zero; //change back later;
         }
     }
 }

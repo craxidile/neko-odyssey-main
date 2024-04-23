@@ -88,7 +88,8 @@ public class DialogueManager : MonoBehaviour
             dialogue = dialogue.Replace('_', '\n');
             newDialogueData.DialogueSentance = dialogue;
 
-            AllDialogueData.Add(row[0], newDialogueData);
+            if (!AllDialogueData.ContainsKey(row[0]))
+                AllDialogueData.Add(row[0], newDialogueData);
         }
 
     }
