@@ -5,7 +5,7 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Buttons
+namespace NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Bag.ItemTypeHeader
 {
     public class ItemButtonController : MonoBehaviour
     {

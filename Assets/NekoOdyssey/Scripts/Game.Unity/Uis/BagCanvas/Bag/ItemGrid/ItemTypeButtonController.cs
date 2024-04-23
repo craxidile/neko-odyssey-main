@@ -1,12 +1,9 @@
-﻿using System;
-using System.Linq;
-using DG.Tweening;
-using NekoOdyssey.Scripts.Database.Domains.Items.Entities.ItemTypeEntity.Models;
+﻿using NekoOdyssey.Scripts.Database.Domains.Items.Entities.ItemTypeEntity.Models;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Buttons
+namespace NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Bag.ItemGrid
 {
     public class ItemTypeButtonController : MonoBehaviour
     {
