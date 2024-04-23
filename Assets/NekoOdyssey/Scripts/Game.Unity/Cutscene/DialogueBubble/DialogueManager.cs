@@ -85,6 +85,7 @@ public class DialogueManager : MonoBehaviour
 
             string dialogue = row[languageColumnIndex];
             dialogue = dialogue.Replace(';', ',');
+            dialogue = dialogue.Replace('_', '\n');
             newDialogueData.DialogueSentance = dialogue;
 
             AllDialogueData.Add(row[0], newDialogueData);
