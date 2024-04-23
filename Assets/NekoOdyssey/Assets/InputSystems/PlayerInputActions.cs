@@ -405,6 +405,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""0df23360-6d8f-44be-b0ee-63e030a0d715"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Fire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""ce9852c7-afb4-4543-96d7-0e391b3ae6be"",
                     ""path"": ""<Gamepad>/buttonEast"",
                     ""interactions"": """",
@@ -417,7 +428,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""bd01001a-6bbc-4628-b113-580cd5635565"",
-                    ""path"": """",
+                    ""path"": ""<Keyboard>/shift"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
