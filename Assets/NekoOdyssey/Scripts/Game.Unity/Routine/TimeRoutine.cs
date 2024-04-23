@@ -127,6 +127,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             //Debug.Log($"current time : {currentTimeText}");
 
             GameRunner.Instance.Core.Routine.UpdateWorld();
+            DayNightTimeActivator.UpdateActivator();
         }
 
         public static bool inBetweenDayAndTime(List<Day> checkDay, string checkTime)

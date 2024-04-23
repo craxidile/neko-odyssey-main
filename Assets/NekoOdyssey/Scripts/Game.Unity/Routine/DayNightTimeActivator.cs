@@ -11,6 +11,9 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         [SerializeField] string enableTime = "09.00-18.00";
 
 
+        public static List<DayNightTimeActivator> DayNightTimeActivators { get; set; } = new List<DayNightTimeActivator>();
+
+
         public bool isActivation { get; set; }
 
         float _delayTime;
@@ -18,15 +21,15 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
         private void Start()
         {
-            Routine.dayNightTimeActivators.Add(this);
+            DayNightTimeActivators.Add(this);
             CheckActivation();
         }
         private void OnDestroy()
         {
-            Routine.dayNightTimeActivators.Remove(this);
+            DayNightTimeActivators.Remove(this);
         }
 
-        public void CheckActivation()
+        void CheckActivation()
         {
             if (Time.time < _delayTime) return;
 
@@ -42,6 +45,15 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             {
                 gameObject.SetActive(false);
 
+            }
+        }
+
+
+        public static void UpdateActivator()
+        {
+            foreach (var dnta in DayNightTimeActivators)
+            {
+                dnta.CheckActivation();
             }
         }
     }

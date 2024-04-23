@@ -70,9 +70,6 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         public static PlayerChoiceDialogueController playerChoiceDialogueController { get; set; }
 
 
-        public static List<DayNightTimeActivator> dayNightTimeActivators { get; set; } = new List<DayNightTimeActivator>();
-
-
         //void InitializedSceneEventPoint()
         //{
         //    questEventManager.InitializedQuestEvent();
@@ -414,7 +411,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
                     if (enabledRoutine != null)
                     {
-                        Debug.Log($"add routine target = {enabledRoutine.targetEventPoint.name} , dialogue = {enabledRoutine.dialogueKey}");
+                        //Debug.Log($"add routine target = {enabledRoutine.targetEventPoint.name} , dialogue = {enabledRoutine.dialogueKey}");
                         AddRoutineDialogue(enabledRoutine.targetEventPoint, enabledRoutine.dialogueKey);
 
                     }
