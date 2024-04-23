@@ -2,8 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
+using NekoOdyssey.Scripts.Database.Domains;
 using NekoOdyssey.Scripts.Database.Domains.Items.Entities.ItemEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.Items.Entities.ItemTypeEntity.Models;
+using NekoOdyssey.Scripts.Database.Domains.SaveV001;
+using NekoOdyssey.Scripts.Database.Domains.SaveV001.BagItemEntity.Models;
+using NekoOdyssey.Scripts.Database.Domains.SaveV001.BagItemEntity.Repo;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 using UniRx;
 using Unity.VisualScripting;
@@ -57,6 +61,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
 
         private void InitializeDatabase()
         {
+            using (new SaveV001DbContext(new() { CopyMode = DbCopyMode.CopyIfNotExists, ReadOnly = false })) ;
         }
 
         private void InitializeItems()
@@ -75,10 +80,19 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
         private void CreateRandomItems()
         {
             var masterItems = GameRunner.Instance.Core.MasterData.ItemsMasterData.Items.ToList();
-            for (var i = 0; i < 50; i++)
+            using (var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = true }))
             {
-                var randomIndex = Random.Range(0, masterItems.Count);
-                Items.Add(masterItems[randomIndex].Clone() as Item);
+                var bagItemRepo = new BagItemV001Repo(dbContext);
+                var bagItems = bagItemRepo.List();
+                foreach (var bagItem in bagItems)
+                {
+                    var item = masterItems.FirstOrDefault(i => i.Code == bagItem.ItemCode);
+                    if (item == null) continue;
+                    item = item.Clone() as Item;
+                    if (item == null) continue;
+                    item.BagItemId = bagItem.Id;
+                    Items.Add(item);
+                }
             }
         }
 
@@ -97,6 +111,18 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
             DOVirtual.DelayedCall(.3f, () => SelectItem(FilteredItems.FirstOrDefault()));
         }
 
+        public void AddItem(Item item)
+        {
+            var newItem = item.Clone() as Item;
+            if (newItem == null) return;
+            Items.Add(newItem);
+            using (var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = true }))
+            {
+                var bagItemRepo = new BagItemV001Repo(dbContext);
+                bagItemRepo.Add(new BagItemV001(item.Code));
+            }
+        }
+
         public void SelectItem(Item item)
         {
             CurrentItem = item;
@@ -107,7 +133,17 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
         {
             OnUseItem.OnNext(CurrentItem);
             var index = FilteredItems.IndexOf(CurrentItem);
+
             Items.Remove(CurrentItem);
+            using (var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = true }))
+            {
+                var bagItemRepo = new BagItemV001Repo(dbContext);
+                bagItemRepo.Remove(new BagItemV001(CurrentItem.Code)
+                {
+                    Id = CurrentItem.BagItemId
+                });
+            }
+
             index = Math.Min(FilteredItems.Count - 1, Math.Max(0, index - 1));
             SelectItem(null);
             SetItemType(CurrentItemType);

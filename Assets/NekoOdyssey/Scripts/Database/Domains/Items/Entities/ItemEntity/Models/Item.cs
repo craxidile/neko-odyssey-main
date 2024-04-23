@@ -7,9 +7,10 @@ using SQLite4Unity3d;
 namespace NekoOdyssey.Scripts.Database.Domains.Items.Entities.ItemEntity.Models
 {
     [Serializable]
-    public class Item : EntityBase<int>, IAggregateRoot, ICloneable, IEquatable<Item>
+    public class Item: EntityBase<int>, IAggregateRoot, ICloneable, IEquatable<Item>
     {
         [Ignore] public string Uuid { get; } = Guid.NewGuid().ToString();
+        [Ignore] public int BagItemId { get; set; }
         
         [NotNull] [Indexed] public string Code { get; set; }
         
