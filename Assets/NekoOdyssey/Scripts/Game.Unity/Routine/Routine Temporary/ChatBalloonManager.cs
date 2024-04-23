@@ -61,9 +61,8 @@ public class ChatBalloonManager : MonoBehaviour
 
             //var newBalloon = Instantiate(balloonPrefab, parent);
             var newBalloon = Instantiate(
-                GameRunner.Instance.AssetMap["dialogcanvas"],
-                GameRunner.Instance.Core.PlayerMenu.GameObject.transform
-             , parent) as GameObject;
+                GameRunner.Instance.AssetMap["dialogcanvas"]
+                , parent) as GameObject;
 
             //newBalloon.transform.localPosition = Vector3.up * 0.5f;
 

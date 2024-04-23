@@ -22,10 +22,12 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         public CSVHolderScriptable csvHolder;
         //public WorldRoutineManager WorldRoutineManager;
 
+        public QuestEventDetail _lastestQuestEventDetail;
+
 
         public Routine()
         {
-           
+
         }
 
         public void Bind()
@@ -176,10 +178,12 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                         //talk to npc
                         var dialogueActors = questEventDetail.targetEventPoint?.GetComponentsInChildren<DialogueActor>();
                         var eventPointInteractive = questEventDetail.targetEventPoint?.GetComponent<EventPointInteractive>();
-                        if (dialogueActors.Length > 0 && eventPointInteractive != null)
+                        if (dialogueActors != null && dialogueActors.Length > 0 && eventPointInteractive != null)
                         {
                             eventPointInteractive.OnInteractive = () =>
                             {
+                                _lastestQuestEventDetail = questEventDetail;
+
                                 var dialogueGroup = allQuestDialogueGroup[questEventDetail.questId];
                                 var dialogueMessage = dialogueGroup.GetNextDialogue();
 
@@ -251,17 +255,19 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                                     if (!dialogueGroup.isCanceled)
                                     {
                                         Debug.Log("Complete dialogue");
-
-                                        questEventManager.ownedQuestKey.Add(questEventDetail.questId);
-
                                         questEventDetail.targetEventPoint?.gameObject.SetActive(false);
 
-                                        UpdateWorld();
+
+                                        CompleteQuestStep();
+                                        //questEventManager.ownedQuestKey.Add(questEventDetail.questId);
+                                        //UpdateWorld();
                                     }
                                     else
                                     {
                                         Debug.Log("Cancel dialogue");
                                         dialogueGroup.isCanceled = false;
+
+                                        CancleQuestStep();
                                     }
 
 
@@ -278,9 +284,10 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                         }
 
                     }
-                    else
+                    else //outside event time
                     {
                         questEventDetail.targetEventPoint?.gameObject.SetActive(false);
+                        //if (_lastestQuestEventDetail == questEventDetail) _lastestQuestEventDetail = null;
 
                         foreach (var keyValue in questEventDetail.relatedCharactersRoutineDisable)
                         {
@@ -420,6 +427,21 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         }
 
 
+        public void CompleteQuestStep()
+        {
+            Debug.Log("Complete dialogue");
+
+            questEventManager.ownedQuestKey.Add(_lastestQuestEventDetail.questId);
+
+
+            _lastestQuestEventDetail = null;
+
+            UpdateWorld();
+        }
+        public void CancleQuestStep()
+        {
+            _lastestQuestEventDetail = null;
+        }
 
 
 

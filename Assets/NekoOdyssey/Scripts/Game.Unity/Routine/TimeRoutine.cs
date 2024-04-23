@@ -102,10 +102,16 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         public static Day day { get; set; } = 0;
         public static TimeHrMin currentTime { get; set; } = new TimeHrMin("00.00");
 
+
+        static bool isTimeRunning = false;
+        public static void PauseTime() => isTimeRunning = false;
+        public static void ContinueTime() => isTimeRunning = true;
+
+
         // Start is called before the first frame update
         public void Start()
         {
-
+            isTimeRunning = false;
         }
 
         // Update is called once per frame
@@ -143,14 +149,16 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         {
             currentTime = new TimeHrMin(timeText);
         }
-        public static void PauseTime()
-        {
-
-        }
 
 
         public void ProcessTime()
         {
+            if (!isTimeRunning)
+            {
+                _dayMinuteFloat = dayMinute;
+                return;
+            }
+
             var secondPerSecond = (60 / (timeSecondPerGameHour / 60));
             var nectSecondValue = Time.deltaTime * secondPerSecond;
 
@@ -176,5 +184,6 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             SetTime($"{dayMinute / 60}:{dayMinute % 60}");
             currentTimeText = currentTime.ToString();
         }
+
     }
 }
