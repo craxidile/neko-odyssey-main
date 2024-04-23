@@ -33,6 +33,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Movement
 
             if (!_active || !_animator) return;
             _animator.SetLayerWeight(_animator.GetLayerIndex($"Phone"), 0f);
+            _animator.SetLayerWeight(_animator.GetLayerIndex($"Bag"), 0f);
             _animator.SetLayerWeight(_animator.GetLayerIndex($"Capture"), 0f);
         }
 

@@ -28,7 +28,11 @@ namespace NekoOdyssey.Scripts.Game.Unity.Sites
                 action != PlayerMenuAction.Enter &&
                 action != PlayerMenuAction.Exit &&
                 action != PlayerMenuAction.Left &&
-                action != PlayerMenuAction.Right
+                action != PlayerMenuAction.Right &&
+                action != PlayerMenuAction.LeftEnter &&
+                action != PlayerMenuAction.RightEnter &&
+                action != PlayerMenuAction.LeftExit &&
+                action != PlayerMenuAction.RightExit
             ) return;
 
             if (action != PlayerMenuAction.Exit)
