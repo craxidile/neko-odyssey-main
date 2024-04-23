@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using NekoOdyssey.Scripts.Constants;
 using NekoOdyssey.Scripts.Game.Core.PlayerMenu;
 using UnityEngine;
 
@@ -20,7 +21,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.AssetBundles
                 $"menu_actions",
                 $"cat_snaps",
                 $"cat_profiles",
-                $"cat_emotions"
+                $"cat_emotions",
+                "items"
             };
 
             foreach (var bundleName in bundleNames)
@@ -35,7 +37,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.AssetBundles
         {
             var bundlePath = System.IO.Path.Combine(
                 Application.streamingAssetsPath,
-                "SwitchAssetBundles",
+                AppConstants.AssetBundlesFolder,
                 bundleName
             );
             if (!System.IO.File.Exists(bundlePath)) return;

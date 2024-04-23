@@ -13,5 +13,7 @@
         Left,
         Right,
         Pet,
+        Up,
+        Down
     }
 }

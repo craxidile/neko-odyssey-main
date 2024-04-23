@@ -1,4 +1,6 @@
 ﻿using System;
+using NekoOdyssey.Scripts.Game.Unity.Player.Bag;
+using NekoOdyssey.Scripts.Game.Unity.Player.Cameras;
 using NekoOdyssey.Scripts.Game.Unity.Player.Capture;
 using NekoOdyssey.Scripts.Game.Unity.Player.Conversations;
 using NekoOdyssey.Scripts.Game.Unity.Player.Movement;
@@ -26,12 +28,15 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
 
         // public static Vector3 MainPlayerAnchor = new(28, -1.662279f, -41.5f);
         private PlayerMovementController _movementController;
+        private ZoomCameraController _zoomCameraController;
         private PlayerPhoneController _phoneController;
+        private PlayerBagController _bagController;
         private PlayerCaptureController _captureController;
         private PlayerConversationController _conversationController;
         private PlayerPettingController _pettingController;
 
-        public GameObject phoneScreen;
+        public GameObject phoneCameraAnchor;
+        public GameObject bagCameraAnchor;
         public GameObject catPhotoContainer;
 
         [Space] [Header("Movement Speed")] public float moveSpeed = 1.5f;
@@ -43,7 +48,9 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
         {
             GameRunner.Instance.Core.Player.GameObject = gameObject;
             _movementController = gameObject.AddComponent<PlayerMovementController>();
+            _zoomCameraController = gameObject.AddComponent<ZoomCameraController>();
             _phoneController = gameObject.AddComponent<PlayerPhoneController>();
+            _bagController = gameObject.AddComponent<PlayerBagController>();
             _captureController = gameObject.AddComponent<PlayerCaptureController>();
             _conversationController = gameObject.AddComponent<PlayerConversationController>();
             _pettingController = gameObject.AddComponent<PlayerPettingController>();

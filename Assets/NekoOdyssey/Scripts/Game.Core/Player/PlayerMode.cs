@@ -4,7 +4,8 @@
     {
         Move,
         Phone,
-        Bag,
+        OpenBag,
+        CloseBag,
         Menu,
         Submenu,
         Capture,
