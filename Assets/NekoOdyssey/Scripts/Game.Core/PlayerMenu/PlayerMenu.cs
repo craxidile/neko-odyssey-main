@@ -18,6 +18,10 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
             PlayerMenuAction.Exit,
             PlayerMenuAction.Left,
             PlayerMenuAction.Right,
+            PlayerMenuAction.LeftEnter,
+            PlayerMenuAction.RightEnter,
+            PlayerMenuAction.LeftExit,
+            PlayerMenuAction.RightExit
         };
 
         private bool _active;
