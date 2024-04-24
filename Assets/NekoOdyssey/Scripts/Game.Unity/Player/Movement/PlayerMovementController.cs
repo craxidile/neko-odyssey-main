@@ -56,6 +56,13 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Movement
             _characterController.enabled = true;
         }
 
+        public void ForceSetRotation(Vector3 rotation)
+        {
+            _characterController.enabled = false;
+            transform.eulerAngles = rotation;
+            _characterController.enabled = true;
+        }
+
         private void Start()
         {
             GameRunner.Instance.Core.Player.OnMove.Subscribe(input => { _moveInput = input; });

@@ -10,8 +10,11 @@ namespace NekoOdyssey.Scripts.Site.Core.Site
     {
         private bool _databaseInitialized;
 
-        public static Database.Domains.Sites.Entities.SiteEntity.Models.Site PreviousSite { get; private set; }
-        public static Database.Domains.Sites.Entities.SiteEntity.Models.Site CurrentSite { get; private set; }
+        private static Database.Domains.Sites.Entities.SiteEntity.Models.Site _previousSite;
+        private static Database.Domains.Sites.Entities.SiteEntity.Models.Site _currentSite;
+
+        public Database.Domains.Sites.Entities.SiteEntity.Models.Site PreviousSite => _previousSite;
+        public Database.Domains.Sites.Entities.SiteEntity.Models.Site CurrentSite => _currentSite;
 
         public bool Ready { get; private set; }
 
@@ -44,12 +47,14 @@ namespace NekoOdyssey.Scripts.Site.Core.Site
         private void InitializeSite()
         {
             if (CurrentSite != null) return;
-            //SetSite("Intro", false);
-            //SetSite("GamePlayZone4_01", false);
-            //SetSite("GamePlayZone4_02", false);
-            SetSite("GamePlayZone5_01", false);
-            //SetSite("GamePlayZone6_01", false);
-            //SetSite("GamePlayZone3_01", false);
+            // SetSite("Intro", false);
+            // SetSite("GamePlayZone4_01", false);
+            // SetSite("GamePlayZone4_02", false);
+            // SetSite("GamePlayZone4_03", false);
+            // SetSite("GamePlayZone5_01", false);
+            // SetSite("GamePlayZone6_01", false);
+            // SetSite("GamePlayZone3_01", false);
+            SetSite("GamePlayZone9_02", false);
         }
 
         public void MoveToNextSite()
@@ -63,7 +68,7 @@ namespace NekoOdyssey.Scripts.Site.Core.Site
 
         public void MoveToPreviousSite(Vector3? previousPosition)
         {
-            CurrentSite = PreviousSite;
+            _currentSite = PreviousSite;
             if (previousPosition != null)
             {
                 CurrentSite.PlayerX = previousPosition.Value.x;
@@ -71,13 +76,13 @@ namespace NekoOdyssey.Scripts.Site.Core.Site
                 CurrentSite.PlayerZ = previousPosition.Value.z;
             }
 
-            PreviousSite = null;
+            _previousSite = null;
             OnChangeSite.OnNext(CurrentSite);
         }
 
         public void SetSite(string siteName, bool reload = true)
         {
-            PreviousSite = CurrentSite;
+            _previousSite = CurrentSite;
             Database.Domains.Sites.Entities.SiteEntity.Models.Site site;
             using (var siteDbContext = new SitesDbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = true }))
             {
@@ -86,8 +91,10 @@ namespace NekoOdyssey.Scripts.Site.Core.Site
             }
 
             if (site == null) return;
-            CurrentSite = site;
-            if (reload) OnChangeSite.OnNext(site);
+            _currentSite = site;
+            
+            if (!reload) return;
+            OnChangeSite.OnNext(site);
         }
     }
 }
