@@ -1,6 +1,7 @@
 ﻿using System;
 using NekoOdyssey.Scripts.Database.Domains.Items.Entities.ItemEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.Items.Entities.ItemTypeEntity.Models;
+using NekoOdyssey.Scripts.Database.Domains.SaveV001.BagItemEntity.Models;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,7 +19,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Panels
             GameRunner.Instance.Core.Player.Bag.OnChangeItemType
                 .Subscribe(HandleItemTypeChange)
                 .AddTo(this);
-            GameRunner.Instance.Core.Player.Bag.OnSelectItem
+            GameRunner.Instance.Core.Player.Bag.OnSelectBagItem
                 .Subscribe(HandleItemSelection)
                 .AddTo(this);
         }
@@ -34,10 +35,10 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Panels
             gameObject.SetActive(false);
         }
 
-        private void HandleItemSelection(Item item)
+        private void HandleItemSelection(BagItemV001 bagItem)
         {
-            if (item == null) return;
-            nameText.text = item.Name;
+            if (bagItem == null) return;
+            nameText.text = bagItem.Item.Name;
         }
     }
 }

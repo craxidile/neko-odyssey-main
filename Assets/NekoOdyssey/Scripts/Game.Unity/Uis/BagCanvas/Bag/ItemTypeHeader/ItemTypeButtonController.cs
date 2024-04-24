@@ -3,7 +3,7 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Bag.ItemGrid
+namespace NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Bag.ItemTypeHeader
 {
     public class ItemTypeButtonController : MonoBehaviour
     {
@@ -45,16 +45,28 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Bag.ItemGrid
         {
             if (itemType == null) return;
             _itemType = itemType;
-            normalImage.sprite = GameRunner.Instance.AssetMap[_itemType.NormalIcon] as Sprite;
-            activeImage.sprite = GameRunner.Instance.AssetMap[_itemType.ActiveIcon] as Sprite;
+            var normalIcon = _itemType.NormalIcon.ToLower();
+            var activeIcon = _itemType.ActiveIcon.ToLower();
+            if (
+                !GameRunner.Instance.AssetMap.ContainsKey(normalIcon) ||
+                !GameRunner.Instance.AssetMap.ContainsKey(activeIcon) 
+            ) return;
+            normalImage.sprite = GameRunner.Instance.AssetMap[normalIcon] as Sprite;
+            activeImage.sprite = GameRunner.Instance.AssetMap[activeIcon] as Sprite;
         }
 
         public void SetCurrent(bool current)
         {
             _current = current;
+            var normalIcon = _itemType.NormalIcon.ToLower();
+            var activeIcon = _itemType.ActiveIcon.ToLower();
+            if (
+                !GameRunner.Instance.AssetMap.ContainsKey(normalIcon) ||
+                !GameRunner.Instance.AssetMap.ContainsKey(activeIcon) 
+            ) return;
             normalImage.sprite = !_current
-                ? GameRunner.Instance.AssetMap[_itemType.NormalIcon] as Sprite
-                : GameRunner.Instance.AssetMap[_itemType.ActiveIcon] as Sprite;
+                ? GameRunner.Instance.AssetMap[normalIcon] as Sprite
+                : GameRunner.Instance.AssetMap[activeIcon] as Sprite;
         }
     }
 }

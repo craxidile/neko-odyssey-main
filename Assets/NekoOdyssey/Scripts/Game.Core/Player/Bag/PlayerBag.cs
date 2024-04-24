@@ -21,20 +21,22 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
     {
         public int GridColumnCount { get; private set; }
         public ItemType CurrentItemType { get; private set; }
-        public Item CurrentItem { get; private set; }
+        public BagItemV001 CurrentBagItem { get; private set; }
         public bool ConfirmationVisible { get; private set; }
-        public List<Item> Items { get; } = new();
-        public Dictionary<Item, Vector3> ItemPositionMap { get; } = new();
+        public List<BagItemV001> BagItems { get; } = new();
+        public Dictionary<BagItemV001, Vector3> ItemPositionMap { get; } = new();
 
-        public List<Item> FilteredItems => Items
-            .Where(i => CurrentItemType.IsAll || i.Type.Code == CurrentItemType.Code)
-            .ToList();
+        public List<BagItemV001> FilteredBagItems => CurrentItemType.IsAll
+            ? BagItems.ToList()
+            : BagItems
+                .Where(bi => bi.Item.Type.Code == CurrentItemType.Code)
+                .ToList();
 
         public Subject<ItemType> OnChangeItemType { get; } = new();
         public Subject<bool> OnChangeConfirmationVisibility { get; } = new();
-        public Subject<Item> OnSelectItem { get; } = new();
-        public Subject<Item> OnUseItem { get; } = new();
-        public Subject<Dictionary<Item, Vector3>> OnItemPositionsReady = new();
+        public Subject<BagItemV001> OnSelectBagItem { get; } = new();
+        public Subject<BagItemV001> OnUseBagItem { get; } = new();
+        public Subject<Dictionary<BagItemV001, Vector3>> OnBagItemPositionsReady = new();
 
         public void Bind()
         {
@@ -67,7 +69,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
         private void InitializeItems()
         {
             SetDefaultItemType();
-            CreateRandomItems();
+            LoadBagItems();
         }
 
         private void HandleCancellation()
@@ -77,77 +79,75 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
             SetConfirmationVisible(false);
         }
 
-        private void CreateRandomItems()
+        private void LoadBagItems()
         {
             var masterItems = GameRunner.Instance.Core.MasterData.ItemsMasterData.Items.ToList();
+            ICollection<BagItemV001> bagItems;
+            
             using (var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = true }))
             {
                 var bagItemRepo = new BagItemV001Repo(dbContext);
-                var bagItems = bagItemRepo.List();
-                foreach (var bagItem in bagItems)
-                {
-                    var item = masterItems.FirstOrDefault(i => i.Code == bagItem.ItemCode);
-                    if (item == null) continue;
-                    item = item.Clone() as Item;
-                    if (item == null) continue;
-                    item.BagItemId = bagItem.Id;
-                    Items.Add(item);
-                }
+                bagItems = bagItemRepo.List();
+            }
+
+            if (bagItems == null) return;
+            foreach (var bagItem in bagItems)
+            {
+                var item = masterItems.FirstOrDefault(i => i.Code == bagItem.ItemCode);
+                bagItem.Item = item;
+                BagItems.Add(bagItem);
             }
         }
 
         public void SetItemType(ItemType itemType)
         {
-            var eligibleToSelectFirstItem = itemType?.Code != CurrentItem?.Code;
+            var eligibleToSelectFirstItem = itemType?.Code != CurrentItemType?.Code;
             CurrentItemType = itemType;
             OnChangeItemType.OnNext(CurrentItemType);
             if (eligibleToSelectFirstItem)
-                DOVirtual.DelayedCall(.3f, () => SelectItem(FilteredItems.FirstOrDefault()));
+                DOVirtual.DelayedCall(.3f, () => SelectBagItem(FilteredBagItems.FirstOrDefault()));
         }
 
         public void SetDefaultItemType()
         {
             SetItemType(GameRunner.Instance.Core.MasterData.ItemsMasterData.ItemTypes.First(it => it.IsAll));
-            DOVirtual.DelayedCall(.3f, () => SelectItem(FilteredItems.FirstOrDefault()));
+            DOVirtual.DelayedCall(.3f, () => SelectBagItem(FilteredBagItems.FirstOrDefault()));
         }
 
-        public void AddItem(Item item)
+        public void AddBagItem(BagItemV001 bagItem)
         {
-            var newItem = item.Clone() as Item;
+            var newItem = bagItem.Clone() as BagItemV001;
             if (newItem == null) return;
-            Items.Add(newItem);
+            BagItems.Add(newItem);
             using (var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = true }))
             {
                 var bagItemRepo = new BagItemV001Repo(dbContext);
-                bagItemRepo.Add(new BagItemV001(item.Code));
+                bagItemRepo.Add(bagItem);
             }
         }
 
-        public void SelectItem(Item item)
+        public void SelectBagItem(BagItemV001 bagItem)
         {
-            CurrentItem = item;
-            OnSelectItem.OnNext(CurrentItem);
+            CurrentBagItem = bagItem;
+            OnSelectBagItem.OnNext(CurrentBagItem);
         }
 
         public void UseItem()
         {
-            OnUseItem.OnNext(CurrentItem);
-            var index = FilteredItems.IndexOf(CurrentItem);
+            OnUseBagItem.OnNext(CurrentBagItem);
+            var index = FilteredBagItems.IndexOf(CurrentBagItem);
 
-            Items.Remove(CurrentItem);
+            BagItems.Remove(CurrentBagItem);
             using (var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = true }))
             {
                 var bagItemRepo = new BagItemV001Repo(dbContext);
-                bagItemRepo.Remove(new BagItemV001(CurrentItem.Code)
-                {
-                    Id = CurrentItem.BagItemId
-                });
+                bagItemRepo.Remove(CurrentBagItem);
             }
 
-            index = Math.Min(FilteredItems.Count - 1, Math.Max(0, index - 1));
-            SelectItem(null);
+            index = Math.Min(FilteredBagItems.Count - 1, Math.Max(0, index - 1));
+            SelectBagItem(null);
             SetItemType(CurrentItemType);
-            DOVirtual.DelayedCall(.3f, () => SelectItem(FilteredItems.Count > 0 ? FilteredItems[index] : null));
+            DOVirtual.DelayedCall(.3f, () => SelectBagItem(FilteredBagItems.Count > 0 ? FilteredBagItems[index] : null));
         }
 
         public void SetConfirmationVisible(bool visible)
@@ -161,11 +161,11 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
             ItemPositionMap.Clear();
         }
 
-        public void SetItemPosition(Item item, Vector3 position)
+        public void SetItemPosition(BagItemV001 item, Vector3 position)
         {
             ItemPositionMap[item] = position;
-            if (ItemPositionMap.Count != FilteredItems.Count) return;
-            OnItemPositionsReady.OnNext(ItemPositionMap);
+            if (ItemPositionMap.Count != FilteredBagItems.Count) return;
+            OnBagItemPositionsReady.OnNext(ItemPositionMap);
         }
 
         public void SetGridColumnCount(int count)

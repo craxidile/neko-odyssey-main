@@ -1,6 +1,7 @@
 ﻿using System;
 using DG.Tweening;
 using NekoOdyssey.Scripts.Database.Domains.Items.Entities.ItemEntity.Models;
+using NekoOdyssey.Scripts.Database.Domains.SaveV001.BagItemEntity.Models;
 using UniRx;
 using UniRx.InternalUtil;
 using UnityEngine;
@@ -34,7 +35,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Panels
             GameRunner.Instance.Core.Player.Bag.OnChangeConfirmationVisibility
                 .Subscribe(HandleConfirmationVisibilityChange)
                 .AddTo(this);
-            GameRunner.Instance.Core.Player.Bag.OnSelectItem
+            GameRunner.Instance.Core.Player.Bag.OnSelectBagItem
                 .Subscribe(HandleItemSelection)
                 .AddTo(this);
         }
@@ -50,10 +51,10 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Panels
             GameRunner.Instance.Core.Player.Bag.SetConfirmationVisible(false);
         }
 
-        private void HandleItemSelection(Item item)
+        private void HandleItemSelection(BagItemV001 bagItem)
         {
-            if (item == null) return;
-            descriptionText.text = $"{item.Name}\n{item.Description}";
+            if (bagItem == null) return;
+            descriptionText.text = $"{bagItem.Item.Name}\n{bagItem.Item.Description}";
         }
 
         private void HandleConfirmationVisibilityChange(bool visible)
