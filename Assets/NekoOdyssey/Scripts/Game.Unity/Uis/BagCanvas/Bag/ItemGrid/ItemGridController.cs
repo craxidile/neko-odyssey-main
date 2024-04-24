@@ -3,6 +3,7 @@ using System.Linq;
 using DG.Tweening;
 using NekoOdyssey.Scripts.Database.Domains.Items.Entities.ItemEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.Items.Entities.ItemTypeEntity.Models;
+using NekoOdyssey.Scripts.Database.Domains.SaveV001.BagItemEntity.Models;
 using NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Bag.ItemTypeHeader;
 using NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Panels;
 using UniRx;
@@ -13,21 +14,24 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Bag.ItemGrid
 {
     public class ItemGridController : MonoBehaviour
     {
+        private const float ItemsRearrangementDelay = .3f;
+        private const float FirstItemSelectionDelay = .1f;
+
         private readonly string _itemButtonKey = "ItemButton".ToLower();
-        
-        private readonly Dictionary<Item, GameObject> _itemButtonMap = new();
-        private readonly Dictionary<Item, GameObject> _animatingItemButtonMap = new();
-        private readonly List<Item> _itemsToMove = new();
-        
+
+        private readonly Dictionary<BagItemV001, GameObject> _bagItemButtonMap = new();
+        private readonly Dictionary<BagItemV001, GameObject> _animatingBagItemButtonMap = new();
+        private readonly List<BagItemV001> _bagItemsToMove = new();
+
         private void Start()
         {
             GameRunner.Instance.Core.Player.Bag.OnChangeItemType
                 .Subscribe(HandleItemTypeChange)
                 .AddTo(this);
-            GameRunner.Instance.Core.Player.Bag.OnSelectItem
+            GameRunner.Instance.Core.Player.Bag.OnSelectBagItem
                 .Subscribe(HandleItemSelection)
                 .AddTo(this);
-            GameRunner.Instance.Core.Player.Bag.OnItemPositionsReady
+            GameRunner.Instance.Core.Player.Bag.OnBagItemPositionsReady
                 .Subscribe(HandleItemPositions)
                 .AddTo(this);
             GameRunner.Instance.Core.Player.Bag.OnChangeConfirmationVisibility
@@ -39,28 +43,27 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Bag.ItemGrid
         {
             var bagCanvasController = GetComponent<BagCanvasController>();
             var bagItemsContainer = bagCanvasController.bagItemsContainer;
-            
+
             if (!GameRunner.Instance.AssetMap.ContainsKey(_itemButtonKey)) return;
             bagItemsContainer.GetComponent<CanvasGroup>().alpha = 0;
-            foreach (var itemButton in _itemButtonMap.Values)
+            foreach (var itemButton in _bagItemButtonMap.Values)
             {
                 Destroy(itemButton);
             }
 
-            _itemButtonMap.Clear();
+            _bagItemButtonMap.Clear();
             GameRunner.Instance.Core.Player.Bag.ClearItemPositions();
-            var items = GameRunner.Instance.Core.Player.Bag.FilteredItems;
-            foreach (var item in items)
+            var bagItems = GameRunner.Instance.Core.Player.Bag.FilteredBagItems;
+            foreach (var bagItem in bagItems)
             {
-                var itemButton = Instantiate(
+                var bagItemButton = Instantiate(
                     GameRunner.Instance.AssetMap[_itemButtonKey],
                     bagItemsContainer.transform
                 ) as GameObject;
-                if (itemButton == null) continue;
-                itemButton.name = $"Item{item.Code} ({item.Name})";
-                _itemButtonMap.Add(item, itemButton);
-                var controller = itemButton.GetComponent<ItemButtonController>();
-                controller.Item = item;
+                if (bagItemButton == null) continue;
+                _bagItemButtonMap.Add(bagItem, bagItemButton);
+                var controller = bagItemButton.GetComponent<ItemButtonController>();
+                controller.BagItem = bagItem;
                 controller.ReadOnly = false;
                 controller.SetVisible(false, false);
             }
@@ -73,10 +76,10 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Bag.ItemGrid
             InitializeItems();
         }
 
-        private void HandleItemSelection(Item item)
+        private void HandleItemSelection(BagItemV001 bagItem)
         {
-            if (item == null) return;
-            var itemButton = _itemButtonMap[item];
+            if (bagItem == null) return;
+            var itemButton = _bagItemButtonMap[bagItem];
             var controller = itemButton.GetComponent<ItemButtonController>();
             if (
                 controller != null &&
@@ -91,48 +94,45 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Bag.ItemGrid
             hoverFrameController.TargetItem = itemButton;
         }
 
-        private void HandleItemPositions(Dictionary<Item, Vector3> itemPositions)
+        private void HandleItemPositions(Dictionary<BagItemV001, Vector3> itemPositions)
         {
             var bagCanvasController = GetComponent<BagCanvasController>();
             var itemAnimationDock = bagCanvasController.itemAnimationDock;
-            
-            if (_animatingItemButtonMap.Count == 0)
+
+            if (_animatingBagItemButtonMap.Count == 0)
             {
                 InitializeAnimatingItemButton(itemPositions);
                 itemAnimationDock.GetComponent<CanvasGroup>().alpha = 0;
                 itemAnimationDock.SetActive(false);
                 ShowUnmovingItemButtons();
-                var controller = _itemButtonMap.Values.First().GetComponent<ItemButtonController>();
+                var controller = _bagItemButtonMap.Values.First().GetComponent<ItemButtonController>();
                 EventSystem.current.SetSelectedGameObject(controller.button.gameObject);
                 return;
             }
 
-            _itemsToMove.Clear();
+            _bagItemsToMove.Clear();
 
             itemAnimationDock.SetActive(true);
             itemAnimationDock.GetComponent<CanvasGroup>().alpha = 1;
-            
-            var itemButtonControllersToShow = new List<ItemButtonController>();
-            foreach (var item in _animatingItemButtonMap.Keys)
+
+            foreach (var item in _animatingBagItemButtonMap.Keys)
             {
-                var itemButton = _animatingItemButtonMap[item];
-                var controller = itemButton.GetComponent<ItemButtonController>();
+                var bagItemButton = _animatingBagItemButtonMap[item];
+                var controller = bagItemButton.GetComponent<ItemButtonController>();
                 if (!itemPositions.TryGetValue(item, out var position))
                 {
                     controller.SetVisible(false, true);
                 }
                 else
                 {
-                    itemButtonControllersToShow.Add(controller);
-                    itemButton.transform.DOMove(position, .3f);
-                    if (_animatingItemButtonMap.ContainsKey(item))
-                        _itemsToMove.Add(item);
+                    bagItemButton.transform.DOMove(position, ItemsRearrangementDelay);
+                    if (_animatingBagItemButtonMap.ContainsKey(item)) _bagItemsToMove.Add(item);
                 }
             }
 
             ShowUnmovingItemButtons();
 
-            DOVirtual.DelayedCall(.3f, () =>
+            DOVirtual.DelayedCall(ItemsRearrangementDelay, () =>
             {
                 ShowMovingItemButtons();
                 itemAnimationDock.GetComponent<CanvasGroup>().alpha = 0;
@@ -144,58 +144,62 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Bag.ItemGrid
         private void HandleConfirmationVisibility(bool visible)
         {
             if (visible) return;
-            var item = GameRunner.Instance.Core.Player.Bag.CurrentItem;
-            if (item == null) return;
-            var itemButton = _itemButtonMap[item];
-            DOVirtual.DelayedCall(.1f, () => EventSystem.current.SetSelectedGameObject(itemButton));
+            
+            var bagItem = GameRunner.Instance.Core.Player.Bag.CurrentBagItem;
+            if (bagItem == null) return;
+            var bagItemButton = _bagItemButtonMap[bagItem];
+            
+            DOVirtual.DelayedCall(
+                FirstItemSelectionDelay,
+                () => EventSystem.current.SetSelectedGameObject(bagItemButton)
+            );
         }
 
         private void ShowUnmovingItemButtons()
         {
-            foreach (var (item, itemButton) in _itemButtonMap)
+            foreach (var (item, itemButton) in _bagItemButtonMap)
             {
                 var controller = itemButton.GetComponent<ItemButtonController>();
-                controller.SetVisible(!_itemsToMove.Contains(item), true);
+                controller.SetVisible(!_bagItemsToMove.Contains(item), true);
             }
         }
 
         private void ShowMovingItemButtons()
         {
-            foreach (var item in _itemsToMove)
+            foreach (var bagItem in _bagItemsToMove)
             {
-                if (!_itemButtonMap.ContainsKey(item)) continue;
-                var itemButton = _itemButtonMap[item];
+                if (!_bagItemButtonMap.ContainsKey(bagItem)) continue;
+                var itemButton = _bagItemButtonMap[bagItem];
                 var controller = itemButton.GetComponent<ItemButtonController>();
-                if (!_itemsToMove.Contains(item)) return;
+                if (!_bagItemsToMove.Contains(bagItem)) return;
                 controller.SetVisible(true, false);
             }
         }
 
-        private void InitializeAnimatingItemButton(Dictionary<Item, Vector3> itemPositions)
+        private void InitializeAnimatingItemButton(Dictionary<BagItemV001, Vector3> itemPositions)
         {
             var bagCanvasController = GetComponent<BagCanvasController>();
             var itemAnimationDock = bagCanvasController.itemAnimationDock;
-            
-            foreach (var item in _animatingItemButtonMap.Values)
-                Destroy(item);
 
-            _animatingItemButtonMap.Clear();
+            foreach (var bagItem in _animatingBagItemButtonMap.Values) Destroy(bagItem);
+
+            _animatingBagItemButtonMap.Clear();
             if (!GameRunner.Instance.AssetMap.ContainsKey(_itemButtonKey)) return;
             var updatedItems = itemPositions.Keys;
-            foreach (var item in updatedItems)
+            foreach (var bagItemV001 in updatedItems)
             {
-                var itemButton = _itemButtonMap[item];
+                var bagItemButton = _bagItemButtonMap[bagItemV001];
                 var animatingItemButton = Instantiate(
                     GameRunner.Instance.AssetMap[_itemButtonKey],
                     itemAnimationDock.transform
                 ) as GameObject;
                 if (animatingItemButton == null) continue;
-                var controller = itemButton.GetComponent<ItemButtonController>();
+                var controller = bagItemButton.GetComponent<ItemButtonController>();
                 var animatingController = animatingItemButton.GetComponent<ItemButtonController>();
                 controller.CopyTo(animatingController);
                 animatingController.SetVisible(true, false);
                 animatingController.ReadOnly = true;
-                _animatingItemButtonMap.Add(item, animatingItemButton);
+                _animatingBagItemButtonMap.Add(bagItemV001, animatingItemButton);
             }
         }
     }

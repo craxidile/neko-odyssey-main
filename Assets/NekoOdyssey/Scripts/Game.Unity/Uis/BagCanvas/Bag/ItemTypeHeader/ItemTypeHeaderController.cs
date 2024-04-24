@@ -34,7 +34,6 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Bag.ItemTypeHeader
             var itemTypes = GameRunner.Instance.Core.MasterData.ItemsMasterData.ItemTypes;
             foreach (var itemType in itemTypes)
             {
-                Debug.Log($">>item_type_button<< {itemType.Code}");
                 var itemTypeButton = Instantiate(
                     GameRunner.Instance.AssetMap[_itemTypeButtonKey],
                     bagHeaderContainer.transform
