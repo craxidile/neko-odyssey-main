@@ -9,8 +9,6 @@ namespace NekoOdyssey.Scripts.Database.Domains.Items.Entities.ItemEntity.Models
     [Serializable]
     public class Item: EntityBase<int>, IAggregateRoot
     {
-        [Ignore] public int BagItemId { get; set; }
-        
         [NotNull] [Indexed] public string Code { get; set; }
         
         [NotNull] public string Name { get; set; }
