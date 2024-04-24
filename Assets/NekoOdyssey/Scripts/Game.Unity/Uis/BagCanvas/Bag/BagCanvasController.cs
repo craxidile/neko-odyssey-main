@@ -1,21 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using DG.Tweening;
-using NekoOdyssey.Scripts.Database.Domains.Items.Entities.ItemEntity.Models;
-using NekoOdyssey.Scripts.Database.Domains.Items.Entities.ItemTypeEntity.Models;
+﻿using DG.Tweening;
 using NekoOdyssey.Scripts.Database.Domains.SaveV001.BagItemEntity.Models;
-using NekoOdyssey.Scripts.Game.Core;
-using NekoOdyssey.Scripts.Game.Unity.AssetBundles;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 using NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Bag.ItemGrid;
 using NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Bag.ItemTypeHeader;
-using NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Panels;
 using UniRx;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Bag

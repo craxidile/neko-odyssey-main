@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
-using NekoOdyssey.Scripts.Database.Domains.Items.Entities.ItemEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.Items.Entities.ItemTypeEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.SaveV001.BagItemEntity.Models;
-using NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Bag.ItemTypeHeader;
 using NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Panels;
 using UniRx;
 using UnityEngine;
@@ -46,10 +44,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Bag.ItemGrid
 
             if (!GameRunner.Instance.AssetMap.ContainsKey(_itemButtonKey)) return;
             bagItemsContainer.GetComponent<CanvasGroup>().alpha = 0;
-            foreach (var itemButton in _bagItemButtonMap.Values)
-            {
-                Destroy(itemButton);
-            }
+            foreach (var itemButton in _bagItemButtonMap.Values) Destroy(itemButton);
 
             _bagItemButtonMap.Clear();
             GameRunner.Instance.Core.Player.Bag.ClearItemPositions();

@@ -25,7 +25,7 @@ namespace NekoOdyssey.Scripts.Database.Domains.Sites.Entities.SiteEntity.Models
         public float? PlayerZ { get; set; }
 
         public string PlayerFacing { get; set; }
-
+        
         [Ignore]
         public FacingDirection PlayerFacingDirection
         {
@@ -47,6 +47,8 @@ namespace NekoOdyssey.Scripts.Database.Domains.Sites.Entities.SiteEntity.Models
                 return (FacingDirection)LightFacing[0];
             }
         }
+        
+        public string CameraBoundary { get; set; }
 
         [ForeignKey(typeof(Site))] [Indexed] public int? NextSiteId { get; set; }
 

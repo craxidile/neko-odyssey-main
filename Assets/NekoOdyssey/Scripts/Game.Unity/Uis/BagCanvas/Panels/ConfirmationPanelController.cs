@@ -1,11 +1,7 @@
-﻿using System;
-using DG.Tweening;
-using NekoOdyssey.Scripts.Database.Domains.Items.Entities.ItemEntity.Models;
+﻿using DG.Tweening;
 using NekoOdyssey.Scripts.Database.Domains.SaveV001.BagItemEntity.Models;
 using UniRx;
-using UniRx.InternalUtil;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -47,7 +43,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Panels
 
         private void HandleConfirmation()
         {
-            GameRunner.Instance.Core.Player.Bag.UseItem();
+            GameRunner.Instance.Core.Player.Bag.UseBagItem();
             GameRunner.Instance.Core.Player.Bag.SetConfirmationVisible(false);
         }
 

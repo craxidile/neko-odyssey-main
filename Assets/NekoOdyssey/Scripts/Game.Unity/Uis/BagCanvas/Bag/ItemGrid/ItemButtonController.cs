@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using DG.Tweening;
-using NekoOdyssey.Scripts.Database.Domains.Items.Entities.ItemEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.SaveV001.BagItemEntity.Models;
 using UniRx;
 using UnityEngine;

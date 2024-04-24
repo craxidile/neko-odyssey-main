@@ -1,6 +1,4 @@
-﻿using System;
-using NekoOdyssey.Scripts.Database.Domains.Items.Entities.ItemEntity.Models;
-using NekoOdyssey.Scripts.Database.Domains.Items.Entities.ItemTypeEntity.Models;
+﻿using NekoOdyssey.Scripts.Database.Domains.Items.Entities.ItemTypeEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.SaveV001.BagItemEntity.Models;
 using UniRx;
 using UnityEngine;

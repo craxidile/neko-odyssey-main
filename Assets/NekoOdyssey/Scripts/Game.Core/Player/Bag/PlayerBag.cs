@@ -10,15 +10,14 @@ using NekoOdyssey.Scripts.Database.Domains.SaveV001.BagItemEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.SaveV001.BagItemEntity.Repo;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 using UniRx;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
 {
     public class PlayerBag
     {
+        private const float SelectBagItemDelay = .3f;
+
         public int GridColumnCount { get; private set; }
         public ItemType CurrentItemType { get; private set; }
         public BagItemV001 CurrentBagItem { get; private set; }
@@ -36,7 +35,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
         public Subject<bool> OnChangeConfirmationVisibility { get; } = new();
         public Subject<BagItemV001> OnSelectBagItem { get; } = new();
         public Subject<BagItemV001> OnUseBagItem { get; } = new();
-        public Subject<Dictionary<BagItemV001, Vector3>> OnBagItemPositionsReady = new();
+        public Subject<Dictionary<BagItemV001, Vector3>> OnBagItemPositionsReady { get; } = new();
 
         public void Bind()
         {
@@ -74,7 +73,6 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
 
         private void HandleCancellation()
         {
-            Debug.Log($">>handle_cancellation<< {GameRunner.Instance.Core.Player.Mode} {PlayerMode.OpenBag}");
             if (GameRunner.Instance.Core.Player.Mode != PlayerMode.OpenBag) return;
             SetConfirmationVisible(false);
         }
@@ -83,7 +81,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
         {
             var masterItems = GameRunner.Instance.Core.MasterData.ItemsMasterData.Items.ToList();
             ICollection<BagItemV001> bagItems;
-            
+
             using (var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = true }))
             {
                 var bagItemRepo = new BagItemV001Repo(dbContext);
@@ -105,21 +103,20 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
             CurrentItemType = itemType;
             OnChangeItemType.OnNext(CurrentItemType);
             if (eligibleToSelectFirstItem)
-                DOVirtual.DelayedCall(.3f, () => SelectBagItem(FilteredBagItems.FirstOrDefault()));
+                DOVirtual.DelayedCall(SelectBagItemDelay, () => SelectBagItem(FilteredBagItems.FirstOrDefault()));
         }
 
         public void SetDefaultItemType()
         {
             SetItemType(GameRunner.Instance.Core.MasterData.ItemsMasterData.ItemTypes.First(it => it.IsAll));
-            DOVirtual.DelayedCall(.3f, () => SelectBagItem(FilteredBagItems.FirstOrDefault()));
+            DOVirtual.DelayedCall(SelectBagItemDelay, () => SelectBagItem(FilteredBagItems.FirstOrDefault()));
         }
 
-        public void AddBagItem(BagItemV001 bagItem)
+        public void AddBagItem(Item item)
         {
-            var newItem = bagItem.Clone() as BagItemV001;
-            if (newItem == null) return;
-            BagItems.Add(newItem);
-            using (var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = true }))
+            var bagItem = new BagItemV001(item);
+            BagItems.Add(bagItem);
+            using (var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = false }))
             {
                 var bagItemRepo = new BagItemV001Repo(dbContext);
                 bagItemRepo.Add(bagItem);
@@ -132,7 +129,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
             OnSelectBagItem.OnNext(CurrentBagItem);
         }
 
-        public void UseItem()
+        public void UseBagItem()
         {
             OnUseBagItem.OnNext(CurrentBagItem);
             var index = FilteredBagItems.IndexOf(CurrentBagItem);
@@ -147,7 +144,11 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
             index = Math.Min(FilteredBagItems.Count - 1, Math.Max(0, index - 1));
             SelectBagItem(null);
             SetItemType(CurrentItemType);
-            DOVirtual.DelayedCall(.3f, () => SelectBagItem(FilteredBagItems.Count > 0 ? FilteredBagItems[index] : null));
+
+            DOVirtual.DelayedCall(
+                SelectBagItemDelay,
+                () => SelectBagItem(FilteredBagItems.Count > 0 ? FilteredBagItems[index] : null)
+            );
         }
 
         public void SetConfirmationVisible(bool visible)
