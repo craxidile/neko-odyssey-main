@@ -350,6 +350,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""579068cb-9bb5-4752-b93a-2f6d08c71c9d"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Bag"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""cd684207-e017-484a-b82d-ed1d812ab3db"",
                     ""path"": ""<Keyboard>/rightArrow"",
                     ""interactions"": """",

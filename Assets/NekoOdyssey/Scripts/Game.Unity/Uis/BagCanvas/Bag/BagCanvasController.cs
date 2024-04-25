@@ -1,20 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using DG.Tweening;
-using NekoOdyssey.Scripts.Database.Domains.Items.Entities.ItemEntity.Models;
-using NekoOdyssey.Scripts.Database.Domains.Items.Entities.ItemTypeEntity.Models;
-using NekoOdyssey.Scripts.Game.Core;
-using NekoOdyssey.Scripts.Game.Unity.AssetBundles;
+﻿using DG.Tweening;
+using NekoOdyssey.Scripts.Database.Domains.SaveV001.BagItemEntity.Models;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 using NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Bag.ItemGrid;
 using NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Bag.ItemTypeHeader;
-using NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Panels;
 using UniRx;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Bag
@@ -56,7 +47,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Bag
             GameRunner.Instance.Core.Player.OnChangeMode
                 .Subscribe(HandleModeChange)
                 .AddTo(this);
-            GameRunner.Instance.Core.Player.Bag.OnSelectItem
+            GameRunner.Instance.Core.Player.Bag.OnSelectBagItem
                 .Subscribe(HandleItemSelection)
                 .AddTo(this);
         }
@@ -136,7 +127,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Bag
             });
         }
 
-        private void HandleItemSelection(Item item)
+        private void HandleItemSelection(BagItemV001 item)
         {
             hoverFrame.SetActive(item != null);
         }
