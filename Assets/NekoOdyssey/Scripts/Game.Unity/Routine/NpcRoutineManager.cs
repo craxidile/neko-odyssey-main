@@ -111,7 +111,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                 TimeHrMin[] eventTimeList = new TimeHrMin[] { new TimeHrMin(targetTimes[0]), new TimeHrMin(targetTimes[1]) };
 
 
-                var tragetEventPoint = EventPoint.GetEventPoint(eventPointKey);
+                //var tragetEventPoint = EventPoint.GetEventPoint(eventPointKey);
 
 
                 var questKeyConditions = questKeyConditionsText.Replace(' ', '-').Replace('+', '-').Split('-').ToList();
@@ -135,8 +135,12 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                     }
                 }
 
-                var newEventDetail = new RoutineEventDetail(dayList, eventTimeList[0], eventTimeList[1], tragetEventPoint, keyIdConditions, keyIdConditionsExclude);
+                var newEventDetail = new RoutineEventDetail(dayList, eventTimeList[0], eventTimeList[1], eventPointKey, keyIdConditions, keyIdConditionsExclude);
 
+                if (string.IsNullOrEmpty(routineDialogueKey))
+                {
+                    routineDialogueKey = "-";
+                }
                 newEventDetail.dialogueKey = routineDialogueKey.ToLower();
 
                 //WorldRoutineManager.allNpcEvents.Add(newEventDetail);
@@ -184,17 +188,18 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
     {
         public HashSet<Day> eventDays;
         public TimeHrMin eventTimeStart, eventTimeEnd;
-        public EventPoint targetEventPoint;
+        public string targetEventPointKey;
+        EventPoint targetEventPoint;
 
         public List<string> keyIdConditions;
         public List<string> keyIdConditionsExclude;
 
-        public EventDetail(HashSet<Day> eventDays, TimeHrMin eventTimeStart, TimeHrMin eventTimeEnd, EventPoint targetEventPoint, List<string> keyIdConditions, List<string> keyIdConditionsExclude)
+        public EventDetail(HashSet<Day> eventDays, TimeHrMin eventTimeStart, TimeHrMin eventTimeEnd, string targetEventPointKey, List<string> keyIdConditions, List<string> keyIdConditionsExclude)
         {
             this.eventDays = eventDays;
             this.eventTimeStart = eventTimeStart;
             this.eventTimeEnd = eventTimeEnd;
-            this.targetEventPoint = targetEventPoint;
+            this.targetEventPointKey = targetEventPointKey;
 
             this.keyIdConditions = keyIdConditions;
             this.keyIdConditionsExclude = keyIdConditionsExclude;
@@ -209,6 +214,16 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             }
             return false;
         }
+
+        public EventPoint GetTargetEventPoint()
+        {
+            if (targetEventPoint == null)
+            {
+                targetEventPoint = EventPoint.GetEventPoint(targetEventPointKey);
+            }
+
+            return targetEventPoint;
+        }
     }
 
 
@@ -216,8 +231,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
     {
         public string dialogueKey;
 
-        public RoutineEventDetail(HashSet<Day> eventDays, TimeHrMin eventTimeStart, TimeHrMin eventTimeEnd, EventPoint targetEventPoint, List<string> keyIdConditions, List<string> keyIdConditionsExclude)
-            : base(eventDays, eventTimeStart, eventTimeEnd, targetEventPoint, keyIdConditions, keyIdConditionsExclude)
+        public RoutineEventDetail(HashSet<Day> eventDays, TimeHrMin eventTimeStart, TimeHrMin eventTimeEnd, string targetEventPointKey, List<string> keyIdConditions, List<string> keyIdConditionsExclude)
+            : base(eventDays, eventTimeStart, eventTimeEnd, targetEventPointKey, keyIdConditions, keyIdConditionsExclude)
         {
         }
     }
