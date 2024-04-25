@@ -15,6 +15,10 @@ public class EventPoint : MonoBehaviour
         AllEventPoint.Add(name, this);
         gameObject.SetActive(false);
     }
+    private void OnDestroy()
+    {
+        AllEventPoint.Remove(name);
+    }
 
 
     public static EventPoint GetEventPoint(string key)

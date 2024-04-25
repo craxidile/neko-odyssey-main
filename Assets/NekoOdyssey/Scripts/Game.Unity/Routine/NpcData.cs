@@ -58,8 +58,10 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
                 if (eventDetail.IsInEventTime(TimeRoutine.day, TimeRoutine.currentTime))
                 {
-                    SwtichEvent(eventDetail);
-                    return eventDetail;
+                    if (SwtichEvent(eventDetail))
+                    {
+                        return eventDetail;
+                    }
                 }
                 //else
                 //{
@@ -71,16 +73,23 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             return null;
         }
 
-        public void SwtichEvent(RoutineEventDetail newEvent)
+        public bool SwtichEvent(RoutineEventDetail newEvent)
         {
             if (newEvent != _cureentEvent)
             {
+                if (_cureentEvent == null || _cureentEvent.targetEventPoint == null) return false;
+                if (newEvent == null || newEvent.targetEventPoint == null) return false;
+
+
                 _cureentEvent?.targetEventPoint.gameObject.SetActive(false);
                 _cureentEvent = newEvent;
 
                 newEvent?.targetEventPoint.gameObject.SetActive(true);
 
+                return true;
             }
+
+            return false;
 
         }
     }
