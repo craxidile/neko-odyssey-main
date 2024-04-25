@@ -137,7 +137,6 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
 
             //SetTime($"{dayMinute / 60}:{dayMinute % 60}");
-            currentTimeText = currentTime.ToString();
 
 
             //Debug.Log($"current time : {currentTimeText}");
@@ -168,24 +167,27 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
         public void ProcessTime()
         {
-            if (!isTimeRunning)
+            if (isTimeRunning)
             {
-                dayMinute = Mathf.RoundToInt(_dayMinuteFloat);
-                return;
+                var secondPerSecond = GameHourPerMinute * timeMultiplier;
+                var nectSecondValue = Time.deltaTime * secondPerSecond;
+
+
+                _dayMinuteFloat += nectSecondValue;
+                if (_dayMinuteFloat > MaxDayMinute)
+                {
+                    _dayMinuteFloat = 0;
+                }
+            }
+            else
+            {
+
             }
 
-            var secondPerSecond = GameHourPerMinute * timeMultiplier;
-            var nectSecondValue = Time.deltaTime * secondPerSecond;
 
-
-            _dayMinuteFloat += nectSecondValue;
-            if (_dayMinuteFloat > MaxDayMinute)
-            {
-                _dayMinuteFloat = 0;
-            }
             dayMinute = Mathf.RoundToInt(_dayMinuteFloat);
-
             currentTime = new TimeHrMin($"{dayMinute / 60}:{dayMinute % 60}");
+            currentTimeText = currentTime.ToString();
         }
 
 

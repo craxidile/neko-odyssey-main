@@ -6,7 +6,7 @@ using UnityEngine;
 using System.Linq;
 
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
-
+using UniRx;
 
 namespace NekoOdyssey.Scripts.Game.Core.Routine
 {
@@ -25,6 +25,12 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         public QuestEventDetail _lastestQuestEventDetail;
 
         public DayNightLightingManager dayNightLightingManager;
+
+
+
+        public Subject<EventPoint> OnBeginEventPoint { get; } = new();
+        public Subject<EventPoint> OnCompleteEventPoint { get; } = new();
+        public Subject<EventPoint> OnCancelEventPoint { get; } = new();
 
 
         public Routine()
