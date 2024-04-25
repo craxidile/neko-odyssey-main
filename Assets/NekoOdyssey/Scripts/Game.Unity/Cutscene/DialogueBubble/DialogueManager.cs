@@ -68,6 +68,7 @@ public class DialogueManager : MonoBehaviour
         {
             nextDialogue = true;
             canvasController.SetOpened(false);
+
             Debug.Log($">>behavior<< play continue after get key down");
         }
     }

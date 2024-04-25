@@ -8,17 +8,18 @@ using UnityEngine.Windows;
 
 public class DialogueTrackMixer : PlayableBehaviour
 {
+    DialogCanvasController canvasController;
+    int indexCount;
     public override void PrepareFrame(Playable playable, FrameData info)
     {
-        base.PrepareFrame(playable, info);
+        indexCount = 0;
     }
     public override void ProcessFrame(Playable playable, FrameData info, object playerData)
     {
-        var canvasController = playerData as DialogCanvasController;
+        canvasController = playerData as DialogCanvasController;
         string currentText = "";
 
         if (!canvasController) { return; }
-
         int inputCount = playable.GetInputCount();
         for (int i = 0; i < inputCount; i++)
         {
@@ -28,25 +29,13 @@ public class DialogueTrackMixer : PlayableBehaviour
             {
                 ScriptPlayable<DialogueBehaviour> inputPlayable = (ScriptPlayable<DialogueBehaviour>)playable.GetInput(i);
                 DialogueBehaviour input = inputPlayable.GetBehaviour();
-                var textData = DialogueManager.GetDialogue(input.lineIndexID);
+                var textData = DialogueManager.GetDialogue(input.lineIndexID[indexCount]);
                 currentText = textData.DialogueSentance;
-                //if (Application.isPlaying)
-                //{
-                //    if (input.waitPlayerSummit)
-                //    {
-
-                //        var director = (playable.GetGraph().GetResolver() as PlayableDirector);
-                //        while (director.state != PlayState.Paused && !input.isLooped)
-                //        {
-                //            input.isLooped = true;
-                //            director.Pause();
-                //        }
-                //    }
-                //}
+                canvasController.gameObject.transform.position = input.bubbleObject.transform.position;
+                canvasController.gameObject.transform.forward = input.bubbleObject.transform.forward;
+                canvasController.SetText(currentText);
             }
         }
-
-        canvasController.SetText(currentText);
     }
     //public override void OnBehaviourPlay(Playable playable, FrameData info)
     //{
