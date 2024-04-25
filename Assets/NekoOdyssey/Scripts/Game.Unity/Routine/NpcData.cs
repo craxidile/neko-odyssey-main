@@ -38,11 +38,11 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             SwtichEvent(null);
             foreach (var eventDetail in npcRoutineEvents)
             {
-                if (eventDetail.targetEventPoint == null)
+                if (eventDetail.GetTargetEventPoint() == null)
                 {
                     continue;
                 }
-                var targetEventObject = eventDetail.targetEventPoint.gameObject;
+                var targetEventObject = eventDetail.GetTargetEventPoint().gameObject;
                 if (targetEventObject.activeSelf)
                 {
                     targetEventObject.SetActive(false);
@@ -81,19 +81,26 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         {
             if (newEvent != _cureentEvent)
             {
-                if (_cureentEvent == null || _cureentEvent.targetEventPoint == null) return false;
-                if (newEvent == null || newEvent.targetEventPoint == null) return false;
 
+                if (_cureentEvent != null && _cureentEvent.GetTargetEventPoint() != null)
+                {
+                    _cureentEvent?.GetTargetEventPoint().gameObject.SetActive(false);
 
-                _cureentEvent?.targetEventPoint.gameObject.SetActive(false);
+                }
+
                 _cureentEvent = newEvent;
 
-                newEvent?.targetEventPoint.gameObject.SetActive(true);
+                if (newEvent != null && newEvent.GetTargetEventPoint() != null)
+                {
+                    newEvent?.GetTargetEventPoint().gameObject.SetActive(true);
+                    Debug.Log($"swtich event : {newEvent.targetEventPointKey}");
+                    return true;
+                }
+                return false;
 
-                return true;
             }
 
-            return false;
+            return true;
 
         }
     }

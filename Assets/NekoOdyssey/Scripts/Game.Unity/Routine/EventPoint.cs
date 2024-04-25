@@ -23,6 +23,16 @@ public class EventPoint : MonoBehaviour
 
     public static EventPoint GetEventPoint(string key)
     {
+
+        //Debug.Log($"event Point Count {AllEventPoint.Count}");
+
+        //foreach (var item in AllEventPoint)
+        //{
+        //    Debug.Log($"{item.Value.name}");
+
+        //}
+
+
         if (AllEventPoint.ContainsKey(key))
         {
             return AllEventPoint[key];
@@ -32,5 +42,6 @@ public class EventPoint : MonoBehaviour
             Debug.LogWarning($"EventPoint : {key} Not Found");
             return null;
         }
+
     }
 }

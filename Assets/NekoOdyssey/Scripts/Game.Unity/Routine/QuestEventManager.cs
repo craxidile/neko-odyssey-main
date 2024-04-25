@@ -70,7 +70,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                 TimeHrMin[] eventTimeList = new TimeHrMin[] { new TimeHrMin(targetTimes[0]), new TimeHrMin(targetTimes[1]) };
 
 
-                var tragetEventPoint = EventPoint.GetEventPoint(eventPointKey);
+                //var tragetEventPoint = EventPoint.GetEventPoint(eventPointKey);
 
 
 
@@ -104,7 +104,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                 }
 
 
-                QuestEventDetail newQuestEventDetail = new QuestEventDetail(dayList, eventTimeList[0], eventTimeList[1], tragetEventPoint, keyIdConditions, keyIdConditionsExclude);
+                QuestEventDetail newQuestEventDetail = new QuestEventDetail(dayList, eventTimeList[0], eventTimeList[1], eventPointKey, keyIdConditions, keyIdConditionsExclude);
                 newQuestEventDetail.questId = questKey.ToLower();
 
                 foreach (var relatedCharacter in releatedCharacters)
@@ -328,7 +328,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
         public Dictionary<string, int> stepRewards;
 
-        public QuestEventDetail(HashSet<Day> eventDays, TimeHrMin eventTimeStart, TimeHrMin eventTimeEnd, EventPoint targetEventPoint, List<string> keyIdConditions, List<string> keyIdConditionsExclude)
+        public QuestEventDetail(HashSet<Day> eventDays, TimeHrMin eventTimeStart, TimeHrMin eventTimeEnd, string targetEventPoint, List<string> keyIdConditions, List<string> keyIdConditionsExclude)
             : base(eventDays, eventTimeStart, eventTimeEnd, targetEventPoint, keyIdConditions, keyIdConditionsExclude)
         {
             //this.eventDays = eventDays;

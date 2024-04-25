@@ -165,7 +165,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
                     if (questEventDetail.IsInEventTime(TimeRoutine.day, TimeRoutine.currentTime))
                     {
-                        questEventDetail.targetEventPoint?.gameObject.SetActive(true);
+                        questEventDetail.GetTargetEventPoint()?.gameObject.SetActive(true);
 
                         foreach (var relatedCharacter in questEventDetail.relatedCharacters)
                         {
@@ -186,8 +186,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
 
                         //talk to npc
-                        var dialogueActors = questEventDetail.targetEventPoint?.GetComponentsInChildren<DialogueActor>();
-                        var eventPointInteractive = questEventDetail.targetEventPoint?.GetComponent<EventPointInteractive>();
+                        var dialogueActors = questEventDetail.GetTargetEventPoint()?.GetComponentsInChildren<DialogueActor>();
+                        var eventPointInteractive = questEventDetail.GetTargetEventPoint()?.GetComponent<EventPointInteractive>();
                         if (dialogueActors != null && dialogueActors.Length > 0 && eventPointInteractive != null)
                         {
                             eventPointInteractive.OnInteractive = () =>
@@ -265,7 +265,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                                     if (!dialogueGroup.isCanceled)
                                     {
                                         Debug.Log("Complete dialogue");
-                                        questEventDetail.targetEventPoint?.gameObject.SetActive(false);
+                                        questEventDetail.GetTargetEventPoint()?.gameObject.SetActive(false);
 
 
                                         CompleteQuestStep();
@@ -296,7 +296,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                     }
                     else //outside event time
                     {
-                        questEventDetail.targetEventPoint?.gameObject.SetActive(false);
+                        questEventDetail.GetTargetEventPoint()?.gameObject.SetActive(false);
                         //if (_lastestQuestEventDetail == questEventDetail) _lastestQuestEventDetail = null;
 
                         foreach (var keyValue in questEventDetail.relatedCharactersRoutineDisable)
@@ -428,8 +428,11 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
                     if (enabledRoutine != null)
                     {
+                        if (enabledRoutine.dialogueKey.Equals("-"))
+                        {
+                            AddRoutineDialogue(enabledRoutine.GetTargetEventPoint(), enabledRoutine.dialogueKey);
+                        }
                         //Debug.Log($"add routine target = {enabledRoutine.targetEventPoint.name} , dialogue = {enabledRoutine.dialogueKey}");
-                        AddRoutineDialogue(enabledRoutine.targetEventPoint, enabledRoutine.dialogueKey);
 
                     }
                 }
