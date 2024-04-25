@@ -38,6 +38,10 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             SwtichEvent(null);
             foreach (var eventDetail in npcRoutineEvents)
             {
+                if (eventDetail.targetEventPoint == null)
+                {
+                    continue;
+                }
                 var targetEventObject = eventDetail.targetEventPoint.gameObject;
                 if (targetEventObject.activeSelf)
                 {
