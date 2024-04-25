@@ -61,6 +61,10 @@ public class TimeHrMin
     {
         return $"{Hour.ToString().PadLeft(2, '0')}:{Minute.ToString().PadLeft(2, '0')}";
     }
+    public int ToInt()
+    {
+        return (Hour * 60) + Minute;
+    }
 
     public bool inBetweenTime(TimeHrMin startTime, TimeHrMin endTime)
     {
@@ -86,23 +90,26 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 {
     public class TimeRoutine : MonoBehaviour
     {
+        public const float GameHourPerMinute = 0.25f;
+        public const int StartDayMinute = 500;
         public const int MaxDayMinute = 1440;
+
 
         public Day currentDay;
         [Range(0, MaxDayMinute)] public int dayMinute;
-        float _dayMinuteFloat = 500;
+        static float _dayMinuteFloat;
 
         [ReadOnlyField]
         [SerializeField]
         public string currentTimeText;
 
-        public float timeSecondPerGameHour = 240;
+        public float timeMultiplier = 1f;
         //public static TimeScriptable timeScriptable;
 
         public static Day day { get; set; } = 0;
         public static TimeHrMin currentTime { get; set; } = new TimeHrMin("00.00");
 
-
+        [SerializeField] bool _isTimer; //only edit in unity editor
         static bool isTimeRunning = false;
         public static void PauseTime() => isTimeRunning = false;
         public static void ContinueTime() => isTimeRunning = true;
@@ -112,6 +119,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         public void Start()
         {
             isTimeRunning = false;
+            _dayMinuteFloat = StartDayMinute;
         }
 
         // Update is called once per frame
@@ -122,18 +130,22 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             //timeHrMin.Hour = currentHours;
             //timeHrMin.Minute = currentMinute;
 
+            _isTimer = isTimeRunning;
+            currentDay = day;
             ProcessTime();
 
 
-            day = currentDay;
-            SetTime($"{dayMinute / 60}:{dayMinute % 60}");
+
+            //SetTime($"{dayMinute / 60}:{dayMinute % 60}");
             currentTimeText = currentTime.ToString();
 
 
             //Debug.Log($"current time : {currentTimeText}");
 
             GameRunner.Instance.Core.Routine.UpdateWorld();
+            GameRunner.Instance.Core.Routine.dayNightLightingManager.Update();
             DayNightTimeActivator.UpdateActivator();
+
         }
 
         public static bool inBetweenDayAndTime(List<Day> checkDay, string checkTime)
@@ -147,7 +159,10 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
         public static void SetTime(string timeText)
         {
-            currentTime = new TimeHrMin(timeText);
+            var newTime = new TimeHrMin(timeText);
+            _dayMinuteFloat = newTime.ToInt();
+
+            currentTime = newTime;
         }
 
 
@@ -155,11 +170,11 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         {
             if (!isTimeRunning)
             {
-                _dayMinuteFloat = dayMinute;
+                dayMinute = Mathf.RoundToInt(_dayMinuteFloat);
                 return;
             }
 
-            var secondPerSecond = (60 / (timeSecondPerGameHour / 60));
+            var secondPerSecond = GameHourPerMinute * timeMultiplier;
             var nectSecondValue = Time.deltaTime * secondPerSecond;
 
 
@@ -169,6 +184,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                 _dayMinuteFloat = 0;
             }
             dayMinute = Mathf.RoundToInt(_dayMinuteFloat);
+
+            currentTime = new TimeHrMin($"{dayMinute / 60}:{dayMinute % 60}");
         }
 
 
@@ -176,14 +193,16 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         private void OnValidate()
         {
             _dayMinuteFloat = dayMinute;
+            isTimeRunning = _isTimer;
+            day = currentDay;
         }
 
-        private void OnDrawGizmos()
-        {
-            day = currentDay;
-            SetTime($"{dayMinute / 60}:{dayMinute % 60}");
-            currentTimeText = currentTime.ToString();
-        }
+        //private void OnDrawGizmos()
+        //{
+        //    day = currentDay;
+        //    SetTime($"{dayMinute / 60}:{dayMinute % 60}");
+        //    currentTimeText = currentTime.ToString();
+        //}
 
     }
 }

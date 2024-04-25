@@ -24,6 +24,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
         public QuestEventDetail _lastestQuestEventDetail;
 
+        public DayNightLightingManager dayNightLightingManager;
+
 
         public Routine()
         {
@@ -35,6 +37,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             questEventManager = new QuestEventManager();
             npcRoutineManager = new NpcRoutineManager();
             questDialogueManager = new QuestDialogueManager();
+            dayNightLightingManager = new DayNightLightingManager();
         }
 
         public void Start()
@@ -54,6 +57,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                 questEventManager.Start();
                 npcRoutineManager.Start();
                 questDialogueManager.Start();
+                dayNightLightingManager.Start();
 
                 UpdateWorld();
                 //Invoke(nameof(UpdateWorld), 1f);

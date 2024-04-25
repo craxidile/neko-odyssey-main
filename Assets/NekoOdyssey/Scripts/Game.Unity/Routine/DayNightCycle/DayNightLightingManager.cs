@@ -7,21 +7,27 @@ using System;
 using UnityEngine.SceneManagement;
 using UnityEngine.Rendering.PostProcessing;
 
+//using NekoOdyssey.Scripts.Game.Unity.AssetBundles;
+
 namespace NekoOdyssey.Scripts.Game.Core.Routine
 {
-    public class DayNightLightingManager : MonoBehaviour
+    public class DayNightLightingManager
     {
         //[SerializeField] TimeRoutine timeRoutine;
 
-        [SerializeField] List<DayNightDataProfile_Scriptable> dayNightDatas = new List<DayNightDataProfile_Scriptable>();
+        //List<DayNightDataProfile_Scriptable> dayNightDatas;
+
+        TimeScriptable timeProfile;
 
         public static DayNightDataProfile_Scriptable currentDayNightProfile;
 
         float _delayTime;
         // Start is called before the first frame update
-        void Start()
+        public void Start()
         {
-            foreach (var dnData in dayNightDatas)
+            timeProfile = GameRunner.Instance.AssetMap["TimeProfile".ToLower()] as TimeScriptable;
+
+            foreach (var dnData in timeProfile.dayNightDataProfiles)
             {
                 var scene = SceneManager.GetSceneByName(dnData.sceneName);
 
@@ -30,14 +36,15 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                     SceneManager.UnloadSceneAsync(scene);
                 }
             }
+
         }
 
         // Update is called once per frame
-        void Update()
+        public void Update()
         {
             if (Time.time < _delayTime) return;
 
-            foreach (var dnData in dayNightDatas)
+            foreach (var dnData in timeProfile.dayNightDataProfiles)
             {
                 if (TimeRoutine.currentTime.inBetweenTime(dnData.enableTime))
                 {
@@ -45,8 +52,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                     {
                         updateDayNightProfile(dnData);
                         _delayTime = Time.time + 1f;
-                        return;
                     }
+                    return;
                 }
             }
         }
@@ -91,20 +98,20 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         }
 
 
-        void UnloadDayNightData(Action callback = null)
-        {
-            SceneManager.UnloadSceneAsync(currentDayNightProfile.sceneName).completed += _ =>
-            {
-                callback?.Invoke();
-            };
-        }
+        //void UnloadDayNightData(Action callback = null)
+        //{
+        //    SceneManager.UnloadSceneAsync(currentDayNightProfile.sceneName).completed += _ =>
+        //    {
+        //        callback?.Invoke();
+        //    };
+        //}
 
-        void LoadDayNightData(Action callback = null)
-        {
-            SceneManager.LoadSceneAsync(currentDayNightProfile.sceneName, LoadSceneMode.Additive).completed += _ =>
-            {
-                callback?.Invoke();
-            };
-        }
+        //void LoadDayNightData(Action callback = null)
+        //{
+        //    SceneManager.LoadSceneAsync(currentDayNightProfile.sceneName, LoadSceneMode.Additive).completed += _ =>
+        //    {
+        //        callback?.Invoke();
+        //    };
+        //}
     }
 }
