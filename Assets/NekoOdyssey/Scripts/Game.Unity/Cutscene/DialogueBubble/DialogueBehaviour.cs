@@ -9,9 +9,7 @@ public class DialogueBehaviour : PlayableBehaviour
 {
     public string[] lineIndexID;
     public GameObject bubbleObject;
-    public bool isLooped;
-    public int maxLength;
-
+    public int indexCount;
     public void Initialize(GameObject aGameObject)
     {
         bubbleObject = aGameObject;

@@ -58,6 +58,7 @@ public class DialogueManager : MonoBehaviour
         director = GetComponent<PlayableDirector>();
         UpdateGlobalLanguage();
         LoadDialogueCSV();
+        canvasController.SetOpened(false);
     }
 
     
@@ -66,10 +67,16 @@ public class DialogueManager : MonoBehaviour
     {
         if (/*director.state == PlayState.Paused && */Input.anyKeyDown && !nextDialogue)
         {
-            nextDialogue = true;
-            canvasController.SetOpened(false);
-
-            Debug.Log($">>behavior<< play continue after get key down");
+            if (!canvasController.isCutSceneLooped )
+            {
+                nextDialogue = true;
+                canvasController.SetOpened(false);
+                canvasController.indexCount = 0;
+            }
+            else
+            {
+                canvasController.nextLineId = true;
+            }
         }
     }
 

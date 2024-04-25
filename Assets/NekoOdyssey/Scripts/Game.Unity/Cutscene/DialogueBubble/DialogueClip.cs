@@ -20,8 +20,7 @@ public class DialogueClip : PlayableAsset
         var gameObject = bubbleObject.Resolve(graph.GetResolver());
         DialogueBehaviour dialogueBehaviour = playable.GetBehaviour();
         dialogueBehaviour.lineIndexID = lineIndexID;
-        dialogueBehaviour.maxLength = lineIndexID.Length;
-        dialogueBehaviour.isLooped = true;
+        dialogueBehaviour.indexCount = 0;
         if (gameObject != null)
         {
             dialogueBehaviour.Initialize(gameObject);
