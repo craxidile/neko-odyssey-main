@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UniRx;
 using UnityEngine;
 
 public enum Day
@@ -114,6 +115,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         public static void PauseTime() => isTimeRunning = false;
         public static void ContinueTime() => isTimeRunning = true;
 
+        public static Subject<TimeHrMin> OnTimeUpdate { get; } = new();
 
         // Start is called before the first frame update
         public void Start()
@@ -170,14 +172,16 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             if (isTimeRunning)
             {
                 var secondPerSecond = GameHourPerMinute * timeMultiplier;
-                var nectSecondValue = Time.deltaTime * secondPerSecond;
+                var nextSecondValue = Time.deltaTime * secondPerSecond;
 
 
-                _dayMinuteFloat += nectSecondValue;
+                _dayMinuteFloat += nextSecondValue;
                 if (_dayMinuteFloat > MaxDayMinute)
                 {
                     _dayMinuteFloat = 0;
                 }
+
+
             }
             else
             {
@@ -185,9 +189,15 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             }
 
 
+            var previosMinute = dayMinute;
             dayMinute = Mathf.RoundToInt(_dayMinuteFloat);
             currentTime = new TimeHrMin($"{dayMinute / 60}:{dayMinute % 60}");
             currentTimeText = currentTime.ToString();
+
+            if (previosMinute != dayMinute)
+            {
+                OnTimeUpdate.OnNext(currentTime);
+            }
         }
 
 

@@ -6,6 +6,8 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
+using NekoOdyssey.Scripts.Game.Core.Routine;
+
 namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
 {
     public class GameCanvasController : MonoBehaviour
@@ -16,7 +18,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
         [SerializeField] private HorizontalLayoutGroup topLeftLayoutGroup;
         [SerializeField] private HorizontalLayoutGroup topRightLayoutGroup;
 
-        [SerializeField] Image foodImage;
+        [SerializeField] Image[] foodImage;
 
         [SerializeField] TextMeshProUGUI socialLikeText, followerText, moneyText;
         [SerializeField] TextMeshProUGUI gameTimeText;
@@ -26,7 +28,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
 
         CanvasGroup canvasGroup;
 
-        [Header("testing")] [SerializeField] int testNumber;
+        [Header("testing")][SerializeField] int testNumber;
         [SerializeField] public float hungryValue;
         [SerializeField] int socialLikeCount, followerCount, moneyCount;
         [SerializeField] int socialNotificationCount, bagNotificationCount;
@@ -54,9 +56,31 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
             LayoutRebuilder.MarkLayoutForRebuild(topLeftLayoutGroup.GetComponent<RectTransform>());
             LayoutRebuilder.MarkLayoutForRebuild(topRightLayoutGroup.GetComponent<RectTransform>());
 
-            gameTimeText.text = System.DateTime.Now.ToString("HH:mm:ss"); //change later
+            //gameTimeText.text = System.DateTime.Now.ToString("HH:mm:ss"); //change later
+            var currentTimeText = TimeRoutine.currentTime.ToString();
+            if (currentTimeText.StartsWith("0")) currentTimeText = currentTimeText.Substring(1);
+            string timeAffixText = " AM";
+            var midDayTime = new TimeHrMin("12:00");
+            if (TimeRoutine.currentTime > midDayTime)
+                timeAffixText = " PM";
+            gameTimeText.text = currentTimeText + timeAffixText;
 
-            foodImage.fillAmount = hungryValue;
+            var foodGuage = hungryValue / 100;
+            for (int i = 0; i < foodImage.Length; i++)
+            {
+                if (foodGuage > i + 1)
+                {
+                    foodImage[i].fillAmount = 1;
+                }
+                else if (foodGuage > i)
+                {
+                    foodImage[i].fillAmount = foodGuage - i;
+                }
+                else
+                {
+                    foodImage[i].fillAmount = 0;
+                }
+            }
 
             socialLikeText.text = socialLikeCount.ToString("N0");
             followerText.text = followerCount.ToString("N0");

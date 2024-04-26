@@ -23,6 +23,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
         public PlayerCapture Capture { get; } = new();
         public PlayerPetting Petting { get; } = new();
         public PlayerConversation Conversation { get; } = new();
+        public PlayerStamina Stamina { get; set; }
 
         public GameObject GameObject { get; set; }
 
@@ -37,6 +38,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
             Bag.Bind();
             Capture.Bind();
             Conversation.Bind();
+
+            //Stamina = GameObject.AddComponent<PlayerStamina>();
         }
 
         public void SetMode(PlayerMode mode)

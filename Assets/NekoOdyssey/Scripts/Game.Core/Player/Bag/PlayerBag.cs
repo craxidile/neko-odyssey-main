@@ -82,7 +82,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
             var masterItems = GameRunner.Instance.Core.MasterData.ItemsMasterData.Items.ToList();
             ICollection<BagItemV001> bagItems;
 
-            using (var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = true }))
+            using (var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = false }))
             {
                 var bagItemRepo = new BagItemV001Repo(dbContext);
                 bagItems = bagItemRepo.List();
