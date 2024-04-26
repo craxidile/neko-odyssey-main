@@ -37,6 +37,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Capture
             });
 
             var assetBundleName = $"{GameRunner.Instance.Core.Player.Capture.CatCode.ToLower()}snap";
+            Debug.Log($">>cat_code<< {_catPhotoContainer == null}");
             if (_catPhoto) Destroy(_catPhoto);
             if (GameRunner.Instance.AssetMap.TryGetValue(assetBundleName, out var asset))
             {
