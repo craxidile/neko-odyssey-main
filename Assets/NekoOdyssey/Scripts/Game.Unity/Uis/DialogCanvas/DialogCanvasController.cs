@@ -11,9 +11,9 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.DialogCanvas
         public GameObject dialogBalloon;
         [SerializeField] Animator animator;
         // For Cutscene
-        [HideInInspector] public bool isCutSceneLooped;
-        [HideInInspector] public bool nextLineId;
-        [HideInInspector] public int indexCount;
+        [HideInInspector] public bool lastLineId;
+        [HideInInspector] public bool goNextLineId;
+        [HideInInspector] public bool endDialogue;
         public void SetText(string text)
         {
             messageBox.text = text;
@@ -21,9 +21,6 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.DialogCanvas
             Canvas.ForceUpdateCanvases();
             messageBox.gameObject.SetActive(false);
             messageBox.gameObject.SetActive(true);
-
-
-
         }
 
         public void SetOpened(bool isOpen)

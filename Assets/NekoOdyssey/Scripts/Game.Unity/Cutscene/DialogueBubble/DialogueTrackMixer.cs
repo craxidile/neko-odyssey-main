@@ -10,11 +10,12 @@ using UnityEngine.Windows;
 public class DialogueTrackMixer : PlayableBehaviour
 {
     DialogCanvasController canvasController;
-    int maxLength;
     public override void ProcessFrame(Playable playable, FrameData info, object playerData)
     {
         canvasController = playerData as DialogCanvasController;
         string currentText = "";
+        int currentArrayLength;
+        canvasController.SetOpened(false);
         if (!canvasController) { return; }
         int inputCount = playable.GetInputCount();
         for (int i = 0; i < inputCount; i++)
@@ -25,51 +26,48 @@ public class DialogueTrackMixer : PlayableBehaviour
             {
                 ScriptPlayable<DialogueBehaviour> inputPlayable = (ScriptPlayable<DialogueBehaviour>)playable.GetInput(i);
                 DialogueBehaviour input = inputPlayable.GetBehaviour();
-                maxLength = input.lineIndexID.Length;
-                if (canvasController.indexCount >= maxLength - 1 && !canvasController.isCutSceneLooped) 
-                {
-                    input.indexCount = canvasController.indexCount;
-                }
-                var textData = DialogueManager.GetDialogue(input.lineIndexID[input.indexCount]);
-                currentText = textData.DialogueSentance;
+                currentArrayLength = input.lineIndexID.Length - 1;
                 canvasController.gameObject.transform.position = input.bubbleObject.transform.position;
                 canvasController.gameObject.transform.forward = input.bubbleObject.transform.forward;
-                if (input.indexCount < maxLength - 1)
+                if (!input.enterClip)
                 {
-                    canvasController.SetOpened(canvasController.isCutSceneLooped);
+                    canvasController.endDialogue = false;
+                    Debug.Log(canvasController.endDialogue);
+                    input.enterClip = true;
+
+                }
+                
+                if (Application.isPlaying)
+                {
+                    if (canvasController.goNextLineId)
+                    {
+                        input.indexCount++;
+                        canvasController.goNextLineId = false;
+                    }
+
+                    if (input.indexCount >= currentArrayLength || currentArrayLength == 0)
+                    {
+                        canvasController.lastLineId = true;
+                    }
+                    else
+                    {
+                        canvasController.lastLineId = false;
+                    }
+
+                    var textData = DialogueManager.GetDialogue(input.lineIndexID[input.indexCount]);
+                    currentText = textData.DialogueSentance;
+                    canvasController.SetOpened(!canvasController.endDialogue);
+
+                }
+                else
+                {
+                    var textData = DialogueManager.GetDialogue(input.lineIndexID[0]);
+                    currentText = textData.DialogueSentance;
+                    canvasController.SetOpened(true);
                 }
             }
+            canvasController.SetText(currentText);
         }
-        if (Application.isPlaying)
-        {
-            if (canvasController.indexCount >= maxLength-1)
-            {
-                canvasController.isCutSceneLooped = false;
-            }
-            else
-            {
-                canvasController.isCutSceneLooped = true;
-            }
-            if (canvasController.nextLineId)
-            {
-                canvasController.indexCount++;
-                canvasController.nextLineId = false;
-            }
-        }
-        else
-        {
-            canvasController.indexCount = 0;
-        }
-        canvasController.SetText(currentText);
     }
-    //public override void OnBehaviourPlay(Playable playable, FrameData info)
-    //{
-    //    Debug.Log(">>behavior<< play");
-    //    var duration = playable.GetDuration();
-    //    playable.SetTime(duration);
-    //}
-    //public override void OnBehaviourPause(Playable playable, FrameData info)
-    //{
-    //    Debug.Log($">>behavior<< pause");
-    //}
+
 }

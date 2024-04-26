@@ -21,6 +21,8 @@ public class DialogueClip : PlayableAsset
         DialogueBehaviour dialogueBehaviour = playable.GetBehaviour();
         dialogueBehaviour.lineIndexID = lineIndexID;
         dialogueBehaviour.indexCount = 0;
+        dialogueBehaviour.enterClip = false;
+        dialogueBehaviour.maxLength = lineIndexID.Length;
         if (gameObject != null)
         {
             dialogueBehaviour.Initialize(gameObject);

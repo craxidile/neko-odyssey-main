@@ -29,7 +29,7 @@ public class DialogueManager : MonoBehaviour
     [HideInInspector]
     public PlayableDirector director;
     public DialogCanvasController canvasController;
-    public bool nextDialogue;
+    public bool endBubble;
 
     //languege  
     int languageColumnIndex = 1;
@@ -65,17 +65,16 @@ public class DialogueManager : MonoBehaviour
 
     private void Update()
     {
-        if (/*director.state == PlayState.Paused && */Input.anyKeyDown && !nextDialogue)
+        if (Input.anyKeyDown && !endBubble)
         {
-            if (!canvasController.isCutSceneLooped )
+            if (canvasController.lastLineId)
             {
-                nextDialogue = true;
-                canvasController.SetOpened(false);
-                canvasController.indexCount = 0;
+                endBubble = true;
+                canvasController.endDialogue = true;
             }
             else
             {
-                canvasController.nextLineId = true;
+                canvasController.goNextLineId = true;
             }
         }
     }
