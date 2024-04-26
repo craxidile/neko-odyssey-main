@@ -9,6 +9,7 @@ using NekoOdyssey.Scripts.Game.Unity.Inputs;
 using NekoOdyssey.Scripts.Game.Unity.Petting;
 using NekoOdyssey.Scripts.Game.Unity.Sites;
 using UniRx;
+using Unity.VisualScripting;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -50,12 +51,12 @@ namespace NekoOdyssey.Scripts
 
             new GameObject("Time Controller").AddComponent<NekoOdyssey.Scripts.Game.Core.Routine.TimeRoutine>().transform.SetParent(transform);
 
+
             Core.Bind();
         }
 
         public void SetReady(bool ready)
         {
-            Debug.Log($">>ready<< {ready}");
             Ready = ready;
             OnReady.OnNext(ready);
         }
@@ -64,18 +65,20 @@ namespace NekoOdyssey.Scripts
         {
             Core.Start();
 
-            var boundary = FindAnyObjectByType<CameraBoundary>();
-            if (boundary != null && Camera.main != null)
-            {
-                var confiner = Camera.main.GetComponent<CinemachineConfiner>();
-                confiner.m_BoundingVolume = boundary.GetComponent<BoxCollider>();
-            }
+            //var boundary = FindAnyObjectByType<CameraBoundary>();
+            //if (boundary != null && Camera.main != null)
+            //{
+            //    var confiner = Camera.main.GetComponent<CinemachineConfiner>();
+            //    confiner.m_BoundingVolume = boundary.GetComponent<BoxCollider>();
+            //}
 
-            var cameraAnchor = FindAnyObjectByType<CameraAnchor>();
-            if (cameraAnchor != null && Camera.main != null)
-            {
-                Camera.main.transform.position = cameraAnchor.transform.position;
-            }
+            //var cameraAnchor = FindAnyObjectByType<CameraAnchor>();
+            //if (cameraAnchor != null && Camera.main != null)
+            //{
+            //    Camera.main.transform.position = cameraAnchor.transform.position;
+            //}
+
+            AssetBundleUtils.OnReady(InitializePositions);
         }
 
         private void OnDestroy()
@@ -91,6 +94,45 @@ namespace NekoOdyssey.Scripts
         private void OnDisable()
         {
             _inputActions.Disable();
+        }
+
+        private CameraBoundary LoadCameraBoundaryFromSite(
+            Database.Domains.Sites.Entities.SiteEntity.Models.Site currentSite
+        )
+        {
+            if (currentSite == null) return null;
+            var cameraBoundaryName = currentSite.CameraBoundary;
+            
+            if (cameraBoundaryName == null) return null;
+            cameraBoundaryName = cameraBoundaryName.ToLower();
+            Debug.Log($">>camera_boundary<< {cameraBoundaryName}");
+            
+            if (!AssetMap.ContainsKey(cameraBoundaryName)) return null;
+            var boundaryGameObject = Instantiate(AssetMap[cameraBoundaryName]);
+            
+            return boundaryGameObject == null ? null : boundaryGameObject.GetComponent<CameraBoundary>();
+        }
+
+        private void InitializePositions()
+        {
+            var currentSite = SiteRunner.Instance.Core.Site.CurrentSite;
+            var boundary = LoadCameraBoundaryFromSite(currentSite);
+            if (boundary == null)
+            {
+                boundary = FindAnyObjectByType<CameraBoundary>();
+            }
+
+            if (boundary != null && Camera.main != null)
+            {
+                var confiner = Camera.main.GetComponent<CinemachineConfiner>();
+                confiner.m_BoundingVolume = boundary.GetComponent<BoxCollider>();
+            }
+
+            var cameraAnchor = FindAnyObjectByType<CameraAnchor>();
+            if (cameraAnchor != null && Camera.main != null)
+            {
+                Camera.main.transform.position = cameraAnchor.transform.position;
+            }
         }
     }
 }

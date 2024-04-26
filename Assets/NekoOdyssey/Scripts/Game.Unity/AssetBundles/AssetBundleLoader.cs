@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using NekoOdyssey.Scripts.Constants;
 using NekoOdyssey.Scripts.Game.Core.PlayerMenu;
 using UnityEngine;
 
@@ -22,6 +23,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.AssetBundles
                 $"cat_profiles",
                 $"cat_emotions",
                 $"scriptableobject"
+                $"items",
+                $"camera_boundaries",
             };
 
             foreach (var bundleName in bundleNames)
@@ -36,7 +39,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.AssetBundles
         {
             var bundlePath = System.IO.Path.Combine(
                 Application.streamingAssetsPath,
-                "StandaloneWindows",
+                AppConstants.AssetBundlesFolder,
                 bundleName
             );
             if (!System.IO.File.Exists(bundlePath)) return;
@@ -46,7 +49,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.AssetBundles
             {
                 var itemName = item.name.ToLower();
                 var assetMap = GameRunner.Instance.AssetMap;
-                Debug.Log($">>item_name<< {itemName}");
+                // Debug.Log($">>item_name<< {itemName}");
                 assetMap[itemName] = item;
             }
         }

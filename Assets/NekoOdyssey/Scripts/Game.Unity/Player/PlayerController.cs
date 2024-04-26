@@ -1,4 +1,8 @@
 ﻿using System;
+using Cinemachine;
+using NekoOdyssey.Scripts.Database.Commons.Models;
+using NekoOdyssey.Scripts.Game.Unity.Player.Bag;
+using NekoOdyssey.Scripts.Game.Unity.Player.Cameras;
 using NekoOdyssey.Scripts.Game.Unity.Player.Capture;
 using NekoOdyssey.Scripts.Game.Unity.Player.Conversations;
 using NekoOdyssey.Scripts.Game.Unity.Player.Movement;
@@ -26,12 +30,15 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
 
         // public static Vector3 MainPlayerAnchor = new(28, -1.662279f, -41.5f);
         private PlayerMovementController _movementController;
+        private ZoomCameraController _zoomCameraController;
         private PlayerPhoneController _phoneController;
+        private PlayerBagController _bagController;
         private PlayerCaptureController _captureController;
         private PlayerConversationController _conversationController;
         private PlayerPettingController _pettingController;
 
-        public GameObject phoneScreen;
+        public GameObject phoneCameraAnchor;
+        public GameObject bagCameraAnchor;
         public GameObject catPhotoContainer;
 
         [Space] [Header("Movement Speed")] public float moveSpeed = 1.5f;
@@ -43,7 +50,9 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
         {
             GameRunner.Instance.Core.Player.GameObject = gameObject;
             _movementController = gameObject.AddComponent<PlayerMovementController>();
+            _zoomCameraController = gameObject.AddComponent<ZoomCameraController>();
             _phoneController = gameObject.AddComponent<PlayerPhoneController>();
+            _bagController = gameObject.AddComponent<PlayerBagController>();
             _captureController = gameObject.AddComponent<PlayerCaptureController>();
             _conversationController = gameObject.AddComponent<PlayerConversationController>();
             _pettingController = gameObject.AddComponent<PlayerPettingController>();
@@ -53,7 +62,9 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
 
         private void InitializePosition()
         {
-            var currentSite = Site.Core.Site.Site.CurrentSite;
+            var positionSet = false;
+
+            var currentSite = SiteRunner.Instance.Core.Site.CurrentSite;
             if (currentSite == null) return;
 
             if (
@@ -65,13 +76,63 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
                 _movementController.ForceSetPosition(
                     new Vector3(currentSite.PlayerX.Value, currentSite.PlayerY.Value, currentSite.PlayerZ.Value)
                 );
-                return;
+                positionSet = true;
             }
 
+            Debug.Log($">>player_facing<< {currentSite.PlayerFacing}");
+            if (currentSite.PlayerFacing != null)
+            {
+                var cameraOffsetX = 0f;
+                var cameraOffsetZ = 0f;
+                var cameraRotationY = 0f;
+                switch (currentSite.PlayerFacingDirection)
+                {
+                    case FacingDirection.West:
+                        cameraOffsetX = 0f;
+                        cameraOffsetZ = 5f;
+                        cameraRotationY = 180f;
+                        break;
+                    case FacingDirection.South:
+                        cameraOffsetX = -5f;
+                        cameraOffsetZ = 0f;
+                        cameraRotationY = 90f;
+                        break;
+                    case FacingDirection.East:
+                        cameraOffsetX = 0f;
+                        cameraOffsetZ = -5f;
+                        cameraRotationY = 0;
+                        break;
+                    case FacingDirection.North:
+                        cameraOffsetX = 5f;
+                        cameraOffsetZ = 0f;
+                        cameraRotationY = -90f;
+                        break;
+                    default:
+                        break;
+                }
+
+                var playerRotation = transform.eulerAngles;
+                playerRotation.y = cameraRotationY;
+                _movementController.ForceSetRotation(playerRotation);
+
+                var cameraRotation = GameRunner.Instance.cameras.mainCamera.transform.eulerAngles;
+                cameraRotation.y = cameraRotationY;
+                GameRunner.Instance.cameras.mainCamera.transform.eulerAngles = cameraRotation;
+
+                var virtualCamera = GameRunner.Instance.cameras.mainCamera.GetComponent<CinemachineVirtualCamera>();
+                var transposer = virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
+                transposer.m_FollowOffset = new Vector3(cameraOffsetX, 0, cameraOffsetZ);
+            }
+
+            if (positionSet) return;
+
             var playerAnchor = FindAnyObjectByType<PlayerAnchor>();
-            _movementController.ForceSetPosition(
-                playerAnchor != null ? playerAnchor.transform.position : MainPlayerAnchor
-            );
+            if (playerAnchor != null)
+            {
+                _movementController.ForceSetPosition(
+                    playerAnchor != null ? playerAnchor.transform.position : MainPlayerAnchor
+                );
+            }
         }
 
         private void Update()

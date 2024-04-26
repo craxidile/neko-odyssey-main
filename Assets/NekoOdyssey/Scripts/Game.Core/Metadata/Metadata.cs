@@ -21,7 +21,6 @@ namespace NekoOdyssey.Scripts.Game.Core.Metadata
         private void InitializeDatabase()
         {
             using (new MetadataDbContext(new() { CopyMode = DbCopyMode.CopyIfNotExists, ReadOnly = false })) ;
-
         }
     }
 }

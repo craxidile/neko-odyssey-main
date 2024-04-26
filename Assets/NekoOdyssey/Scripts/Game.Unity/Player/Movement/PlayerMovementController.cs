@@ -33,6 +33,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Movement
 
             if (!_active || !_animator) return;
             _animator.SetLayerWeight(_animator.GetLayerIndex($"Phone"), 0f);
+            _animator.SetLayerWeight(_animator.GetLayerIndex($"Bag"), 0f);
             _animator.SetLayerWeight(_animator.GetLayerIndex($"Capture"), 0f);
         }
 
@@ -52,6 +53,13 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Movement
         {
             _characterController.enabled = false;
             transform.position = position;
+            _characterController.enabled = true;
+        }
+
+        public void ForceSetRotation(Vector3 rotation)
+        {
+            _characterController.enabled = false;
+            transform.eulerAngles = rotation;
             _characterController.enabled = true;
         }
 
