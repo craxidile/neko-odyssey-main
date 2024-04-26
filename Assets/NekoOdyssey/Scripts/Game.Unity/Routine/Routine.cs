@@ -440,7 +440,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
                     if (enabledRoutine != null)
                     {
-                        if (enabledRoutine.dialogueKey.Equals("-"))
+                        if (!enabledRoutine.dialogueKey.Equals("-"))
                         {
                             AddRoutineDialogue(enabledRoutine.GetTargetEventPoint(), enabledRoutine.dialogueKey);
                         }

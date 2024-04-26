@@ -22,7 +22,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.AssetBundles
                 $"cat_snaps",
                 $"cat_profiles",
                 $"cat_emotions",
-                $"scriptableobject"
+                $"scriptableobject",
                 $"items",
                 $"camera_boundaries",
             };

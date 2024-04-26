@@ -65,18 +65,18 @@ namespace NekoOdyssey.Scripts
         {
             Core.Start();
 
-            //var boundary = FindAnyObjectByType<CameraBoundary>();
-            //if (boundary != null && Camera.main != null)
-            //{
-            //    var confiner = Camera.main.GetComponent<CinemachineConfiner>();
-            //    confiner.m_BoundingVolume = boundary.GetComponent<BoxCollider>();
-            //}
+            var boundary = FindAnyObjectByType<CameraBoundary>();
+            if (boundary != null && Camera.main != null)
+            {
+                var confiner = Camera.main.GetComponent<CinemachineConfiner>();
+                confiner.m_BoundingVolume = boundary.GetComponent<BoxCollider>();
+            }
 
-            //var cameraAnchor = FindAnyObjectByType<CameraAnchor>();
-            //if (cameraAnchor != null && Camera.main != null)
-            //{
-            //    Camera.main.transform.position = cameraAnchor.transform.position;
-            //}
+            var cameraAnchor = FindAnyObjectByType<CameraAnchor>();
+            if (cameraAnchor != null && Camera.main != null)
+            {
+                Camera.main.transform.position = cameraAnchor.transform.position;
+            }
 
             AssetBundleUtils.OnReady(InitializePositions);
         }
