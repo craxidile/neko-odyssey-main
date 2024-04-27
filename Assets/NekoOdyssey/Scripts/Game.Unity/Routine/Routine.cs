@@ -19,7 +19,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         //public static List<EventDetail> allNpcEvents = new List<EventDetail>();
 
 
-        public CSVHolderScriptable csvHolder;
+        //public CSVHolderScriptable csvHolder;
         //public WorldRoutineManager WorldRoutineManager;
 
         public QuestEventDetail _lastestQuestEventDetail;
@@ -51,12 +51,12 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             AssetBundleUtils.OnReady(() =>
             {
                 //var a = GameRunner.Instance.AssetMap["daytime"] as ScriptableObject;
-                var CSVHolder = GameRunner.Instance.AssetMap["CSVHolder".ToLower()] as CSVHolderScriptable;
+                //var CSVHolder = GameRunner.Instance.AssetMap["CSVHolder".ToLower()] as CSVHolderScriptable;
                 //var currentTime = GameRunner.Instance.AssetMap["CurrentTime".ToLower()] as TimeScriptable;
                 //Debug.Log($"test load scriptable asset bundle {currentTime.currentTimeText}");
 
 
-                csvHolder = CSVHolder;
+                //csvHolder = CSVHolder;
                 //TimeRoutine.timeScriptable = currentTime;
 
                 //InitializedSceneEventPoint();

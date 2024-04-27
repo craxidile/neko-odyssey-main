@@ -17,11 +17,11 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
         public void Start()
         {
-            foreach (var csv in GameRunner.Instance.Core.Routine.csvHolder.allQuestsCSV)
+            foreach (var csv in GameRunner.Instance.CsvHolder.allQuestsCSV)
             {
                 LoadQuestCSV(csv);
             }
-            LoadQuestRelationshipCSV(GameRunner.Instance.Core.Routine.csvHolder.questRelationshipCSV);
+            LoadQuestRelationshipCSV(GameRunner.Instance.CsvHolder.questRelationshipCSV);
         }
 
         public void LoadQuestCSV(TextAsset textAsset)

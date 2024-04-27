@@ -32,6 +32,9 @@ namespace NekoOdyssey.Scripts
 
         public Subject<bool> OnReady { get; } = new();
 
+
+        public CSVHolderScriptable CsvHolder; //Linias Edit**
+
         public GameRunner()
         {
             Instance = this;
