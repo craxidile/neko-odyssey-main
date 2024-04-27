@@ -12,7 +12,7 @@
         public const string DbItemsName = "items";
 
         public const string DbQuestsVersion = "1";
-        public const string DbQuestsName = "quests";
+        public const string DbRoutinesQuestsName = "routines-quests";
 
         public const string DbSaveVersion = "2";
         public const string DbSaveVersion001Name = "save001";
