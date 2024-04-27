@@ -205,9 +205,16 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
         private void OnValidate()
         {
+            if (_dayMinuteFloat != dayMinute)
+            {
+                OnTimeUpdate.OnNext(Mathf.RoundToInt((float)dayMinute - _dayMinuteFloat));
+            }
+
             _dayMinuteFloat = dayMinute;
             isTimeRunning = _isTimer;
             day = currentDay;
+
+
         }
 
         //private void OnDrawGizmos()
