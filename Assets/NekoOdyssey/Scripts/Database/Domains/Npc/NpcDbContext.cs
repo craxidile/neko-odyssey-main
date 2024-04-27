@@ -1,6 +1,6 @@
 ﻿using NekoOdyssey.Constants;
 
-namespace NekoOdyssey.Scripts.Database.Domains.Quests
+namespace NekoOdyssey.Scripts.Database.Domains.Npc
 {
     public class NpcDbContext: BaseDbContext
     {
