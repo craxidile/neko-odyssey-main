@@ -1,4 +1,4 @@
-﻿namespace NekoOdyssey.Scripts.Database.Domains.Quests.Entities.QuestEntity.Models
+﻿namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestEntity.Models
 {
     public class Quest
     {

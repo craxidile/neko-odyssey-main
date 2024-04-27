@@ -1,4 +1,4 @@
-﻿namespace NekoOdyssey.Scripts.Database.Domains.Quests.Entities.RoutineEntity.Models
+﻿namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.RoutineEntity.Models
 {
     public class Routine
     {
