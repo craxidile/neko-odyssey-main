@@ -2,8 +2,11 @@
 using DG.Tweening;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 using TMPro;
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
+
+using NekoOdyssey.Scripts.Game.Core.Routine;
 
 namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
 {
@@ -15,7 +18,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
         [SerializeField] private HorizontalLayoutGroup topLeftLayoutGroup;
         [SerializeField] private HorizontalLayoutGroup topRightLayoutGroup;
 
-        [SerializeField] Image foodImage;
+        [SerializeField] Image[] foodImage;
 
         [SerializeField] TextMeshProUGUI socialLikeText, followerText, moneyText;
         [SerializeField] TextMeshProUGUI gameTimeText;
@@ -25,7 +28,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
 
         CanvasGroup canvasGroup;
 
-        [Header("testing")] [SerializeField] int testNumber;
+        [Header("testing")][SerializeField] int testNumber;
         [SerializeField] public float hungryValue;
         [SerializeField] int socialLikeCount, followerCount, moneyCount;
         [SerializeField] int socialNotificationCount, bagNotificationCount;
@@ -40,15 +43,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
         // Start is called before the first frame update
         void Start()
         {
-            phoneButton.onClick.AddListener(() =>
-            {
-                Debug.Log($">>click_button<< phone");
-                var currentMode = GameRunner.Instance.Core.Player.Mode;
-                GameRunner.Instance.Core.Player.SetMode(
-                    currentMode != PlayerMode.Phone ? PlayerMode.Phone : PlayerMode.Move
-                );
-            });
-            bagButton.onClick.AddListener(() => { Debug.Log($">>click_button<< bag"); });
+            phoneButton.onClick.AddListener(HandlePhoneClick);
+            bagButton.onClick.AddListener(HandleBackClick);
         }
 
         // Update is called once per frame
@@ -60,9 +56,31 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
             LayoutRebuilder.MarkLayoutForRebuild(topLeftLayoutGroup.GetComponent<RectTransform>());
             LayoutRebuilder.MarkLayoutForRebuild(topRightLayoutGroup.GetComponent<RectTransform>());
 
-            gameTimeText.text = System.DateTime.Now.ToString("HH:mm:ss"); //change later
+            //gameTimeText.text = System.DateTime.Now.ToString("HH:mm:ss"); //change later
+            var currentTimeText = TimeRoutine.currentTime.ToString();
+            if (currentTimeText.StartsWith("0")) currentTimeText = currentTimeText.Substring(1);
+            string timeAffixText = " AM";
+            var midDayTime = new TimeHrMin("12:00");
+            if (TimeRoutine.currentTime > midDayTime)
+                timeAffixText = " PM";
+            gameTimeText.text = currentTimeText + timeAffixText;
 
-            foodImage.fillAmount = hungryValue;
+            var foodGuage = hungryValue / 100;
+            for (int i = 0; i < foodImage.Length; i++)
+            {
+                if (foodGuage > i + 1)
+                {
+                    foodImage[i].fillAmount = 1;
+                }
+                else if (foodGuage > i)
+                {
+                    foodImage[i].fillAmount = foodGuage - i;
+                }
+                else
+                {
+                    foodImage[i].fillAmount = 0;
+                }
+            }
 
             socialLikeText.text = socialLikeCount.ToString("N0");
             followerText.text = followerCount.ToString("N0");
@@ -78,15 +96,22 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
             testNumber = (int)Time.time;
         }
 
+        private void HandlePhoneClick()
+        {
+            GameRunner.Instance.Core.Player.SetPhoneMode();
+        }
+
+        private void HandleBackClick()
+        {
+            GameRunner.Instance.Core.Player.SetBagMode();
+        }
 
         void CheckActivation()
         {
             if (isActive != canvasGroup.interactable)
             {
                 canvasGroup.interactable = isActive;
-
                 var targetAlpha = isActive ? 1 : 0;
-
                 canvasGroup.DOFade(targetAlpha, 0.3f);
             }
         }

@@ -43,10 +43,8 @@ namespace NekoOdyssey.Scripts.Site.Unity.Transition
 
         private void LoadScenes()
         {
-            var currentSite = Core.Site.Site.CurrentSite;
-
+            var currentSite = SiteRunner.Instance.Core.Site.CurrentSite;
             var scenes = currentSite.Scenes.OrderBy(s => s.Id);
-            
 
             var mainScene = scenes.FirstOrDefault();
             if (mainScene == null) return;

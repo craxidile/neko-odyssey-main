@@ -1,0 +1,43 @@
+﻿using System;
+using NekoOdyssey.Scripts.Database.Domains.Items.Entities.ItemTypeEntity.Models;
+using SpatiumInteractive.Libraries.Unity.GRU.Base;
+using SpatiumInteractive.Libraries.Unity.GRU.Contracts;
+using SQLite4Unity3d;
+
+namespace NekoOdyssey.Scripts.Database.Domains.Items.Entities.ItemEntity.Models
+{
+    [Serializable]
+    public class Item: EntityBase<int>, IAggregateRoot
+    {
+        [NotNull] [Indexed] public string Code { get; set; }
+        
+        [NotNull] public string Name { get; set; }
+        
+        public string Description { get; set; }
+
+        [NotNull] public string NormalIcon { get; set; }
+
+        [NotNull] public string ActiveIcon { get; set; }
+
+        [NotNull]
+        [Indexed]
+        [ForeignKey(typeof(ItemType))]
+        public int ItemTypeId { get; set; }
+
+        [Ignore] public ItemType Type { get; set; }
+
+        public string ItemTypeCode { get; set; }
+
+
+        public Item()
+        {
+        }
+
+        public Item(string code, string normalIcon, string activeIcon)
+        {
+            Code = code;
+            NormalIcon = normalIcon;
+            ActiveIcon = activeIcon;
+        }
+    }
+}

@@ -13,5 +13,12 @@
         Left,
         Right,
         Pet,
+        Up,
+        Down,
+        LeftEnter,
+        LeftExit,
+        RightEnter,
+        RightExit,
+        NoEntry
     }
 }
