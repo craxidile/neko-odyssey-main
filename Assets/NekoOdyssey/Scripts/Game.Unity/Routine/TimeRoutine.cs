@@ -115,7 +115,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         public static void PauseTime() => isTimeRunning = false;
         public static void ContinueTime() => isTimeRunning = true;
 
-        public static Subject<TimeHrMin> OnTimeUpdate { get; } = new();
+        public static Subject<int> OnTimeUpdate { get; } = new();
 
         // Start is called before the first frame update
         public void Start()
@@ -196,7 +196,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
             if (previosMinute != dayMinute)
             {
-                OnTimeUpdate.OnNext(currentTime);
+                OnTimeUpdate.OnNext(Mathf.Max(dayMinute - previosMinute, 0));
             }
         }
 

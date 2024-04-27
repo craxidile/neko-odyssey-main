@@ -23,7 +23,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
         public PlayerCapture Capture { get; } = new();
         public PlayerPetting Petting { get; } = new();
         public PlayerConversation Conversation { get; } = new();
-        public PlayerStamina Stamina { get; set; }
+        public PlayerStamina Stamina { get; } = new();
 
         public GameObject GameObject { get; set; }
 
@@ -39,6 +39,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
             Capture.Bind();
             Conversation.Bind();
 
+            Stamina.Bind();
             //Stamina = GameObject.AddComponent<PlayerStamina>();
         }
 
@@ -74,6 +75,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
             Bag.Start();
             Capture.Start();
             Conversation.Start();
+            Stamina.Start();
         }
 
         public void Unbind()
@@ -82,6 +84,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
             Bag.Unbind();
             Capture.Unbind();
             Conversation.Unbind();
+            Stamina.Unbind();
         }
 
         private void ResetPlayerSubmenu()
