@@ -15,7 +15,7 @@ public class PlayerStamina
     float _stamina;
     public int Stamina => Mathf.RoundToInt(_stamina);
 
-    public Subject<float> OnStaminaChange { get; } = new();
+    public Subject<float> OnStaminaChange { get; } = new(); //float is delta stamina
 
     public void Bind()
     {
@@ -78,5 +78,17 @@ public class PlayerStamina
 
             IncreaseStamina(30);
         }
+    }
+
+
+    void StaminaOut()
+    {
+
+
+
+        //move player to home
+        var homeSite = "MikiHome";
+        SiteRunner.Instance.Core.Site.SetSite(homeSite);
+        UnityEngine.SceneManagement.SceneManager.LoadScene("SceneLoader");
     }
 }
