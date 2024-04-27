@@ -33,10 +33,7 @@ namespace NekoOdyssey.Scripts.Site.Unity.Transition
         {
             if (_screenInitialized) return;
             if (Application.isEditor) return;
-            var support16To10 = Screen.resolutions.Any(resolution =>
-                Math.Abs((float)resolution.width / resolution.height - 1.6f) < 0.05f);
-            /*Screen.SetResolution(1920,
-                Math.Abs((float)Screen.width / (float)Screen.height - 1.6f) < 0.05f ? 1200 : 1080, true);*/
+            var support16To10 = (float)Display.main.systemWidth / Display.main.systemHeight - 1.6f < .0001f;
             Screen.SetResolution(1440, support16To10 ? 900 : 810, true);
             _screenInitialized = true;
         }
