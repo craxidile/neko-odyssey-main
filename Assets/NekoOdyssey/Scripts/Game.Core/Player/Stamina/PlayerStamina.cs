@@ -24,11 +24,11 @@ public class PlayerStamina
 
     public void Start()
     {
-        ResetStamina();
 
         TimeRoutine.OnTimeUpdate.Subscribe(UpdateStamina).AddTo(GameRunner.Instance);
         GameRunner.Instance.Core.Player.Bag.OnUseBagItem.Subscribe(HandleFoodItemUsed).AddTo(GameRunner.Instance);
 
+        ResetStamina();
     }
     public void Unbind()
     {
@@ -40,6 +40,7 @@ public class PlayerStamina
     public void ResetStamina()
     {
         _stamina = 100;
+        OnStaminaChange.OnNext(0);
     }
 
 

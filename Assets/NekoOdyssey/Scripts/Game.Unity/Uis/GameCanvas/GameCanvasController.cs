@@ -29,7 +29,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
         CanvasGroup canvasGroup;
 
         [Header("testing")][SerializeField] int testNumber;
-        [SerializeField] public float hungryValue;
+        //[SerializeField] public float hungryValue;
         [SerializeField] int socialLikeCount, followerCount, moneyCount;
         [SerializeField] int socialNotificationCount, bagNotificationCount;
 
@@ -45,6 +45,9 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
         {
             phoneButton.onClick.AddListener(HandlePhoneClick);
             bagButton.onClick.AddListener(HandleBackClick);
+
+            GameRunner.Instance.Core.Player.Stamina.OnStaminaChange.Subscribe(HandleStaminaChanged).AddTo(this);
+            HandleStaminaChanged(0);
         }
 
         // Update is called once per frame
@@ -65,22 +68,6 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
                 timeAffixText = " PM";
             gameTimeText.text = currentTimeText + timeAffixText;
 
-            var foodGuage = hungryValue / 100;
-            for (int i = 0; i < foodImage.Length; i++)
-            {
-                if (foodGuage > i + 1)
-                {
-                    foodImage[i].fillAmount = 1;
-                }
-                else if (foodGuage > i)
-                {
-                    foodImage[i].fillAmount = foodGuage - i;
-                }
-                else
-                {
-                    foodImage[i].fillAmount = 0;
-                }
-            }
 
             socialLikeText.text = socialLikeCount.ToString("N0");
             followerText.text = followerCount.ToString("N0");
@@ -113,6 +100,29 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
                 canvasGroup.interactable = isActive;
                 var targetAlpha = isActive ? 1 : 0;
                 canvasGroup.DOFade(targetAlpha, 0.3f);
+            }
+        }
+
+
+        void HandleStaminaChanged(float deltaStamina)
+        {
+            var stamina = GameRunner.Instance.Core.Player.Stamina.Stamina;
+
+            float foodGuage = (float)stamina / 100f;
+            for (int i = 0; i < foodImage.Length; i++)
+            {
+                if (foodGuage > i + 1)
+                {
+                    foodImage[i].fillAmount = 1;
+                }
+                else if (foodGuage > i)
+                {
+                    foodImage[i].fillAmount = foodGuage - i;
+                }
+                else
+                {
+                    foodImage[i].fillAmount = 0;
+                }
             }
         }
     }

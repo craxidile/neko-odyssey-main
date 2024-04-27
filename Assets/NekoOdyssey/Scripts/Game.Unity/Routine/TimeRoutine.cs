@@ -122,6 +122,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         {
             isTimeRunning = false;
             _dayMinuteFloat = StartDayMinute;
+            dayMinute = Mathf.RoundToInt(_dayMinuteFloat);
         }
 
         // Update is called once per frame
