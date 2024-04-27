@@ -31,6 +31,7 @@ namespace NekoOdyssey.Scripts.Site.Unity.Transition
 
         private void InitializeScreen()
         {
+            Debug.LogError($">>resolution<< {Display.main.systemWidth} {Display.main.systemHeight}");
             if (_screenInitialized) return;
             if (Application.isEditor) return;
             var support16To10 = (float)Display.main.systemWidth / Display.main.systemHeight - 1.6f < .0001f;
