@@ -28,7 +28,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         {
             //csv loader
 
-            foreach (var dialogueCSV in GameRunner.Instance.Core.Routine.csvHolder.allQuestDialoguesCSV)
+            foreach (var dialogueCSV in GameRunner.Instance.CsvHolder.allQuestDialoguesCSV)
             {
                 var questDialogueGroup = new QuestDialogueGroup(dialogueCSV.name.ToLower().Replace("_dialogue", ""));
 

@@ -40,6 +40,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone
 
         private void SetActive(PlayerMode mode)
         {
+            Debug.Log($">>mode_mode<< {_previousMode} {mode}");
             if (_previousMode != PlayerMode.Phone && mode != PlayerMode.Phone)
             {
                 _previousMode = mode;

@@ -11,16 +11,13 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Phone
         private bool _previousActive;
         private bool _active;
 
-        private GameObject _phoneScreen;
         private Animator _animator;
         private SpriteRenderer _renderer;
-        private DepthOfField _depthOfField;
 
         private void Awake()
         {
             var player = GameRunner.Instance.Core.Player;
             var playerController = player.GameObject.GetComponent<PlayerController>();
-            _phoneScreen = playerController.phoneScreen;
             _animator = playerController.GetComponent<Animator>();
             _renderer = playerController.GetComponent<SpriteRenderer>();
         }
@@ -32,22 +29,10 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Phone
                 .AddTo(this);
         }
 
-        private void Update()
-        {
-            var mainCamera = GameRunner.Instance.cameras.mainCamera;
-            var playerCamera = GameRunner.Instance.cameras.playerCamera;
-            if (!playerCamera || !playerCamera.gameObject.activeSelf) return;
-            playerCamera.fieldOfView = mainCamera.fieldOfView;
-        }
-
         private void SetActive(PlayerMode mode)
         {
             _previousActive = _active;
             _active = mode == PlayerMode.Phone;
-
-            _phoneScreen.SetActive(_active);
-            var playerCamera = GameRunner.Instance.cameras.playerCamera;
-            if (playerCamera != null) playerCamera.gameObject.SetActive(_active);
 
             if (_active) _animator.SetLayerWeight(_animator.GetLayerIndex($"Phone"), 1f);
 

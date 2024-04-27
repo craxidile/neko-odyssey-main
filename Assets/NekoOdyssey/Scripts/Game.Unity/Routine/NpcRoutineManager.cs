@@ -63,7 +63,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
         public void Start()
         {
-            foreach (var csv in GameRunner.Instance.Core.Routine.csvHolder.routinesCSV)
+            foreach (var csv in GameRunner.Instance.CsvHolder.routinesCSV)
             {
                 LoadRoutineCSV(csv);
             }

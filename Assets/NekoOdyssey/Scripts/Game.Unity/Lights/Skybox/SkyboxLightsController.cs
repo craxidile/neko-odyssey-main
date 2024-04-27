@@ -39,7 +39,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Lights.SkyBox
 
         private void SetupLights()
         {
-            var currentSite = Site.Core.Site.Site.CurrentSite;
+            var currentSite = SiteRunner.Instance.Core.Site.CurrentSite;
             if (currentSite == null) return;
 
             var lightFacing = currentSite.LightFacingDirection;

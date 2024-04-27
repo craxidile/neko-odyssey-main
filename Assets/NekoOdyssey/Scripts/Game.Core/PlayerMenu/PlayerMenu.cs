@@ -18,6 +18,12 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
             PlayerMenuAction.Exit,
             PlayerMenuAction.Left,
             PlayerMenuAction.Right,
+            PlayerMenuAction.Up,
+            PlayerMenuAction.Down,
+            PlayerMenuAction.LeftEnter,
+            PlayerMenuAction.RightEnter,
+            PlayerMenuAction.LeftExit,
+            PlayerMenuAction.RightExit
         };
 
         private bool _active;
@@ -149,6 +155,10 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
 
         private void CommitAction()
         {
+            if (
+                GameRunner.Instance.Core.Player.Mode != PlayerMode.Move &&
+                GameRunner.Instance.Core.Player.Mode != PlayerMode.Submenu
+            ) return;
             if (!_active || _currentAction == PlayerMenuAction.None) return;
             // if (MenuLevel == 0 && _actions.Length > 1)
             //     OnChangeSiteActive.OnNext(Tuple.Create(Site, false));
