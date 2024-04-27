@@ -1,4 +1,5 @@
-﻿using DG.Tweening;
+﻿using System;
+using DG.Tweening;
 using NekoOdyssey.Scripts.Game.Core.Capture;
 using NekoOdyssey.Scripts.Game.Core.Petting;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
@@ -81,13 +82,22 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Petting
             var playerPosition = GameRunner.Instance.Core.Player.Position;
             var capturePosition = GameRunner.Instance.Core.Player.Petting.TargetPosition;
             var delta = capturePosition - playerPosition;
-            var deltaDepth = forward.x != 0f ? forward.x * delta.x : forward.z * delta.z;
-            var deltaSide = forward.x != 0f ? left.z * delta.z : left.x * delta.x;
-            Debug.Log($">>forward<< {forward} {left} {deltaDepth} {deltaSide}");
+            var forwardX = Math.Abs(forward.x) < .0001f ? 0f : forward.x;
+            var forwardZ = Math.Abs(forward.z) < .0001f ? 0f : forward.z;
+            var leftX = Math.Abs(left.x) < .0001f ? 0f : left.x;
+            var leftZ = Math.Abs(left.z) < .0001f ? 0f : left.z;
+            var deltaDepth = forwardX != 0f ? forwardX * delta.x : forwardZ * delta.z;
+            var deltaSide = forwardX != 0f ? leftZ * delta.z : leftX * delta.x;
+            
+            // Debug.Log($">>delta<< forward *{forward.x}* *{forwardX}*   *{forward.z}* *{forwardZ}*");
+            // Debug.Log($">>delta<< left *{left.x}* *{leftX}*   *{left.z}* *{leftZ}*");
+            // Debug.Log($">>delta<< delta *{delta.x}*   *{delta.z}*");
+            // Debug.Log($">>delta<< depth {deltaDepth}");
+            
             var angle = Mathf.Rad2Deg * Mathf.Atan2(Mathf.Abs(deltaSide), Mathf.Abs(deltaDepth));
 
             _animator.SetBool(petMode, true);
-            _animator.SetFloat($"FacingToCat", deltaDepth <= 0f ? 0.0f : 1.0f);
+            _animator.SetFloat($"FacingToCat", deltaDepth <= 0f ? 0f : 1f);
             _animator.SetFloat($"CaptureAngle", angle);
             _renderer.flipX = deltaSide > 0f;
 
