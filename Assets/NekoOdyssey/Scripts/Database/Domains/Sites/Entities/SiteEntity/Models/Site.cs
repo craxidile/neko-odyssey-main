@@ -12,7 +12,7 @@ using UnityEngine;
 namespace NekoOdyssey.Scripts.Database.Domains.Sites.Entities.SiteEntity.Models
 {
     [Serializable]
-    public class Site : EntityBase<int>, IAggregateRoot
+    public class Site: EntityBase<int>, IAggregateRoot
     {
         [NotNull] [Indexed] public string Name { get; set; }
 

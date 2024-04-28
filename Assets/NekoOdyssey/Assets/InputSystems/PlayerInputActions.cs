@@ -82,18 +82,18 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""NextMenu"",
+                    ""name"": ""PrevMenu"",
                     ""type"": ""Button"",
-                    ""id"": ""0745e2fc-d7ef-4909-a57a-8220255aa3f3"",
+                    ""id"": ""6ff1e118-6765-4bbf-a21d-783cac23294a"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""PrevMenu"",
+                    ""name"": ""NextMenu"",
                     ""type"": ""Button"",
-                    ""id"": ""6ff1e118-6765-4bbf-a21d-783cac23294a"",
+                    ""id"": ""0745e2fc-d7ef-4909-a57a-8220255aa3f3"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -121,6 +121,24 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""name"": ""Cancel"",
                     ""type"": ""Button"",
                     ""id"": ""d2992087-ab34-4824-a07a-d0427fcd46fd"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PrevTab"",
+                    ""type"": ""Button"",
+                    ""id"": ""541c6465-2c03-4f2f-8594-964fd51c3238"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""NextTab"",
+                    ""type"": ""Button"",
+                    ""id"": ""29ca307b-23a5-47a2-99e1-9b91445212ef"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -383,28 +401,6 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""ff96c83b-7655-4ee7-9261-733fe040d563"",
-                    ""path"": ""<Keyboard>/leftArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""PrevMenu"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""04420f91-e812-4bbb-b140-fe8538475872"",
-                    ""path"": ""<Gamepad>/dpad/left"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""PrevMenu"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""8c113f6e-ee1c-45e9-88f0-ac29fb8fc7a5"",
                     ""path"": ""<Keyboard>/enter"",
                     ""interactions"": """",
@@ -466,6 +462,72 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Cancel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cf650b76-c199-48ab-9262-0a37e7fe6d75"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextTab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d60c65ec-0f5b-474b-8d66-e913c76f7bc9"",
+                    ""path"": ""<Keyboard>/period"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextTab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ff96c83b-7655-4ee7-9261-733fe040d563"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PrevMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""04420f91-e812-4bbb-b140-fe8538475872"",
+                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PrevMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""db73d84b-8286-4a90-b925-2f846261e207"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PrevTab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""37777919-d3d4-47a2-9fa2-d07e87ec5fa8"",
+                    ""path"": ""<Keyboard>/comma"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PrevTab"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1059,11 +1121,13 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_Crouch = m_Player.FindAction("Crouch", throwIfNotFound: true);
         m_Player_Phone = m_Player.FindAction("Phone", throwIfNotFound: true);
         m_Player_Bag = m_Player.FindAction("Bag", throwIfNotFound: true);
-        m_Player_NextMenu = m_Player.FindAction("NextMenu", throwIfNotFound: true);
         m_Player_PrevMenu = m_Player.FindAction("PrevMenu", throwIfNotFound: true);
+        m_Player_NextMenu = m_Player.FindAction("NextMenu", throwIfNotFound: true);
         m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
         m_Player_Speed = m_Player.FindAction("Speed", throwIfNotFound: true);
         m_Player_Cancel = m_Player.FindAction("Cancel", throwIfNotFound: true);
+        m_Player_PrevTab = m_Player.FindAction("PrevTab", throwIfNotFound: true);
+        m_Player_NextTab = m_Player.FindAction("NextTab", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1143,11 +1207,13 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Crouch;
     private readonly InputAction m_Player_Phone;
     private readonly InputAction m_Player_Bag;
-    private readonly InputAction m_Player_NextMenu;
     private readonly InputAction m_Player_PrevMenu;
+    private readonly InputAction m_Player_NextMenu;
     private readonly InputAction m_Player_Fire;
     private readonly InputAction m_Player_Speed;
     private readonly InputAction m_Player_Cancel;
+    private readonly InputAction m_Player_PrevTab;
+    private readonly InputAction m_Player_NextTab;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -1158,11 +1224,13 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @Crouch => m_Wrapper.m_Player_Crouch;
         public InputAction @Phone => m_Wrapper.m_Player_Phone;
         public InputAction @Bag => m_Wrapper.m_Player_Bag;
-        public InputAction @NextMenu => m_Wrapper.m_Player_NextMenu;
         public InputAction @PrevMenu => m_Wrapper.m_Player_PrevMenu;
+        public InputAction @NextMenu => m_Wrapper.m_Player_NextMenu;
         public InputAction @Fire => m_Wrapper.m_Player_Fire;
         public InputAction @Speed => m_Wrapper.m_Player_Speed;
         public InputAction @Cancel => m_Wrapper.m_Player_Cancel;
+        public InputAction @PrevTab => m_Wrapper.m_Player_PrevTab;
+        public InputAction @NextTab => m_Wrapper.m_Player_NextTab;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1190,12 +1258,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Bag.started += instance.OnBag;
             @Bag.performed += instance.OnBag;
             @Bag.canceled += instance.OnBag;
-            @NextMenu.started += instance.OnNextMenu;
-            @NextMenu.performed += instance.OnNextMenu;
-            @NextMenu.canceled += instance.OnNextMenu;
             @PrevMenu.started += instance.OnPrevMenu;
             @PrevMenu.performed += instance.OnPrevMenu;
             @PrevMenu.canceled += instance.OnPrevMenu;
+            @NextMenu.started += instance.OnNextMenu;
+            @NextMenu.performed += instance.OnNextMenu;
+            @NextMenu.canceled += instance.OnNextMenu;
             @Fire.started += instance.OnFire;
             @Fire.performed += instance.OnFire;
             @Fire.canceled += instance.OnFire;
@@ -1205,6 +1273,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Cancel.started += instance.OnCancel;
             @Cancel.performed += instance.OnCancel;
             @Cancel.canceled += instance.OnCancel;
+            @PrevTab.started += instance.OnPrevTab;
+            @PrevTab.performed += instance.OnPrevTab;
+            @PrevTab.canceled += instance.OnPrevTab;
+            @NextTab.started += instance.OnNextTab;
+            @NextTab.performed += instance.OnNextTab;
+            @NextTab.canceled += instance.OnNextTab;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1227,12 +1301,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Bag.started -= instance.OnBag;
             @Bag.performed -= instance.OnBag;
             @Bag.canceled -= instance.OnBag;
-            @NextMenu.started -= instance.OnNextMenu;
-            @NextMenu.performed -= instance.OnNextMenu;
-            @NextMenu.canceled -= instance.OnNextMenu;
             @PrevMenu.started -= instance.OnPrevMenu;
             @PrevMenu.performed -= instance.OnPrevMenu;
             @PrevMenu.canceled -= instance.OnPrevMenu;
+            @NextMenu.started -= instance.OnNextMenu;
+            @NextMenu.performed -= instance.OnNextMenu;
+            @NextMenu.canceled -= instance.OnNextMenu;
             @Fire.started -= instance.OnFire;
             @Fire.performed -= instance.OnFire;
             @Fire.canceled -= instance.OnFire;
@@ -1242,6 +1316,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Cancel.started -= instance.OnCancel;
             @Cancel.performed -= instance.OnCancel;
             @Cancel.canceled -= instance.OnCancel;
+            @PrevTab.started -= instance.OnPrevTab;
+            @PrevTab.performed -= instance.OnPrevTab;
+            @PrevTab.canceled -= instance.OnPrevTab;
+            @NextTab.started -= instance.OnNextTab;
+            @NextTab.performed -= instance.OnNextTab;
+            @NextTab.canceled -= instance.OnNextTab;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1430,11 +1510,13 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnCrouch(InputAction.CallbackContext context);
         void OnPhone(InputAction.CallbackContext context);
         void OnBag(InputAction.CallbackContext context);
-        void OnNextMenu(InputAction.CallbackContext context);
         void OnPrevMenu(InputAction.CallbackContext context);
+        void OnNextMenu(InputAction.CallbackContext context);
         void OnFire(InputAction.CallbackContext context);
         void OnSpeed(InputAction.CallbackContext context);
         void OnCancel(InputAction.CallbackContext context);
+        void OnPrevTab(InputAction.CallbackContext context);
+        void OnNextTab(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
