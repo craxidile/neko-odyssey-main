@@ -9,6 +9,8 @@ namespace NekoOdyssey.Scripts.Constants
         public const string WindowsAssetBundlesFolder = "StandaloneWindows";
         public const string SwitchAssetBundlesFolder = "Switch";
 
+        public const int MaxStamina = 20000;
+
         public static string AssetBundlesFolder
         {
             get

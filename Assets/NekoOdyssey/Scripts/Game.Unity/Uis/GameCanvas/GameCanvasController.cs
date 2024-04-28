@@ -1,5 +1,7 @@
 ﻿using System;
 using DG.Tweening;
+using NekoOdyssey.Scripts.Constants;
+using NekoOdyssey.Scripts.Game.Unity.AssetBundles;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 using TMPro;
 using UniRx;
@@ -10,8 +12,12 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
 {
     public class GameCanvasController : MonoBehaviour
     {
-        public bool isActive = false;
+        private const float MaxStaminaDelay = 1f;
 
+        private bool _initialized;
+        private Tween _staminaTween;
+
+        public bool isActive;
 
         [SerializeField] private HorizontalLayoutGroup topLeftLayoutGroup;
         [SerializeField] private HorizontalLayoutGroup topRightLayoutGroup;
@@ -35,7 +41,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
         {
             canvasGroup = GetComponent<CanvasGroup>();
             canvasGroup.alpha = 0;
-            canvasGroup.DOFade(1, 0.3f).SetDelay(0.1f).OnStart(() => { isActive = true; });
+            canvasGroup.DOFade(1, 0.3f).SetDelay(.1f).OnStart(() => { isActive = true; });
         }
 
         // Start is called before the first frame update
@@ -43,25 +49,20 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
         {
             phoneButton.onClick.AddListener(HandlePhoneClick);
             bagButton.onClick.AddListener(HandleBackClick);
-        }
 
-        // Update is called once per frame
-        void Update()
-        {
-            CheckActivation();
-            if (!isActive) return;
+            AssetBundleUtils.OnReady(RebuildLayout);
 
-            LayoutRebuilder.MarkLayoutForRebuild(topLeftLayoutGroup.GetComponent<RectTransform>());
-            LayoutRebuilder.MarkLayoutForRebuild(topRightLayoutGroup.GetComponent<RectTransform>());
+            GameRunner.Instance.Core.Player.OnChangeStamina
+                .Subscribe(HandleStaminaChange)
+                .AddTo(this);
 
-            gameTimeText.text = System.DateTime.Now.ToString("HH:mm:ss"); //change later
+            UpdateStamina(GameRunner.Instance.Core.Player.Stamina);
 
-            foodImage.fillAmount = hungryValue;
+            gameTimeText.text = DateTime.Now.ToString("HH:mm:ss"); //change later
 
             socialLikeText.text = socialLikeCount.ToString("N0");
             followerText.text = followerCount.ToString("N0");
             moneyText.text = moneyCount.ToString("N0");
-
 
             socialNotificationCanvasGroup.alpha = socialNotificationCount == 0 ? 0 : 1;
             socialNotificationText.text = socialNotificationCount.ToString("N0");
@@ -70,6 +71,12 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
             bagNotificationText.text = bagNotificationCount.ToString("N0");
 
             testNumber = (int)Time.time;
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+            CheckActivation();
         }
 
         private void HandlePhoneClick()
@@ -82,7 +89,41 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
             GameRunner.Instance.Core.Player.SetBagMode();
         }
 
-        void CheckActivation()
+        private void HandleStaminaChange(int stamina)
+        {
+            UpdateStamina(stamina);
+            RebuildLayout();
+        }
+
+        private void RebuildLayout()
+        {
+            LayoutRebuilder.MarkLayoutForRebuild(topLeftLayoutGroup.GetComponent<RectTransform>());
+            LayoutRebuilder.MarkLayoutForRebuild(topRightLayoutGroup.GetComponent<RectTransform>());
+        }
+
+        private void UpdateStamina(int stamina)
+        {
+            _staminaTween?.Kill();
+
+            var staminaRatio = (float)stamina / AppConstants.MaxStamina;
+
+            if (!_initialized)
+            {
+                foodImage.fillAmount = staminaRatio;
+                _initialized = true;
+            }
+
+            var staminaDelay = foodImage.fillAmount * MaxStaminaDelay;
+            _staminaTween = DOTween.To(
+                () => foodImage.fillAmount,
+                s => foodImage.fillAmount = s,
+                staminaRatio,
+                staminaDelay
+            );
+            _staminaTween.OnComplete(() => { _staminaTween = null; });
+        }
+
+        private void CheckActivation()
         {
             if (isActive != canvasGroup.interactable)
             {
@@ -90,6 +131,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
                 var targetAlpha = isActive ? 1 : 0;
                 canvasGroup.DOFade(targetAlpha, 0.3f);
             }
+
+            if (isActive) RebuildLayout();
         }
     }
 }

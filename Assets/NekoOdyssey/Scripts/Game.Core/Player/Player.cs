@@ -1,5 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using NekoOdyssey.Scripts.Constants;
+using NekoOdyssey.Scripts.Database.Domains;
+using NekoOdyssey.Scripts.Database.Domains.SaveV001;
+using NekoOdyssey.Scripts.Database.Domains.SaveV001.PlayerPropertiesEntity.Repo;
 using NekoOdyssey.Scripts.Game.Core.Player.Bag;
 using NekoOdyssey.Scripts.Game.Core.Player.Capture;
 using NekoOdyssey.Scripts.Game.Core.Player.Conversation;
@@ -14,6 +18,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
 {
     public class Player
     {
+        private static bool _initialized;
+        
         public PlayerMode Mode { get; private set; } = PlayerMode.Move;
         public bool Running { get; private set; } = false;
         public Vector3 Position { get; private set; }
@@ -24,29 +30,36 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
         public PlayerPetting Petting { get; } = new();
         public PlayerConversation Conversation { get; } = new();
 
+        public int Stamina { get; private set; }
+        public int PocketMoney { get; private set; }
+        public int LikeCount { get; private set; }
+        public int FollowerCount { get; private set; }
+
         public GameObject GameObject { get; set; }
 
         public Subject<PlayerMode> OnChangeMode { get; } = new();
         public Subject<bool> OnRun { get; } = new();
         public Subject<Vector2> OnMove { get; } = new();
         public Subject<Vector3> OnChangePosition { get; } = new();
+        public Subject<int> OnChangeStamina { get; } = new();
+        public Subject<int> OnChangePocketMoney { get; } = new();
+        public Subject<int> OnChangeLikeCount { get; } = new();
+        public Subject<int> OnChangeFollowerCount { get; } = new();
 
         public void Bind()
         {
+            InitializeDatabase();
+
             Phone.Bind();
             Bag.Bind();
             Capture.Bind();
             Conversation.Bind();
         }
 
-        public void SetMode(PlayerMode mode)
-        {
-            Mode = mode;
-            OnChangeMode.OnNext(Mode);
-        }
-
         public void Start()
         {
+            LoadPlayerProperties();
+
             GameRunner.Instance.PlayerInputHandler.OnPhoneTriggerred
                 .Subscribe(_ => SetPhoneMode())
                 .AddTo(GameRunner.Instance);
@@ -79,6 +92,34 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
             Bag.Unbind();
             Capture.Unbind();
             Conversation.Unbind();
+        }
+
+        private void InitializeDatabase()
+        {
+            if (_initialized) return;
+            _initialized = true;
+            using (new SaveV001DbContext(new() { CopyMode = DbCopyMode.ForceCopy, ReadOnly = false })) ;
+        }
+
+        private void LoadPlayerProperties()
+        {
+            using (var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = true }))
+            {
+                var playerPropertiesRepo = new PlayerPropertiesV001Repo(dbContext);
+                var playerProperties = playerPropertiesRepo.Load();
+                AddStamina(playerProperties.Stamina);
+            }
+        }
+
+        private void SavePlayerProperties()
+        {
+            using (var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = false }))
+            {
+                var playerPropertiesRepo = new PlayerPropertiesV001Repo(dbContext);
+                var playerProperties = playerPropertiesRepo.Load();
+                playerProperties.Stamina = Stamina;
+                playerPropertiesRepo.Update(playerProperties);
+            }
         }
 
         private void ResetPlayerSubmenu()
@@ -135,10 +176,23 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
             OnRun.OnNext(Running = false);
         }
 
+        public void SetMode(PlayerMode mode)
+        {
+            Mode = mode;
+            OnChangeMode.OnNext(Mode);
+        }
+
         public void SetPosition(Vector3 position)
         {
             Position = position;
             OnChangePosition.OnNext(position);
+        }
+
+        public void AddStamina(int addition)
+        {
+            Stamina = Math.Min(AppConstants.MaxStamina, Stamina + addition);
+            OnChangeStamina.OnNext(Stamina);
+            SavePlayerProperties();
         }
     }
 }

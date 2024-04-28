@@ -73,7 +73,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Bag.ItemGrid
 
         private void HandleItemSelection(BagItemV001 bagItem)
         {
-            if (bagItem == null) return;
+            if (bagItem == null || !_bagItemButtonMap.ContainsKey(bagItem)) return;
             var itemButton = _bagItemButtonMap[bagItem];
             var controller = itemButton.GetComponent<ItemButtonController>();
             if (
@@ -110,6 +110,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Bag.ItemGrid
             itemAnimationDock.SetActive(true);
             itemAnimationDock.GetComponent<CanvasGroup>().alpha = 1;
 
+            bagCanvasController.SetRearranging(true);
+
             foreach (var item in _animatingBagItemButtonMap.Keys)
             {
                 var bagItemButton = _animatingBagItemButtonMap[item];
@@ -133,6 +135,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Bag.ItemGrid
                 itemAnimationDock.GetComponent<CanvasGroup>().alpha = 0;
                 InitializeAnimatingItemButton(itemPositions);
                 itemAnimationDock.SetActive(false);
+                bagCanvasController.SetRearranging(false);
             });
         }
 
@@ -141,7 +144,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Bag.ItemGrid
             if (visible) return;
             
             var bagItem = GameRunner.Instance.Core.Player.Bag.CurrentBagItem;
-            if (bagItem == null) return;
+            if (bagItem == null || !_bagItemButtonMap.ContainsKey(bagItem)) return;
             var bagItemButton = _bagItemButtonMap[bagItem];
             
             DOVirtual.DelayedCall(
