@@ -73,7 +73,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Bag.ItemGrid
 
         private void HandleItemSelection(BagItemV001 bagItem)
         {
-            if (bagItem == null) return;
+            if (bagItem == null || !_bagItemButtonMap.ContainsKey(bagItem)) return;
             var itemButton = _bagItemButtonMap[bagItem];
             var controller = itemButton.GetComponent<ItemButtonController>();
             if (
@@ -141,7 +141,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Bag.ItemGrid
             if (visible) return;
             
             var bagItem = GameRunner.Instance.Core.Player.Bag.CurrentBagItem;
-            if (bagItem == null) return;
+            if (bagItem == null || !_bagItemButtonMap.ContainsKey(bagItem)) return;
             var bagItemButton = _bagItemButtonMap[bagItem];
             
             DOVirtual.DelayedCall(
