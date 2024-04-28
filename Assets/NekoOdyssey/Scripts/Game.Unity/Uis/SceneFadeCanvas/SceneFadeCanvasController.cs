@@ -10,6 +10,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.SceneFadeCanvas
     {
         private const float FadeDuration = 1.5f;
 
+        private bool _animating;
         private CanvasGroup _canvasGroup;
 
         private void Awake()
@@ -29,12 +30,16 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.SceneFadeCanvas
 
         private void AnimateFade(bool opening)
         {
+            Debug.Log($">>fade<< {opening}");
+            if (_animating) return;
+            _animating = true;
             _canvasGroup.gameObject.SetActive(true);
             _canvasGroup.alpha = opening ? 1f : 0f;
             DOTween.Sequence()
                 .Append(_canvasGroup.DOFade(opening ? 0f : 1f, FadeDuration))
                 .AppendCallback(() =>
                 {
+                    _animating = false;
                     if (!opening) return;
                     _canvasGroup.gameObject.SetActive(false);
                 });
