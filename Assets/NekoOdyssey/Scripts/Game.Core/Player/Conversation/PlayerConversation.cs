@@ -12,8 +12,6 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Conversation
     {
         public string Dialog { get; set; }
 
-        private IDisposable _fireTriggeredSubscription;
-
         public void Bind()
         {
         }
@@ -21,7 +19,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Conversation
         public void Start()
         {
             Debug.Log($">>set_mode_move<< 00");
-            _fireTriggeredSubscription = GameRunner.Instance.PlayerInputHandler.OnFireTriggerred.Subscribe(_ =>
+            GameRunner.Instance.PlayerInputHandler.OnFireTriggerred.Subscribe(_ =>
             {
                 Debug.Log($">>set_mode_move<< 01 {GameRunner.Instance.Core.Player.Mode}");
                 if (GameRunner.Instance.Core.Player.Mode != PlayerMode.Conversation) return;
@@ -30,12 +28,12 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Conversation
                     GameRunner.Instance.Core.Player.SetMode(PlayerMode.Move);
                     Debug.Log($">>set_mode_move<< 02");
                 });
-            });
+            }).AddTo(GameRunner.Instance);
         }
 
         public void Unbind()
         {
-            _fireTriggeredSubscription.Dispose();
         }
+        
     }
 }
