@@ -28,6 +28,8 @@ namespace NekoOdyssey.Scripts.Database.Domains.Items.Entities.ItemEntity.Models
         [Ignore] public ItemType Type { get; set; }
 
         public string ItemTypeCode { get; set; }
+        
+        [NotNull] public int Price { get; set; }
 
         [Indexed]
         [ForeignKey(typeof(ItemShop))]
