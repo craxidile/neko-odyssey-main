@@ -15,10 +15,5 @@ namespace NekoOdyssey.Scripts.Database.Domains.SaveV001.PlayerPropertiesEntity.R
         {
             return _dbContext.Context.Table<PlayerPropertiesV001>().FirstOrDefault();
         }
-
-        public void Save(PlayerPropertiesV001 playerPropertiesV001)
-        {
-            Update(playerPropertiesV001);
-        }
     }
 }

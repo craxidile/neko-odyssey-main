@@ -13,11 +13,12 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
     public class GameCanvasController : MonoBehaviour
     {
         private const float MaxStaminaDelay = 1f;
-        
+
+        private bool _initialized;
         private Tween _staminaTween;
 
         public bool isActive;
-        
+
         [SerializeField] private HorizontalLayoutGroup topLeftLayoutGroup;
         [SerializeField] private HorizontalLayoutGroup topRightLayoutGroup;
 
@@ -40,7 +41,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
         {
             canvasGroup = GetComponent<CanvasGroup>();
             canvasGroup.alpha = 0;
-            canvasGroup.DOFade(1, 0.3f).SetDelay(0.1f).OnStart(() => { isActive = true; });
+            canvasGroup.DOFade(1, 0.3f).SetDelay(.1f).OnStart(() => { isActive = true; });
         }
 
         // Start is called before the first frame update
@@ -103,20 +104,23 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
         private void UpdateStamina(int stamina)
         {
             _staminaTween?.Kill();
-            
+
             var staminaRatio = (float)stamina / AppConstants.MaxStamina;
+
+            if (!_initialized)
+            {
+                foodImage.fillAmount = staminaRatio;
+                _initialized = true;
+            }
+
             var staminaDelay = foodImage.fillAmount * MaxStaminaDelay;
-            
             _staminaTween = DOTween.To(
                 () => foodImage.fillAmount,
                 s => foodImage.fillAmount = s,
                 staminaRatio,
                 staminaDelay
             );
-            _staminaTween.OnComplete(() =>
-            {
-                _staminaTween = null;
-            });
+            _staminaTween.OnComplete(() => { _staminaTween = null; });
         }
 
         private void CheckActivation()

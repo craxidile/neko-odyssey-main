@@ -18,6 +18,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
 {
     public class Player
     {
+        private static bool _initialized;
+        
         public PlayerMode Mode { get; private set; } = PlayerMode.Move;
         public bool Running { get; private set; } = false;
         public Vector3 Position { get; private set; }
@@ -94,6 +96,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
 
         private void InitializeDatabase()
         {
+            if (_initialized) return;
+            _initialized = true;
             using (new SaveV001DbContext(new() { CopyMode = DbCopyMode.ForceCopy, ReadOnly = false })) ;
         }
 
@@ -114,7 +118,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
                 var playerPropertiesRepo = new PlayerPropertiesV001Repo(dbContext);
                 var playerProperties = playerPropertiesRepo.Load();
                 playerProperties.Stamina = Stamina;
-                playerPropertiesRepo.Save(playerProperties);
+                playerPropertiesRepo.Update(playerProperties);
             }
         }
 
