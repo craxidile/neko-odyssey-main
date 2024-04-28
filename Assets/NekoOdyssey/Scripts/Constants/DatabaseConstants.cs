@@ -11,8 +11,11 @@
         public const string DbItemsVersion = "1";
         public const string DbItemsName = "items";
 
-        public const string DbQuestsVersion = "1";
-        public const string DbRoutinesQuestsName = "routines-quests";
+        public const string DbNpcVersion = "1";
+        public const string DbNpcName = "npc";
+
+        public const string DbFriendsVersion = "1";
+        public const string DbFriendsName = "friends";
 
         public const string DbSaveVersion = "2";
         public const string DbSaveVersion001Name = "save001";

@@ -4,7 +4,7 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc
 {
     public class NpcDbContext: BaseDbContext
     {
-        public NpcDbContext(DbContextOptions options) : base(DatabaseConstants.DbRoutinesQuestsName, options)
+        public NpcDbContext(DbContextOptions options) : base(DatabaseConstants.DbNpcName, options)
         {
         }
     }
