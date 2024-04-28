@@ -34,7 +34,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Bag
         public GameObject bagItemsContainer;
         public GameObject hoverFrame;
         public GameObject itemAnimationDock;
-        public Text itemNameText;
+
+        public bool Rearranging { get; private set; }
 
         private void Start()
         {
@@ -77,7 +78,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Bag
                 _lastSelectedObject = EventSystem.current.currentSelectedGameObject;
             }
 
-            if (!hoverFrame.activeSelf) return;
+            if (Rearranging || !hoverFrame.activeSelf) return;
 
             var scrollRectRectTransform = bagItemsScrollRect.GetComponent<RectTransform>();
             var itemHoverRectTransform = hoverFrame.GetComponent<RectTransform>();
@@ -130,6 +131,11 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Bag
         private void HandleItemSelection(BagItemV001 item)
         {
             hoverFrame.SetActive(item != null);
+        }
+
+        public void SetRearranging(bool rearranging)
+        {
+            Rearranging = rearranging;
         }
     }
 }

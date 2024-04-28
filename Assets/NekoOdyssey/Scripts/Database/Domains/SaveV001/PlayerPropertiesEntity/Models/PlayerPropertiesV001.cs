@@ -11,5 +11,9 @@ namespace NekoOdyssey.Scripts.Database.Domains.SaveV001.PlayerPropertiesEntity.M
         [NotNull] public int Stamina { get; set; }
         
         [NotNull] public int PocketMoney { get; set; }
+        
+        [NotNull] public int FollowerCount { get; set; }
+        
+        [NotNull] public int LikeCount { get; set; }
     }
 }

@@ -29,15 +29,21 @@ namespace NekoOdyssey.Scripts.Database.Domains.Items.Entities.ItemEntity.Models
 
         public string ItemTypeCode { get; set; }
         
-        [NotNull] public int Price { get; set; }
-
         [Indexed]
         [ForeignKey(typeof(ItemShop))]
         public int ItemShopId { get; set; }
+        
+        public string ItemShopCode { get; set; }
+        
+        [Ignore] public ItemShop Shop { get; set; }
+        
+        [NotNull] public int Stamina { get; set; }
 
         [NotNull] public bool SingleUse { get; set; }
 
         [NotNull] public bool Collectible { get; set; }
+        
+        [NotNull] public int Price { get; set; }
 
         public string NameTh { get; set; }
         public string NameEn { get; set; }

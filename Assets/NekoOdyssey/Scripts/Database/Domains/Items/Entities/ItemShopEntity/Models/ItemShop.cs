@@ -9,5 +9,7 @@ namespace NekoOdyssey.Scripts.Database.Domains.Items.Entities.ItemShopEntity.Mod
     public class ItemShop : EntityBase<int>, IAggregateRoot
     {
         [NotNull] [Unique] public string SiteCode { get; set; }
+        
+        public string Name { get; set; }
     }
 }
