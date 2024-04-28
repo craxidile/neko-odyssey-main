@@ -12,7 +12,9 @@ namespace NekoOdyssey.Scripts.Database.Domains.SaveV001.PlayerCatEntity.Models
         
         [NotNull] public int DailyFeedCount { get; set; }
         
-        [NotNull] public int DailyPlayCount { get; set; }
+        [NotNull] public int DailyPetCount { get; set; }
+        
+        [NotNull] public int CaptureCount { get; set; }
         
         [NotNull] public float Friendship { get; set; }
     }
