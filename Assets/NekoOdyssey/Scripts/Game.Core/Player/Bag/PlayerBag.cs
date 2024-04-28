@@ -39,7 +39,6 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
 
         public void Bind()
         {
-            InitializeDatabase();
         }
 
         public void Start()
@@ -65,12 +64,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
         public void Unbind()
         {
         }
-
-        private void InitializeDatabase()
-        {
-            using (new SaveV001DbContext(new() { CopyMode = DbCopyMode.ForceCopy, ReadOnly = false })) ;
-        }
-
+        
         private void InitializeItems()
         {
             SetDefaultItemType();
@@ -153,7 +147,9 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
 
         public void UseBagItem()
         {
+            GameRunner.Instance.Core.Player.AddStamina(CurrentBagItem.Item.Stamina);
             OnUseBagItem.OnNext(CurrentBagItem);
+            
             var index = FilteredBagItems.IndexOf(CurrentBagItem);
 
             if (!CurrentBagItem.Item.SingleUse) return;

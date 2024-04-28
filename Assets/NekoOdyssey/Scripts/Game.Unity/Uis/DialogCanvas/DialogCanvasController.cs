@@ -18,9 +18,6 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.DialogCanvas
             Canvas.ForceUpdateCanvases();
             messageBox.gameObject.SetActive(false);
             messageBox.gameObject.SetActive(true);
-
-
-
         }
 
         public void SetOpened(bool isOpen)
