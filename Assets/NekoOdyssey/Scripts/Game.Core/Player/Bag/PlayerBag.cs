@@ -54,6 +54,12 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
             GameRunner.Instance.PlayerInputHandler.OnCancelTriggerred
                 .Subscribe(_ => HandleCancellation())
                 .AddTo(GameRunner.Instance);
+            GameRunner.Instance.PlayerInputHandler.OnPrevTabTriggerred
+                .Subscribe(_ => HandlePrevTab())
+                .AddTo(GameRunner.Instance);
+            GameRunner.Instance.PlayerInputHandler.OnNextTabTriggerred
+                .Subscribe(_ => HandleNextTab())
+                .AddTo(GameRunner.Instance);
         }
 
         public void Unbind()
@@ -62,7 +68,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
 
         private void InitializeDatabase()
         {
-            using (new SaveV001DbContext(new() { CopyMode = DbCopyMode.CopyIfNotExists, ReadOnly = false })) ;
+            using (new SaveV001DbContext(new() { CopyMode = DbCopyMode.ForceCopy, ReadOnly = false })) ;
         }
 
         private void InitializeItems()
@@ -75,6 +81,22 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
         {
             if (GameRunner.Instance.Core.Player.Mode != PlayerMode.OpenBag) return;
             SetConfirmationVisible(false);
+        }
+
+        private void HandlePrevTab()
+        {
+            if (GameRunner.Instance.Core.Player.Mode != PlayerMode.OpenBag) return;
+            var itemTypes = GameRunner.Instance.Core.MasterData.ItemsMasterData.ItemTypes.ToList();
+            var index = itemTypes.IndexOf(CurrentItemType);
+            SetItemType(itemTypes[Math.Max(0, index - 1)]);
+        }
+        
+        private void HandleNextTab()
+        {
+            if (GameRunner.Instance.Core.Player.Mode != PlayerMode.OpenBag) return;
+            var itemTypes = GameRunner.Instance.Core.MasterData.ItemsMasterData.ItemTypes.ToList();
+            var index = itemTypes.IndexOf(CurrentItemType);
+            SetItemType(itemTypes[Math.Min(itemTypes.Count - 1, index + 1)]);
         }
 
         private void LoadBagItems()
@@ -97,12 +119,12 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
             }
         }
 
-        public void SetItemType(ItemType itemType)
+        public void SetItemType(ItemType itemType, bool forceFirstItemSelection = true)
         {
             var eligibleToSelectFirstItem = itemType?.Code != CurrentItemType?.Code;
             CurrentItemType = itemType;
             OnChangeItemType.OnNext(CurrentItemType);
-            if (eligibleToSelectFirstItem)
+            if (forceFirstItemSelection && eligibleToSelectFirstItem)
                 DOVirtual.DelayedCall(SelectBagItemDelay, () => SelectBagItem(FilteredBagItems.FirstOrDefault()));
         }
 
@@ -134,16 +156,18 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
             OnUseBagItem.OnNext(CurrentBagItem);
             var index = FilteredBagItems.IndexOf(CurrentBagItem);
 
+            if (!CurrentBagItem.Item.SingleUse) return;
+            
             BagItems.Remove(CurrentBagItem);
-            using (var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = true }))
+            using (var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = false }))
             {
                 var bagItemRepo = new BagItemV001Repo(dbContext);
                 bagItemRepo.Remove(CurrentBagItem);
             }
 
             index = Math.Min(FilteredBagItems.Count - 1, Math.Max(0, index - 1));
-            SelectBagItem(null);
-            SetItemType(CurrentItemType);
+            // SelectBagItem(null);
+            SetItemType(CurrentItemType, false);
 
             DOVirtual.DelayedCall(
                 SelectBagItemDelay,

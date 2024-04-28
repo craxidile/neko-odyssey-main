@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NekoOdyssey.Scripts.Database.Domains.Items.Entities.ItemEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.Sites.Entities.SiteSceneEntity.Models;
 using SpatiumInteractive.Libraries.Unity.GRU.Base;
@@ -7,7 +8,8 @@ using SQLite4Unity3d;
 
 namespace NekoOdyssey.Scripts.Database.Domains.Items.Entities.ItemTypeEntity.Models
 {
-    public class ItemType: EntityBase<int>, IAggregateRoot
+    [Serializable]
+    public class ItemType : EntityBase<int>, IAggregateRoot
     {
         [NotNull] [Indexed] public string Code { get; set; }
         

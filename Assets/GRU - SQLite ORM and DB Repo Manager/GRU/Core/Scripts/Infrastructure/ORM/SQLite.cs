@@ -420,7 +420,10 @@ namespace SQLite4Unity3d
 			}
 			var query = "create table if not exists \"" + map.TableName + "\"(\n";
 
-			var decls = map.Columns.Select (p => Orm.SqlDecl (p, StoreDateTimeAsTicks));
+			var columns = new List<TableMapping.Column>();
+			columns.Add(map.Columns.First(c => c.Name == "Id"));
+			columns.AddRange(map.Columns.Where(c => c.Name != "Id"));
+			var decls = columns.Select (p => Orm.SqlDecl (p, StoreDateTimeAsTicks));
 			var fkDecls = Orm.SqlDeclFKs(map.Columns);
 			var allDecls = decls.Concat(fkDecls);
 
