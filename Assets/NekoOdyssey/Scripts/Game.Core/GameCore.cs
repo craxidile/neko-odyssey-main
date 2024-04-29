@@ -2,7 +2,6 @@
 using NekoOdyssey.Scripts.Game.Core.Ais;
 using NekoOdyssey.Scripts.Game.Core.Areas;
 using NekoOdyssey.Scripts.Game.Core.Cat;
-using NekoOdyssey.Scripts.Game.Core.Scene;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 using UnityEngine;
 
@@ -18,7 +17,7 @@ namespace NekoOdyssey.Scripts.Game.Core
         public GameAreas Areas { get; } = new();
         public Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu.PlayerMenu PlayerMenu { get; } = new();
         public PlayerMenuCandidateManager PlayerMenuCandidateManager { get; } = new();
-        public GameScene GameScene { get; } = new();
+        public GameScene.GameScene GameScene { get; } = new();
         
         public void Bind()
         {
