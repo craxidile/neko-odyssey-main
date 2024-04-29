@@ -1,4 +1,4 @@
-﻿namespace NekoOdyssey.Scripts.Game.Core.Scene
+﻿namespace NekoOdyssey.Scripts.Game.Core.GameScene
 {
     public enum GameSceneMode
     {

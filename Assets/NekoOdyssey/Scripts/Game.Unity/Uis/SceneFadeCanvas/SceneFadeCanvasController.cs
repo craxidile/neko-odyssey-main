@@ -1,6 +1,6 @@
 ﻿using System;
 using DG.Tweening;
-using NekoOdyssey.Scripts.Game.Core.Scene;
+using NekoOdyssey.Scripts.Game.Core.GameScene;
 using UniRx;
 using UnityEngine;
 
@@ -10,7 +10,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.SceneFadeCanvas
     {
         private const float FadeDuration = 1.5f;
 
-        private bool _animating;
+        private Tween _tween;
         private CanvasGroup _canvasGroup;
 
         private void Awake()
@@ -30,17 +30,20 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.SceneFadeCanvas
 
         private void AnimateFade(bool opening)
         {
-            Debug.Log($">>fade<< {opening}");
-            if (_animating) return;
-            _animating = true;
-            _canvasGroup.gameObject.SetActive(true);
-            _canvasGroup.alpha = opening ? 1f : 0f;
-            DOTween.Sequence()
+            _tween?.Kill();
+            _tween = DOTween.Sequence()
+                .OnStart(() =>
+                {
+                    _canvasGroup.gameObject.SetActive(true);
+                    if (_tween == null)
+                        _canvasGroup.alpha = opening ? 1f : 0f;
+                })
                 .Append(_canvasGroup.DOFade(opening ? 0f : 1f, FadeDuration))
                 .AppendCallback(() =>
                 {
-                    _animating = false;
+                    _tween = null;
                     if (!opening) return;
+                    Debug.Log($">>fade<< set_active false");
                     _canvasGroup.gameObject.SetActive(false);
                 });
         }
