@@ -24,7 +24,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
         [SerializeField] private HorizontalLayoutGroup topLeftLayoutGroup;
         [SerializeField] private HorizontalLayoutGroup topRightLayoutGroup;
 
-        [SerializeField] Image[] foodImage;
+        [SerializeField] Image[] foodImages;
 
         [SerializeField] TextMeshProUGUI socialLikeText, followerText, moneyText;
         [SerializeField] TextMeshProUGUI gameTimeText;
@@ -52,16 +52,16 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
             phoneButton.onClick.AddListener(HandlePhoneClick);
             bagButton.onClick.AddListener(HandleBackClick);
 
-            GameRunner.Instance.Core.Player.Stamina.OnStaminaChange.Subscribe(HandleStaminaChanged).AddTo(this);
-            HandleStaminaChanged(0);
-        }
+            //GameRunner.Instance.Core.Player.Stamina.OnStaminaChange.Subscribe(HandleStaminaChanged).AddTo(this);
+            //HandleStaminaChanged(0);
+
 
 
             AssetBundleUtils.OnReady(RebuildLayout);
 
             GameRunner.Instance.Core.Player.OnChangeStamina
                 .Subscribe(HandleStaminaChange)
-                .AddTo(this);
+            .AddTo(this);
 
             UpdateStamina(GameRunner.Instance.Core.Player.Stamina);
 
@@ -117,11 +117,13 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
             LayoutRebuilder.MarkLayoutForRebuild(topRightLayoutGroup.GetComponent<RectTransform>());
         }
 
-        private void UpdateStamina(int stamina) 
+        private void UpdateStamina(int stamina)
         {
             _staminaTween?.Kill();
 
             var staminaRatio = (float)stamina / AppConstants.MaxStamina;
+
+            var foodImage = foodImages[0];
 
             if (!_initialized)
             {
@@ -152,26 +154,26 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
         }
 
 
-        void HandleStaminaChanged(float deltaStamina)
-        {
-            var stamina = GameRunner.Instance.Core.Player.Stamina.Stamina;
+        //void HandleStaminaChanged(float deltaStamina)
+        //{
+        //    var stamina = GameRunner.Instance.Core.Player.Stamina.Stamina;
 
-            float foodGuage = (float)stamina / 100f;
-            for (int i = 0; i < foodImage.Length; i++)
-            {
-                if (foodGuage > i + 1)
-                {
-                    foodImage[i].fillAmount = 1;
-                }
-                else if (foodGuage > i)
-                {
-                    foodImage[i].fillAmount = foodGuage - i;
-                }
-                else
-                {
-                    foodImage[i].fillAmount = 0;
-                }
-            }
-        }
+        //    float foodGuage = (float)stamina / 100f;
+        //    for (int i = 0; i < foodImage.Length; i++)
+        //    {
+        //        if (foodGuage > i + 1)
+        //        {
+        //            foodImage[i].fillAmount = 1;
+        //        }
+        //        else if (foodGuage > i)
+        //        {
+        //            foodImage[i].fillAmount = foodGuage - i;
+        //        }
+        //        else
+        //        {
+        //            foodImage[i].fillAmount = 0;
+        //        }
+        //    }
+        //}
     }
 }
