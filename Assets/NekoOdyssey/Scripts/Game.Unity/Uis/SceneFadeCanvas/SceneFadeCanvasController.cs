@@ -43,7 +43,6 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.SceneFadeCanvas
                 {
                     _tween = null;
                     if (!opening) return;
-                    Debug.Log($">>fade<< set_active false");
                     _canvasGroup.gameObject.SetActive(false);
                 });
         }
