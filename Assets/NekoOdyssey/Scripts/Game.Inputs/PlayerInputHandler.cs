@@ -28,11 +28,17 @@ namespace NekoOdyssey.Scripts.Game.Unity.Inputs
         public IObservable<Unit> OnBagTriggerred => this.UpdateAsObservable()
             .Where(_ => InputActions.Player.Bag.triggered);
 
-        public IObservable<Unit> OnNextMenuTriggerred => this.UpdateAsObservable()
-            .Where(_ => InputActions.Player.NextMenu.triggered);
-
         public IObservable<Unit> OnPrevMenuTriggerred => this.UpdateAsObservable()
             .Where(_ => InputActions.Player.PrevMenu.triggered);
+        
+        public IObservable<Unit> OnNextMenuTriggerred => this.UpdateAsObservable()
+            .Where(_ => InputActions.Player.NextMenu.triggered);
+        
+        public IObservable<Unit> OnPrevTabTriggerred => this.UpdateAsObservable()
+            .Where(_ => InputActions.Player.PrevTab.triggered);
+        
+        public IObservable<Unit> OnNextTabTriggerred => this.UpdateAsObservable()
+            .Where(_ => InputActions.Player.NextTab.triggered);
 
         public IObservable<Unit> OnFireTriggerred => this.UpdateAsObservable()
             .Where(_ => InputActions.Player.Fire.triggered);
