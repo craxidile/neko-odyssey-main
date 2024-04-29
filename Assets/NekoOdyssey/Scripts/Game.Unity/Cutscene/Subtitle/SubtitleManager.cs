@@ -6,10 +6,11 @@ using UnityEngine.Playables;
 
 public enum languageTypeSubtitle
 {
-    English,
-    Japanese,
-    Chinese,
-    Thai
+    TH,
+    EN,
+    JP,
+    S_CN,
+    T_CN,
 }
 public class SubtitleData
 {
@@ -26,13 +27,13 @@ public class SubtitleManager : MonoBehaviour
     int languageColumnIndex = 1;
 
     //languege  
-    public languageTypeSubtitle language = languageTypeSubtitle.English;
-    public static languageTypeSubtitle globalLanguage = languageTypeSubtitle.English;
+    public languageTypeSubtitle language = languageTypeSubtitle.EN;
+    public static languageTypeSubtitle globalLanguage = languageTypeSubtitle.EN;
 
     public void UpdateGlobalLanguage()
     {
         Debug.Log($"ChangeLanguage : {language} / {globalLanguage}");
-        language = globalLanguage;
+        //language = globalLanguage;
     }
 
 
@@ -62,6 +63,7 @@ public class SubtitleManager : MonoBehaviour
             SubtitleData newSubtitleData = new SubtitleData();
 
             string subtitle = row[languageColumnIndex];
+            subtitle = subtitle.Replace(';', ',');
             newSubtitleData.SubtitleSentance = subtitle;
 
             AllSubtitleData.Add(row[0], newSubtitleData);

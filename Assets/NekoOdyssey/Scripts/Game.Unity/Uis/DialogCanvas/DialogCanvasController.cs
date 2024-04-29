@@ -8,9 +8,12 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.DialogCanvas
     public class DialogCanvasController : MonoBehaviour
     {
         public Text messageBox;
+        public GameObject dialogBalloon;
         [SerializeField] Animator animator;
-
-
+        // For Cutscene
+        [HideInInspector] public bool lastLineId;
+        [HideInInspector] public bool goNextLineId;
+        [HideInInspector] public bool endDialogue;
         public void SetText(string text)
         {
             messageBox.text = text;
@@ -22,7 +25,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.DialogCanvas
 
         public void SetOpened(bool isOpen)
         {
-            animator.SetBool("OpenTrigger", isOpen);
+            dialogBalloon.SetActive(isOpen);
 
             //gameObject.transform.localScale = Vector3.zero; //change back later;
         }

@@ -29,7 +29,7 @@ public class DialogueManager : MonoBehaviour
     [HideInInspector]
     public PlayableDirector director;
     public DialogCanvasController canvasController;
-    public bool nextDialogue;
+    public bool endBubble;
 
     //languege  
     int languageColumnIndex = 1;
@@ -58,17 +58,24 @@ public class DialogueManager : MonoBehaviour
         director = GetComponent<PlayableDirector>();
         UpdateGlobalLanguage();
         LoadDialogueCSV();
+        canvasController.SetOpened(false);
     }
 
     
 
     private void Update()
     {
-        if (/*director.state == PlayState.Paused && */Input.anyKeyDown && !nextDialogue)
+        if (Input.anyKeyDown && !endBubble)
         {
-            nextDialogue = true;
-            canvasController.SetOpened(false);
-            Debug.Log($">>behavior<< play continue after get key down");
+            if (canvasController.lastLineId)
+            {
+                endBubble = true;
+                canvasController.endDialogue = true;
+            }
+            else
+            {
+                canvasController.goNextLineId = true;
+            }
         }
     }
 
@@ -85,6 +92,7 @@ public class DialogueManager : MonoBehaviour
 
             string dialogue = row[languageColumnIndex];
             dialogue = dialogue.Replace(';', ',');
+            dialogue = dialogue.Replace('_', '\n');
             newDialogueData.DialogueSentance = dialogue;
 
             if (!AllDialogueData.ContainsKey(row[0]))
