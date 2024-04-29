@@ -122,6 +122,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         {
             isTimeRunning = false;
             _dayMinuteFloat = StartDayMinute;
+            dayMinute = Mathf.RoundToInt(_dayMinuteFloat);
         }
 
         // Update is called once per frame
@@ -204,9 +205,16 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
         private void OnValidate()
         {
+            if (_dayMinuteFloat != dayMinute)
+            {
+                OnTimeUpdate.OnNext(Mathf.RoundToInt((float)dayMinute - _dayMinuteFloat));
+            }
+
             _dayMinuteFloat = dayMinute;
             isTimeRunning = _isTimer;
             day = currentDay;
+
+
         }
 
         //private void OnDrawGizmos()
