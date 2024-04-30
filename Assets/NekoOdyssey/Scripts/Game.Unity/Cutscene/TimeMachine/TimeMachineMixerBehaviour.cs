@@ -47,8 +47,7 @@ public class TimeMachineMixerBehaviour : PlayableBehaviour
                         case TimeMachineBehaviour.TimeMachineAction.ResetWaitInput:
                             if (input.ConditionMet(playerData))
                             {
-                                manager.nextDialogue = false;
-                                Debug.Log("set waitInput value = false");
+                                manager.endBubble = false;
                                 input.clipExecuted = true;
                             }
                             break;

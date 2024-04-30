@@ -24,8 +24,7 @@ public class TimeMachineBehaviour : PlayableBehaviour
                 return true;
 
             case Condition.WaitInput:
-                //The Timeline will jump to the label or time if a specific Platoon still has at least 1 unit alive
-                return !manager.nextDialogue;
+                return !manager.endBubble;
 
             case Condition.Never:
             default:

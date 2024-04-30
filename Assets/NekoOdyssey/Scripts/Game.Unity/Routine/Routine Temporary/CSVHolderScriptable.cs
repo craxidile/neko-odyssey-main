@@ -5,6 +5,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "CSVHolderScriptable", menuName = "ScriptableObjects/CSVHolderScriptable")]
 public class CSVHolderScriptable : ScriptableObject
 {
+    public TimeScriptable timeProfile;
+
     [Header("Npc Routine")]
     public TextAsset[] routinesCSV;
 
