@@ -12,8 +12,10 @@ namespace NekoOdyssey.Scripts.Database.Domains.SaveV001.BagItemEntity.Models
         [Ignore] public string Uuid { get; } = Guid.NewGuid().ToString();
 
         [NotNull] public string ItemCode { get; set; }
-
+        
         [Ignore] public Item Item { get; set; }
+        
+        public DateTime ReceivedAt { get; set; }
 
         public BagItemV001()
         {

@@ -86,7 +86,7 @@ namespace NekoOdyssey.Scripts
             _inputActions.Disable();
         }
 
-        private CameraBoundary LoadCameraBoundaryFromSite(
+        private GameObject LoadCameraBoundaryFromSite(
             Database.Domains.Sites.Entities.SiteEntity.Models.Site currentSite
         )
         {
@@ -95,22 +95,28 @@ namespace NekoOdyssey.Scripts
 
             if (cameraBoundaryName == null) return null;
             cameraBoundaryName = cameraBoundaryName.ToLower();
-            Debug.Log($">>camera_boundary<< {cameraBoundaryName}");
+
+            Debug.Log($">>boundary<< name 01 {cameraBoundaryName}");
 
             if (!AssetMap.ContainsKey(cameraBoundaryName)) return null;
-            var boundaryGameObject = Instantiate(AssetMap[cameraBoundaryName]);
+            var boundaryGameObject = Instantiate(AssetMap[cameraBoundaryName]) as GameObject;
+            Debug.Log($">>boundary<< name 02 {boundaryGameObject.name}");
 
-            return boundaryGameObject == null ? null : boundaryGameObject.GetComponent<CameraBoundary>();
+            return boundaryGameObject == null ? null : boundaryGameObject;
         }
 
         private void InitializePositions()
         {
-            var currentSite = SiteRunner.Instance.Core.Site.CurrentSite;
-            var boundary = LoadCameraBoundaryFromSite(currentSite);
+            Debug.Log($">>boundary<< start");
+            var boundary = FindAnyObjectByType<CameraBoundary>()?.gameObject;
+            Debug.Log($">>boundary<< 01 {boundary?.GetComponent<BoxCollider>()}");
             if (boundary == null)
             {
-                boundary = FindAnyObjectByType<CameraBoundary>();
+                var currentSite = SiteRunner.Instance.Core.Site.CurrentSite;
+                boundary = LoadCameraBoundaryFromSite(currentSite);
+                Debug.Log($">>boundary<< 02 {boundary?.GetComponent<BoxCollider>()}");
             }
+
 
             if (boundary != null && Camera.main != null)
             {
