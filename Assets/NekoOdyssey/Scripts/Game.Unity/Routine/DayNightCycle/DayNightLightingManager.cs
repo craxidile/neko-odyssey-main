@@ -25,7 +25,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         // Start is called before the first frame update
         public void Start()
         {
-            timeProfile = GameRunner.Instance.AssetMap["TimeProfile".ToLower()] as TimeScriptable;
+            //timeProfile = GameRunner.Instance.AssetMap["TimeProfile".ToLower()] as TimeScriptable;
+            timeProfile = GameRunner.Instance.CsvHolder.timeProfile;
 
             foreach (var dnData in timeProfile.dayNightDataProfiles)
             {
