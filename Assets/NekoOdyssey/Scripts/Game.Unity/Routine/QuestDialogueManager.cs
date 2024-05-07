@@ -30,6 +30,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
             foreach (var dialogueCSV in GameRunner.Instance.CsvHolder.allQuestDialoguesCSV)
             {
+                if (dialogueCSV == null) continue;
+
                 var questDialogueGroup = new QuestDialogueGroup(dialogueCSV.name.ToLower().Replace("_dialogue", ""));
 
                 string[] lines = dialogueCSV.text.Split('\n');
@@ -49,11 +51,19 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                 for (int i = 1; i < lines.Length; i++)
                 {
                     var line = lines[i];
-                    Debug.Log($"load csv line : {line}");
+                    //Debug.Log($"load csv line : {line}");
 
                     List<string> row = line.Trim().Split(',').ToList();
 
-                    if (string.IsNullOrEmpty(row.FirstOrDefault())) continue;
+                    if (string.IsNullOrEmpty(row.FirstOrDefault()))
+                    {
+                        Debug.Log($"load csv line : [[Empty Line]] ({line})");
+                        continue;
+                    }
+                    else
+                    {
+                        Debug.Log($"load csv line : {line}");
+                    }
 
 
                     //process

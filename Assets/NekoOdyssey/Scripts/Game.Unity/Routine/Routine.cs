@@ -48,26 +48,33 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
         public void Start()
         {
-            AssetBundleUtils.OnReady(() =>
-            {
-                //var a = GameRunner.Instance.AssetMap["daytime"] as ScriptableObject;
-                //var CSVHolder = GameRunner.Instance.AssetMap["CSVHolder".ToLower()] as CSVHolderScriptable;
-                //var currentTime = GameRunner.Instance.AssetMap["CurrentTime".ToLower()] as TimeScriptable;
-                //Debug.Log($"test load scriptable asset bundle {currentTime.currentTimeText}");
+            //AssetBundleUtils.OnReady(() =>
+            //{
+            //    //var a = GameRunner.Instance.AssetMap["daytime"] as ScriptableObject;
+            //    //var CSVHolder = GameRunner.Instance.AssetMap["CSVHolder".ToLower()] as CSVHolderScriptable;
+            //    //var currentTime = GameRunner.Instance.AssetMap["CurrentTime".ToLower()] as TimeScriptable;
+            //    //Debug.Log($"test load scriptable asset bundle {currentTime.currentTimeText}");
 
 
-                //csvHolder = CSVHolder;
-                //TimeRoutine.timeScriptable = currentTime;
+            //    //csvHolder = CSVHolder;
+            //    //TimeRoutine.timeScriptable = currentTime;
 
-                //InitializedSceneEventPoint();
-                questEventManager.Start();
-                npcRoutineManager.Start();
-                questDialogueManager.Start();
-                dayNightLightingManager.Start();
+            //    //InitializedSceneEventPoint();
+            //    //questEventManager.Start();
+            //    //npcRoutineManager.Start();
+            //    //questDialogueManager.Start();
 
-                UpdateWorld();
-                //Invoke(nameof(UpdateWorld), 1f);
-            });
+            //    //UpdateWorld();
+            //    //Invoke(nameof(UpdateWorld), 1f);
+            //});
+
+            questEventManager.Start();
+            npcRoutineManager.Start();
+            questDialogueManager.Start();
+
+            UpdateWorld();
+
+            dayNightLightingManager.Start();
         }
 
         public void Unbind()
@@ -339,6 +346,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                 var dialogueGroup = allQuestDialogueGroup[dialogueGroupId];
                 var dialogueMessage = dialogueGroup.GetNextDialogue();
 
+                Debug.Log($"interactive event point");
+
                 if (dialogueMessage != null)
                 {
                     Debug.Log($"npc Talk quest id : {dialogueGroupId} , text : {dialogueMessage.messageIndex}, {dialogueMessage.message}");
@@ -442,6 +451,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                     {
                         if (!enabledRoutine.dialogueKey.Equals("-"))
                         {
+                            //Debug.Log($"Add dialogue key : {enabledRoutine.dialogueKey}");
                             AddRoutineDialogue(enabledRoutine.GetTargetEventPoint(), enabledRoutine.dialogueKey);
                         }
                         //Debug.Log($"add routine target = {enabledRoutine.targetEventPoint.name} , dialogue = {enabledRoutine.dialogueKey}");
