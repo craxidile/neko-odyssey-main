@@ -36,7 +36,7 @@ public class EventPointInteractive : MonoBehaviour
             {
                 if (Keyboard.current.spaceKey.wasPressedThisFrame)
                 {
-                    Debug.Log("Pressed space");
+                    Debug.Log($"Pressed space on {name}");
                     OnInteractive?.Invoke();
                 }
 
