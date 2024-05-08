@@ -79,7 +79,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             for (int i = 1; i < lines.Length; i++)
             {
                 var line = lines[i];
-                Debug.Log($"load csv line : {line}");
+                //Debug.Log($"load csv line : {line}");
 
                 string[] values = line.Trim().Split(',');
 
@@ -148,7 +148,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             }
 
             GameRunner.Instance.Core.Routine.npcDatas.Add(newNpc);
-            Debug.Log($"Add npc {newNpc.npcName}");
+            //Debug.Log($"Add npc {newNpc.npcName}");
         }
 
 
