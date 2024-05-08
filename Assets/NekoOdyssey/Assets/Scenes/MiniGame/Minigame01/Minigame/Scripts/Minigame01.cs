@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor.UI;
+//using UnityEditor.UI;
 
 public class Minigame01 : MonoBehaviour
 {
