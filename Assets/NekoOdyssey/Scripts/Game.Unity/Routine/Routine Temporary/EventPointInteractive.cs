@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UnityEngine.InputSystem;
+using NekoOdyssey.Scripts;
+using UniRx;
 
 public class EventPointInteractive : MonoBehaviour
 {
@@ -12,11 +14,19 @@ public class EventPointInteractive : MonoBehaviour
 
     public Action OnInteractive;
 
+
+    bool _isActive = false;
+
     // Start is called before the first frame update
     void Start()
     {
         if (NearestPoint == null)
             NearestPoint = this;
+
+
+        GameRunner.Instance.PlayerInputHandler.OnFireTriggerred
+                .Subscribe(_ => CheckInput())
+                .AddTo(gameObject);
     }
 
     // Update is called once per frame
@@ -34,11 +44,11 @@ public class EventPointInteractive : MonoBehaviour
         {
             if (NearestPoint == this)
             {
-                if (Keyboard.current.spaceKey.wasPressedThisFrame)
-                {
-                    Debug.Log($"Pressed space on {name}");
-                    OnInteractive?.Invoke();
-                }
+                //if (Keyboard.current.spaceKey.wasPressedThisFrame)
+                //{
+                //    Debug.Log($"Pressed space on {name}");
+                //    OnInteractive?.Invoke();
+                //}
 
             }
             else
@@ -54,6 +64,19 @@ public class EventPointInteractive : MonoBehaviour
 
             }
 
+        }
+
+
+        _isActive = NearestPoint == this;
+
+    }
+
+    private void CheckInput()
+    {
+        if (_isActive)
+        {
+            Debug.Log($"Pressed interactive on {name}");
+            OnInteractive?.Invoke();
         }
     }
 
