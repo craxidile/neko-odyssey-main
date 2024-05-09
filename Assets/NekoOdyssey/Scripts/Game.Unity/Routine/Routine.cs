@@ -44,6 +44,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             npcRoutineManager = new NpcRoutineManager();
             questDialogueManager = new QuestDialogueManager();
             dayNightLightingManager = new DayNightLightingManager();
+            ChatBalloonManager = new ChatBalloonManager();
         }
 
         public void Start()
@@ -71,6 +72,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             questEventManager.Start();
             npcRoutineManager.Start();
             questDialogueManager.Start();
+            ChatBalloonManager.Start();
 
             UpdateWorld();
 
@@ -85,6 +87,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         public QuestEventManager questEventManager { get; set; }
         public NpcRoutineManager npcRoutineManager { get; set; }
         public QuestDialogueManager questDialogueManager { get; set; }
+        public ChatBalloonManager ChatBalloonManager { get; set; }
 
         public static PlayerChoiceDialogueController playerChoiceDialogueController { get; set; }
 
@@ -373,7 +376,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                                 var targetActor = dialogueActors.FirstOrDefault(actor => actor.actorId == dialogueMessage.actor);
                                 if (targetActor != null)
                                 {
-                                    ChatBalloonManager.instance.ShowChatBalloon(targetActor.transform, dialogueMessage.message);
+                                    ChatBalloonManager.ShowChatBalloon(targetActor.transform, dialogueMessage.message);
                                     //NekoOdyssey.Scripts.GameRunner.Instance.Core.Player.SetMode(NekoOdyssey.Scripts.Game.Unity.Game.Core.PlayerMode.Conversation);
                                 }
                                 else
@@ -390,7 +393,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                             //Debug.Log($"Check index : {dialogueGroup._currentDialogueIndex}");
                         });
 
-                        ChatBalloonManager.instance.HideChatBalloon();
+                        ChatBalloonManager.HideChatBalloon();
                     }
                     else
                     {
@@ -398,7 +401,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                         var targetActor = dialogueActors.FirstOrDefault(actor => actor.actorId == dialogueMessage.actor);
                         if (targetActor != null)
                         {
-                            ChatBalloonManager.instance.ShowChatBalloon(targetActor.transform, dialogueMessage.message);
+                            ChatBalloonManager.ShowChatBalloon(targetActor.transform, dialogueMessage.message);
                             GameRunner.Instance.Core.PlayerMenu.GameObject = targetActor.gameObject;
                             GameRunner.Instance.Core.Player.SetMode(PlayerMode.QuestConversation);
                         }
@@ -417,7 +420,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                 {
                     //complete talking
                     //restore player control
-                    ChatBalloonManager.instance.HideChatBalloon();
+                    ChatBalloonManager.HideChatBalloon();
                     GameRunner.Instance.Core.Player.SetMode(PlayerMode.Move);
 
                     if (!dialogueGroup.isCanceled)
@@ -498,7 +501,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                             var targetActor = dialogueActors.FirstOrDefault(actor => actor.actorId == dialogueMessage.actor);
                             if (targetActor != null)
                             {
-                                ChatBalloonManager.instance.ShowChatBalloon(targetActor.transform, dialogueMessage.message);
+                                ChatBalloonManager.ShowChatBalloon(targetActor.transform, dialogueMessage.message);
                                 //NekoOdyssey.Scripts.GameRunner.Instance.Core.Player.SetMode(NekoOdyssey.Scripts.Game.Unity.Game.Core.PlayerMode.Conversation);
                             }
                             else
@@ -515,7 +518,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                         //Debug.Log($"Check index : {dialogueGroup._currentDialogueIndex}");
                     });
 
-                    ChatBalloonManager.instance.HideChatBalloon();
+                    ChatBalloonManager.HideChatBalloon();
                 }
                 else
                 {
@@ -524,7 +527,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                     var targetActor = dialogueActors.FirstOrDefault(actor => actor.actorId == dialogueMessage.actor);
                     if (targetActor != null)
                     {
-                        ChatBalloonManager.instance.ShowChatBalloon(targetActor.transform, dialogueMessage.message);
+                        ChatBalloonManager.ShowChatBalloon(targetActor.transform, dialogueMessage.message);
                         GameRunner.Instance.Core.PlayerMenu.GameObject = targetActor.gameObject;
                         GameRunner.Instance.Core.Player.SetMode(PlayerMode.QuestConversation);
                     }
@@ -544,7 +547,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             {
                 //complete talking
                 //restore player control
-                ChatBalloonManager.instance.HideChatBalloon();
+                ChatBalloonManager.HideChatBalloon();
                 GameRunner.Instance.Core.Player.SetMode(PlayerMode.Move);
 
                 if (!dialogueGroup.isCanceled)

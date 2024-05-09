@@ -5,12 +5,12 @@ using UnityEngine;
 using DG.Tweening;
 using NekoOdyssey.Scripts;
 
-public class ChatBalloonManager : MonoBehaviour
+public class ChatBalloonManager
 {
     //public GameObject balloonPrefab;
     public const float balloonScaleTime = 0.3f;
 
-    public static ChatBalloonManager instance { get; private set; }
+    //public static ChatBalloonManager instance { get; private set; }
 
 
     class ChatBalloonData
@@ -26,24 +26,24 @@ public class ChatBalloonManager : MonoBehaviour
     ChatBalloonData _lastestBalloon;
 
 
-    private void Awake()
-    {
-        instance = this;
-    }
+    //private void Awake()
+    //{
+    //    //instance = this;
+    //}
     // Start is called before the first frame update
-    void Start()
+   public void Start()
     {
 
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        //foreach (var balloon in chatBalloonDatas)
-        //{
-        //    balloon.dialogCanvas.messageBox.text = balloon.message;
-        //}
-    }
+    //void Update()
+    //{
+    //    //foreach (var balloon in chatBalloonDatas)
+    //    //{
+    //    //    balloon.dialogCanvas.messageBox.text = balloon.message;
+    //    //}
+    //}
 
     public void ShowChatBalloon(Transform parent, string message)
     {
@@ -60,7 +60,7 @@ public class ChatBalloonManager : MonoBehaviour
             if (!GameRunner.Instance.AssetMap.ContainsKey("dialogcanvas")) return;
 
             //var newBalloon = Instantiate(balloonPrefab, parent);
-            var newBalloon = Instantiate(
+            var newBalloon = GameObject.Instantiate(
                 GameRunner.Instance.AssetMap["dialogcanvas"]
                 , parent) as GameObject;
 
@@ -122,7 +122,7 @@ public class ChatBalloonManager : MonoBehaviour
         targetObject.chatBalloon.SetOpened(false);
 
         //DOVirtual.DelayedCall(1, () => { Destroy(targetObject.chatBalloon.gameObject); });
-        DOVirtual.DelayedCall(0, () => { Destroy(targetObject.chatBalloon.gameObject); });
+        DOVirtual.DelayedCall(0, () => { GameObject.Destroy(targetObject.chatBalloon.gameObject); });
 
     }
 }
