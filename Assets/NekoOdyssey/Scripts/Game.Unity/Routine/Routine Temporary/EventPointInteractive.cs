@@ -64,10 +64,14 @@ public class EventPointInteractive : MonoBehaviour
 
             }
 
+            _isActive = NearestPoint == this;
+        }
+        else
+        {
+            _isActive = false;
         }
 
 
-        _isActive = NearestPoint == this;
 
     }
 
