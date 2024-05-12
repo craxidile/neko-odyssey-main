@@ -53,7 +53,7 @@ namespace NekoOdyssey.Scripts.Site.Core.Site
             // SetSite("GamePlayZone4_03", false);
              // SetSite("GamePlayZone5_02", false);
            SetSite("GamePlayZone6_01", false);
-            // SetSite("GamePlayZone3_01", false);
+            //SetSite("GamePlayZone3_01", false);
             // SetSite("GamePlayZone9_02", false);
         }
 
