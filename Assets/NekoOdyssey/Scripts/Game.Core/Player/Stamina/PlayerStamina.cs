@@ -49,9 +49,11 @@ public class PlayerStamina
         int previousStamina = Stamina;
         var staminaDrainPerSecond = AppConstants.Stamina.NewDay / AppConstants.Stamina.LiveTime;
 
-        Debug.Log($"drain stamina : {staminaDrainPerSecond}");
+        var staminaDecrease = staminaDrainPerSecond * TimeRoutine.s_hungryOverTimeMultiplier;
 
-        var newStamina = Stamina - (staminaDrainPerSecond * deltaTime);
+        Debug.Log($"drain stamina : {staminaDecrease}");
+
+        var newStamina = Stamina - Mathf.RoundToInt(staminaDecrease * deltaTime);
 
         if (newStamina != previousStamina)
         {
