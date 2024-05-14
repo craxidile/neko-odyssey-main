@@ -95,7 +95,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
         public Day currentDay;
         [Range(0, AppConstants.Time.MaxDayMinute)] public int dayMinute;
-        static float _dayMinuteFloat;
+        static float s_dayMinuteFloat;
 
         [ReadOnlyField]
         [SerializeField]
@@ -104,13 +104,18 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         public float timeMultiplier = 1f;
         //public static TimeScriptable timeScriptable;
 
+        [Tooltip("increase this value mean hungey decrease faster")]
+        [Range(0, 10)]
+        public float hungryOverTimeMultiplier = 1;
+        public static float s_hungryOverTimeMultiplier;
+
         public static Day day { get; set; } = 0;
         public static TimeHrMin currentTime { get; set; } = new TimeHrMin("00.00");
 
         [SerializeField] bool _isTimer; //only edit in unity editor
-        static bool isTimeRunning;
-        public static void PauseTime() => isTimeRunning = false;
-        public static void ContinueTime() => isTimeRunning = true;
+        static bool s_isTimeRunning;
+        public static void PauseTime() => s_isTimeRunning = false;
+        public static void ContinueTime() => s_isTimeRunning = true;
 
 
         public static int GameDayTotal { get; set; } = 1;
@@ -128,9 +133,9 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         // Start is called before the first frame update
         public void Start()
         {
-            isTimeRunning = true;
-            _dayMinuteFloat = AppConstants.Time.StartDayMinute;
-            dayMinute = Mathf.RoundToInt(_dayMinuteFloat);
+            s_isTimeRunning = true;
+            s_dayMinuteFloat = AppConstants.Time.StartDayMinute;
+            dayMinute = Mathf.RoundToInt(s_dayMinuteFloat);
         }
 
         // Update is called once per frame
@@ -141,7 +146,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             //timeHrMin.Hour = currentHours;
             //timeHrMin.Minute = currentMinute;
 
-            _isTimer = isTimeRunning;
+            _isTimer = s_isTimeRunning;
             currentDay = day;
             ProcessTime();
 
@@ -170,7 +175,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         public static void SetTime(string timeText)
         {
             var newTime = new TimeHrMin(timeText);
-            _dayMinuteFloat = newTime.ToInt();
+            s_dayMinuteFloat = newTime.ToInt();
 
             currentTime = newTime;
         }
@@ -184,16 +189,16 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
         public void ProcessTime()
         {
-            if (isTimeRunning)
+            if (s_isTimeRunning)
             {
                 var secondPerSecond = AppConstants.Time.GameHourPerMinute * timeMultiplier;
                 var nextSecondValue = Time.deltaTime * secondPerSecond;
 
 
-                _dayMinuteFloat += nextSecondValue;
-                if (_dayMinuteFloat > AppConstants.Time.MaxDayMinute)
+                s_dayMinuteFloat += nextSecondValue;
+                if (s_dayMinuteFloat > AppConstants.Time.MaxDayMinute)
                 {
-                    _dayMinuteFloat = 0;
+                    s_dayMinuteFloat = 0;
                 }
 
 
@@ -205,7 +210,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
 
             var previosMinute = dayMinute;
-            dayMinute = Mathf.RoundToInt(_dayMinuteFloat);
+            dayMinute = Mathf.RoundToInt(s_dayMinuteFloat);
             currentTime = new TimeHrMin($"{dayMinute / 60}:{dayMinute % 60}");
             currentTimeText = currentTime.ToString();
 
@@ -219,16 +224,16 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
         private void OnValidate()
         {
-            if (_dayMinuteFloat != dayMinute)
+            if (s_dayMinuteFloat != dayMinute)
             {
-                OnTimeUpdate.OnNext(Mathf.RoundToInt((float)dayMinute - _dayMinuteFloat));
+                OnTimeUpdate.OnNext(Mathf.RoundToInt((float)dayMinute - s_dayMinuteFloat));
             }
 
-            _dayMinuteFloat = dayMinute;
-            isTimeRunning = _isTimer;
+            s_dayMinuteFloat = dayMinute;
+            s_isTimeRunning = _isTimer;
             day = currentDay;
 
-
+            s_hungryOverTimeMultiplier = hungryOverTimeMultiplier;
         }
 
         //private void OnDrawGizmos()
