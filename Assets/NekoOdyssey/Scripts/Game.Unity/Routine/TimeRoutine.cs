@@ -104,11 +104,6 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         public float timeMultiplier = 1f;
         //public static TimeScriptable timeScriptable;
 
-        [Tooltip("increase this value mean hungey decrease faster")]
-        [Range(0, 10)]
-        public float hungryOverTimeMultiplier = 1;
-        public static float s_hungryOverTimeMultiplier;
-
         public static Day day { get; set; } = 0;
         public static TimeHrMin currentTime { get; set; } = new TimeHrMin("00.00");
 
@@ -121,6 +116,12 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         public static int GameDayTotal { get; set; } = 1;
         public static int GameMounth => ((GameDayTotal - 1) / 30) + 1;
         public static int DayInMounth => ((GameDayTotal - 1) % 30) + 1;
+
+
+        [Tooltip("increase this value mean hungey decrease faster")]
+        [Range(0, 10)]
+        public float hungryOverTimeMultiplier = 1;
+        public static float s_hungryOverTimeMultiplier;
 
 
         public static Subject<int> OnTimeUpdate { get; } = new();
