@@ -64,7 +64,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
         public void Unbind()
         {
         }
-        
+
         private void InitializeItems()
         {
             SetDefaultItemType();
@@ -84,7 +84,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
             var index = itemTypes.IndexOf(CurrentItemType);
             SetItemType(itemTypes[Math.Max(0, index - 1)]);
         }
-        
+
         private void HandleNextTab()
         {
             if (GameRunner.Instance.Core.Player.Mode != PlayerMode.OpenBag) return;
@@ -147,18 +147,22 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
 
         public void UseBagItem()
         {
-            GameRunner.Instance.Core.Player.AddStamina(CurrentBagItem.Item.Stamina);
+            //GameRunner.Instance.Core.Player.AddStamina(CurrentBagItem.Item.Stamina);
             OnUseBagItem.OnNext(CurrentBagItem);
-            
+
             var index = FilteredBagItems.IndexOf(CurrentBagItem);
 
             if (!CurrentBagItem.Item.SingleUse) return;
-            
-            BagItems.Remove(CurrentBagItem);
-            using (var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = false }))
+
+            bool reomveItemEnable = false;
+            if (reomveItemEnable)
             {
-                var bagItemRepo = new BagItemV001Repo(dbContext);
-                bagItemRepo.Remove(CurrentBagItem);
+                BagItems.Remove(CurrentBagItem);
+                using (var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = false }))
+                {
+                    var bagItemRepo = new BagItemV001Repo(dbContext);
+                    bagItemRepo.Remove(CurrentBagItem);
+                }
             }
 
             index = Math.Min(FilteredBagItems.Count - 1, Math.Max(0, index - 1));

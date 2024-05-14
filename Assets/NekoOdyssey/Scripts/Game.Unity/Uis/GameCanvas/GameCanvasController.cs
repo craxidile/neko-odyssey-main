@@ -25,6 +25,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
         [SerializeField] private HorizontalLayoutGroup topRightLayoutGroup;
 
         [SerializeField] Image[] foodImages;
+        float _staminaGaugeRatio;
 
         [SerializeField] TextMeshProUGUI socialLikeText, followerText, moneyText;
         [SerializeField] TextMeshProUGUI gameTimeText;
@@ -52,18 +53,14 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
             phoneButton.onClick.AddListener(HandlePhoneClick);
             bagButton.onClick.AddListener(HandleBackClick);
 
-            //GameRunner.Instance.Core.Player.Stamina.OnStaminaChange.Subscribe(HandleStaminaChanged).AddTo(this);
-            //HandleStaminaChanged(0);
-
-
 
             AssetBundleUtils.OnReady(RebuildLayout);
 
-            GameRunner.Instance.Core.Player.OnChangeStamina
+            GameRunner.Instance.Core.Player.Stamina.OnChangeStamina
                 .Subscribe(HandleStaminaChange)
-            .AddTo(this);
+                .AddTo(this);
 
-            UpdateStamina(GameRunner.Instance.Core.Player.Stamina);
+            UpdateStamina(GameRunner.Instance.Core.Player.Stamina.Stamina);
 
 
             //gameTimeText.text = System.DateTime.Now.ToString("HH:mm:ss"); //change later
@@ -93,6 +90,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
         void Update()
         {
             CheckActivation();
+            //UpdateStaminaGuage();
         }
 
         private void HandlePhoneClick()
@@ -121,24 +119,34 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
         {
             _staminaTween?.Kill();
 
-            var staminaRatio = (float)stamina / AppConstants.MaxStamina;
+            var staminaRatio = (float)stamina / AppConstants.Stamina.MaxNormal;
 
-            var foodImage = foodImages[0];
+            //var foodImage = foodImages[0];
 
             if (!_initialized)
             {
-                foodImage.fillAmount = staminaRatio;
+                //foodImage.fillAmount = staminaRatio;
+                _staminaGaugeRatio = staminaRatio;
+                UpdateStaminaGuage();
                 _initialized = true;
             }
 
-            var staminaDelay = foodImage.fillAmount * MaxStaminaDelay;
+            //var staminaDelay = foodImage.fillAmount * MaxStaminaDelay;
+            var staminaDelay = _staminaGaugeRatio * MaxStaminaDelay;
             _staminaTween = DOTween.To(
-                () => foodImage.fillAmount,
-                s => foodImage.fillAmount = s,
+                () => _staminaGaugeRatio,
+                s =>
+                {
+                    _staminaGaugeRatio = s;
+                    UpdateStaminaGuage();
+                },
                 staminaRatio,
                 staminaDelay
             );
+
             _staminaTween.OnComplete(() => { _staminaTween = null; });
+
+            Debug.Log($"UpdateStamina target ratio : {staminaRatio} , current stamina : {stamina}");
         }
 
         private void CheckActivation()
@@ -154,26 +162,23 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
         }
 
 
-        //void HandleStaminaChanged(float deltaStamina)
-        //{
-        //    var stamina = GameRunner.Instance.Core.Player.Stamina.Stamina;
-
-        //    float foodGuage = (float)stamina / 100f;
-        //    for (int i = 0; i < foodImage.Length; i++)
-        //    {
-        //        if (foodGuage > i + 1)
-        //        {
-        //            foodImage[i].fillAmount = 1;
-        //        }
-        //        else if (foodGuage > i)
-        //        {
-        //            foodImage[i].fillAmount = foodGuage - i;
-        //        }
-        //        else
-        //        {
-        //            foodImage[i].fillAmount = 0;
-        //        }
-        //    }
-        //}
+        void UpdateStaminaGuage()
+        {
+            for (int i = 0; i < foodImages.Length; i++)
+            {
+                if (_staminaGaugeRatio > i + 1)
+                {
+                    foodImages[i].fillAmount = 1;
+                }
+                else if (_staminaGaugeRatio > i)
+                {
+                    foodImages[i].fillAmount = _staminaGaugeRatio - i;
+                }
+                else
+                {
+                    foodImages[i].fillAmount = 0;
+                }
+            }
+        }
     }
 }
