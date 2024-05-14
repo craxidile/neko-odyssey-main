@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
+using NekoOdyssey.Scripts.Constants;
 
 public enum Day
 {
@@ -91,13 +92,9 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 {
     public class TimeRoutine : MonoBehaviour
     {
-        public const float GameHourPerMinute = 0.25f;
-        public const int StartDayMinute = 500;
-        public const int MaxDayMinute = 1440;
-
 
         public Day currentDay;
-        [Range(0, MaxDayMinute)] public int dayMinute;
+        [Range(0, AppConstants.Time.MaxDayMinute)] public int dayMinute;
         static float _dayMinuteFloat;
 
         [ReadOnlyField]
@@ -111,17 +108,28 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         public static TimeHrMin currentTime { get; set; } = new TimeHrMin("00.00");
 
         [SerializeField] bool _isTimer; //only edit in unity editor
-        static bool isTimeRunning = false;
+        static bool isTimeRunning;
         public static void PauseTime() => isTimeRunning = false;
         public static void ContinueTime() => isTimeRunning = true;
 
+
+        public static int GameDayTotal { get; set; } = 1;
+        public static int GameMounth => ((GameDayTotal - 1) / 30) + 1;
+        public static int DayInMounth => ((GameDayTotal - 1) % 30) + 1;
+
+
         public static Subject<int> OnTimeUpdate { get; } = new();
+        public static Subject<int> OnChangeDay { get; } = new();
+
+
+
+
 
         // Start is called before the first frame update
         public void Start()
         {
-            isTimeRunning = false;
-            _dayMinuteFloat = StartDayMinute;
+            isTimeRunning = true;
+            _dayMinuteFloat = AppConstants.Time.StartDayMinute;
             dayMinute = Mathf.RoundToInt(_dayMinuteFloat);
         }
 
@@ -167,17 +175,23 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             currentTime = newTime;
         }
 
+        public static void NextDay()
+        {
+            GameDayTotal += 1;
+            OnChangeDay.OnNext(GameDayTotal);
+        }
+
 
         public void ProcessTime()
         {
             if (isTimeRunning)
             {
-                var secondPerSecond = GameHourPerMinute * timeMultiplier;
+                var secondPerSecond = AppConstants.Time.GameHourPerMinute * timeMultiplier;
                 var nextSecondValue = Time.deltaTime * secondPerSecond;
 
 
                 _dayMinuteFloat += nextSecondValue;
-                if (_dayMinuteFloat > MaxDayMinute)
+                if (_dayMinuteFloat > AppConstants.Time.MaxDayMinute)
                 {
                     _dayMinuteFloat = 0;
                 }

@@ -9,7 +9,19 @@ namespace NekoOdyssey.Scripts.Constants
         public const string WindowsAssetBundlesFolder = "StandaloneWindows";
         public const string SwitchAssetBundlesFolder = "Switch";
 
-        public const int MaxStamina = 20000;
+        public class Stamina
+        {
+            public const int MaxTotal = 20000; //total amount of stamina
+            public const int MaxNormal = 10000; //max stamina for each bar
+            public const int NewDay = 10000; //how much stamina player start per day
+            public const int LiveTime = 360; //how long (in-game minute) player can stay idle with NewDay stamina
+        }
+        public class Time
+        {
+            public const float GameHourPerMinute = 0.25f; //how many in game hours per real life minute
+            public const int StartDayMinute = 600; // 60 = 1 hours in game //600 = 10:00
+            public const int MaxDayMinute = 1440;
+        }
 
         public static string AssetBundlesFolder
         {

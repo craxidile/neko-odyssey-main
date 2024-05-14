@@ -123,7 +123,12 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
                 if (!banner) continue;
                 var animator = banner.GetComponent<Animator>();
                 if (!animator) continue;
-                animator.SetBool($"Selected", action == currentAction);
+                var selected = action == currentAction;
+                animator.SetBool($"Selected", selected);
+                if (GameRunner.Instance.Core.PlayerMenu.MenuLevel == 0) continue;
+                DOTween.Sequence()
+                    .Append(animator.transform.DOScale(!selected ? 1f : 1.25f, .07f).SetEase(Ease.InQuad))
+                    .Append(animator.transform.DOScale(!selected ? 1f : 1.1f, .12f).SetEase(Ease.InQuad));
             }
         }
 

@@ -29,9 +29,9 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
         public PlayerCapture Capture { get; } = new();
         public PlayerPetting Petting { get; } = new();
         public PlayerConversation Conversation { get; } = new();
-        //public PlayerStamina Stamina { get; } = new();
+        public PlayerStamina Stamina { get; } = new(); //linias added
 
-        public int Stamina { get; private set; }
+        //public int Stamina { get; private set; }
         public int PocketMoney { get; private set; }
         public int LikeCount { get; private set; }
         public int FollowerCount { get; private set; }
@@ -42,7 +42,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
         public Subject<bool> OnRun { get; } = new();
         public Subject<Vector2> OnMove { get; } = new();
         public Subject<Vector3> OnChangePosition { get; } = new();
-        public Subject<int> OnChangeStamina { get; } = new();
+        //public Subject<int> OnChangeStamina { get; } = new();
         public Subject<int> OnChangePocketMoney { get; } = new();
         public Subject<int> OnChangeLikeCount { get; } = new();
         public Subject<int> OnChangeFollowerCount { get; } = new();
@@ -56,7 +56,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
             Capture.Bind();
             Conversation.Bind();
 
-            //Stamina.Bind();
+            Stamina.Bind();
         }
 
         public void Start()
@@ -87,7 +87,11 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
             Bag.Start();
             Capture.Start();
             Conversation.Start();
-            //Stamina.Start();
+
+            Stamina.Start();
+            Stamina.OnChangeStamina
+                .Subscribe(_ => SavePlayerProperties())
+                .AddTo(GameRunner.Instance);
         }
 
         public void Unbind()
@@ -96,7 +100,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
             Bag.Unbind();
             Capture.Unbind();
             Conversation.Unbind();
-            //Stamina.Unbind();
+            Stamina.Unbind();
         }
 
         private void InitializeDatabase()
@@ -112,7 +116,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
             {
                 var playerPropertiesRepo = new PlayerPropertiesV001Repo(dbContext);
                 var playerProperties = playerPropertiesRepo.Load();
-                AddStamina(playerProperties.Stamina);
+                //AddStamina(playerProperties.Stamina);
+                Stamina.SetStamina(playerProperties.Stamina);
             }
         }
 
@@ -122,7 +127,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
             {
                 var playerPropertiesRepo = new PlayerPropertiesV001Repo(dbContext);
                 var playerProperties = playerPropertiesRepo.Load();
-                playerProperties.Stamina = Stamina;
+                playerProperties.Stamina = Stamina.Stamina;
                 playerPropertiesRepo.Update(playerProperties);
             }
         }
@@ -193,11 +198,11 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
             OnChangePosition.OnNext(position);
         }
 
-        public void AddStamina(int addition)
-        {
-            Stamina = Math.Min(AppConstants.MaxStamina, Stamina + addition);
-            OnChangeStamina.OnNext(Stamina);
-            SavePlayerProperties();
-        }
+        //public void AddStamina(int addition)
+        //{
+        //    Stamina = Math.Min(AppConstants.Stamina_Max, Stamina + addition);
+        //    OnChangeStamina.OnNext(Stamina);
+        //    SavePlayerProperties();
+        //}
     }
 }

@@ -1,21 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 using NekoOdyssey.Scripts.Game.Core.Routine;
 using UniRx;
 using NekoOdyssey.Scripts;
 using NekoOdyssey.Scripts.Database.Domains.SaveV001.BagItemEntity.Models;
+using NekoOdyssey.Scripts.Constants;
 
 public class PlayerStamina
 {
-    public const float MaxStamina = 200;
-    public const float LiveTime = 360; //how long (in-game minute) player can stay idle with 100 stamina
+    bool _isEnable = true;
+    public int Stamina { get; private set; }
 
-    float _stamina;
-    public int Stamina => Mathf.RoundToInt(_stamina);
-
-    public Subject<float> OnStaminaChange { get; } = new(); //float is delta stamina
+    public Subject<int> OnChangeStamina { get; } = new();
 
     public void Bind()
     {
@@ -24,11 +23,10 @@ public class PlayerStamina
 
     public void Start()
     {
-
         TimeRoutine.OnTimeUpdate.Subscribe(UpdateStamina).AddTo(GameRunner.Instance);
         GameRunner.Instance.Core.Player.Bag.OnUseBagItem.Subscribe(HandleFoodItemUsed).AddTo(GameRunner.Instance);
 
-        ResetStamina();
+        OnChangeStamina.Subscribe(CheckStaminaOut).AddTo(GameRunner.Instance);
     }
     public void Unbind()
     {
@@ -39,56 +37,84 @@ public class PlayerStamina
 
     public void ResetStamina()
     {
-        _stamina = 100;
-        OnStaminaChange.OnNext(0);
+        Stamina = AppConstants.Stamina.NewDay;
+        OnChangeStamina.OnNext(Stamina);
     }
 
 
     void UpdateStamina(int deltaTime)
     {
+        if (!_isEnable) return;
+
         int previousStamina = Stamina;
-        var staminaDrainPerSecond = 100f / LiveTime;
+        var staminaDrainPerSecond = AppConstants.Stamina.NewDay / AppConstants.Stamina.LiveTime;
 
-        _stamina -= staminaDrainPerSecond * deltaTime;
+        Debug.Log($"drain stamina : {staminaDrainPerSecond}");
 
-        if (Stamina != previousStamina)
+        var newStamina = Stamina - (staminaDrainPerSecond * deltaTime);
+
+        if (newStamina != previousStamina)
         {
-            OnStaminaChange.OnNext(Stamina - previousStamina);
+            SetStamina(newStamina);
         }
     }
 
-    public void IncreaseStamina(float staminaValue)
+    public void SetStamina(int newStamina)
     {
-        var previousStamina = _stamina;
-        _stamina = Mathf.Min(_stamina + staminaValue, MaxStamina);
-        OnStaminaChange.OnNext(_stamina - previousStamina);
+        Stamina = Mathf.Min(AppConstants.Stamina.MaxTotal, newStamina);
+        OnChangeStamina.OnNext(Stamina);
     }
-    public void ConsumeStamina(float staminaValue)
+    public void AddStamina(int value)
     {
-        var previousStamina = _stamina;
-        _stamina = Mathf.Max(_stamina - staminaValue, 0);
-        OnStaminaChange.OnNext(_stamina - previousStamina);
+        Stamina = Mathf.Min(AppConstants.Stamina.MaxTotal, Stamina + value);
+        OnChangeStamina.OnNext(Stamina);
+    }
+    public void ConsumeStamina(int value)
+    {
+        Stamina = Mathf.Max(0, Stamina - value);
+        OnChangeStamina.OnNext(Stamina);
     }
 
     void HandleFoodItemUsed(BagItemV001 usedItem)
     {
-        if (usedItem.Item.Type.Code.ToLower().Equals("playerfood"))
+        //if (usedItem.Item.Type.Code.ToLower().Equals("playerfood"))
         {
-            Debug.Log($"Food Item Used");
+            Debug.Log($"Food Item Used Add stamina {usedItem.Item.Stamina}");
 
-            IncreaseStamina(30);
+            AddStamina(usedItem.Item.Stamina);
         }
     }
 
 
-    void StaminaOut()
+    void CheckStaminaOut(int stamina)
     {
+        if (stamina > 0) return;
+        if (!_isEnable) return;
+        _isEnable = false;
+
+        Debug.Log($"player stamina out");
+
+        DOVirtual.DelayedCall(1, () =>
+        {
+            //play unconsios animation
+            //
+
+            //move player to home
+            //var homeSite = "MikiHome";
+            var homeSite = "GamePlayZone6_01";
+            SiteRunner.Instance.Core.Site.SetSite(homeSite);
+            //UnityEngine.SceneManagement.SceneManager.LoadScene("SceneLoader");
 
 
 
-        //move player to home
-        var homeSite = "MikiHome";
-        SiteRunner.Instance.Core.Site.SetSite(homeSite);
-        UnityEngine.SceneManagement.SceneManager.LoadScene("SceneLoader");
+            _isEnable = true;
+
+            TimeRoutine.NextDay();
+            SetStamina(AppConstants.Stamina.NewDay);
+        });
+
+
+
+
     }
 }
