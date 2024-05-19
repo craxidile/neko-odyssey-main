@@ -137,6 +137,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             currentTime = new TimeHrMin($"{timeScriptable.dayMinute / 60}:{timeScriptable.dayMinute % 60}");
 
             //dayMinuteFloat = new TimeHrMin(AppConstants.Time.StartDayTime).ToInt();
+            dayMinuteFloat = timeScriptable.dayMinute;
         }
 
         // Start is called before the first frame update
