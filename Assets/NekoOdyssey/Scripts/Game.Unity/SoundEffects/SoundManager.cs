@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AudioManager : MonoBehaviour
+public class SoundManager : MonoBehaviour
 {
-    public static AudioManager Instance { get; set; }
+    public static SoundManager Instance { get; set; }
 
     public bool debug;
     public AudioTrack[] tracks;
@@ -16,7 +16,7 @@ public class AudioManager : MonoBehaviour
     [System.Serializable]
     public class AudioObject
     {
-        public AudioType type;
+        public SoundType type;
         public AudioClip clip;
     }
     [System.Serializable]
@@ -28,10 +28,10 @@ public class AudioManager : MonoBehaviour
     private class AudioJob
     {
         public AudioAction action;
-        public AudioType type;
+        public SoundType type;
         public bool fade;
         public float delay;
-        public AudioJob(AudioAction _action, AudioType _type ,bool _fade, float _delay)
+        public AudioJob(AudioAction _action, SoundType _type ,bool _fade, float _delay)
         {
             action = _action;
             type = _type;
@@ -60,15 +60,15 @@ public class AudioManager : MonoBehaviour
         Dispose();
     }
 
-    public void PlayAudio(AudioType _type, bool _fade = false, float _delay = 0f)
+    public void PlayAudio(SoundType _type, bool _fade = false, float _delay = 0f)
     {
         AddJob(new AudioJob(AudioAction.Start, _type, _fade, _delay));
     }
-    public void StopAudio(AudioType _type, bool _fade = false, float _delay = 0f)
+    public void StopAudio(SoundType _type, bool _fade = false, float _delay = 0f)
     {
         AddJob(new AudioJob(AudioAction.Stop, _type, _fade, _delay));
     }
-    public void RestartAudio(AudioType _type, bool _fade = false, float _delay = 0f)
+    public void RestartAudio(SoundType _type, bool _fade = false, float _delay = 0f)
     {
         AddJob(new AudioJob(AudioAction.Restart, _type, _fade, _delay));
     }
@@ -162,7 +162,7 @@ public class AudioManager : MonoBehaviour
 
     }
 
-    private void RemoveJob(AudioType _type)
+    private void RemoveJob(SoundType _type)
     {
         if (!m_JobTable.ContainsKey(_type))
         {
@@ -175,16 +175,16 @@ public class AudioManager : MonoBehaviour
     }
 
 
-    private void RemoveConflictingJobs(AudioType _type)
+    private void RemoveConflictingJobs(SoundType _type)
     {
         if (m_JobTable.ContainsKey(_type))
         {
             RemoveJob(_type);
         }
-        AudioType _conflictAudio = AudioType.None;
+        SoundType _conflictAudio = SoundType.None;
         foreach (DictionaryEntry _enty in m_JobTable)
         {
-            AudioType _audioType = (AudioType)_enty.Key;
+            SoundType _audioType = (SoundType)_enty.Key;
             AudioTrack _audioTrackInUse = (AudioTrack)m_AudioTable[_audioType];
             AudioTrack _audioTrackNeeded = (AudioTrack)m_AudioTable[_type];
             if (_audioTrackNeeded.source == _audioTrackInUse.source)
@@ -192,13 +192,13 @@ public class AudioManager : MonoBehaviour
                 _conflictAudio = _audioType;
             }
         }
-        if (_conflictAudio != AudioType.None) 
+        if (_conflictAudio != SoundType.None) 
         {
             RemoveJob(_conflictAudio);
         }
     }
 
-    private AudioClip GetAudioClipFromAudioTrack(AudioType _type, AudioTrack _track)
+    private AudioClip GetAudioClipFromAudioTrack(SoundType _type, AudioTrack _track)
     {
         foreach (var _obj in _track.audios)
         {

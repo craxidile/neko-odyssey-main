@@ -1,4 +1,4 @@
-public enum AudioType
+public enum SoundType
 {
     None,
     SFX_ClickOk,
