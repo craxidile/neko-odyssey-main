@@ -79,7 +79,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
             foreach (var dnData in timeProfile.dayNightDataProfiles)
             {
-                if (TimeRoutine.currentTime.inBetweenTime(dnData.enableTime))
+                if (GameRunner.Instance.TimeRoutine.currentTime.inBetweenTime(dnData.enableTime))
                 {
                     if (currentDayNightProfile != dnData)
                     {

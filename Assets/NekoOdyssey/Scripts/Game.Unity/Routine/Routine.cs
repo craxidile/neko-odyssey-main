@@ -74,7 +74,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             questDialogueManager.Start();
             ChatBalloonManager.Start();
 
-            UpdateWorld();
+            //UpdateWorld();
 
             dayNightLightingManager.Start();
         }
@@ -173,7 +173,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
                     if (!questEventManager.CheckQuestKeyAndItem(questEventDetail)) continue;//check quest key condition
 
-                    if (questEventDetail.IsInEventTime(TimeRoutine.day, TimeRoutine.currentTime))
+                    if (questEventDetail.IsInEventTime(GameRunner.Instance.TimeRoutine.currentDay, GameRunner.Instance.TimeRoutine.currentTime))
                     {
                         questEventDetail.GetTargetEventPoint()?.gameObject.SetActive(true);
 

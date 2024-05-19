@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace NekoOdyssey.Scripts.Game.Unity.Player.Stamina
+namespace NekoOdyssey.Scripts.Game.Unity.Player.EndDay
 {
-    public class PlayerStaminaAnimatorStateBehaviour : StateMachineBehaviour
+    public class PlayerEndDayAnimatorStateBehaviour : StateMachineBehaviour
     {
         //private readonly List<int> _eligibleLoopStates = new()
         //{
@@ -39,6 +39,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Stamina
 
             //GameRunner.Instance.Core.Cats.CurrentCat?.SetEmotion(CatEmotion.None);
             //GameRunner.Instance.Core.Player.Petting.Finish();
+
+            GameRunner.Instance.Core.Player.Stamina.StaminaOutFinish();
         }
     }
 

@@ -33,7 +33,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         {
             if (Time.time < _delayTime) return;
 
-            if (TimeRoutine.inBetweenDayAndTime(enableDays, enableTime))
+            if (GameRunner.Instance.TimeRoutine.inBetweenDayAndTime(enableDays, enableTime))
             {
                 gameObject.SetActive(true);
 

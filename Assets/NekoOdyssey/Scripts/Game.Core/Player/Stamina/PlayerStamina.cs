@@ -8,15 +8,21 @@ using UniRx;
 using NekoOdyssey.Scripts;
 using NekoOdyssey.Scripts.Database.Domains.SaveV001.BagItemEntity.Models;
 using NekoOdyssey.Scripts.Constants;
+using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 
 namespace NekoOdyssey.Scripts.Game.Core.Player.Stamina
 {
     public class PlayerStamina
     {
-        bool _isEnable = true;
+        static bool _isEnable = true;
+
         public int Stamina { get; private set; }
 
         public Subject<int> OnChangeStamina { get; } = new();
+
+        public Subject<Unit> OnStaminaOutFinish { get; } = new();
+
+        TimeHrMin startDayTime;
 
         public void Bind()
         {
@@ -25,6 +31,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Stamina
 
         public void Start()
         {
+            startDayTime = new TimeHrMin(AppConstants.Time.StartDayTime);
             TimeRoutine.OnTimeUpdate.Subscribe(UpdateStamina).AddTo(GameRunner.Instance);
             GameRunner.Instance.Core.Player.Bag.OnUseBagItem.Subscribe(HandleFoodItemUsed).AddTo(GameRunner.Instance);
 
@@ -47,11 +54,13 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Stamina
         void UpdateStamina(int deltaTime)
         {
             if (!_isEnable) return;
+            var timeRoutine = GameRunner.Instance.TimeRoutine;
+            if (timeRoutine.currentTime <= startDayTime) return;
 
             int previousStamina = Stamina;
             var staminaDrainPerSecond = AppConstants.Stamina.NewDay / AppConstants.Stamina.LiveTime;
 
-            var staminaDecrease = staminaDrainPerSecond * TimeRoutine.s_hungryOverTimeMultiplier;
+            var staminaDecrease = staminaDrainPerSecond * timeRoutine.hungryOverTimeMultiplier;
 
             Debug.Log($"drain stamina : {staminaDecrease}");
 
@@ -98,28 +107,39 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Stamina
 
             Debug.Log($"player stamina out");
 
-            DOVirtual.DelayedCall(1, () =>
-            {
-                //play unconsios animation
-                //
-
-                //move player to home
-                //var homeSite = "MikiHome";
-                var homeSite = "GamePlayZone6_01";
-                SiteRunner.Instance.Core.Site.SetSite(homeSite);
-                //UnityEngine.SceneManagement.SceneManager.LoadScene("SceneLoader");
+            GameRunner.Instance.TimeRoutine.PauseTime();
+            GameRunner.Instance.Core.Player.SetMode(PlayerMode.EndDay_StaminaOut);
 
 
+            //DOVirtual.DelayedCall(1, () =>
+            //{
+            //    //play unconsios animation
+            //    //
 
-                _isEnable = true;
-
-                TimeRoutine.NextDay();
-                SetStamina(AppConstants.Stamina.NewDay);
-            });
+            //    //move player to home
+            //    //var homeSite = "MikiHome";
+            //    var homeSite = "GamePlayZone6_01";
+            //    SiteRunner.Instance.Core.Site.SetSite(homeSite);
+            //    //UnityEngine.SceneManagement.SceneManager.LoadScene("SceneLoader");
 
 
 
+            //    _isEnable = true;
 
+            //    TimeRoutine.NextDay();
+            //    SetStamina(AppConstants.Stamina.NewDay);
+            //});
+
+
+
+
+        }
+
+        public void StaminaOutFinish()
+        {
+            OnStaminaOutFinish.OnNext(Unit.Default);
+
+            GameRunner.Instance.Core.Player.SetMode(PlayerMode.Stop);
         }
     }
 }
