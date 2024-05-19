@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class UiButtonSound : MonoBehaviour
 {
-    [SerializeField] public AudioType onHoverSound = AudioType.SFX_Rollover;
-    [SerializeField] public AudioType onClickSound = AudioType.SFX_ClickOk;
+    [SerializeField] public SoundType onHoverSound = SoundType.SFX_Rollover;
+    [SerializeField] public SoundType onClickSound = SoundType.SFX_ClickOk;
 
 
     ButtonHover _hoverButton;
@@ -42,18 +42,18 @@ public class UiButtonSound : MonoBehaviour
     {
         if (isHover)
         {
-            if (AudioManager.Instance != null)
+            if (SoundManager.Instance != null)
             {
-                AudioManager.Instance.PlayAudio(AudioType.SFX_Rollover, true, 1.0f);
+                SoundManager.Instance.PlayAudio(SoundType.SFX_Rollover, true, 1.0f);
             }
         }
     }
 
     public void OnClick()
     {
-        if (AudioManager.Instance != null)
+        if (SoundManager.Instance != null)
         {
-            AudioManager.Instance.PlayAudio(AudioType.SFX_ClickOk, true, 1.0f); ;
+            SoundManager.Instance.PlayAudio(SoundType.SFX_ClickOk, true, 1.0f); ;
         }
 
     }
