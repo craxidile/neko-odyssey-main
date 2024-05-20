@@ -13,5 +13,6 @@
         QuestConversation,
         Pet,
         Stop,
+        EndDay_StaminaOut, EndDay_TimeOut,
     }
 }

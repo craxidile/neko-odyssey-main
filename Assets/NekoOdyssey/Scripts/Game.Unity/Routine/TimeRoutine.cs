@@ -92,51 +92,63 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 {
     public class TimeRoutine : MonoBehaviour
     {
+        TimeScriptable timeScriptable;
+        //public Day currentDay;
+        //[Range(0, AppConstants.Time.MaxDayMinute)] public int dayMinute;
+        float dayMinuteFloat;
 
-        public Day currentDay;
-        [Range(0, AppConstants.Time.MaxDayMinute)] public int dayMinute;
-        static float s_dayMinuteFloat;
+        //[ReadOnlyField]
+        //[SerializeField]
+        //public string currentTimeText;
 
-        [ReadOnlyField]
-        [SerializeField]
-        public string currentTimeText;
-
-        public float timeMultiplier = 1f;
+        //public float timeMultiplier = 1f;
         //public static TimeScriptable timeScriptable;
 
-        public static Day day { get; set; } = 0;
-        public static TimeHrMin currentTime { get; set; } = new TimeHrMin("00.00");
+        //public static Day day { get; set; } = 0;
+        //public TimeHrMin currentTime { get; set; } = new TimeHrMin("00.00");
 
-        [SerializeField] bool _isTimer; //only edit in unity editor
-        static bool s_isTimeRunning;
-        public static void PauseTime() => s_isTimeRunning = false;
-        public static void ContinueTime() => s_isTimeRunning = true;
-
-
-        public static int GameDayTotal { get; set; } = 1;
-        public static int GameMounth => ((GameDayTotal - 1) / 30) + 1;
-        public static int DayInMounth => ((GameDayTotal - 1) % 30) + 1;
+        //[SerializeField] bool _isTimer; //only edit in unity editor
+        //static bool s_isTimeRunning;
+        public Day currentDay => timeScriptable.currentDay;
+        public TimeHrMin currentTime;
+        public void PauseTime() => timeScriptable._isTimer = false;
+        public void ContinueTime() => timeScriptable._isTimer = true;
 
 
-        [Tooltip("increase this value mean hungey decrease faster")]
-        [Range(0, 10)]
-        public float hungryOverTimeMultiplier = 1;
-        public static float s_hungryOverTimeMultiplier;
+        public int GameDayTotal { get; set; } = 1;
+        public int GameMounth => ((GameDayTotal - 1) / 30) + 1;
+        public int DayInMounth => ((GameDayTotal - 1) % 30) + 1;
+
+
+        //[Tooltip("increase this value mean hungey decrease faster")]
+        ////[Range(0, 10)]
+        //public float hungryOverTimeMultiplier = 1;
+        public float hungryOverTimeMultiplier => timeScriptable.hungryOverTimeMultiplier;
 
 
         public static Subject<int> OnTimeUpdate { get; } = new();
         public static Subject<int> OnChangeDay { get; } = new();
 
 
+        private void Awake()
+        {
+            timeScriptable = GameRunner.Instance.CsvHolder.timeProfile;
+            timeScriptable.OnValidated.Subscribe(OnTimeProfileValidate).AddTo(this);
+            currentTime = new TimeHrMin($"{timeScriptable.dayMinute / 60}:{timeScriptable.dayMinute % 60}");
 
-
+            //dayMinuteFloat = new TimeHrMin(AppConstants.Time.StartDayTime).ToInt();
+            dayMinuteFloat = timeScriptable.dayMinute;
+        }
 
         // Start is called before the first frame update
         public void Start()
         {
-            s_isTimeRunning = true;
-            s_dayMinuteFloat = AppConstants.Time.StartDayMinute;
-            dayMinute = Mathf.RoundToInt(s_dayMinuteFloat);
+            
+
+
+            //s_isTimeRunning = true;
+            
+            //dayMinute = Mathf.RoundToInt(s_dayMinuteFloat);
         }
 
         // Update is called once per frame
@@ -147,8 +159,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             //timeHrMin.Hour = currentHours;
             //timeHrMin.Minute = currentMinute;
 
-            _isTimer = s_isTimeRunning;
-            currentDay = day;
+            //_isTimer = s_isTimeRunning;
+            //currentDay = day;
             ProcessTime();
 
 
@@ -164,24 +176,25 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
         }
 
-        public static bool inBetweenDayAndTime(List<Day> checkDay, string checkTime)
+        public bool inBetweenDayAndTime(List<Day> checkDay, string checkTime)
         {
-            if (checkDay.Contains(day))
+            if (checkDay.Contains(currentDay))
             {
                 return currentTime.inBetweenTime(checkTime);
             }
             return false;
         }
 
-        public static void SetTime(string timeText)
+        public void SetTime(string timeText)
         {
             var newTime = new TimeHrMin(timeText);
-            s_dayMinuteFloat = newTime.ToInt();
+            dayMinuteFloat = newTime.ToInt();
+            timeScriptable.dayMinute = newTime.ToInt();
 
-            currentTime = newTime;
+            //currentTime = newTime;
         }
 
-        public static void NextDay()
+        public void NextDay()
         {
             GameDayTotal += 1;
             OnChangeDay.OnNext(GameDayTotal);
@@ -190,18 +203,18 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
         public void ProcessTime()
         {
-            if (s_isTimeRunning)
+            if (timeScriptable._isTimer)
             {
-                var secondPerSecond = AppConstants.Time.GameHourPerMinute * timeMultiplier;
+                var secondPerSecond = AppConstants.Time.GameHourPerMinute * timeScriptable.timeMultiplier;
                 var nextSecondValue = Time.deltaTime * secondPerSecond;
 
 
-                s_dayMinuteFloat += nextSecondValue;
-                if (s_dayMinuteFloat > AppConstants.Time.MaxDayMinute)
+                dayMinuteFloat += nextSecondValue;
+                if (dayMinuteFloat > AppConstants.Time.MaxDayMinute)
                 {
-                    s_dayMinuteFloat = 0;
+                    dayMinuteFloat = 0;
                 }
-
+                
 
             }
             else
@@ -210,31 +223,30 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             }
 
 
-            var previosMinute = dayMinute;
-            dayMinute = Mathf.RoundToInt(s_dayMinuteFloat);
-            currentTime = new TimeHrMin($"{dayMinute / 60}:{dayMinute % 60}");
-            currentTimeText = currentTime.ToString();
+            var previosMinute = timeScriptable.dayMinute;
+            timeScriptable.dayMinute = Mathf.RoundToInt(dayMinuteFloat);
+            currentTime = new TimeHrMin($"{timeScriptable.dayMinute / 60}:{timeScriptable.dayMinute % 60}");
 
-            if (previosMinute != dayMinute)
+            if (previosMinute != timeScriptable.dayMinute)
             {
-                OnTimeUpdate.OnNext(Mathf.Max(dayMinute - previosMinute, 0));
+                OnTimeUpdate.OnNext(Mathf.Max(timeScriptable.dayMinute - previosMinute, 0));
+                Debug.Log($"OnTimeUpdate = {(timeScriptable.dayMinute - previosMinute)}");
             }
         }
 
 
 
-        private void OnValidate()
+        private void OnTimeProfileValidate(Unit _)
         {
-            if (s_dayMinuteFloat != dayMinute)
+            if (dayMinuteFloat !=timeScriptable.dayMinute)
             {
-                OnTimeUpdate.OnNext(Mathf.RoundToInt((float)dayMinute - s_dayMinuteFloat));
+                OnTimeUpdate.OnNext(Mathf.RoundToInt((float)timeScriptable.dayMinute - dayMinuteFloat));
             }
 
-            s_dayMinuteFloat = dayMinute;
-            s_isTimeRunning = _isTimer;
-            day = currentDay;
+            dayMinuteFloat = timeScriptable.dayMinute;
+            //day = currentDay;
 
-            s_hungryOverTimeMultiplier = hungryOverTimeMultiplier;
+            //s_hungryOverTimeMultiplier = hungryOverTimeMultiplier;
         }
 
         //private void OnDrawGizmos()

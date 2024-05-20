@@ -32,16 +32,10 @@ public class DialogueManager : MonoBehaviour
     public bool endBubble;
 
     //languege  
-    int languageColumnIndex = 1;
-   
+    public LanguageManager languageManager;
     public languageTypeDialogue language = languageTypeDialogue.EN;
-    public static languageTypeDialogue globalLanguage = languageTypeDialogue.EN;
+    int languageColumnIndex = 1;
 
-    public void UpdateGlobalLanguage()
-    {
-        Debug.Log($"ChangeLanguage : {language} / {globalLanguage}");
-        //language = globalLanguage;
-    }
 
     // Dialogue
     [SerializeField] TextAsset DialogueAsset;
@@ -56,9 +50,10 @@ public class DialogueManager : MonoBehaviour
     private void Awake()
     {
         director = GetComponent<PlayableDirector>();
-        UpdateGlobalLanguage();
-        LoadDialogueCSV();
+        languageManager = GetComponent<LanguageManager>();
+        languageManager.updateGlobalLanguage();
         canvasController.SetOpened(false);
+        LoadDialogueCSV();
     }
 
     
@@ -106,11 +101,21 @@ public class DialogueManager : MonoBehaviour
 
         for (int i = 0; i < row.Length; i++)
         {
-
-            if (row[i].ToLower() == language.ToString().ToLower())
+            if (languageManager != null)
             {
-                languageColumnIndex = i;
-                Debug.Log($"check language [{row[i]}] (column {i})");
+                if (row[i].ToLower() == languageManager.language.ToString().ToLower())
+                {
+                    languageColumnIndex = i;
+                    Debug.Log($"check language [{row[i]}] (column {i})");
+                }
+            }
+            else
+            {
+                if (row[i].ToLower() == language.ToString().ToLower())
+                {
+                    languageColumnIndex = i;
+                    Debug.Log($"check language [{row[i]}] (column {i})");
+                }
             }
         }
     }

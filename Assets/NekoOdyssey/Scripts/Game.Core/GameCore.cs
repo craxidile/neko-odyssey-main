@@ -21,7 +21,8 @@ namespace NekoOdyssey.Scripts.Game.Core
         public GameScene.GameScene GameScene { get; } = new();
 
         public Routine.Routine Routine { get; } = new(); //**Linias Edit
-        
+        public EndDay.EndDayController EndDay { get; } = new(); //**Linias Edit
+
         public void Bind()
         {
             Metadata.Bind();
@@ -34,6 +35,7 @@ namespace NekoOdyssey.Scripts.Game.Core
             GameScene.Bind();
 
             Routine.Bind();
+            EndDay.Bind();
         }
 
         public void Start()
@@ -48,6 +50,7 @@ namespace NekoOdyssey.Scripts.Game.Core
             GameScene.Start();
 
             Routine.Start();
+            EndDay.Start();
         }
 
         public void Unbind()
@@ -62,6 +65,7 @@ namespace NekoOdyssey.Scripts.Game.Core
             GameScene.Unbind();
 
             Routine.Unbind();
+            EndDay.Unbind();
         }
 
     }

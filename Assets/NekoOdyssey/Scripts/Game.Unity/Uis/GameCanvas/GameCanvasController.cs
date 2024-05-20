@@ -64,11 +64,11 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
 
 
             //gameTimeText.text = System.DateTime.Now.ToString("HH:mm:ss"); //change later
-            var currentTimeText = TimeRoutine.currentTime.ToString();
+            var currentTimeText = GameRunner.Instance.TimeRoutine.currentTime.ToString();
             if (currentTimeText.StartsWith("0")) currentTimeText = currentTimeText.Substring(1);
             string timeAffixText = " AM";
             var midDayTime = new TimeHrMin("12:00");
-            if (TimeRoutine.currentTime > midDayTime)
+            if (GameRunner.Instance.TimeRoutine.currentTime > midDayTime)
                 timeAffixText = " PM";
             gameTimeText.text = currentTimeText + timeAffixText;
 

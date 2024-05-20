@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using Cinemachine;
 using NekoOdyssey.Scripts.Game.Core;
+using NekoOdyssey.Scripts.Game.Core.Routine;
 using NekoOdyssey.Scripts.Game.Unity.AssetBundles;
 using NekoOdyssey.Scripts.Game.Unity.Cameras;
 using NekoOdyssey.Scripts.Game.Unity.Capture;
@@ -34,6 +36,8 @@ namespace NekoOdyssey.Scripts
 
 
         public CSVHolderScriptable CsvHolder; //Linias Edit**
+        public TimeRoutine TimeRoutine;
+        public Subject<UniRx.Unit> OnUpdate { get; } = new();
 
         public GameRunner()
         {
@@ -52,7 +56,8 @@ namespace NekoOdyssey.Scripts
             gameObject.AddComponent<CentralPlayerPettingHandler>();
             gameObject.AddComponent<AssetBundleLoader>();
 
-            new GameObject("Time Controller").AddComponent<NekoOdyssey.Scripts.Game.Core.Routine.TimeRoutine>().transform.SetParent(transform);
+            TimeRoutine = gameObject.AddComponent<TimeRoutine>();
+            //new GameObject("Time Controller").AddComponent<NekoOdyssey.Scripts.Game.Core.Routine.TimeRoutine>().transform.SetParent(transform);
 
 
             Core.Bind();
@@ -69,11 +74,20 @@ namespace NekoOdyssey.Scripts
             Core.Start();
 
             AssetBundleUtils.OnReady(InitializePositions);
+
+            StartCoroutine(IUpdate());
         }
 
         private void OnDestroy()
         {
             Core.Unbind();
+        }
+
+        IEnumerator IUpdate()
+        {
+            OnUpdate.OnNext(UniRx.Unit.Default);
+            yield return null;
+            StartCoroutine(IUpdate());
         }
 
         private void OnEnable()
