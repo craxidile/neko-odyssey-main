@@ -17,5 +17,14 @@ namespace NekoOdyssey.Scripts.Database.Domains.SaveV001.PlayerCatEntity.Models
         [NotNull] public int CaptureCount { get; set; }
         
         [NotNull] public float Friendship { get; set; }
+
+        public PlayerCatV001()
+        {
+        }
+
+        public PlayerCatV001(string catCode)
+        {
+            CatCode = catCode;
+        }
     }
 }

@@ -187,6 +187,12 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
             Position = position;
             OnChangePosition.OnNext(position);
         }
+        
+        public void SetLikeCount(int likeCount)
+        {
+            LikeCount = likeCount;
+            OnChangeLikeCount.OnNext(LikeCount);
+        }
 
         public void AddStamina(int addition)
         {

@@ -11,6 +11,9 @@ namespace NekoOdyssey.Scripts.Constants
 
         public const int MaxStamina = 20000;
 
+        public const float RapidExpCdfLambda = .8f;
+        public const float NormalExpCdfLambda = .2f;
+
         public static string AssetBundlesFolder
         {
             get
@@ -25,7 +28,7 @@ namespace NekoOdyssey.Scripts.Constants
         
         public static string BaseAppFilePath { get; private set; } = null;
 
-        public static void Intialize()
+        public static void Initialize()
         {
             #if UNITY_EDITOR || UNITY_STANDALONE_OSX || UNITY_STANDALONE_OSX
             Debug.Log($">>app_constants<< initialize {Application.persistentDataPath}");
