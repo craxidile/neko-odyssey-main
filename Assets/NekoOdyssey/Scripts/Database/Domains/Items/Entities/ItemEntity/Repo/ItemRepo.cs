@@ -10,7 +10,7 @@ using SQLite4Unity3d;
 
 namespace NekoOdyssey.Scripts.Database.Domains.Items.Entities.ItemEntity.Repo
 {
-    public class ItemRepo: Repository<ItemType, int, SQLiteConnection>
+    public class ItemRepo : Repository<ItemType, int, SQLiteConnection>
     {
         private ItemTypeRepo _itemTypeRepo;
         

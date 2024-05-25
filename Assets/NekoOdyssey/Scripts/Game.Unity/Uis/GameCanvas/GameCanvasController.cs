@@ -55,12 +55,15 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
             GameRunner.Instance.Core.Player.OnChangeStamina
                 .Subscribe(HandleStaminaChange)
                 .AddTo(this);
+            GameRunner.Instance.Core.Player.OnChangeLikeCount
+                .Subscribe(HandleLikeCountChange)
+                .AddTo(this);
 
             UpdateStamina(GameRunner.Instance.Core.Player.Stamina);
 
             gameTimeText.text = DateTime.Now.ToString("HH:mm:ss"); //change later
 
-            socialLikeText.text = socialLikeCount.ToString("N0");
+            socialLikeText.text = "0"; // socialLikeCount.ToString("N0");
             followerText.text = followerCount.ToString("N0");
             moneyText.text = moneyCount.ToString("N0");
 
@@ -92,6 +95,12 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
         private void HandleStaminaChange(int stamina)
         {
             UpdateStamina(stamina);
+            RebuildLayout();
+        }
+
+        private void HandleLikeCountChange(int likeCount)
+        {
+            socialLikeText.text = likeCount.ToString("N0");
             RebuildLayout();
         }
 

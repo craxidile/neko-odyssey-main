@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
+using NekoOdyssey.Scripts.Database.Domains.SaveV001.CatPhotoEntity.Models;
 using NekoOdyssey.Scripts.Game.Core.Player.Phone;
+using NekoOdyssey.Scripts.Game.Unity.AssetBundles;
 using NekoOdyssey.Scripts.Models;
 using UniRx;
 using Unity.VisualScripting;
@@ -27,29 +29,20 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone.PhotoGallery
             _gridCell = phoneCanvasUi.gridCell;
             _scrollRect = phoneCanvasUi.scrollRect;
 
-            DOVirtual.DelayedCall(1f, () =>
+            AssetBundleUtils.OnReady(() =>
             {
-                if (GameRunner.Instance.Ready)
-                {
-                    GeneratePhotoGalleryEntryGrid(GameRunner.Instance.Core.Player.Phone.PhotoGallery.Entries);
-                }
-                else
-                {
-                    GameRunner.Instance.OnReady.Subscribe(ready =>
-                    {
-                        if (!ready) return;
-                        GeneratePhotoGalleryEntryGrid(GameRunner.Instance.Core.Player.Phone.PhotoGallery.Entries);
-                    });
-                }
+                GeneratePhotoGalleryEntryGrid(GameRunner.Instance.Core.Player.Phone.PhotoGallery.Photos);
             });
         }
 
         private void Start()
         {
-            GameRunner.Instance.Core.Player.Phone.PhotoGallery.OnChangeEntries.Subscribe(GeneratePhotoGalleryEntryGrid);
+            GameRunner.Instance.Core.Player.Phone.PhotoGallery.OnChangePhotos
+                .Subscribe(GeneratePhotoGalleryEntryGrid)
+                .AddTo(this);
         }
 
-        private void GeneratePhotoGalleryEntryGrid(List<PhotoGalleryEntry> photoGalleryEntries)
+        private void GeneratePhotoGalleryEntryGrid(ICollection<CatPhotoV001> photoGalleryEntries)
         {
             foreach (var socialFeedCells in _photoGalleryEntryCells)
             {
@@ -68,11 +61,11 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone.PhotoGallery
             _scrollRect.content.anchoredPosition = contentPosition;
         }
 
-        private void AddPhotoGalleryEntryCell(PhotoGalleryEntry photoGalleryEntry)
+        private void AddPhotoGalleryEntryCell(CatPhotoV001 catPhotoEntry)
         {
             var newPhotoEntryCellObject = Instantiate(_gridCell, _gridCell.transform.parent);
             var photoTransform = newPhotoEntryCellObject.GetComponent<PhotoGalleryEntryCellController>().photoTransform;
-            var assetBundleName = $"{photoGalleryEntry.CatCode.ToLower()}snap";
+            var assetBundleName = $"{catPhotoEntry.CatCode.ToLower()}snap";
             if (GameRunner.Instance.AssetMap.TryGetValue(assetBundleName, out var asset))
             {
                 var catPhoto = Instantiate(asset, newPhotoEntryCellObject.transform) as GameObject;

@@ -4,8 +4,10 @@ using System.Linq;
 using DG.Tweening;
 using NekoOdyssey.Scripts.Game.Core.Player.Phone;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
+using NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone.CatNote;
 using NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone.PhotoGallery;
 using NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone.SocialNetwork;
+using TMPro;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
@@ -25,6 +27,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone
         public Transform openPositionTransform;
         public Transform closePositionTransform;
         public Transform phoneTransform;
+
+        public TextMeshProUGUI likeCountText;
 
         private bool _active;
         private bool _isOpen;
@@ -62,6 +66,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone
             GameRunner.Instance.Core.Player.Phone.GameObject = gameObject;
             gameObject.AddComponent<PhoneSocialNetworkController>();
             gameObject.AddComponent<PhonePhotoGalleryController>();
+            gameObject.AddComponent<PhoneCatNoteController>();
         }
 
         private void Start()

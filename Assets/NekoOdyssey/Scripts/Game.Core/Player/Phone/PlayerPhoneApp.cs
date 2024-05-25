@@ -4,5 +4,6 @@
     {
         SocialNetwork,
         PhotoGallery,
+        CatNote,
     }
 }
