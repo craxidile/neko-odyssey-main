@@ -235,7 +235,7 @@ public class GameSettingManager : MonoBehaviour, IStackPanel
     public void ChangeMasterVolume(float value)
     {
         AudioListener.volume = value;
-        //_audioMixer.SetFloat("Master", Mathf.Log10(value) * 20);
+        _audioMixer.SetFloat("Master Volume", Mathf.Log10(value) * 20);
     }
     public void ChangeBGMVolume(float value)
     {
@@ -244,7 +244,7 @@ public class GameSettingManager : MonoBehaviour, IStackPanel
         {
             targetValue = -80;
         }
-        _audioMixer.SetFloat("BGM", targetValue);
+        _audioMixer.SetFloat("BGM Volume", targetValue);
     }
     public void ChangeEffectVolume(float value)
     {
@@ -253,7 +253,7 @@ public class GameSettingManager : MonoBehaviour, IStackPanel
         {
             targetValue = -80;
         }
-        _audioMixer.SetFloat("Effect", targetValue);
+        _audioMixer.SetFloat("SFX Volume", targetValue);
     }
 
     public void ChangeScreenResolution(int value)
