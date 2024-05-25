@@ -2,11 +2,7 @@
 using NekoOdyssey.Scripts.Game.Core.Ais;
 using NekoOdyssey.Scripts.Game.Core.Areas;
 using NekoOdyssey.Scripts.Game.Core.Cat;
-<<<<<<< HEAD
-=======
-using NekoOdyssey.Scripts.Game.Core.Scene;
 using NekoOdyssey.Scripts.Game.Core.Simulators;
->>>>>>> feature/database
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 using UnityEngine;
 
