@@ -29,6 +29,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
         public PlayerCapture Capture { get; } = new();
         public PlayerPetting Petting { get; } = new();
         public PlayerConversation Conversation { get; } = new();
+        public SaveV001DbWriter SaveDbWriter { get; } = new();
 
         public int Stamina { get; private set; }
         public int PocketMoney { get; private set; }
@@ -98,6 +99,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
         {
             if (_initialized) return;
             _initialized = true;
+            // using (new SaveV001DbContext(new() { CopyMode = DbCopyMode.CopyIfNotExists, ReadOnly = false })) ;
             using (new SaveV001DbContext(new() { CopyMode = DbCopyMode.ForceCopy, ReadOnly = false })) ;
         }
 
@@ -113,13 +115,13 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
 
         private void SavePlayerProperties()
         {
-            using (var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = false }))
+            SaveDbWriter.Add(dbContext =>
             {
                 var playerPropertiesRepo = new PlayerPropertiesV001Repo(dbContext);
                 var playerProperties = playerPropertiesRepo.Load();
                 playerProperties.Stamina = Stamina;
                 playerPropertiesRepo.Update(playerProperties);
-            }
+            });
         }
 
         private void ResetPlayerSubmenu()

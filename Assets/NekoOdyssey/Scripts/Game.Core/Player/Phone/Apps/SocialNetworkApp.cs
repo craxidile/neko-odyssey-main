@@ -2,6 +2,7 @@
 using NekoOdyssey.Scripts.Database.Domains;
 using NekoOdyssey.Scripts.Database.Domains.SaveV001;
 using NekoOdyssey.Scripts.Database.Domains.SaveV001.CatPhotoEntity.Models;
+using NekoOdyssey.Scripts.Database.Domains.SaveV001.CatPhotoEntity.Repo;
 using NekoOdyssey.Scripts.Database.Domains.SaveV001.SocialPostEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.SaveV001.SocialPostEntity.Repo;
 using UnityEngine;
@@ -16,14 +17,6 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Phone.Apps
         public Subject<ICollection<SocialPostV001>> OnChangeFeeds { get; } = new();
 
         public GameObject GameObject { get; set; }
-
-        public void Add(string catCode)
-        {
-            var catPhoto = new CatPhotoV001(catCode, catCode);
-            var postList = Posts as List<SocialPostV001>;
-            postList?.Insert(0, new SocialPostV001(catPhoto));
-            OnChangeFeeds.OnNext(Posts);
-        }
 
         public void Bind()
         {
@@ -50,7 +43,22 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Phone.Apps
                 var socialPostRepo = new SocialPostV001Repo(dbContext);
                 Posts = new List<SocialPostV001>(socialPostRepo.List());
             }
+
             OnChangeFeeds.OnNext(Posts);
+        }
+
+        public void Add(string catCode)
+        {
+            var catPhoto = new CatPhotoV001(catCode, catCode);
+            GameRunner.Instance.Core.Player.SaveDbWriter.Add(dbContext =>
+            {
+                var catPhotoRepo = new CatPhotoV001Repo(dbContext);
+                var dbCatPhoto = catPhotoRepo.FindByAssetBundleName(catCode);
+                catPhoto = dbCatPhoto == null ? catPhotoRepo.Add(catPhoto) : catPhoto;
+                var socialPostRepo = new SocialPostV001Repo(dbContext);
+                socialPostRepo.Add(new SocialPostV001(catPhoto));
+            });
+            LoadPosts();
         }
     }
 }

@@ -51,26 +51,26 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Phone.Apps
 
         public void AddCatPetting(string catCode)
         {
-            using (var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = true }))
+            GameRunner.Instance.Core.Player.SaveDbWriter.Add(dbContext =>
             {
                 var repo = new PlayerCatV001Repo(dbContext);
                 var playerCat = GetPlayerCatByCode(repo, catCode);
                 playerCat.DailyFeedCount++;
                 repo.Update(playerCat);
-            }
+            });
 
             LoadPlayerCats();
         }
 
         public void AddCatCapture(string catCode)
         {
-            using (var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = true }))
+            GameRunner.Instance.Core.Player.SaveDbWriter.Add(dbContext =>
             {
                 var repo = new PlayerCatV001Repo(dbContext);
                 var playerCat = GetPlayerCatByCode(repo, catCode);
                 playerCat.CaptureCount++;
                 repo.Update(playerCat);
-            }
+            });
 
             LoadPlayerCats();
         }

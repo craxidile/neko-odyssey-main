@@ -36,14 +36,23 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Phone.Apps
                 var repo = new CatPhotoV001Repo(dbContext);
                 Photos = new List<CatPhotoV001>(repo.List());
             }
+
             OnChangePhotos.OnNext(Photos);
         }
 
         public void Add(CatPhotoV001 photo)
         {
-            var photoList = Photos as List<CatPhotoV001>;
-            photoList?.Insert(0, photo);
-            OnChangePhotos.OnNext(Photos);
+            // var photoList = Photos as List<CatPhotoV001>;
+            // photoList?.Insert(0, photo);
+            // OnChangePhotos.OnNext(Photos);
+            GameRunner.Instance.Core.Player.SaveDbWriter.Add(dbContext =>
+            {
+                var repo = new CatPhotoV001Repo(dbContext);
+                var catPhoto = repo.FindByAssetBundleName(photo.CatCode);
+                if (catPhoto != null) return;
+                repo.Add(photo);
+            });
+            LoadPhotos();
         }
     }
 }

@@ -54,7 +54,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Simulators.SocialNetwork
             if (template == null) return;
 
             SocialPostV001 socialPost = null;
-            using (var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = true }))
+            GameRunner.Instance.Core.Player.SaveDbWriter.Add(dbContext =>
             {
                 var catPhotoRepo = new CatPhotoV001Repo(dbContext);
                 var catPhoto = catPhotoRepo.FindByAssetBundleName(assetBundleName);
@@ -63,7 +63,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Simulators.SocialNetwork
                 var socialPostRepo = new SocialPostV001Repo(dbContext);
                 socialPost = socialPostRepo.FindByCatPhotoId(catPhoto.Id);
                 if (socialPost == null) socialPost = socialPostRepo.Add(new SocialPostV001(catPhoto));
-            }
+            });
 
             if (socialPost == null) return;
 
