@@ -8,6 +8,12 @@ namespace NekoOdyssey.Scripts.Database.Domains.SaveV001.PlayerPropertiesEntity.M
     [Serializable]
     public class PlayerPropertiesV001 : EntityBase<int>, IAggregateRoot
     {
+        [NotNull] public int DayCount { get; set; }
+        
+        [NotNull] public int CurrentHour { get; set; }
+        
+        [NotNull] public int CurrentMinute { get; set; }
+        
         [NotNull] public int Stamina { get; set; }
         
         [NotNull] public int PocketMoney { get; set; }

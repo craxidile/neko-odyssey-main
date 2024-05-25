@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Cinemachine;
 using NekoOdyssey.Scripts.Constants;
 using NekoOdyssey.Scripts.Game.Core;
@@ -9,6 +10,7 @@ using NekoOdyssey.Scripts.Game.Unity.Conversations;
 using NekoOdyssey.Scripts.Game.Unity.Inputs;
 using NekoOdyssey.Scripts.Game.Unity.Petting;
 using NekoOdyssey.Scripts.Game.Unity.Sites;
+using NUnit.Framework.Internal;
 using UniRx;
 using Unity.VisualScripting;
 using UnityEngine;
