@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Cinemachine;
+using NekoOdyssey.Scripts.Constants;
 using NekoOdyssey.Scripts.Game.Core;
 using NekoOdyssey.Scripts.Game.Unity.AssetBundles;
 using NekoOdyssey.Scripts.Game.Unity.Cameras;
@@ -8,6 +10,7 @@ using NekoOdyssey.Scripts.Game.Unity.Conversations;
 using NekoOdyssey.Scripts.Game.Unity.Inputs;
 using NekoOdyssey.Scripts.Game.Unity.Petting;
 using NekoOdyssey.Scripts.Game.Unity.Sites;
+using NUnit.Framework.Internal;
 using UniRx;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -62,6 +65,7 @@ namespace NekoOdyssey.Scripts
         {
             Core.Start();
             AssetBundleUtils.OnReady(InitializePositions);
+            TestNetworkSimulator();
         }
 
         private void OnDestroy()
@@ -121,6 +125,12 @@ namespace NekoOdyssey.Scripts
             {
                 Camera.main.transform.position = cameraAnchor.transform.position;
             }
+        }
+
+        private void TestNetworkSimulator()
+        {
+            // Core.Simulators.SocialNetworkSimulator.Start(1, AppConstants.RapidExpCdfLambda);
+            Core.Simulators.SocialNetworkSimulator.Add("A02");
         }
     }
 }

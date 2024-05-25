@@ -16,6 +16,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Phone
         {
             PlayerPhoneApp.SocialNetwork,
             PlayerPhoneApp.PhotoGallery,
+            PlayerPhoneApp.CatNote
         };
 
         private int _previousAppIndex;
@@ -28,6 +29,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Phone
 
         public SocialNetworkApp SocialNetwork { get; } = new();
         public PhotoGalleryApp PhotoGallery { get; } = new();
+        public CatNoteApp CatNote { get; } = new();
 
         public Subject<Vector2> OnScroll { get; } = new();
         public Subject<PlayerPhoneApp> OnChangeApp { get; } = new();
@@ -39,6 +41,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Phone
         {
             SocialNetwork.Bind();
             PhotoGallery.Bind();
+            CatNote.Bind();
         }
 
         public void Start()
@@ -64,12 +67,14 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Phone
 
             SocialNetwork.Start();
             PhotoGallery.Start();
+            CatNote.Start();
         }
 
         public void Unbind()
         {
             SocialNetwork.Unbind();
             PhotoGallery.Unbind();
+            CatNote.Unbind();
         }
 
         private void HandleScroll(Vector2 input)

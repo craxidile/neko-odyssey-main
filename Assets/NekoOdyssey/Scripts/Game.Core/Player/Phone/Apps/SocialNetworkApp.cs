@@ -1,5 +1,10 @@
 ﻿using System.Collections.Generic;
-using NekoOdyssey.Scripts.Models;
+using NekoOdyssey.Scripts.Database.Domains;
+using NekoOdyssey.Scripts.Database.Domains.SaveV001;
+using NekoOdyssey.Scripts.Database.Domains.SaveV001.CatPhotoEntity.Models;
+using NekoOdyssey.Scripts.Database.Domains.SaveV001.CatPhotoEntity.Repo;
+using NekoOdyssey.Scripts.Database.Domains.SaveV001.SocialPostEntity.Models;
+using NekoOdyssey.Scripts.Database.Domains.SaveV001.SocialPostEntity.Repo;
 using UnityEngine;
 using UniRx;
 
@@ -7,28 +12,15 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Phone.Apps
 {
     public class SocialNetworkApp
     {
-        private static readonly List<SocialFeed> _feeds = new()
-        {
-            new SocialFeed()
-            {
-                CatCode = "A02"
-            }
-        };
-        
-        public List<SocialFeed> Feeds => _feeds;
+        public ICollection<SocialPostV001> Posts { get; private set; }
 
-        public Subject<List<SocialFeed>> OnChangeFeeds { get; } = new();
-            
+        public Subject<ICollection<SocialPostV001>> OnChangeFeeds { get; } = new();
+
         public GameObject GameObject { get; set; }
 
-        public void Add(SocialFeed feed)
-        {
-            Feeds.Insert(0, feed);
-            OnChangeFeeds.OnNext(Feeds);
-        }
-        
         public void Bind()
         {
+            LoadPosts();
         }
 
         public void Start()
@@ -37,6 +29,36 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Phone.Apps
 
         public void Unbind()
         {
+        }
+
+        public void RefreshPost(SocialPostV001 post)
+        {
+            OnChangeFeeds.OnNext(Posts);
+        }
+
+        private void LoadPosts()
+        {
+            using (var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = true }))
+            {
+                var socialPostRepo = new SocialPostV001Repo(dbContext);
+                Posts = new List<SocialPostV001>(socialPostRepo.List());
+            }
+
+            OnChangeFeeds.OnNext(Posts);
+        }
+
+        public void Add(string catCode)
+        {
+            var catPhoto = new CatPhotoV001(catCode, catCode);
+            GameRunner.Instance.Core.Player.SaveDbWriter.Add(dbContext =>
+            {
+                var catPhotoRepo = new CatPhotoV001Repo(dbContext);
+                var dbCatPhoto = catPhotoRepo.FindByAssetBundleName(catCode);
+                catPhoto = dbCatPhoto == null ? catPhotoRepo.Add(catPhoto) : catPhoto;
+                var socialPostRepo = new SocialPostV001Repo(dbContext);
+                socialPostRepo.Add(new SocialPostV001(catPhoto));
+            });
+            LoadPosts();
         }
     }
 }

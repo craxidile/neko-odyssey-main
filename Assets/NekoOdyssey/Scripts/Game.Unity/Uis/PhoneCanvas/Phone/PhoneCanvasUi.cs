@@ -10,6 +10,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone
     {
         public PlayerPhoneApp phoneApp;
         public CanvasGroup canvasGroup;
+        public GameObject grid;
         public GameObject gridCell;
         public ScrollRect scrollRect;
     }

@@ -13,7 +13,9 @@ namespace NekoOdyssey.Scripts.Database.Domains.SaveV001.PlayerPropertiesEntity.R
 
         public PlayerPropertiesV001 Load()
         {
-            return _dbContext.Context.Table<PlayerPropertiesV001>().FirstOrDefault();
+            return _dbContext.Context
+                .Table<PlayerPropertiesV001>()
+                .FirstOrDefault();
         }
     }
 }

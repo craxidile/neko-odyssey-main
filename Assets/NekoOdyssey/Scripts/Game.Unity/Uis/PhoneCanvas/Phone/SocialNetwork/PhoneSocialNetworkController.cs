@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
+using NekoOdyssey.Scripts.Database.Domains.SaveV001.SocialPostEntity.Models;
 using NekoOdyssey.Scripts.Game.Core.Player.Phone;
+using NekoOdyssey.Scripts.Game.Unity.AssetBundles;
 using NekoOdyssey.Scripts.Models;
+using TMPro;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,6 +16,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone.SocialNetwork
     {
         private GameObject _gridCell;
         private ScrollRect _scrollRect;
+        private TextMeshProUGUI _likeCountText;
 
         private readonly List<GameObject> _socialFeedCells = new();
 
@@ -25,30 +29,32 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone.SocialNetwork
             if (phoneCanvasUi == null) return;
             _gridCell = phoneCanvasUi.gridCell;
             _scrollRect = phoneCanvasUi.scrollRect;
-            
-            DOVirtual.DelayedCall(1f, () =>
+            _likeCountText = phoneCanvasController.likeCountText;
+
+            _likeCountText.text = "0";
+
+            AssetBundleUtils.OnReady(() =>
             {
-                if (GameRunner.Instance.Ready)
-                {
-                    GenerateSocialFeedGrid(GameRunner.Instance.Core.Player.Phone.SocialNetwork.Feeds);
-                }
-                else
-                {
-                    GameRunner.Instance.OnReady.Subscribe(ready =>
-                    {
-                        if (!ready) return;
-                        GenerateSocialFeedGrid(GameRunner.Instance.Core.Player.Phone.SocialNetwork.Feeds);
-                    });
-                }
+                GenerateSocialPostGrid(GameRunner.Instance.Core.Player.Phone.SocialNetwork.Posts);
             });
         }
 
         private void Start()
         {
-            GameRunner.Instance.Core.Player.Phone.SocialNetwork.OnChangeFeeds.Subscribe(GenerateSocialFeedGrid);
+            GameRunner.Instance.Core.Player.Phone.SocialNetwork.OnChangeFeeds
+                .Subscribe(GenerateSocialPostGrid)
+                .AddTo(this);
+            GameRunner.Instance.Core.Player.OnChangeLikeCount
+                .Subscribe(HandleLikeCountChange)
+                .AddTo(this);
         }
 
-        private void GenerateSocialFeedGrid(List<SocialFeed> feeds)
+        private void HandleLikeCountChange(int likeCount)
+        {
+            _likeCountText.text = likeCount.ToString("N0");
+        }
+
+        private void GenerateSocialPostGrid(ICollection<SocialPostV001> posts)
         {
             foreach (var socialFeedCells in _socialFeedCells)
             {
@@ -56,10 +62,9 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone.SocialNetwork
             }
 
             _socialFeedCells.Clear();
-            foreach (var feed in feeds)
+            foreach (var post in posts)
             {
-                Debug.Log($">>feed<< {feed}");
-                AddSocialFeedCell(feed);
+                AddSocialPostCell(post);
             }
 
             var phoneCanvasController = GetComponent<PhoneCanvasController>();
@@ -68,11 +73,13 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone.SocialNetwork
             _scrollRect.content.anchoredPosition = contentPosition;
         }
 
-        private void AddSocialFeedCell(SocialFeed feed)
+        private void AddSocialPostCell(SocialPostV001 post)
         {
             var newPostObject = Instantiate(_gridCell, _gridCell.transform.parent);
-            var photoTransform = newPostObject.GetComponent<SocialFeedCellController>().photoTransform;
-            var assetBundleName = $"{feed.CatCode.ToLower()}snap";
+            var controller = newPostObject.GetComponent<SocialFeedCellController>();
+            controller.likeText.text = post.LikeCount.ToString("N0");
+            var photoTransform = controller.photoTransform;
+            var assetBundleName = $"{post.Photo.AssetBundleName.ToLower()}snap";
             if (GameRunner.Instance.AssetMap.TryGetValue(assetBundleName, out var asset))
             {
                 var catPhoto = Instantiate(asset, newPostObject.transform) as GameObject;

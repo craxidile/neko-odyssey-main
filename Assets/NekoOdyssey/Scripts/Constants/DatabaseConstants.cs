@@ -10,13 +10,16 @@
 
         public const string DbItemsVersion = "1";
         public const string DbItemsName = "items";
+        
+        public const string DbCatsVersion = "1";
+        public const string DbCatsName = "cats";
 
         public const string DbNpcVersion = "1";
         public const string DbNpcName = "npc";
 
         public const string DbFriendsVersion = "1";
-        public const string DbFriendsName = "friends";
-
+        public const string DbSocialName = "social";
+        
         public const string DbSaveVersion = "2";
         public const string DbSaveVersion001Name = "save001";
         public const string DbSaveVersion002Name = "save002";

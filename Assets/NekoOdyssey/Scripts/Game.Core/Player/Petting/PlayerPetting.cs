@@ -26,6 +26,9 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Petting
 
         public void Finish()
         {
+            var catCode = GameRunner.Instance.Core.Cats.CurrentCatCode;
+            GameRunner.Instance.Core.Player.Phone.CatNote.AddCatPetting(catCode);
+            
             OnFinishPetting.OnNext(Unit.Default);
             // GameRunner.Instance.Core.PlayerMenu.SetCurrentSiteActive();
             GameRunner.Instance.Core.PlayerMenu.SetCurrentSiteNameActive();
