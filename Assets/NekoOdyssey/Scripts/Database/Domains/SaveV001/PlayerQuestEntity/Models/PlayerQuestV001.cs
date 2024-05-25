@@ -11,8 +11,18 @@ namespace NekoOdyssey.Scripts.Database.Domains.SaveV001.PlayerQuestEntity.Models
     {
         [NotNull] [Unique] public string QuestCode { get; set; }
 
-        [Ignore] public Quest Item { get; set; }
+        [Ignore] public Quest Quest { get; set; }
 
         public DateTime ReceivedAt { get; set; }
+
+        public PlayerQuestV001()
+        {
+        }
+
+        public PlayerQuestV001(string questCode)
+        {
+            QuestCode = questCode;
+            ReceivedAt = DateTime.Now;
+        }
     }
 }
