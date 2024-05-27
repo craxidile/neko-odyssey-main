@@ -395,6 +395,90 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &139746467
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 139746468}
+  - component: {fileID: 139746469}
+  m_Layer: 0
+  m_Name: Player
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &139746468
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 139746467}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: -0.5209999, y: 0.037, z: 0.57}
+  m_LocalScale: {x: 1.2499999, y: 1.25, z: 1.2499999}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1868479841}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!212 &139746469
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 139746467}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 4b2b4320a4b7f7f4295bc66908acb1f6, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: -1479739024, guid: 70e28f617727e964190a7889a4046ecc, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 0.25, y: 0.71}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
 --- !u!1 &171301632
 GameObject:
   m_ObjectHideFlags: 0
@@ -1253,6 +1337,7 @@ GameObject:
   - component: {fileID: 275943294}
   - component: {fileID: 275943293}
   - component: {fileID: 275943295}
+  - component: {fileID: 275943296}
   m_Layer: 0
   m_Name: Bird11
   m_TagString: Untagged
@@ -1365,6 +1450,20 @@ MonoBehaviour:
   timeCounter: 5
   speed: 1
   isTrigger: 0
+--- !u!114 &275943296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 275943291}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b70e37ad1e190d43bb21fdeb697af0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableDays: 00000000010000000200000003000000040000000500000006000000
+  enableTime: 15.01-17.00
 --- !u!1 &292413666
 GameObject:
   m_ObjectHideFlags: 0
@@ -1484,6 +1583,7 @@ GameObject:
   - component: {fileID: 293113456}
   - component: {fileID: 293113455}
   - component: {fileID: 293113457}
+  - component: {fileID: 293113458}
   m_Layer: 0
   m_Name: Bird08
   m_TagString: Untagged
@@ -1596,6 +1696,20 @@ MonoBehaviour:
   timeCounter: 5
   speed: 1
   isTrigger: 0
+--- !u!114 &293113458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 293113453}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b70e37ad1e190d43bb21fdeb697af0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableDays: 00000000010000000200000003000000040000000500000006000000
+  enableTime: 8.00-12.00
 --- !u!1 &315455490
 GameObject:
   m_ObjectHideFlags: 0
@@ -2339,6 +2453,7 @@ GameObject:
   - component: {fileID: 462336416}
   - component: {fileID: 462336415}
   - component: {fileID: 462336417}
+  - component: {fileID: 462336418}
   m_Layer: 0
   m_Name: Bird12
   m_TagString: Untagged
@@ -2451,6 +2566,20 @@ MonoBehaviour:
   timeCounter: 5
   speed: 1
   isTrigger: 0
+--- !u!114 &462336418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 462336413}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b70e37ad1e190d43bb21fdeb697af0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableDays: 00000000010000000200000003000000040000000500000006000000
+  enableTime: 15.01-17.00
 --- !u!1 &466385722
 GameObject:
   m_ObjectHideFlags: 0
@@ -2742,6 +2871,7 @@ GameObject:
   - component: {fileID: 510113441}
   - component: {fileID: 510113440}
   - component: {fileID: 510113442}
+  - component: {fileID: 510113443}
   m_Layer: 0
   m_Name: Bird16
   m_TagString: Untagged
@@ -2854,6 +2984,20 @@ MonoBehaviour:
   timeCounter: 5
   speed: 1
   isTrigger: 0
+--- !u!114 &510113443
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 510113438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b70e37ad1e190d43bb21fdeb697af0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableDays: 00000000010000000200000003000000040000000500000006000000
+  enableTime: 12.01-16.00
 --- !u!1 &511495392
 GameObject:
   m_ObjectHideFlags: 0
@@ -3225,8 +3369,10 @@ GameObject:
   - component: {fileID: 552701528}
   - component: {fileID: 552701527}
   - component: {fileID: 552701529}
+  - component: {fileID: 552701530}
+  - component: {fileID: 552701531}
   m_Layer: 0
-  m_Name: FatCat01
+  m_Name: B01
   m_TagString: Cat
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3245,7 +3391,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 803616341}
   - {fileID: 1841427300}
+  - {fileID: 1868479841}
   m_Father: {fileID: 521149988}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!95 &552701527
@@ -3335,6 +3483,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   catCode: B01
+--- !u!114 &552701530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 552701525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b70e37ad1e190d43bb21fdeb697af0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableDays: 00000000010000000200000003000000040000000500000006000000
+  enableTime: 08.00-18.00
+--- !u!114 &552701531
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 552701525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abb1f5c87c884038a8acc360e1391e86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  code: B01
+  emoji: {fileID: 803616340}
 --- !u!1 &558555707
 GameObject:
   m_ObjectHideFlags: 0
@@ -3911,6 +4087,7 @@ GameObject:
   - component: {fileID: 644198992}
   - component: {fileID: 644198991}
   - component: {fileID: 644198993}
+  - component: {fileID: 644198994}
   m_Layer: 0
   m_Name: Bird15
   m_TagString: Untagged
@@ -4023,6 +4200,20 @@ MonoBehaviour:
   timeCounter: 5
   speed: 1
   isTrigger: 0
+--- !u!114 &644198994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 644198989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b70e37ad1e190d43bb21fdeb697af0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableDays: 00000000010000000200000003000000040000000500000006000000
+  enableTime: 12.01-16.00
 --- !u!1 &678552761
 GameObject:
   m_ObjectHideFlags: 0
@@ -4638,6 +4829,113 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &803616340
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 803616341}
+  - component: {fileID: 803616343}
+  - component: {fileID: 803616342}
+  m_Layer: 0
+  m_Name: Emoji
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &803616341
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 803616340}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.034, y: 0.098, z: -0.017}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 552701526}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &803616342
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 803616340}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: dd39597fb63bd7e4787e5b4c022add8c, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!212 &803616343
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 803616340}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 1136677903, guid: 524833704b2fef94dbd37a5c48ad105c, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 0.13, y: 0.12}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
 --- !u!1 &854675968
 GameObject:
   m_ObjectHideFlags: 0
@@ -5064,6 +5362,7 @@ GameObject:
   - component: {fileID: 896693246}
   - component: {fileID: 896693245}
   - component: {fileID: 896693247}
+  - component: {fileID: 896693248}
   m_Layer: 0
   m_Name: Bird14
   m_TagString: Untagged
@@ -5176,6 +5475,20 @@ MonoBehaviour:
   timeCounter: 5
   speed: 1
   isTrigger: 0
+--- !u!114 &896693248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 896693243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b70e37ad1e190d43bb21fdeb697af0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableDays: 00000000010000000200000003000000040000000500000006000000
+  enableTime: 12.01-16.00
 --- !u!1 &904298731
 GameObject:
   m_ObjectHideFlags: 0
@@ -5235,6 +5548,7 @@ GameObject:
   - component: {fileID: 918149928}
   - component: {fileID: 918149927}
   - component: {fileID: 918149929}
+  - component: {fileID: 918149930}
   m_Layer: 0
   m_Name: Bird10
   m_TagString: Untagged
@@ -5347,6 +5661,20 @@ MonoBehaviour:
   timeCounter: 5
   speed: 1
   isTrigger: 0
+--- !u!114 &918149930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 918149925}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b70e37ad1e190d43bb21fdeb697af0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableDays: 00000000010000000200000003000000040000000500000006000000
+  enableTime: 15.01-17.00
 --- !u!1 &928972252
 GameObject:
   m_ObjectHideFlags: 0
@@ -5476,6 +5804,37 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.38000008, y: 0.81, z: 0.20000005}
   m_Center: {x: 0.010000008, y: 0.08500001, z: 0}
+--- !u!1 &945528469
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 945528470}
+  m_Layer: 0
+  m_Name: CaptureAnchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &945528470
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 945528469}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: -0.231, z: 0}
+  m_LocalScale: {x: 1.25, y: 1.25, z: 1.25}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1868479841}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!1 &956179290
 GameObject:
   m_ObjectHideFlags: 0
@@ -5488,6 +5847,7 @@ GameObject:
   - component: {fileID: 956179293}
   - component: {fileID: 956179292}
   - component: {fileID: 956179294}
+  - component: {fileID: 956179295}
   m_Layer: 0
   m_Name: Bird13
   m_TagString: Untagged
@@ -5600,6 +5960,20 @@ MonoBehaviour:
   timeCounter: 5
   speed: 1
   isTrigger: 0
+--- !u!114 &956179295
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 956179290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b70e37ad1e190d43bb21fdeb697af0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableDays: 00000000010000000200000003000000040000000500000006000000
+  enableTime: 12.01-16.00
 --- !u!1 &1034795024
 GameObject:
   m_ObjectHideFlags: 0
@@ -6412,6 +6786,7 @@ GameObject:
   - component: {fileID: 1207017058}
   - component: {fileID: 1207017057}
   - component: {fileID: 1207017056}
+  - component: {fileID: 1207017059}
   m_Layer: 0
   m_Name: Bird19
   m_TagString: Untagged
@@ -6524,6 +6899,20 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1207017059
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1207017054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b70e37ad1e190d43bb21fdeb697af0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableDays: 00000000010000000200000003000000040000000500000006000000
+  enableTime: 12.01-16.00
 --- !u!1 &1213540338
 GameObject:
   m_ObjectHideFlags: 0
@@ -7619,6 +8008,7 @@ GameObject:
   - component: {fileID: 1457345094}
   - component: {fileID: 1457345093}
   - component: {fileID: 1457345092}
+  - component: {fileID: 1457345095}
   m_Layer: 0
   m_Name: Bird18
   m_TagString: Untagged
@@ -7731,6 +8121,20 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1457345095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1457345090}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b70e37ad1e190d43bb21fdeb697af0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableDays: 00000000010000000200000003000000040000000500000006000000
+  enableTime: 12.01-16.00
 --- !u!1 &1465092469
 GameObject:
   m_ObjectHideFlags: 0
@@ -8044,6 +8448,7 @@ GameObject:
   - component: {fileID: 1525754145}
   - component: {fileID: 1525754144}
   - component: {fileID: 1525754146}
+  - component: {fileID: 1525754147}
   m_Layer: 0
   m_Name: Bird03
   m_TagString: Untagged
@@ -8156,6 +8561,20 @@ MonoBehaviour:
   timeCounter: 5
   speed: 1
   isTrigger: 0
+--- !u!114 &1525754147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1525754142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b70e37ad1e190d43bb21fdeb697af0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableDays: 00000000010000000200000003000000040000000500000006000000
+  enableTime: 14.01-16.00
 --- !u!1 &1546356331
 GameObject:
   m_ObjectHideFlags: 0
@@ -8306,6 +8725,7 @@ GameObject:
   - component: {fileID: 1560519848}
   - component: {fileID: 1560519847}
   - component: {fileID: 1560519849}
+  - component: {fileID: 1560519850}
   m_Layer: 0
   m_Name: Bird02
   m_TagString: Untagged
@@ -8418,6 +8838,20 @@ MonoBehaviour:
   timeCounter: 5
   speed: 1
   isTrigger: 0
+--- !u!114 &1560519850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1560519845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b70e37ad1e190d43bb21fdeb697af0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableDays: 00000000010000000200000003000000040000000500000006000000
+  enableTime: 14.01-16.00
 --- !u!1 &1570877896
 GameObject:
   m_ObjectHideFlags: 0
@@ -9169,6 +9603,7 @@ GameObject:
   - component: {fileID: 1748365556}
   - component: {fileID: 1748365555}
   - component: {fileID: 1748365554}
+  - component: {fileID: 1748365557}
   m_Layer: 0
   m_Name: Bird17
   m_TagString: Untagged
@@ -9281,6 +9716,20 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1748365557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1748365552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b70e37ad1e190d43bb21fdeb697af0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableDays: 00000000010000000200000003000000040000000500000006000000
+  enableTime: 12.01-16.00
 --- !u!1 &1758686570
 GameObject:
   m_ObjectHideFlags: 0
@@ -9524,6 +9973,7 @@ GameObject:
   - component: {fileID: 1837220285}
   - component: {fileID: 1837220284}
   - component: {fileID: 1837220283}
+  - component: {fileID: 1837220286}
   m_Layer: 0
   m_Name: Bird20
   m_TagString: Untagged
@@ -9636,6 +10086,20 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1837220286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1837220281}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b70e37ad1e190d43bb21fdeb697af0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableDays: 00000000010000000200000003000000040000000500000006000000
+  enableTime: 12.01-16.00
 --- !u!1 &1840597858
 GameObject:
   m_ObjectHideFlags: 0
@@ -9957,6 +10421,111 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1868479840
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1868479841}
+  - component: {fileID: 1868479845}
+  - component: {fileID: 1868479844}
+  - component: {fileID: 1868479843}
+  - component: {fileID: 1868479842}
+  m_Layer: 0
+  m_Name: B01Action
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1868479841
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1868479840}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0.006, y: 0.118, z: -0.017}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 139746468}
+  - {fileID: 945528470}
+  m_Father: {fileID: 552701526}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+--- !u!114 &1868479842
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1868479840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9daca120269a48408dd9b5af36243f7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pettingAnchor: {fileID: 945528470}
+  pettingMode: 6
+  catCode: B01
+--- !u!114 &1868479843
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1868479840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e70381d905d5490aae67a32d6d3044ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  captureAnchor: {fileID: 945528470}
+  captureMode: 4
+  catCode: B01
+--- !u!114 &1868479844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1868479840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a4ec80f51c543b185cea23812e7ebe0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  availableActions: 070000000a000000
+  site: 8
+  siteName: 
+  activeAtSiteName: 
+  autoActive: 1
+--- !u!135 &1868479845
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1868479840}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.28
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1876055020
 GameObject:
   m_ObjectHideFlags: 0
@@ -10266,6 +10835,7 @@ GameObject:
   - component: {fileID: 2038599920}
   - component: {fileID: 2038599919}
   - component: {fileID: 2038599921}
+  - component: {fileID: 2038599922}
   m_Layer: 0
   m_Name: Bird01
   m_TagString: Untagged
@@ -10378,6 +10948,20 @@ MonoBehaviour:
   timeCounter: 5
   speed: 1
   isTrigger: 0
+--- !u!114 &2038599922
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2038599917}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b70e37ad1e190d43bb21fdeb697af0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableDays: 00000000010000000200000003000000040000000500000006000000
+  enableTime: 08.00-14.00
 --- !u!1 &2046757985
 GameObject:
   m_ObjectHideFlags: 0
@@ -10746,6 +11330,7 @@ GameObject:
   - component: {fileID: 2140461662}
   - component: {fileID: 2140461661}
   - component: {fileID: 2140461663}
+  - component: {fileID: 2140461664}
   m_Layer: 0
   m_Name: Bird09
   m_TagString: Untagged
@@ -10858,6 +11443,20 @@ MonoBehaviour:
   timeCounter: 5
   speed: 1
   isTrigger: 0
+--- !u!114 &2140461664
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2140461659}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b70e37ad1e190d43bb21fdeb697af0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableDays: 00000000010000000200000003000000040000000500000006000000
+  enableTime: 8.00-12.00
 --- !u!1 &2145839490
 GameObject:
   m_ObjectHideFlags: 0
