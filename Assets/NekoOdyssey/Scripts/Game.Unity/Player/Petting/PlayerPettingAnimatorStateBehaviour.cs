@@ -9,12 +9,16 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Petting
     {
         private readonly List<int> _eligibleLoopStates = new()
         {
+            Animator.StringToHash($"PetSideSitHighLoop"),
             Animator.StringToHash($"PetSideSitLoop"),
             Animator.StringToHash($"PetSideLowLoop"),
+            Animator.StringToHash($"PetSideUpperLowLoop"),
             Animator.StringToHash($"PetSideMediumLoop"),
             Animator.StringToHash($"PetSideHighLoop"),
             Animator.StringToHash($"PetStraightSitLoop"),
+            Animator.StringToHash($"PetStraightSitHighLoop"),
             Animator.StringToHash($"PetStraightLowLoop"),
+            Animator.StringToHash($"PetStraightUpperLowLoop"),
             Animator.StringToHash($"PetStraightMediumLoop"),
             Animator.StringToHash($"PetStraightHighLoop"),
         };
@@ -22,11 +26,15 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Petting
         private readonly List<int> _eligibleFinishStates = new()
         {
             Animator.StringToHash($"PetSideSitEnd"),
+            Animator.StringToHash($"PetSideSitHighEnd"),
             Animator.StringToHash($"PetSideLowEnd"),
+            Animator.StringToHash($"PetSideUpperLowEnd"),
             Animator.StringToHash($"PetSideMediumEnd"),
             Animator.StringToHash($"PetSideHighEnd"),
             Animator.StringToHash($"PetStraightSitEnd"),
+            Animator.StringToHash($"PetStraightSitHighEnd"),
             Animator.StringToHash($"PetStraightLowEnd"),
+            Animator.StringToHash($"PetStraightUpperLowEnd"),
             Animator.StringToHash($"PetStraightMediumEnd"),
             Animator.StringToHash($"PetStraightHighEnd"),
         };

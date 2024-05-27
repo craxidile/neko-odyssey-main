@@ -59,8 +59,14 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Petting
                 case PettingMode.Sit:
                     petMode = $"PetSit";
                     break;
+                case PettingMode.SitHigh:
+                    petMode = $"PetSitHigh";
+                    break;
                 case PettingMode.Low:
                     petMode = $"PetLow";
+                    break;
+                case PettingMode.UpperLow:
+                    petMode = $"PetUpperLow";
                     break;
                 case PettingMode.Medium:
                     petMode = $"PetMedium";
