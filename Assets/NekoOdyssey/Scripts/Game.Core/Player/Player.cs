@@ -23,6 +23,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
     {
         private static bool _initialized;
 
+        public PlayerMode PreviousMode { get; private set; } = PlayerMode.Move;
         public PlayerMode Mode { get; private set; } = PlayerMode.Move;
         public bool Running { get; private set; } = false;
         public Vector3 Position { get; private set; }
@@ -139,16 +140,14 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
         {
             ResetPlayerSubmenu();
             if (Mode != PlayerMode.Move && Mode != PlayerMode.Phone) return;
-            Mode = Mode == PlayerMode.Move ? PlayerMode.Phone : PlayerMode.Move;
-            OnChangeMode.OnNext(Mode);
+            SetMode(Mode == PlayerMode.Move ? PlayerMode.Phone : PlayerMode.Move);
         }
 
         public void SetBagMode()
         {
             ResetPlayerSubmenu();
             if (Mode != PlayerMode.Move && Mode != PlayerMode.OpenBag) return;
-            Mode = Mode == PlayerMode.Move ? PlayerMode.OpenBag : PlayerMode.Stop;
-            OnChangeMode.OnNext(Mode);
+            SetMode(Mode == PlayerMode.Move ? PlayerMode.OpenBag : PlayerMode.Stop);
         }
 
         private void HandleMove(Vector2 input)
@@ -188,6 +187,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
 
         public void SetMode(PlayerMode mode)
         {
+            PreviousMode = Mode;
             Mode = mode;
             OnChangeMode.OnNext(Mode);
         }

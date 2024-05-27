@@ -21,8 +21,12 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Phone
 
         private int _previousAppIndex;
         private int _currentAppIndex;
+        private bool _scrolling;
 
         private static bool IsPhoneMode => GameRunner.Instance.Core.Player.Mode == PlayerMode.Phone;
+
+        private static bool PhoneClosing =>
+            !IsPhoneMode && GameRunner.Instance.Core.Player.PreviousMode == PlayerMode.Phone;
 
         public PlayerPhoneApp PreviousApp => _phoneAppList[_previousAppIndex];
         public PlayerPhoneApp CurrentApp => _phoneAppList[_currentAppIndex];
@@ -32,10 +36,11 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Phone
         public CatNoteApp CatNote { get; } = new();
 
         public Subject<Vector2> OnScroll { get; } = new();
+        public Subject<Unit> OnStopScrolling { get; } = new();
         public Subject<PlayerPhoneApp> OnChangeApp { get; } = new();
 
         public GameObject GameObject { get; set; }
-        
+
 
         public void Bind()
         {
@@ -48,7 +53,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Phone
         {
             var player = GameRunner.Instance.Core.Player;
             var playerInputHandler = GameRunner.Instance.PlayerInputHandler;
-            
+
             playerInputHandler.OnMove
                 .Subscribe(HandleScroll)
                 .AddTo(GameRunner.Instance);
@@ -79,7 +84,20 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Phone
 
         private void HandleScroll(Vector2 input)
         {
-            if (!IsPhoneMode || input.y == 0) return;
+            if (!IsPhoneMode)
+            {
+                _scrolling = false;
+                return;
+            }
+
+            if (input.y == 0)
+            {
+                if (_scrolling) OnStopScrolling.OnNext(default);
+                _scrolling = false;
+                return;
+            }
+
+            _scrolling = true;
             OnScroll.OnNext(input);
         }
 
@@ -103,8 +121,11 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Phone
 
         private void ResetCurrentIndex(PlayerMode mode)
         {
-            if (!IsPhoneMode) return;
-            SetAppIndices(_currentAppIndex, 0);
+            if (!PhoneClosing) return;
+            DOVirtual.DelayedCall(.3f, () =>
+            {
+                SetAppIndices(_currentAppIndex, 0);
+            });
         }
 
         private void SetAppIndices(int previousIndex, int nextIndex)
