@@ -11,11 +11,11 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.EndDay
         //    Animator.StringToHash($"PetSideSitLoop"),
         //};
 
-        private readonly List<int> _eligibleFinishStates = new()
-        {
-            Animator.StringToHash($"Hungry"),
-            Animator.StringToHash($"Yawn"),
-        };
+        //private readonly List<int> _eligibleFinishStates = new()
+        //{
+        //    Animator.StringToHash($"Hungry"),
+        //    Animator.StringToHash($"Yawn"),
+        //};
 
         //private readonly int _hungryState = Animator.StringToHash($"Hungry");
         //private readonly int _yawnState = Animator.StringToHash($"Yawn");
@@ -34,13 +34,29 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.EndDay
 
         public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            var finished = _eligibleFinishStates.Contains(stateInfo.shortNameHash);
-            if (!finished) return;
+            //var finished = _eligibleFinishStates.Contains(stateInfo.shortNameHash);
+            //if (!finished) return;
 
-            //GameRunner.Instance.Core.Cats.CurrentCat?.SetEmotion(CatEmotion.None);
-            //GameRunner.Instance.Core.Player.Petting.Finish();
+            //GameRunner.Instance.Core.Player.Stamina.StaminaOutFinish();
 
-            GameRunner.Instance.Core.Player.Stamina.StaminaOutFinish();
+            //foreach (var state in _eligibleFinishStates)
+            //{
+            //    if (state.Equals(stateInfo.shortNameHash))
+            //    {
+
+            //    }
+            //}
+
+            if (stateInfo.shortNameHash == Animator.StringToHash($"Hungry"))
+            {
+                Debug.Log("Animetor state finish : Hungry");
+                GameRunner.Instance.Core.EndDay.StaminaOutFinish();
+            }
+            if (stateInfo.shortNameHash == Animator.StringToHash($"Yawn"))
+            {
+                Debug.Log("Animetor state finish : Yawn");
+                GameRunner.Instance.Core.EndDay.TimeOutFinish();
+            }
         }
     }
 

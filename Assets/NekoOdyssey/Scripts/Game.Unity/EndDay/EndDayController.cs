@@ -2,6 +2,7 @@ using NekoOdyssey.Scripts.Game.Unity.AssetBundles;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 using System.Linq;
 
@@ -13,10 +14,14 @@ namespace NekoOdyssey.Scripts.Game.Core.EndDay
 {
     public class EndDayController
     {
-        public const float HomeAnimationDelay = 3f;
+        public const float HomeAnimationDelay = 4f;
 
         public static EndDayMode endDayMode = EndDayMode.None;
         public static EndDayStep endDayStep = EndDayStep.None;
+
+
+        public Subject<Unit> OnStaminaOutFinish { get; } = new();
+        public Subject<Unit> OnTimeOutFinish { get; } = new();
 
         public void Bind()
         {
@@ -25,15 +30,19 @@ namespace NekoOdyssey.Scripts.Game.Core.EndDay
 
         public void Start()
         {
-            GameRunner.Instance.Core.Player.Stamina.OnStaminaOutFinish
-                .Subscribe(EndDay_StaminaOut)
-                .AddTo(GameRunner.Instance);
+            //GameRunner.Instance.Core.Player.Stamina.OnStaminaOutFinish
+            //    .Subscribe(EndDay_StaminaOut)
+            //    .AddTo(GameRunner.Instance);
+
+            //GameRunner.Instance.Core.Player.Stamina.OnStaminaOutFinish
+            //    .Subscribe(EndDay_StaminaOut)
+            //    .AddTo(GameRunner.Instance);
 
             Debug.Log("EndDayController Start");
 
             if (endDayStep != EndDayStep.None)
             {
-                NextEndDayStep();
+                ProcessEndDayStep();
             }
         }
 
@@ -41,10 +50,12 @@ namespace NekoOdyssey.Scripts.Game.Core.EndDay
         {
         }
 
-
-
-        void EndDay_StaminaOut(Unit _)
+        public void StaminaOutFinish()
         {
+            OnStaminaOutFinish.OnNext(Unit.Default);
+
+            GameRunner.Instance.Core.Player.SetMode(PlayerMode.Stop);
+
             if (endDayMode != EndDayMode.None) return;
 
             endDayMode = EndDayMode.StaminaOut;
@@ -63,9 +74,42 @@ namespace NekoOdyssey.Scripts.Game.Core.EndDay
                 SiteRunner.Instance.Core.Site.SetSite(homeSite);
             });
         }
+        public void TimeOutFinish()
+        {
+            OnTimeOutFinish.OnNext(Unit.Default);
+
+            GameRunner.Instance.Core.Player.SetMode(PlayerMode.Stop);
+
+            if (endDayMode != EndDayMode.None) return;
+
+            endDayMode = EndDayMode.TimeOut;
+
+            //var homeSite = "NekoInside03MikiHouse";
+
+            //SiteRunner.Instance.Core.Site.SetSite(homeSite);
+
+            endDayStep = EndDayStep.MikiHome;
 
 
-        void NextEndDayStep()
+            GameRunner.Instance.Core.GameScene.CloseScene();
+            DOVirtual.DelayedCall(4, () =>
+            {
+                var homeSite = "NekoInside03MikiHouse";
+                SiteRunner.Instance.Core.Site.SetSite(homeSite);
+            });
+        }
+
+        //void EndDay_StaminaOut(Unit _)
+        //{
+
+        //}
+        //void EndDay_TimeOut(Unit _)
+        //{
+
+        //}
+
+
+        void ProcessEndDayStep()
         {
             Debug.Log($"NextEndDayStep = {endDayStep} ");
             switch (endDayStep)
@@ -78,8 +122,10 @@ namespace NekoOdyssey.Scripts.Game.Core.EndDay
                     EndDayStep_MikiHome();
                     break;
                 case EndDayStep.Result:
+                    ShowResultPanel();
                     break;
                 case EndDayStep.NewDay:
+                    LoadNewDay();
                     break;
                 default:
                     break;
@@ -96,10 +142,12 @@ namespace NekoOdyssey.Scripts.Game.Core.EndDay
                 Debug.Log($"EndDayStep_MikiHome delay complete");
                 GameRunner.Instance.Core.GameScene.CloseScene();
 
-                DOVirtual.DelayedCall(4, () =>
+                DOVirtual.DelayedCall(Unity.Uis.SceneFadeCanvas.SceneFadeCanvasController.FadeDuration, () =>
                 {
                     Debug.Log($"EndDayStep_MikiHome delay complete 2");
                     endDayStep = EndDayStep.Result;
+
+                    ProcessEndDayStep();
 
                     //var homeSite = "NekoInside03MikiHouse";
                     //SiteRunner.Instance.Core.Site.SetSite(homeSite);
@@ -107,7 +155,30 @@ namespace NekoOdyssey.Scripts.Game.Core.EndDay
             }, false);
         }
 
+        void ShowResultPanel()
+        {
+            //var homeSite = "NekoInside03MikiHouse";
+            //SiteRunner.Instance.Core.Site.SetSite(homeSite);
 
+            SceneManager.LoadSceneAsync("EndDayResult", LoadSceneMode.Additive).completed += _ =>
+            {
+                var endDayResultCanvas = Object.FindFirstObjectByType<EndDayResult_CanvasController>();
+                endDayResultCanvas.OnEndDayResultFinish.Subscribe(_ =>
+                {
+                    endDayStep = EndDayStep.NewDay;
+                    ProcessEndDayStep();
+                })
+                .AddTo(endDayResultCanvas);
+            };
+        }
+
+        void LoadNewDay()
+        {
+            endDayStep = EndDayStep.None;
+
+            var newDaySite = "GamePlayZone9_01";
+            SiteRunner.Instance.Core.Site.SetSite(newDaySite);
+        }
 
     }
 

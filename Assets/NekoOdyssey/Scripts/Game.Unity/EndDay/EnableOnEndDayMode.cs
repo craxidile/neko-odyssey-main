@@ -22,7 +22,7 @@ public class EnableOnEndDayMode : MonoBehaviour
             GameRunner.Instance.OnReady.Subscribe(_ =>
             {
                 CheckCondition();
-            });
+            }).AddTo(this);
         }
 
     }

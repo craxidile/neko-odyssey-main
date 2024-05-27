@@ -126,8 +126,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         public float hungryOverTimeMultiplier => timeScriptable.hungryOverTimeMultiplier;
 
 
-        public static Subject<int> OnTimeUpdate { get; } = new();
-        public static Subject<int> OnChangeDay { get; } = new();
+        public Subject<int> OnTimeUpdate { get; } = new();
+        public Subject<int> OnChangeDay { get; } = new();
 
 
         private void Awake()

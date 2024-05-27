@@ -8,7 +8,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.SceneFadeCanvas
 {
     public class SceneFadeCanvasController : MonoBehaviour
     {
-        private const float FadeDuration = 1.5f;
+        public const float FadeDuration = 1.5f;
 
         private Tween _tween;
         private CanvasGroup _canvasGroup;
