@@ -181,6 +181,7 @@ namespace NekoOdyssey.Scripts.Game.Core.EndDay
             SiteRunner.Instance.Core.Site.SetSite(newDaySite);
 
             GameRunner.Instance.TimeRoutine.SetTime(AppConstants.Time.StartDayTime);
+            GameRunner.Instance.TimeRoutine.NextDay();
         }
 
     }

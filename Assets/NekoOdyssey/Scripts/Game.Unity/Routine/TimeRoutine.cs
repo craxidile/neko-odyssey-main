@@ -109,7 +109,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
         //[SerializeField] bool _isTimer; //only edit in unity editor
         //static bool s_isTimeRunning;
-        public Day currentDay => timeScriptable.currentDay;
+        public Day CurrentDay => timeScriptable.currentDay;
         public TimeHrMin currentTime;
         public void PauseTime() => timeScriptable._isTimer = false;
         public void ContinueTime() => timeScriptable._isTimer = true;
@@ -118,6 +118,15 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         public int GameDayTotal { get; set; } = 1;
         public int GameMounth => ((GameDayTotal - 1) / 30) + 1;
         public int DayInMounth => ((GameDayTotal - 1) % 30) + 1;
+        //public Day CurrentDay
+        //{
+        //    get
+        //    {
+        //        int daysInWeek = System.Enum.GetNames(typeof(Day)).Length;
+        //        int dayOfWeekIndex = (GameDayTotal - 1) % daysInWeek;
+        //        return (Day)dayOfWeekIndex;
+        //    }
+        //}
 
 
         //[Tooltip("increase this value mean hungey decrease faster")]
@@ -138,6 +147,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
             //dayMinuteFloat = new TimeHrMin(AppConstants.Time.StartDayTime).ToInt();
             dayMinuteFloat = timeScriptable.dayMinute;
+
+            Debug.Log($"initialize time : {timeScriptable.dayMinute}");
         }
 
         // Start is called before the first frame update
@@ -178,7 +189,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
         public bool inBetweenDayAndTime(List<Day> checkDay, string checkTime)
         {
-            if (checkDay.Contains(currentDay))
+            if (checkDay.Contains(CurrentDay))
             {
                 return currentTime.inBetweenTime(checkTime);
             }
@@ -198,6 +209,9 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         {
             GameDayTotal += 1;
             OnChangeDay.OnNext(GameDayTotal);
+
+            int dayOfWeekIndex = (GameDayTotal - 1) % 7;
+            timeScriptable.currentDay = (Day)dayOfWeekIndex;
         }
 
 

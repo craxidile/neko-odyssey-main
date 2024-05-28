@@ -5,6 +5,7 @@ using UnityEngine;
 using UniRx;
 
 [CreateAssetMenu(fileName = "TimeScriptable", menuName = "ScriptableObjects/TimeScriptable")]
+[System.Serializable]
 public class TimeScriptable : ScriptableObject
 {
     public Day currentDay;
@@ -29,7 +30,7 @@ public class TimeScriptable : ScriptableObject
     public Subject<Unit> OnValidated = new();
     private void OnValidate()
     {
-        //Debug.Log("ScriptableObject validate");
+        Debug.Log("ScriptableObject validate");
         currentTimeText = new TimeHrMin($"{dayMinute / 60}:{dayMinute % 60}").ToString();
 
         OnValidated.OnNext(Unit.Default);

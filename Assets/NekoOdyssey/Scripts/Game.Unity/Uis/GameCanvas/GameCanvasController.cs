@@ -59,18 +59,22 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
             GameRunner.Instance.Core.Player.Stamina.OnChangeStamina
                 .Subscribe(HandleStaminaChange)
                 .AddTo(this);
+            GameRunner.Instance.TimeRoutine.OnTimeUpdate
+                .Subscribe(_ => HandleTimeChange())
+                .AddTo(this);
 
             UpdateStamina(GameRunner.Instance.Core.Player.Stamina.Stamina);
 
 
-            //gameTimeText.text = System.DateTime.Now.ToString("HH:mm:ss"); //change later
-            var currentTimeText = GameRunner.Instance.TimeRoutine.currentTime.ToString();
-            if (currentTimeText.StartsWith("0")) currentTimeText = currentTimeText.Substring(1);
-            string timeAffixText = " AM";
-            var midDayTime = new TimeHrMin("12:00");
-            if (GameRunner.Instance.TimeRoutine.currentTime > midDayTime)
-                timeAffixText = " PM";
-            gameTimeText.text = currentTimeText + timeAffixText;
+            ////gameTimeText.text = System.DateTime.Now.ToString("HH:mm:ss"); //change later
+            //var currentTimeText = GameRunner.Instance.TimeRoutine.currentTime.ToString();
+            //if (currentTimeText.StartsWith("0")) currentTimeText = currentTimeText.Substring(1);
+            //string timeAffixText = " AM";
+            //var midDayTime = new TimeHrMin("12:00");
+            //if (GameRunner.Instance.TimeRoutine.currentTime > midDayTime)
+            //    timeAffixText = " PM";
+            //gameTimeText.text = currentTimeText + timeAffixText;
+            HandleTimeChange();
 
 
             socialLikeText.text = socialLikeCount.ToString("N0");
@@ -106,6 +110,22 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
         private void HandleStaminaChange(int stamina)
         {
             UpdateStamina(stamina);
+            RebuildLayout();
+        }
+        private void HandleTimeChange()
+        {
+            var timeRoutine = GameRunner.Instance.TimeRoutine;
+            var currentTimeText = timeRoutine.currentTime.ToString();
+            if (currentTimeText.StartsWith("0")) currentTimeText = currentTimeText.Substring(1);
+            string timeAffixText = "AM";
+            var midDayTime = new TimeHrMin("12:00");
+            if (timeRoutine.currentTime > midDayTime)
+                timeAffixText = "PM";
+
+            var dayText = timeRoutine.CurrentDay.ToString();
+
+            gameTimeText.text = $"{dayText} {currentTimeText} {timeAffixText}";
+
             RebuildLayout();
         }
 

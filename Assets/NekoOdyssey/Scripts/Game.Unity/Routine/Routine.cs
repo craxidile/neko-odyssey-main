@@ -173,7 +173,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
                     if (!questEventManager.CheckQuestKeyAndItem(questEventDetail)) continue;//check quest key condition
 
-                    if (questEventDetail.IsInEventTime(GameRunner.Instance.TimeRoutine.currentDay, GameRunner.Instance.TimeRoutine.currentTime))
+                    if (questEventDetail.IsInEventTime(GameRunner.Instance.TimeRoutine.CurrentDay, GameRunner.Instance.TimeRoutine.currentTime))
                     {
                         questEventDetail.GetTargetEventPoint()?.gameObject.SetActive(true);
 

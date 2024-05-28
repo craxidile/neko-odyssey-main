@@ -36,7 +36,7 @@ namespace NekoOdyssey.Scripts
 
 
         public CSVHolderScriptable CsvHolder; //Linias Edit**
-        public TimeRoutine TimeRoutine;
+        public TimeRoutine TimeRoutine { get; private set; }
         public Subject<UniRx.Unit> OnUpdate { get; } = new();
 
         public GameRunner()
@@ -56,11 +56,11 @@ namespace NekoOdyssey.Scripts
             gameObject.AddComponent<CentralPlayerPettingHandler>();
             gameObject.AddComponent<AssetBundleLoader>();
 
-            TimeRoutine = gameObject.AddComponent<TimeRoutine>();
-            //new GameObject("Time Controller").AddComponent<NekoOdyssey.Scripts.Game.Core.Routine.TimeRoutine>().transform.SetParent(transform);
-
 
             Core.Bind();
+
+            TimeRoutine = gameObject.AddComponent<TimeRoutine>();
+            //new GameObject("Time Controller").AddComponent<NekoOdyssey.Scripts.Game.Core.Routine.TimeRoutine>().transform.SetParent(transform);
         }
 
         public void SetReady(bool ready)
