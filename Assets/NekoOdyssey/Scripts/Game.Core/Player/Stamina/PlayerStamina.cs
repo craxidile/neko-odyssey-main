@@ -20,8 +20,6 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Stamina
 
         public Subject<int> OnChangeStamina { get; } = new();
 
-        public Subject<Unit> OnStaminaOutFinish { get; } = new();
-
         TimeHrMin startDayTime;
 
         public void Bind()
@@ -32,10 +30,10 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Stamina
         public void Start()
         {
             startDayTime = new TimeHrMin(AppConstants.Time.StartDayTime);
-            TimeRoutine.OnTimeUpdate.Subscribe(UpdateStamina).AddTo(GameRunner.Instance);
+            GameRunner.Instance.TimeRoutine.OnTimeUpdate.Subscribe(UpdateStamina).AddTo(GameRunner.Instance);
             GameRunner.Instance.Core.Player.Bag.OnUseBagItem.Subscribe(HandleFoodItemUsed).AddTo(GameRunner.Instance);
 
-            OnChangeStamina.Subscribe(CheckStaminaOut).AddTo(GameRunner.Instance);
+            OnChangeStamina.Subscribe(CheckStaminaDisable).AddTo(GameRunner.Instance);
         }
         public void Unbind()
         {
@@ -99,47 +97,19 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Stamina
         }
 
 
-        void CheckStaminaOut(int stamina)
+        void CheckStaminaDisable(int stamina)
         {
-            if (stamina > 0) return;
-            if (!_isEnable) return;
-            _isEnable = false;
-
-            Debug.Log($"player stamina out");
-
-            GameRunner.Instance.TimeRoutine.PauseTime();
-            GameRunner.Instance.Core.Player.SetMode(PlayerMode.EndDay_StaminaOut);
-
-
-            //DOVirtual.DelayedCall(1, () =>
-            //{
-            //    //play unconsios animation
-            //    //
-
-            //    //move player to home
-            //    //var homeSite = "MikiHome";
-            //    var homeSite = "GamePlayZone6_01";
-            //    SiteRunner.Instance.Core.Site.SetSite(homeSite);
-            //    //UnityEngine.SceneManagement.SceneManager.LoadScene("SceneLoader");
-
-
-
-            //    _isEnable = true;
-
-            //    TimeRoutine.NextDay();
-            //    SetStamina(AppConstants.Stamina.NewDay);
-            //});
-
-
-
-
+            if (stamina <= 0)
+            {
+                _isEnable = false;
+            }
         }
 
-        public void StaminaOutFinish()
-        {
-            OnStaminaOutFinish.OnNext(Unit.Default);
+        //public void StaminaOutFinish()
+        //{
+        //    OnStaminaOutFinish.OnNext(Unit.Default);
 
-            GameRunner.Instance.Core.Player.SetMode(PlayerMode.Stop);
-        }
+        //    GameRunner.Instance.Core.Player.SetMode(PlayerMode.Stop);
+        //}
     }
 }

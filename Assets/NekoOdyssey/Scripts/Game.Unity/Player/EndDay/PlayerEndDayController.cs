@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
+using NekoOdyssey.Scripts.Constants;
 
 namespace NekoOdyssey.Scripts.Game.Unity.Player.EndDay
 {
@@ -21,14 +22,47 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.EndDay
 
         public void Start()
         {
+            GameRunner.Instance.Core.Player.Stamina.OnChangeStamina
+                .Subscribe(CheckEndDayStaminaOut)
+                .AddTo(this);
+            GameRunner.Instance.TimeRoutine.OnTimeUpdate
+                .Subscribe(_ => CheckEndDayTimeOut())
+                .AddTo(this);
+
             GameRunner.Instance.Core.Player.OnChangeMode
                 .Subscribe(CheckPlayerMode)
                 .AddTo(this);
-            GameRunner.Instance.Core.Player.Stamina.OnStaminaOutFinish
+
+            GameRunner.Instance.Core.EndDay.OnStaminaOutFinish
                 .Subscribe(HandleEndDayFinish_StaminaOut)
                 .AddTo(this);
+            GameRunner.Instance.Core.EndDay.OnTimeOutFinish
+               .Subscribe(HandleEndDayFinish_TimeOut)
+               .AddTo(this);
+
+
         }
 
+        void CheckEndDayStaminaOut(int stamina)
+        {
+            if (stamina > 0) return;
+
+            Debug.Log($"player EndDayStaminaOut");
+
+            GameRunner.Instance.TimeRoutine.PauseTime();
+            GameRunner.Instance.Core.Player.SetMode(PlayerMode.EndDay_StaminaOut);
+        }
+        void CheckEndDayTimeOut()
+        {
+            var currentTime = GameRunner.Instance.TimeRoutine.currentTime;
+            if (currentTime >= new TimeHrMin(AppConstants.Time.EndDayTime))
+            {
+                Debug.Log($"player EndDayTimeOut");
+
+                GameRunner.Instance.TimeRoutine.PauseTime();
+                GameRunner.Instance.Core.Player.SetMode(PlayerMode.EndDay_TimeOut);
+            }
+        }
 
         void CheckPlayerMode(PlayerMode mode)
         {

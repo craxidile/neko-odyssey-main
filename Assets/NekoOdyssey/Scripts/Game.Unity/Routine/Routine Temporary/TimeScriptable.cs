@@ -30,8 +30,8 @@ public class TimeScriptable : ScriptableObject
     private void OnValidate()
     {
         //Debug.Log("ScriptableObject validate");
-        OnValidated.OnNext(Unit.Default);
-
         currentTimeText = new TimeHrMin($"{dayMinute / 60}:{dayMinute % 60}").ToString();
+
+        OnValidated.OnNext(Unit.Default);
     }
 }

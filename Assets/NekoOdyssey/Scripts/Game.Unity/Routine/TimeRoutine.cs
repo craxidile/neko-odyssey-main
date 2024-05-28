@@ -126,8 +126,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         public float hungryOverTimeMultiplier => timeScriptable.hungryOverTimeMultiplier;
 
 
-        public static Subject<int> OnTimeUpdate { get; } = new();
-        public static Subject<int> OnChangeDay { get; } = new();
+        public Subject<int> OnTimeUpdate { get; } = new();
+        public Subject<int> OnChangeDay { get; } = new();
 
 
         private void Awake()
@@ -143,11 +143,11 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         // Start is called before the first frame update
         public void Start()
         {
-            
+
 
 
             //s_isTimeRunning = true;
-            
+
             //dayMinute = Mathf.RoundToInt(s_dayMinuteFloat);
         }
 
@@ -214,7 +214,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                 {
                     dayMinuteFloat = 0;
                 }
-                
+
 
             }
             else
@@ -238,8 +238,9 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
         private void OnTimeProfileValidate(Unit _)
         {
-            if (dayMinuteFloat !=timeScriptable.dayMinute)
+            if (dayMinuteFloat != timeScriptable.dayMinute)
             {
+                dayMinuteFloat = timeScriptable.dayMinute;
                 OnTimeUpdate.OnNext(Mathf.RoundToInt((float)timeScriptable.dayMinute - dayMinuteFloat));
             }
 
