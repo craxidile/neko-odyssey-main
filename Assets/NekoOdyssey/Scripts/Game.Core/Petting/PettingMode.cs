@@ -8,5 +8,7 @@
         Medium = 3,
         High = 4,
         Reach = 5,
+        SitHigh = 6,
+        UpperLow = 7,
     }
 }

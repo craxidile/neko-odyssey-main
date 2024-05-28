@@ -51,6 +51,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Phone.Apps
 
         public void AddCatPetting(string catCode)
         {
+            catCode = catCode.Substring(0, 3);
             GameRunner.Instance.Core.Player.SaveDbWriter.Add(dbContext =>
             {
                 var repo = new PlayerCatV001Repo(dbContext);
@@ -64,6 +65,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Phone.Apps
 
         public void AddCatCapture(string catCode)
         {
+            catCode = catCode.Substring(0, 3);
             GameRunner.Instance.Core.Player.SaveDbWriter.Add(dbContext =>
             {
                 var repo = new PlayerCatV001Repo(dbContext);

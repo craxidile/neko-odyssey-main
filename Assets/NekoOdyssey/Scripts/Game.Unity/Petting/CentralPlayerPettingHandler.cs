@@ -9,7 +9,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Petting
     public class CentralPlayerPettingHandler : MonoBehaviour
     {
         private Core.Player.Player _player;
-        private Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu.PlayerMenu _playerMenu;
+        private global::Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu.PlayerMenu _playerMenu;
         private Core.Player.Petting.PlayerPetting _petting;
         
         private Animator _animator;

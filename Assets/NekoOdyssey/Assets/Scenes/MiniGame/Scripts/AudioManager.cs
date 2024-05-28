@@ -1,129 +1,132 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Audio;
 
-public class AudioManager : MonoBehaviour
+namespace NekoOdyssey.Assets.Scenes.MiniGame.Scripts
 {
-    [SerializeField] List<AudioClip> SFXList = new List<AudioClip>();
-    [SerializeField] List<AudioClip> BGMList = new List<AudioClip>();
-
-    public AudioMixerGroup sfxMixerGroup;
-    public AudioMixerGroup bgmMixerGroup;
-
-    List<AudioSource> sfxAudioSources = new List<AudioSource>();
-    AudioSource bgmAudioSource;
+    public class AudioManager : MonoBehaviour
+    {
+        [SerializeField] List<AudioClip> SFXList = new List<AudioClip>();
+        [SerializeField] List<AudioClip> BGMList = new List<AudioClip>();
     
-    Dictionary<AudioSource, AudioClip> playingSFX = new Dictionary<AudioSource, AudioClip>();
-    void Start()
-    {
-        for (int i = 0; i < 3; i++)
-        {
-            AudioSource source = gameObject.AddComponent<AudioSource>();
-            source.outputAudioMixerGroup = sfxMixerGroup;
-            sfxAudioSources.Add(source);
-        }
+        public AudioMixerGroup sfxMixerGroup;
+        public AudioMixerGroup bgmMixerGroup;
+    
+        List<AudioSource> sfxAudioSources = new List<AudioSource>();
+        AudioSource bgmAudioSource;
         
-        bgmAudioSource = gameObject.AddComponent<AudioSource>();
-        bgmAudioSource.outputAudioMixerGroup = bgmMixerGroup;
-    }
-
-    public void PlaySFX(string name, bool loop)
-    {
-        AudioClip clipToPlay = FindAudioClipByName(SFXList, name);
-
-        if (clipToPlay != null)
+        Dictionary<AudioSource, AudioClip> playingSFX = new Dictionary<AudioSource, AudioClip>();
+        void Start()
         {
-            if (!IsSFXPlaying(clipToPlay))
+            for (int i = 0; i < 3; i++)
             {
-                AudioSource freeSource = GetFreeSFXAudioSource();
-                if (freeSource != null)
+                AudioSource source = gameObject.AddComponent<AudioSource>();
+                source.outputAudioMixerGroup = sfxMixerGroup;
+                sfxAudioSources.Add(source);
+            }
+            
+            bgmAudioSource = gameObject.AddComponent<AudioSource>();
+            bgmAudioSource.outputAudioMixerGroup = bgmMixerGroup;
+        }
+    
+        public void PlaySFX(string name, bool loop)
+        {
+            AudioClip clipToPlay = FindAudioClipByName(SFXList, name);
+    
+            if (clipToPlay != null)
+            {
+                if (!IsSFXPlaying(clipToPlay))
                 {
-                    freeSource.clip = clipToPlay;
-                    freeSource.loop = loop;
-                    freeSource.Play();
-                    if (loop)
+                    AudioSource freeSource = GetFreeSFXAudioSource();
+                    if (freeSource != null)
                     {
-                        // Add the playing source and its associated clip to the dictionary
-                        playingSFX.Add(freeSource, clipToPlay);
+                        freeSource.clip = clipToPlay;
+                        freeSource.loop = loop;
+                        freeSource.Play();
+                        if (loop)
+                        {
+                            // Add the playing source and its associated clip to the dictionary
+                            playingSFX.Add(freeSource, clipToPlay);
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogWarning("No free AudioSource available to play SFX: " + name);
                     }
                 }
-                else
+            }
+            else
+            {
+                Debug.LogWarning("SFX clip with name " + name + " not found.");
+            }
+        }
+        public void StopLoopedSFX(string name)
+        {
+            foreach (var pair in playingSFX)
+            {
+                if (pair.Value.name == name)
                 {
-                    Debug.LogWarning("No free AudioSource available to play SFX: " + name);
+                    pair.Key.Stop();
+                    playingSFX.Remove(pair.Key);
+                    return;
                 }
             }
         }
-        else
+        private bool IsSFXPlaying(AudioClip clip)
         {
-            Debug.LogWarning("SFX clip with name " + name + " not found.");
-        }
-    }
-    public void StopLoopedSFX(string name)
-    {
-        foreach (var pair in playingSFX)
-        {
-            if (pair.Value.name == name)
+            foreach (var pair in playingSFX)
             {
-                pair.Key.Stop();
-                playingSFX.Remove(pair.Key);
-                return;
+                if (pair.Value == clip)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+    
+        public void PlayBGM(string name, bool loop)
+        {
+            AudioClip clipToPlay = FindAudioClipByName(BGMList, name);
+    
+            if (clipToPlay != null)
+            {
+                bgmAudioSource.clip = clipToPlay;
+                bgmAudioSource.loop = loop;
+                bgmAudioSource.Play();
+            }
+            else
+            {
+                Debug.LogWarning("BGM clip with name " + name + " not found.");
             }
         }
-    }
-    private bool IsSFXPlaying(AudioClip clip)
-    {
-        foreach (var pair in playingSFX)
+        public void StopBGM()
         {
-            if (pair.Value == clip)
+            if (bgmAudioSource.isPlaying)
             {
-                return true;
+                bgmAudioSource.Stop();
+            }
+            else
+            {
+                Debug.LogWarning("No BGM is currently playing.");
             }
         }
-        return false;
-    }
-
-    public void PlayBGM(string name, bool loop)
-    {
-        AudioClip clipToPlay = FindAudioClipByName(BGMList, name);
-
-        if (clipToPlay != null)
+    
+        private AudioSource GetFreeSFXAudioSource()
         {
-            bgmAudioSource.clip = clipToPlay;
-            bgmAudioSource.loop = loop;
-            bgmAudioSource.Play();
-        }
-        else
-        {
-            Debug.LogWarning("BGM clip with name " + name + " not found.");
-        }
-    }
-    public void StopBGM()
-    {
-        if (bgmAudioSource.isPlaying)
-        {
-            bgmAudioSource.Stop();
-        }
-        else
-        {
-            Debug.LogWarning("No BGM is currently playing.");
-        }
-    }
-
-    private AudioSource GetFreeSFXAudioSource()
-    {
-        foreach (AudioSource source in sfxAudioSources)
-        {
-            if (!source.isPlaying)
+            foreach (AudioSource source in sfxAudioSources)
             {
-                return source;
+                if (!source.isPlaying)
+                {
+                    return source;
+                }
             }
+            return null;
         }
-        return null;
+    
+        private AudioClip FindAudioClipByName(List<AudioClip> clipList, string name)
+        {
+            return clipList.Find(clip => clip.name == name);
+        }
+    
     }
-
-    private AudioClip FindAudioClipByName(List<AudioClip> clipList, string name)
-    {
-        return clipList.Find(clip => clip.name == name);
-    }
-
 }

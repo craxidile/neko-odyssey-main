@@ -1,8 +1,8 @@
-﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
-using NekoOdyssey.Scripts.Constants;
 using NekoOdyssey.Scripts.Game.Core;
+using NekoOdyssey.Scripts.Game.Core.Routine;
 using NekoOdyssey.Scripts.Game.Unity.AssetBundles;
 using NekoOdyssey.Scripts.Game.Unity.Cameras;
 using NekoOdyssey.Scripts.Game.Unity.Capture;
@@ -10,7 +10,6 @@ using NekoOdyssey.Scripts.Game.Unity.Conversations;
 using NekoOdyssey.Scripts.Game.Unity.Inputs;
 using NekoOdyssey.Scripts.Game.Unity.Petting;
 using NekoOdyssey.Scripts.Game.Unity.Sites;
-using NUnit.Framework.Internal;
 using UniRx;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -35,6 +34,11 @@ namespace NekoOdyssey.Scripts
 
         public Subject<bool> OnReady { get; } = new();
 
+
+        public CSVHolderScriptable CsvHolder; //Linias Edit**
+        public TimeRoutine TimeRoutine { get; private set; }
+        public Subject<UniRx.Unit> OnUpdate { get; } = new();
+
         public GameRunner()
         {
             Instance = this;
@@ -53,6 +57,9 @@ namespace NekoOdyssey.Scripts
             gameObject.AddComponent<AssetBundleLoader>();
 
             Core.Bind();
+
+            TimeRoutine = gameObject.AddComponent<TimeRoutine>();
+            //new GameObject("Time Controller").AddComponent<NekoOdyssey.Scripts.Game.Core.Routine.TimeRoutine>().transform.SetParent(transform);
         }
 
         public void SetReady(bool ready)
@@ -64,13 +71,23 @@ namespace NekoOdyssey.Scripts
         private void Start()
         {
             Core.Start();
+
             AssetBundleUtils.OnReady(InitializePositions);
+
+            StartCoroutine(IUpdate());
             TestNetworkSimulator();
         }
 
         private void OnDestroy()
         {
             Core.Unbind();
+        }
+
+        IEnumerator IUpdate()
+        {
+            OnUpdate.OnNext(UniRx.Unit.Default);
+            yield return null;
+            StartCoroutine(IUpdate());
         }
 
         private void OnEnable()

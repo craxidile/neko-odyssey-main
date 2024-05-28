@@ -12,6 +12,7 @@ using NekoOdyssey.Scripts.Game.Core.Player.Capture;
 using NekoOdyssey.Scripts.Game.Core.Player.Conversation;
 using NekoOdyssey.Scripts.Game.Core.Player.Petting;
 using NekoOdyssey.Scripts.Game.Core.Player.Phone;
+using NekoOdyssey.Scripts.Game.Core.Player.Stamina;
 using NekoOdyssey.Scripts.Game.Unity;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 using UniRx;
@@ -22,9 +23,9 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
     public class Player
     {
         private static bool _initialized;
-
-        public PlayerMode PreviousMode { get; private set; } = PlayerMode.Move;
+        
         public PlayerMode Mode { get; private set; } = PlayerMode.Move;
+        public PlayerMode PreviousMode { get; private set; } = PlayerMode.Move;
         public bool Running { get; private set; } = false;
         public Vector3 Position { get; private set; }
 
@@ -34,8 +35,9 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
         public PlayerPetting Petting { get; } = new();
         public PlayerConversation Conversation { get; } = new();
         public SaveV001DbWriter SaveDbWriter { get; } = new();
+        public PlayerStamina Stamina { get; } = new(); // linias added
 
-        public int Stamina { get; private set; }
+        // public int Stamina { get; private set; }
         public int PocketMoney { get; private set; }
         public int LikeCount { get; private set; }
         public int FollowerCount { get; private set; }
@@ -69,6 +71,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
             Bag.Bind();
             Capture.Bind();
             Conversation.Bind();
+            Stamina.Bind();
         }
 
         public void Start()
@@ -99,6 +102,11 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
             Bag.Start();
             Capture.Start();
             Conversation.Start();
+            
+            Stamina.Start();
+            Stamina.OnChangeStamina
+                .Subscribe(_ => SavePlayerProperties())
+                .AddTo(GameRunner.Instance);
         }
 
         public void Unbind()
@@ -107,27 +115,39 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
             Bag.Unbind();
             Capture.Unbind();
             Conversation.Unbind();
+            Stamina.Unbind();
         }
 
         private void InitializeDatabase()
         {
             if (_initialized) return;
             _initialized = true;
-            // using (new SaveV001DbContext(new() { CopyMode = DbCopyMode.CopyIfNotExists, ReadOnly = false })) ;
             using (new SaveV001DbContext(new() { CopyMode = DbCopyMode.ForceCopy, ReadOnly = false })) ;
         }
 
         private PlayerPropertiesV001 LoadPlayerProperties()
         {
-            PlayerPropertiesV001 properties;
+            PlayerPropertiesV001 playerProperties;
             using (var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = true }))
             {
                 var playerPropertiesRepo = new PlayerPropertiesV001Repo(dbContext);
-                properties = playerPropertiesRepo.Load();
-                AddStamina(properties.Stamina);
+                playerProperties = playerPropertiesRepo.Load();
+                //AddStamina(playerProperties.Stamina);
+                Stamina.SetStamina(playerProperties.Stamina);
             }
 
-            return properties;
+            return playerProperties;
+        }
+
+        private void SavePlayerProperties()
+        {
+            using (var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = false }))
+            {
+                var playerPropertiesRepo = new PlayerPropertiesV001Repo(dbContext);
+                var playerProperties = playerPropertiesRepo.Load();
+                playerProperties.Stamina = Stamina.Stamina;
+                playerPropertiesRepo.Update(playerProperties);
+            }
         }
 
         private void ResetPlayerSubmenu()
@@ -140,14 +160,25 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
         {
             ResetPlayerSubmenu();
             if (Mode != PlayerMode.Move && Mode != PlayerMode.Phone) return;
-            SetMode(Mode == PlayerMode.Move ? PlayerMode.Phone : PlayerMode.Move);
+            Mode = Mode == PlayerMode.Move ? PlayerMode.Phone : PlayerMode.Move;
+            OnChangeMode.OnNext(Mode);
         }
 
         public void SetBagMode()
         {
             ResetPlayerSubmenu();
             if (Mode != PlayerMode.Move && Mode != PlayerMode.OpenBag) return;
-            SetMode(Mode == PlayerMode.Move ? PlayerMode.OpenBag : PlayerMode.Stop);
+            Mode = Mode == PlayerMode.Move ? PlayerMode.OpenBag : PlayerMode.Stop;
+            OnChangeMode.OnNext(Mode);
+            // switch (Mode)
+            // {
+            //     case PlayerMode.Move:
+            //         SetMode(PlayerMode.OpenBag);
+            //         break;
+            //     case PlayerMode.OpenBag:
+            //         SetMode(PlayerMode.CloseBag);
+            //         break;
+            // }
         }
 
         private void HandleMove(Vector2 input)
@@ -204,11 +235,12 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
             OnChangeLikeCount.OnNext(LikeCount);
         }
 
-        public void AddStamina(int addition)
-        {
-            Stamina = Math.Min(AppConstants.MaxStamina, Stamina + addition);
-            OnChangeStamina.OnNext(Stamina);
-        }
+        // public void AddStamina(int addition)
+        // {
+        //     Stamina = Math.Min(AppConstants.Stamina_Max, AppConstants.Stamina + addition);
+        //     OnChangeStamina.OnNext(Stamina);
+        //     SavePlayerProperties();
+        // }
 
         public void UpdateDayCount(int dayCount) => UpdateProperties(properties => properties.DayCount = dayCount);
 
@@ -259,5 +291,6 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
                 return repo.FindByQuestCode(questCode) != null;
             }
         }
+        
     }
 }

@@ -32,6 +32,9 @@ namespace NekoOdyssey.Scripts.Game.Unity.Conversations
 
             player.Conversation.Dialog = attributes.dialog;
             player.SetMode(PlayerMode.Conversation);
+
+
+            Debug.Log("HandlePlayerMenuAction");
         }
     }
 }

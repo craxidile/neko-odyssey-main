@@ -23,6 +23,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.AssetBundles
                 $"cat_profiles",
                 $"cat_badges",
                 $"cat_emotions",
+                $"scriptableobject",
                 $"items",
                 $"camera_boundaries",
             };
@@ -34,7 +35,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.AssetBundles
             
             GameRunner.Instance.SetReady(true);
         }
-        
+
         private void LoadAssetBundle(string bundleName)
         {
             var bundlePath = System.IO.Path.Combine(

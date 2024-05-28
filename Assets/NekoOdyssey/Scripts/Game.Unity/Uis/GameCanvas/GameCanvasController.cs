@@ -22,7 +22,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
         [SerializeField] private HorizontalLayoutGroup topLeftLayoutGroup;
         [SerializeField] private HorizontalLayoutGroup topRightLayoutGroup;
 
-        [SerializeField] Image foodImage;
+        [SerializeField] Image[] foodImages;
+        float _staminaGaugeRatio;
 
         [SerializeField] TextMeshProUGUI socialLikeText, followerText, moneyText;
         [SerializeField] TextMeshProUGUI gameTimeText;
@@ -52,18 +53,21 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
 
             AssetBundleUtils.OnReady(RebuildLayout);
 
-            GameRunner.Instance.Core.Player.OnChangeStamina
+            GameRunner.Instance.Core.Player.Stamina.OnChangeStamina
                 .Subscribe(HandleStaminaChange)
+                .AddTo(this);
+            GameRunner.Instance.TimeRoutine.OnTimeUpdate
+                .Subscribe(_ => HandleTimeChange())
                 .AddTo(this);
             GameRunner.Instance.Core.Player.OnChangeLikeCount
                 .Subscribe(HandleLikeCountChange)
                 .AddTo(this);
 
-            UpdateStamina(GameRunner.Instance.Core.Player.Stamina);
+            UpdateStamina(GameRunner.Instance.Core.Player.Stamina.Stamina);
+            
+            HandleTimeChange();
 
-            gameTimeText.text = DateTime.Now.ToString("HH:mm:ss"); //change later
-
-            socialLikeText.text = "0"; // socialLikeCount.ToString("N0");
+            socialLikeText.text = "0";
             followerText.text = followerCount.ToString("N0");
             moneyText.text = moneyCount.ToString("N0");
 
@@ -104,6 +108,23 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
             RebuildLayout();
         }
 
+        private void HandleTimeChange()
+        {
+            var timeRoutine = GameRunner.Instance.TimeRoutine;
+            var currentTimeText = timeRoutine.currentTime.ToString();
+            if (currentTimeText.StartsWith("0")) currentTimeText = currentTimeText.Substring(1);
+            string timeAffixText = "AM";
+            var midDayTime = new TimeHrMin("12:00");
+            if (timeRoutine.currentTime > midDayTime)
+                timeAffixText = "PM";
+
+            var dayText = timeRoutine.CurrentDay.ToString();
+
+            gameTimeText.text = $"{dayText} {currentTimeText} {timeAffixText}";
+
+            RebuildLayout();
+        }
+
         private void RebuildLayout()
         {
             LayoutRebuilder.MarkLayoutForRebuild(topLeftLayoutGroup.GetComponent<RectTransform>());
@@ -112,24 +133,37 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
 
         private void UpdateStamina(int stamina)
         {
+            Debug.Log($">>stamina<< {stamina}");
             _staminaTween?.Kill();
 
-            var staminaRatio = (float)stamina / AppConstants.MaxStamina;
+            var staminaRatio = (float)stamina / AppConstants.Stamina.MaxNormal;
+
+            //var foodImage = foodImages[0];
 
             if (!_initialized)
             {
-                foodImage.fillAmount = staminaRatio;
+                //foodImage.fillAmount = staminaRatio;
+                _staminaGaugeRatio = staminaRatio;
+                UpdateStaminaGauge();
                 _initialized = true;
             }
 
-            var staminaDelay = foodImage.fillAmount * MaxStaminaDelay;
+            //var staminaDelay = foodImage.fillAmount * MaxStaminaDelay;
+            var staminaDelay = _staminaGaugeRatio * MaxStaminaDelay;
             _staminaTween = DOTween.To(
-                () => foodImage.fillAmount,
-                s => foodImage.fillAmount = s,
+                () => _staminaGaugeRatio,
+                s =>
+                {
+                    _staminaGaugeRatio = s;
+                    UpdateStaminaGauge();
+                },
                 staminaRatio,
                 staminaDelay
             );
+
             _staminaTween.OnComplete(() => { _staminaTween = null; });
+
+            Debug.Log($"UpdateStamina target ratio : {staminaRatio} , current stamina : {stamina}");
         }
 
         private void CheckActivation()
@@ -142,6 +176,26 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
             }
 
             if (isActive) RebuildLayout();
+        }
+
+
+        private void UpdateStaminaGauge()
+        {
+            for (int i = 0; i < foodImages.Length; i++)
+            {
+                if (_staminaGaugeRatio > i + 1)
+                {
+                    foodImages[i].fillAmount = 1;
+                }
+                else if (_staminaGaugeRatio > i)
+                {
+                    foodImages[i].fillAmount = _staminaGaugeRatio - i;
+                }
+                else
+                {
+                    foodImages[i].fillAmount = 0;
+                }
+            }
         }
     }
 }

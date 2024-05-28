@@ -7,10 +7,11 @@ using UnityEngine.Playables;
 
 public enum languageTypeDialogue
 {
-    English,
-    Japanese,
-    Chinese,
-    Thai
+    TH,
+    EN,
+    JP,
+    S_CN,
+    T_CN,
 }
 public class DialogueData
 {
@@ -28,19 +29,13 @@ public class DialogueManager : MonoBehaviour
     [HideInInspector]
     public PlayableDirector director;
     public DialogCanvasController canvasController;
-    public bool nextDialogue;
+    public bool endBubble;
 
     //languege  
+    public LanguageManager languageManager;
+    public languageTypeDialogue language = languageTypeDialogue.EN;
     int languageColumnIndex = 1;
-   
-    public languageTypeDialogue language = languageTypeDialogue.English;
-    public static languageTypeDialogue globalLanguage = languageTypeDialogue.English;
 
-    public void UpdateGlobalLanguage()
-    {
-        Debug.Log($"ChangeLanguage : {language} / {globalLanguage}");
-        language = globalLanguage;
-    }
 
     // Dialogue
     [SerializeField] TextAsset DialogueAsset;
@@ -55,7 +50,9 @@ public class DialogueManager : MonoBehaviour
     private void Awake()
     {
         director = GetComponent<PlayableDirector>();
-        UpdateGlobalLanguage();
+        languageManager = GetComponent<LanguageManager>();
+        languageManager.updateGlobalLanguage();
+        canvasController.SetOpened(false);
         LoadDialogueCSV();
     }
 
@@ -63,11 +60,17 @@ public class DialogueManager : MonoBehaviour
 
     private void Update()
     {
-        if (/*director.state == PlayState.Paused && */Input.anyKeyDown && !nextDialogue)
+        if (Input.anyKeyDown && !endBubble)
         {
-            nextDialogue = true;
-            canvasController.SetOpened(false);
-            Debug.Log($">>behavior<< play continue after get key down");
+            if (canvasController.lastLineId)
+            {
+                endBubble = true;
+                canvasController.endDialogue = true;
+            }
+            else
+            {
+                canvasController.goNextLineId = true;
+            }
         }
     }
 
@@ -83,6 +86,8 @@ public class DialogueManager : MonoBehaviour
             DialogueData newDialogueData = new DialogueData();
 
             string dialogue = row[languageColumnIndex];
+            dialogue = dialogue.Replace(';', ',');
+            dialogue = dialogue.Replace('_', '\n');
             newDialogueData.DialogueSentance = dialogue;
 
             if (!AllDialogueData.ContainsKey(row[0]))
@@ -96,11 +101,21 @@ public class DialogueManager : MonoBehaviour
 
         for (int i = 0; i < row.Length; i++)
         {
-
-            if (row[i].ToLower() == language.ToString().ToLower())
+            if (languageManager != null)
             {
-                languageColumnIndex = i;
-                Debug.Log($"check language [{row[i]}] (column {i})");
+                if (row[i].ToLower() == languageManager.language.ToString().ToLower())
+                {
+                    languageColumnIndex = i;
+                    Debug.Log($"check language [{row[i]}] (column {i})");
+                }
+            }
+            else
+            {
+                if (row[i].ToLower() == language.ToString().ToLower())
+                {
+                    languageColumnIndex = i;
+                    Debug.Log($"check language [{row[i]}] (column {i})");
+                }
             }
         }
     }

@@ -1,15 +1,13 @@
+#if UNITY_EDITOR
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-#if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.Timeline;
-#endif
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
 
-#if UNITY_EDITOR
 public class PlayableDirectorInspector : Editor
 {
     private TimelineAsset[] _timelineAssets;

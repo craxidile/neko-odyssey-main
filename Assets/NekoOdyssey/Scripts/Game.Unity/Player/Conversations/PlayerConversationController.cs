@@ -3,6 +3,7 @@ using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 using NekoOdyssey.Scripts.Game.Unity.Uis.DialogCanvas;
 using UniRx;
 using UnityEngine;
+using NekoOdyssey.Scripts.Game.Core.Routine;
 
 namespace NekoOdyssey.Scripts.Game.Unity.Player.Conversations
 {
@@ -24,15 +25,18 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Conversations
             _active = mode == PlayerMode.Conversation;
             if (!_active) return;
 
-            if (!GameRunner.Instance.AssetMap.ContainsKey("dialogcanvas")) return;
+            //if (!GameRunner.Instance.AssetMap.ContainsKey("dialogcanvas")) return;
 
-            _dialogCanvas = Instantiate(
-                GameRunner.Instance.AssetMap["dialogcanvas"],
-                GameRunner.Instance.Core.PlayerMenu.GameObject.transform
-            ) as GameObject;
-            Debug.Log($">>dialog_canvas<< {_dialogCanvas}");
-            var dialogCanvasController = _dialogCanvas.GetComponent<DialogCanvasController>();
-            dialogCanvasController.SetText(GameRunner.Instance.Core.Player.Conversation.Dialog);
+            //_dialogCanvas = Instantiate(
+            //    GameRunner.Instance.AssetMap["dialogcanvas"],
+            //    GameRunner.Instance.Core.PlayerMenu.GameObject.transform
+            //) as GameObject;
+            //Debug.Log($">>dialog_canvas<< {_dialogCanvas}");
+            //var dialogCanvasController = _dialogCanvas.GetComponent<DialogCanvasController>();
+            //dialogCanvasController.SetText(GameRunner.Instance.Core.Player.Conversation.Dialog);
+
+
+            //GameRunner.Instance.Core.Routine.ConversationHandle();
         }
 
         public void Awake()

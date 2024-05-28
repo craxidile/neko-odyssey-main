@@ -34,8 +34,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
         public Subject<ItemType> OnChangeItemType { get; } = new();
         public Subject<bool> OnChangeConfirmationVisibility { get; } = new();
         public Subject<BagItemV001> OnSelectBagItem { get; } = new();
-        public Subject<Dictionary<BagItemV001, Vector3>> OnBagItemPositionsReady { get; } = new();
         public Subject<BagItemV001> OnUseBagItem { get; } = new();
+        public Subject<Dictionary<BagItemV001, Vector3>> OnBagItemPositionsReady { get; } = new();
         public Subject<Unit> OnSearchBag { get; } = new();
         public Subject<Unit> OnEat { get; } = new();
 
@@ -66,7 +66,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
         public void Unbind()
         {
         }
-
+        
         private void InitializeItems()
         {
             SetDefaultItemType();
@@ -86,7 +86,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
             var index = itemTypes.IndexOf(CurrentItemType);
             SetItemType(itemTypes[Math.Max(0, index - 1)]);
         }
-
+        
         private void HandleNextTab()
         {
             if (GameRunner.Instance.Core.Player.Mode != PlayerMode.OpenBag) return;
@@ -134,11 +134,11 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
         {
             var bagItem = new BagItemV001(item);
             BagItems.Add(bagItem);
-            GameRunner.Instance.Core.Player.SaveDbWriter.Add(dbContext =>
+            using (var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = false }))
             {
                 var bagItemRepo = new BagItemV001Repo(dbContext);
                 bagItemRepo.Add(bagItem);
-            });
+            }
         }
 
         public void SelectBagItem(BagItemV001 bagItem)
@@ -149,6 +149,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
 
         public void UseBagItem()
         {
+            //GameRunner.Instance.Core.Player.AddStamina(CurrentBagItem.Item.Stamina);
             var bagItem = CurrentBagItem;
             var itemType = bagItem.Item.Type;
             if (itemType.Name == "Food")
@@ -156,7 +157,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
             else
                 OnSearchBag.OnNext(default);
 
-            GameRunner.Instance.Core.Player.AddStamina(CurrentBagItem.Item.Stamina);
+            // GameRunner.Instance.Core.Player.AddStamina(CurrentBagItem.Item.Stamina);
+            
             OnUseBagItem.OnNext(CurrentBagItem);
 
             var index = FilteredBagItems.IndexOf(CurrentBagItem);
@@ -164,7 +166,6 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
             if (!CurrentBagItem.Item.SingleUse) return;
 
             BagItems.Remove(CurrentBagItem);
-
             GameRunner.Instance.Core.Player.SaveDbWriter.Add(dbContext =>
             {
                 var bagItemRepo = new BagItemV001Repo(dbContext);

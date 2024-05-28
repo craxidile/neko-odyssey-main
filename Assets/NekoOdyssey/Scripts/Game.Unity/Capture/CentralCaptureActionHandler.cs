@@ -11,7 +11,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Capture
     public class CentralCaptureActionHandler : MonoBehaviour
     {
         private Core.Player.Player _player;
-        private Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu.PlayerMenu _playerMenu;
+        private global::Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu.PlayerMenu _playerMenu;
         private Core.Player.Capture.PlayerCapture _capture;
 
         private void Awake()
