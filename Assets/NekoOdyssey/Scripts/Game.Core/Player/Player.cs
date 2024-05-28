@@ -141,13 +141,13 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
 
         private void SavePlayerProperties()
         {
-            using (var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = false }))
+            SaveDbWriter.Add(dbContext =>
             {
                 var playerPropertiesRepo = new PlayerPropertiesV001Repo(dbContext);
                 var playerProperties = playerPropertiesRepo.Load();
                 playerProperties.Stamina = Stamina.Stamina;
                 playerPropertiesRepo.Update(playerProperties);
-            }
+            });
         }
 
         private void ResetPlayerSubmenu()
@@ -248,8 +248,9 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
         {
             using (var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = true }))
             {
-                var repo = new PlayerPropertiesV001();
-                return repo.DayCount;
+                var repo = new PlayerPropertiesV001Repo(dbContext);
+                var properties = repo.Load();
+                return properties.DayCount;
             }
         }
 
