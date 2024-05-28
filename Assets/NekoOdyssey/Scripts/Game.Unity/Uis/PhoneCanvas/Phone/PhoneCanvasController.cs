@@ -152,10 +152,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone
             }
 
             var deltaY = Mathf.Abs(scrollRectDelta.y);
-            if (deltaY <= ScrollAnimationTriggerMinDelta || deltaY >= ScrollAnimationTriggerMaxDelta) return;
+            if (deltaY is <= ScrollAnimationTriggerMinDelta or >= ScrollAnimationTriggerMaxDelta) return;
             
-            Debug.Log($">>swapped<< {deltaY} {_transitionActive}");
-
             TriggerSwipeAnimation();
         }
 
