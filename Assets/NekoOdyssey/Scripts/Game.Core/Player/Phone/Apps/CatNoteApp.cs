@@ -2,11 +2,8 @@
 using System.Linq;
 using NekoOdyssey.Scripts.Database.Domains;
 using NekoOdyssey.Scripts.Database.Domains.SaveV001;
-using NekoOdyssey.Scripts.Database.Domains.SaveV001.CatPhotoEntity.Models;
-using NekoOdyssey.Scripts.Database.Domains.SaveV001.CatPhotoEntity.Repo;
 using NekoOdyssey.Scripts.Database.Domains.SaveV001.PlayerCatEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.SaveV001.PlayerCatEntity.Repo;
-using NekoOdyssey.Scripts.Models;
 using UniRx;
 
 namespace NekoOdyssey.Scripts.Game.Core.Player.Phone.Apps

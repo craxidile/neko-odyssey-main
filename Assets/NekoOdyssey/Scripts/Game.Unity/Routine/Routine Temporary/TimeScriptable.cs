@@ -1,6 +1,7 @@
 using NekoOdyssey.Scripts.Constants;
 using System.Collections;
 using System.Collections.Generic;
+using NekoOdyssey.Scripts.Game.Unity.CustomAttribute;
 using UnityEngine;
 using UniRx;
 
@@ -18,7 +19,7 @@ public class TimeScriptable : ScriptableObject
     public float timeMultiplier = 1f;
     public bool _isTimer;
 
-    [Tooltip("increase this value mean hungey decrease faster")]
+    [Tooltip("increase this value mean hungry decrease faster")]
     //[Range(0, 10)]
     public float hungryOverTimeMultiplier = 1;
 

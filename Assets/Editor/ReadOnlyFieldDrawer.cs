@@ -1,5 +1,6 @@
 #if UNITY_EDITOR
 
+using NekoOdyssey.Scripts.Game.Unity.CustomAttribute;
 using UnityEngine;
 using UnityEditor;
 

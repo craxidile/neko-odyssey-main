@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using System;
+using NekoOdyssey.Scripts.Game.Unity.CustomAttribute;
 
 
 namespace NekoOdyssey.Scripts.Game.Core.Routine
