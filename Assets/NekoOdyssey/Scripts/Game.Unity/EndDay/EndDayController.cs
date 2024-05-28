@@ -9,6 +9,7 @@ using System.Linq;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 using UniRx;
 using DG.Tweening;
+using NekoOdyssey.Scripts.Constants;
 
 namespace NekoOdyssey.Scripts.Game.Core.EndDay
 {
@@ -94,7 +95,7 @@ namespace NekoOdyssey.Scripts.Game.Core.EndDay
             GameRunner.Instance.Core.GameScene.CloseScene();
             DOVirtual.DelayedCall(4, () =>
             {
-                var homeSite = "NekoInside03MikiHouse";
+                var homeSite = "NekoInside28Bedroom";
                 SiteRunner.Instance.Core.Site.SetSite(homeSite);
             });
         }
@@ -176,8 +177,10 @@ namespace NekoOdyssey.Scripts.Game.Core.EndDay
         {
             endDayStep = EndDayStep.None;
 
-            var newDaySite = "GamePlayZone9_01";
+            var newDaySite = "GamePlayZone3_02";
             SiteRunner.Instance.Core.Site.SetSite(newDaySite);
+
+            GameRunner.Instance.TimeRoutine.SetTime(AppConstants.Time.StartDayTime);
         }
 
     }
