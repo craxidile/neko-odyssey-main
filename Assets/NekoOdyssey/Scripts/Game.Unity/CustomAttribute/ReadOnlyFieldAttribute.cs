@@ -1,5 +1,8 @@
 using UnityEngine;
-public class ReadOnlyFieldAttribute : PropertyAttribute
-{
 
+namespace NekoOdyssey.Scripts.Game.Unity.CustomAttribute
+{
+    public class ReadOnlyFieldAttribute : PropertyAttribute
+    {
+    }
 }

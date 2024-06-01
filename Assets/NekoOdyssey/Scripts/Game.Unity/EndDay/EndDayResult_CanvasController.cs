@@ -1,27 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
 using DG.Tweening;
-using UniRx;
 using NekoOdyssey.Scripts;
+using UniRx;
+using UnityEngine;
 
 public class EndDayResult_CanvasController : MonoBehaviour
 {
     public float fadeDuration = 1f;
 
+    private CanvasGroup _canvasGroup;
+    
+    [SerializeField] public CanvasGroup subCanvasGroup;
+    
     public Subject<Unit> OnEndDayResultStart { get; } = new();
     public Subject<Unit> OnEndDayResultFinish { get; } = new();
 
-    CanvasGroup canvasGroup;
-
-    [SerializeField] CanvasGroup subCanvasGroup;
 
     private void Awake()
     {
-        canvasGroup = GetComponent<CanvasGroup>();
+        _canvasGroup = GetComponent<CanvasGroup>();
 
-        canvasGroup.LerpAlpha(0, 0);
+        _canvasGroup.LerpAlpha(0, 0);
         subCanvasGroup.LerpAlpha(0, 0);
     }
 
@@ -47,10 +45,10 @@ public class EndDayResult_CanvasController : MonoBehaviour
     void OpenPanel()
     {
         OnEndDayResultStart.OnNext(Unit.Default);
-        canvasGroup.DOFade(1, fadeDuration).OnComplete(() =>
+        _canvasGroup.DOFade(1, fadeDuration).OnComplete(() =>
         {
-            canvasGroup.interactable = true;
-            canvasGroup.blocksRaycasts = true;
+            _canvasGroup.interactable = true;
+            _canvasGroup.blocksRaycasts = true;
 
             subCanvasGroup.LerpAlpha(1, fadeDuration);
 
@@ -58,9 +56,9 @@ public class EndDayResult_CanvasController : MonoBehaviour
     }
     void ClosePanel()
     {
-        canvasGroup.interactable = false;
-        canvasGroup.blocksRaycasts = false;
-        canvasGroup.DOFade(0, fadeDuration).OnComplete(() =>
+        _canvasGroup.interactable = false;
+        _canvasGroup.blocksRaycasts = false;
+        _canvasGroup.DOFade(0, fadeDuration).OnComplete(() =>
         {
             OnEndDayResultFinish.OnNext(Unit.Default);
         });
@@ -70,11 +68,11 @@ public class EndDayResult_CanvasController : MonoBehaviour
     void CheckInput()
     {
         Debug.Log("Check input");
-        if (canvasGroup.interactable)
+        if (_canvasGroup.interactable)
         {
             Debug.Log("Check input pass");
 
-            canvasGroup.DOFade(0, fadeDuration);
+            _canvasGroup.DOFade(0, fadeDuration);
 
             ClosePanel();
         }

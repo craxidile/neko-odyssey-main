@@ -21,6 +21,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.AssetBundles
                 $"menu_actions",
                 $"cat_snaps",
                 $"cat_profiles",
+                $"cat_badges",
                 $"cat_emotions",
                 $"scriptableobject",
                 $"items",

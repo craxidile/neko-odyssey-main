@@ -5,14 +5,6 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Playables;
 
-public enum languageTypeDialogue
-{
-    TH,
-    EN,
-    JP,
-    S_CN,
-    T_CN,
-}
 public class DialogueData
 {
     public string DialogueSentance;
@@ -31,11 +23,16 @@ public class DialogueManager : MonoBehaviour
     public DialogCanvasController canvasController;
     public bool endBubble;
 
-    //languege  
-    public LanguageManager languageManager;
-    public languageTypeDialogue language = languageTypeDialogue.EN;
+    //languege
     int languageColumnIndex = 1;
+        public languageType language = languageType.EN;
+    public static languageType globalLanguage = LanguageManager.globalLanguage;
 
+    public void UpdateGlobalLanguage()
+    {
+        Debug.Log($"ChangeLanguage : {language} to {globalLanguage}");
+        language = globalLanguage;
+    }
 
     // Dialogue
     [SerializeField] TextAsset DialogueAsset;
@@ -50,13 +47,10 @@ public class DialogueManager : MonoBehaviour
     private void Awake()
     {
         director = GetComponent<PlayableDirector>();
-        languageManager = GetComponent<LanguageManager>();
-        languageManager.updateGlobalLanguage();
         canvasController.SetOpened(false);
+        UpdateGlobalLanguage();
         LoadDialogueCSV();
     }
-
-    
 
     private void Update()
     {
@@ -90,8 +84,10 @@ public class DialogueManager : MonoBehaviour
             dialogue = dialogue.Replace('_', '\n');
             newDialogueData.DialogueSentance = dialogue;
 
-            if (!AllDialogueData.ContainsKey(row[0]))
+            if (!AllDialogueData.ContainsKey(row[0])) 
+            {
                 AllDialogueData.Add(row[0], newDialogueData);
+            }
         }
 
     }
@@ -101,21 +97,10 @@ public class DialogueManager : MonoBehaviour
 
         for (int i = 0; i < row.Length; i++)
         {
-            if (languageManager != null)
+            if (row[i].ToLower() == language.ToString().ToLower())
             {
-                if (row[i].ToLower() == languageManager.language.ToString().ToLower())
-                {
-                    languageColumnIndex = i;
-                    Debug.Log($"check language [{row[i]}] (column {i})");
-                }
-            }
-            else
-            {
-                if (row[i].ToLower() == language.ToString().ToLower())
-                {
-                    languageColumnIndex = i;
-                    Debug.Log($"check language [{row[i]}] (column {i})");
-                }
+                languageColumnIndex = i;
+                Debug.Log($"check language [{row[i]}] (column {i})");
             }
         }
     }

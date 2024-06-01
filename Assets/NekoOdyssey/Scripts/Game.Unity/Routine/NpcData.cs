@@ -60,7 +60,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                 //Debug.Log("UpdateRoutine 1");
 
 
-                if (eventDetail.IsInEventTime(GameRunner.Instance.TimeRoutine.currentDay, GameRunner.Instance.TimeRoutine.currentTime))
+                if (eventDetail.IsInEventTime(GameRunner.Instance.TimeRoutine.CurrentDay, GameRunner.Instance.TimeRoutine.currentTime))
                 {
                     if (SwtichEvent(eventDetail))
                     {

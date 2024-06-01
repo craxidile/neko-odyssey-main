@@ -4,8 +4,10 @@ using System.Linq;
 using DG.Tweening;
 using NekoOdyssey.Scripts.Game.Core.Player.Phone;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
+using NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone.CatNote;
 using NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone.PhotoGallery;
 using NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone.SocialNetwork;
+using TMPro;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,7 +18,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone
     {
         private const float PositionTransitionDuration = 0.2f;
         private const float AppSwapDuration = 0.3f;
-        private const float ScrollAnimationTriggerDelta = 12f;
+        private const float ScrollAnimationTriggerMinDelta = 5f; // 12f;
+        private const float ScrollAnimationTriggerMaxDelta = 300f;
         private const float SlideDelayTimeDelta = 0.5f;
         private const float ContentScrollTimeFactor = 1000f;
 
@@ -26,12 +29,15 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone
         public Transform closePositionTransform;
         public Transform phoneTransform;
 
+        public TextMeshProUGUI likeCountText;
+
         private bool _active;
         private bool _isOpen;
         private bool _transitionActive;
         private float _positionTransitionTimeCount;
         private Vector3 _startPosition;
         private Vector3 _endPosition;
+        private bool _appSwapped;
         private CanvasGroup _canvasGroup;
         private Animator _playerAnimator;
         private PlayerMode _previousMode;
@@ -62,6 +68,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone
             GameRunner.Instance.Core.Player.Phone.GameObject = gameObject;
             gameObject.AddComponent<PhoneSocialNetworkController>();
             gameObject.AddComponent<PhonePhotoGalleryController>();
+            gameObject.AddComponent<PhoneCatNoteController>();
         }
 
         private void Start()
@@ -72,6 +79,9 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone
             GameRunner.Instance.Core.Player.Phone.OnScroll
                 .Subscribe(ScrollAppPane)
                 .AddTo(this);
+            GameRunner.Instance.Core.Player.Phone.OnStopScrolling
+                .Subscribe(HandleScrollingStop)
+                .AddTo(this);
             GameRunner.Instance.Core.Player.Phone.OnChangeApp
                 .Subscribe(AnimateCanvasSwap)
                 .AddTo(this);
@@ -79,9 +89,9 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone
 
         private void Update()
         {
-            if (!_isOpen) UpdateSwipeAnimation();
+            if (_isOpen) UpdateSwipeAnimation();
             if (!_transitionActive) return;
-            
+
             var targetPosition = Vector3.Lerp(_startPosition, _endPosition, _positionTransitionTimeCount);
             _positionTransitionTimeCount += Time.deltaTime / PositionTransitionDuration;
             phoneTransform.position = targetPosition;
@@ -104,6 +114,10 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone
             scrollRect.content.anchoredPosition = contentPosition;
         }
 
+        private void HandleScrollingStop(Unit _)
+        {
+        }
+
         private void AnimateCanvasSwap(PlayerPhoneApp _)
         {
             var previousApp = GameRunner.Instance.Core.Player.Phone.PreviousApp;
@@ -111,11 +125,14 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone
             var prevCanvasUi = phoneUiList.FirstOrDefault(ui => ui.phoneApp == previousApp);
             var currentCanvasUi = phoneUiList.FirstOrDefault(ui => ui.phoneApp == currentApp);
             if (prevCanvasUi == null || currentCanvasUi == null) return;
-            
             if (prevCanvasUi == currentCanvasUi) return;
-            
+
+            _appSwapped = true;
+
             prevCanvasUi.canvasGroup.DOFade(0f, AppSwapDuration);
             currentCanvasUi.canvasGroup.DOFade(1f, AppSwapDuration);
+            
+            _playerAnimator.SetTrigger($"Swipe");
         }
 
         private void UpdateSwipeAnimation()
@@ -123,11 +140,20 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone
             var currentApp = GameRunner.Instance.Core.Player.Phone.CurrentApp;
             var phoneCanvasUi = phoneUiList.FirstOrDefault(ui => ui.phoneApp == currentApp);
             if (phoneCanvasUi == null) return;
-            
+
             var contentPosition = phoneCanvasUi.scrollRect.content.position;
             var scrollRectDelta = contentPosition - _tempSlideCheckScrollRectPosition;
             _tempSlideCheckScrollRectPosition = contentPosition;
-            if (Mathf.Abs(scrollRectDelta.y) <= ScrollAnimationTriggerDelta) return;
+
+            if (_appSwapped)
+            {
+                _appSwapped = false;
+                return;
+            }
+
+            var deltaY = Mathf.Abs(scrollRectDelta.y);
+            if (deltaY is <= ScrollAnimationTriggerMinDelta or >= ScrollAnimationTriggerMaxDelta) return;
+            
             TriggerSwipeAnimation();
         }
 

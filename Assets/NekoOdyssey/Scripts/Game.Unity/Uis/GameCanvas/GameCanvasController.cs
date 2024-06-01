@@ -8,8 +8,6 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
-using NekoOdyssey.Scripts.Game.Core.Routine;
-
 namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
 {
     public class GameCanvasController : MonoBehaviour
@@ -35,8 +33,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
 
         CanvasGroup canvasGroup;
 
-        [Header("testing")][SerializeField] int testNumber;
-        //[SerializeField] public float hungryValue;
+        [Header("testing")] [SerializeField] int testNumber;
+        [SerializeField] public float hungryValue;
         [SerializeField] int socialLikeCount, followerCount, moneyCount;
         [SerializeField] int socialNotificationCount, bagNotificationCount;
 
@@ -53,27 +51,23 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
             phoneButton.onClick.AddListener(HandlePhoneClick);
             bagButton.onClick.AddListener(HandleBackClick);
 
-
             AssetBundleUtils.OnReady(RebuildLayout);
 
             GameRunner.Instance.Core.Player.Stamina.OnChangeStamina
                 .Subscribe(HandleStaminaChange)
                 .AddTo(this);
+            GameRunner.Instance.TimeRoutine.OnTimeUpdate
+                .Subscribe(_ => HandleTimeChange())
+                .AddTo(this);
+            GameRunner.Instance.Core.Player.OnChangeLikeCount
+                .Subscribe(HandleLikeCountChange)
+                .AddTo(this);
 
             UpdateStamina(GameRunner.Instance.Core.Player.Stamina.Stamina);
+            
+            HandleTimeChange();
 
-
-            //gameTimeText.text = System.DateTime.Now.ToString("HH:mm:ss"); //change later
-            var currentTimeText = GameRunner.Instance.TimeRoutine.currentTime.ToString();
-            if (currentTimeText.StartsWith("0")) currentTimeText = currentTimeText.Substring(1);
-            string timeAffixText = " AM";
-            var midDayTime = new TimeHrMin("12:00");
-            if (GameRunner.Instance.TimeRoutine.currentTime > midDayTime)
-                timeAffixText = " PM";
-            gameTimeText.text = currentTimeText + timeAffixText;
-
-
-            socialLikeText.text = socialLikeCount.ToString("N0");
+            socialLikeText.text = "0";
             followerText.text = followerCount.ToString("N0");
             moneyText.text = moneyCount.ToString("N0");
 
@@ -90,7 +84,6 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
         void Update()
         {
             CheckActivation();
-            //UpdateStaminaGuage();
         }
 
         private void HandlePhoneClick()
@@ -109,6 +102,29 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
             RebuildLayout();
         }
 
+        private void HandleLikeCountChange(int likeCount)
+        {
+            socialLikeText.text = likeCount.ToString("N0");
+            RebuildLayout();
+        }
+
+        private void HandleTimeChange()
+        {
+            var timeRoutine = GameRunner.Instance.TimeRoutine;
+            var currentTimeText = timeRoutine.currentTime.ToString();
+            if (currentTimeText.StartsWith("0")) currentTimeText = currentTimeText.Substring(1);
+            string timeAffixText = "AM";
+            var midDayTime = new TimeHrMin("12:00");
+            if (timeRoutine.currentTime > midDayTime)
+                timeAffixText = "PM";
+
+            var dayText = timeRoutine.CurrentDay.ToString();
+
+            gameTimeText.text = $"{dayText} {currentTimeText} {timeAffixText}";
+
+            RebuildLayout();
+        }
+
         private void RebuildLayout()
         {
             LayoutRebuilder.MarkLayoutForRebuild(topLeftLayoutGroup.GetComponent<RectTransform>());
@@ -117,6 +133,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
 
         private void UpdateStamina(int stamina)
         {
+            Debug.Log($">>stamina<< {stamina}");
             _staminaTween?.Kill();
 
             var staminaRatio = (float)stamina / AppConstants.Stamina.MaxNormal;
@@ -127,7 +144,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
             {
                 //foodImage.fillAmount = staminaRatio;
                 _staminaGaugeRatio = staminaRatio;
-                UpdateStaminaGuage();
+                UpdateStaminaGauge();
                 _initialized = true;
             }
 
@@ -138,7 +155,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
                 s =>
                 {
                     _staminaGaugeRatio = s;
-                    UpdateStaminaGuage();
+                    UpdateStaminaGauge();
                 },
                 staminaRatio,
                 staminaDelay
@@ -162,7 +179,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
         }
 
 
-        void UpdateStaminaGuage()
+        private void UpdateStaminaGauge()
         {
             for (int i = 0; i < foodImages.Length; i++)
             {

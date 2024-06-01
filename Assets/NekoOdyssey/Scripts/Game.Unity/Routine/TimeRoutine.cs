@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
 using NekoOdyssey.Scripts.Constants;
+using NekoOdyssey.Scripts.Game.Core.GameScene;
 
 public enum Day
 {
@@ -12,10 +13,10 @@ public class TimeHrMin
 {
     public int Hour, Minute;
 
-    public TimeHrMin(int timeText)
-    {
-        new TimeHrMin(timeText.ToString());
-    }
+    //public TimeHrMin(int timeText)
+    //{
+    //    new TimeHrMin(timeText.ToString());
+    //}
     public TimeHrMin(string timeText)
     {
         //Debug.Log($"create timeHrMin with text : {timeText}");
@@ -33,6 +34,11 @@ public class TimeHrMin
         Hour = int.Parse(timeSplit[0]);
         Minute = int.Parse(timeSplit[1]);
         Minute = Mathf.Clamp(Minute, 0, 59);
+    }
+    public TimeHrMin(int hour, int minute)
+    {
+        Hour = hour;
+        Minute = minute;
     }
 
     public static bool operator >(TimeHrMin timeA, TimeHrMin timeB)
@@ -109,8 +115,9 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
         //[SerializeField] bool _isTimer; //only edit in unity editor
         //static bool s_isTimeRunning;
-        public Day currentDay => timeScriptable.currentDay;
+        //public Day CurrentDay => timeScriptable.currentDay;
         public TimeHrMin currentTime;
+        //public TimeHrMin currentTime => new TimeHrMin(GameRunner.Instance.Core.Player.Time.Item1, GameRunner.Instance.Core.Player.Time.Item2);
         public void PauseTime() => timeScriptable._isTimer = false;
         public void ContinueTime() => timeScriptable._isTimer = true;
 
@@ -118,6 +125,16 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         public int GameDayTotal { get; set; } = 1;
         public int GameMounth => ((GameDayTotal - 1) / 30) + 1;
         public int DayInMounth => ((GameDayTotal - 1) % 30) + 1;
+        public Day CurrentDay
+        {
+            get
+            {
+                //int daysInWeek = System.Enum.GetNames(typeof(Day)).Length;
+                int daysInWeek = 7;
+                int dayOfWeekIndex = (GameDayTotal - 1) % daysInWeek;
+                return (Day)dayOfWeekIndex;
+            }
+        }
 
 
         //[Tooltip("increase this value mean hungey decrease faster")]
@@ -129,15 +146,41 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         public Subject<int> OnTimeUpdate { get; } = new();
         public Subject<int> OnChangeDay { get; } = new();
 
+        float _timeSaveDelay;
 
         private void Awake()
         {
+            currentTime = new TimeHrMin(GameRunner.Instance.Core.Player.Time.Item1, GameRunner.Instance.Core.Player.Time.Item2);
+            GameDayTotal = Mathf.Max(GameRunner.Instance.Core.Player.DayCount, 1);
+
+            var startDayTime = new TimeHrMin(AppConstants.Time.StartDayTime);
+            if (currentTime < startDayTime)
+            {
+                currentTime = startDayTime;
+                SaveTimeData(true);
+            }
+
+
             timeScriptable = GameRunner.Instance.CsvHolder.timeProfile;
             timeScriptable.OnValidated.Subscribe(OnTimeProfileValidate).AddTo(this);
-            currentTime = new TimeHrMin($"{timeScriptable.dayMinute / 60}:{timeScriptable.dayMinute % 60}");
+
+            timeScriptable.dayMinute = currentTime.ToInt();
+            timeScriptable.currentDayCount = GameDayTotal;
+            //currentTime = new TimeHrMin($"{timeScriptable.dayMinute / 60}:{timeScriptable.dayMinute % 60}");
 
             //dayMinuteFloat = new TimeHrMin(AppConstants.Time.StartDayTime).ToInt();
             dayMinuteFloat = timeScriptable.dayMinute;
+
+            Debug.Log($"initialize time : {timeScriptable.dayMinute}");
+
+            _timeSaveDelay = Time.time;
+
+            GameRunner.Instance.Core.GameScene.OnChangeSceneMode
+                .Subscribe(OnChangeSceneMode)
+                .AddTo(this);
+            GameRunner.Instance.Core.GameScene.OnChangeSceneFinish
+                .Subscribe(OnChangeSceneFinish)
+                .AddTo(this);
         }
 
         // Start is called before the first frame update
@@ -178,7 +221,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
         public bool inBetweenDayAndTime(List<Day> checkDay, string checkTime)
         {
-            if (checkDay.Contains(currentDay))
+            if (checkDay.Contains(CurrentDay))
             {
                 return currentTime.inBetweenTime(checkTime);
             }
@@ -192,11 +235,20 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             timeScriptable.dayMinute = newTime.ToInt();
 
             //currentTime = newTime;
+
+            currentTime = new TimeHrMin(newTime.Hour, newTime.Minute);
+            SaveTimeData(true);
         }
 
         public void NextDay()
         {
+            GameRunner.Instance.Core.Player.UpdateDayCount(GameDayTotal + 1);
+
             GameDayTotal += 1;
+
+            //int dayOfWeekIndex = (GameDayTotal - 1) % 7;
+            //timeScriptable.currentDay = (Day)dayOfWeekIndex;
+
             OnChangeDay.OnNext(GameDayTotal);
         }
 
@@ -225,12 +277,20 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
             var previosMinute = timeScriptable.dayMinute;
             timeScriptable.dayMinute = Mathf.RoundToInt(dayMinuteFloat);
-            currentTime = new TimeHrMin($"{timeScriptable.dayMinute / 60}:{timeScriptable.dayMinute % 60}");
+
+            //currentTime = new TimeHrMin($"{timeScriptable.dayMinute / 60}:{timeScriptable.dayMinute % 60}");
 
             if (previosMinute != timeScriptable.dayMinute)
             {
+                var newTime = new TimeHrMin(timeScriptable.dayMinute / 60, timeScriptable.dayMinute % 60);
+                currentTime = newTime;
+
+
                 OnTimeUpdate.OnNext(Mathf.Max(timeScriptable.dayMinute - previosMinute, 0));
                 Debug.Log($"OnTimeUpdate = {(timeScriptable.dayMinute - previosMinute)}");
+
+
+                SaveTimeData();
             }
         }
 
@@ -238,13 +298,17 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
         private void OnTimeProfileValidate(Unit _)
         {
+            var previousTime = dayMinuteFloat;
             if (dayMinuteFloat != timeScriptable.dayMinute)
             {
                 dayMinuteFloat = timeScriptable.dayMinute;
-                OnTimeUpdate.OnNext(Mathf.RoundToInt((float)timeScriptable.dayMinute - dayMinuteFloat));
+                OnTimeUpdate.OnNext(Mathf.RoundToInt(dayMinuteFloat - previousTime));
             }
 
             dayMinuteFloat = timeScriptable.dayMinute;
+
+            GameDayTotal = timeScriptable.currentDayCount;
+
             //day = currentDay;
 
             //s_hungryOverTimeMultiplier = hungryOverTimeMultiplier;
@@ -257,5 +321,32 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         //    currentTimeText = currentTime.ToString();
         //}
 
+
+        public void SaveTimeData(bool forceSave = false)
+        {
+            if (!forceSave)
+            {
+                if (Time.time < _timeSaveDelay) return;
+            }
+
+            _timeSaveDelay = Time.time + 10;
+            GameRunner.Instance.Core.Player.UpdateTime(currentTime.Hour, currentTime.Minute);
+        }
+
+        void OnChangeSceneMode(GameSceneMode gameSceneMode)
+        {
+            if (gameSceneMode.Equals(GameSceneMode.Closing))
+            {
+                PauseTime();
+                SaveTimeData(true);
+            }
+        }
+        void OnChangeSceneFinish(GameSceneMode gameSceneMode)
+        {
+            if (gameSceneMode.Equals(GameSceneMode.Opening))
+            {
+                ContinueTime();
+            }
+        }
     }
 }

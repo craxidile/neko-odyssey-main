@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
 using NekoOdyssey.Scripts.Game.Core;
@@ -36,7 +36,7 @@ namespace NekoOdyssey.Scripts
 
 
         public CSVHolderScriptable CsvHolder; //Linias Edit**
-        public TimeRoutine TimeRoutine;
+        public TimeRoutine TimeRoutine { get; private set; }
         public Subject<UniRx.Unit> OnUpdate { get; } = new();
 
         public GameRunner()
@@ -56,11 +56,10 @@ namespace NekoOdyssey.Scripts
             gameObject.AddComponent<CentralPlayerPettingHandler>();
             gameObject.AddComponent<AssetBundleLoader>();
 
+            Core.Bind();
+
             TimeRoutine = gameObject.AddComponent<TimeRoutine>();
             //new GameObject("Time Controller").AddComponent<NekoOdyssey.Scripts.Game.Core.Routine.TimeRoutine>().transform.SetParent(transform);
-
-
-            Core.Bind();
         }
 
         public void SetReady(bool ready)
@@ -76,6 +75,7 @@ namespace NekoOdyssey.Scripts
             AssetBundleUtils.OnReady(InitializePositions);
 
             StartCoroutine(IUpdate());
+            TestNetworkSimulator();
         }
 
         private void OnDestroy()
@@ -109,7 +109,6 @@ namespace NekoOdyssey.Scripts
 
             if (cameraBoundaryName == null) return null;
             cameraBoundaryName = cameraBoundaryName.ToLower();
-
             Debug.Log($">>boundary<< name 01 {cameraBoundaryName}");
 
             if (!AssetMap.ContainsKey(cameraBoundaryName)) return null;
@@ -143,6 +142,12 @@ namespace NekoOdyssey.Scripts
             {
                 Camera.main.transform.position = cameraAnchor.transform.position;
             }
+        }
+
+        private void TestNetworkSimulator()
+        {
+            // Core.Simulators.SocialNetworkSimulator.Start(1, AppConstants.RapidExpCdfLambda);
+            Core.Simulators.SocialNetworkSimulator.Add("A02");
         }
     }
 }

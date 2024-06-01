@@ -27,6 +27,12 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Bag
             GameRunner.Instance.Core.Player.OnChangeMode
                 .Subscribe(SetActive)
                 .AddTo(this);
+            GameRunner.Instance.Core.Player.Bag.OnEat
+                .Subscribe(HandleEating)
+                .AddTo(this);
+            GameRunner.Instance.Core.Player.Bag.OnSearchBag
+                .Subscribe(HandleBagSearch)
+                .AddTo(this);
         }
 
         private void SetActive(PlayerMode mode)
@@ -58,6 +64,16 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Bag
         {
             _animator.SetBool($"OpenBag", false);
             SoundEffectController.Instance.closePhone.Play();
+        }
+
+        private void HandleEating(Unit _)
+        {
+            _animator.SetTrigger($"EatFromBag");
+        }
+
+        private void HandleBagSearch(Unit _)
+        {
+            _animator.SetTrigger($"SearchBag");
         }
     }
 }

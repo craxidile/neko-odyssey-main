@@ -17,6 +17,5 @@ namespace NekoOdyssey.Scripts.Database.Domains.SaveV001.SocialCommentEntity.Mode
         [NotNull] public string FriendCode { get; set; }
         
         [NotNull] public string CommentCode { get; set; }
-        
     }
 }

@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using NekoOdyssey.Scripts.Constants;
 using NekoOdyssey.Scripts.Database.Domains;
 using NekoOdyssey.Scripts.Database.Domains.SaveV001;
+using NekoOdyssey.Scripts.Database.Domains.SaveV001.PlayerPropertiesEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.SaveV001.PlayerPropertiesEntity.Repo;
+using NekoOdyssey.Scripts.Database.Domains.SaveV001.PlayerQuestEntity.Models;
+using NekoOdyssey.Scripts.Database.Domains.SaveV001.PlayerQuestEntity.Repo;
 using NekoOdyssey.Scripts.Game.Core.Player.Bag;
 using NekoOdyssey.Scripts.Game.Core.Player.Capture;
 using NekoOdyssey.Scripts.Game.Core.Player.Conversation;
@@ -22,6 +25,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
         private static bool _initialized;
         
         public PlayerMode Mode { get; private set; } = PlayerMode.Move;
+        public PlayerMode PreviousMode { get; private set; } = PlayerMode.Move;
         public bool Running { get; private set; } = false;
         public Vector3 Position { get; private set; }
 
@@ -30,12 +34,23 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
         public PlayerCapture Capture { get; } = new();
         public PlayerPetting Petting { get; } = new();
         public PlayerConversation Conversation { get; } = new();
-        public PlayerStamina Stamina { get; } = new(); //linias added
+        public SaveV001DbWriter SaveDbWriter { get; } = new();
+        public PlayerStamina Stamina { get; } = new(); // linias added
 
-        //public int Stamina { get; private set; }
+        // public int Stamina { get; private set; }
         public int PocketMoney { get; private set; }
         public int LikeCount { get; private set; }
         public int FollowerCount { get; private set; }
+        public int DayCount => LoadPlayerProperties().DayCount;
+
+        public Tuple<int, int> Time
+        {
+            get
+            {
+                var properties = LoadPlayerProperties();
+                return Tuple.Create(properties.CurrentHour, properties.CurrentMinute);
+            }
+        }
 
         public GameObject GameObject { get; set; }
 
@@ -43,7 +58,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
         public Subject<bool> OnRun { get; } = new();
         public Subject<Vector2> OnMove { get; } = new();
         public Subject<Vector3> OnChangePosition { get; } = new();
-        //public Subject<int> OnChangeStamina { get; } = new();
+        public Subject<int> OnChangeStamina { get; } = new();
         public Subject<int> OnChangePocketMoney { get; } = new();
         public Subject<int> OnChangeLikeCount { get; } = new();
         public Subject<int> OnChangeFollowerCount { get; } = new();
@@ -56,7 +71,6 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
             Bag.Bind();
             Capture.Bind();
             Conversation.Bind();
-
             Stamina.Bind();
         }
 
@@ -88,7 +102,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
             Bag.Start();
             Capture.Start();
             Conversation.Start();
-
+            
             Stamina.Start();
             Stamina.OnChangeStamina
                 .Subscribe(_ => SavePlayerProperties())
@@ -111,26 +125,29 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
             using (new SaveV001DbContext(new() { CopyMode = DbCopyMode.ForceCopy, ReadOnly = false })) ;
         }
 
-        private void LoadPlayerProperties()
+        private PlayerPropertiesV001 LoadPlayerProperties()
         {
+            PlayerPropertiesV001 playerProperties;
             using (var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = true }))
             {
                 var playerPropertiesRepo = new PlayerPropertiesV001Repo(dbContext);
-                var playerProperties = playerPropertiesRepo.Load();
+                playerProperties = playerPropertiesRepo.Load();
                 //AddStamina(playerProperties.Stamina);
                 Stamina.SetStamina(playerProperties.Stamina);
             }
+
+            return playerProperties;
         }
 
         private void SavePlayerProperties()
         {
-            using (var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = false }))
+            SaveDbWriter.Add(dbContext =>
             {
                 var playerPropertiesRepo = new PlayerPropertiesV001Repo(dbContext);
                 var playerProperties = playerPropertiesRepo.Load();
                 playerProperties.Stamina = Stamina.Stamina;
                 playerPropertiesRepo.Update(playerProperties);
-            }
+            });
         }
 
         private void ResetPlayerSubmenu()
@@ -187,8 +204,21 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
             OnRun.OnNext(Running = false);
         }
 
+        private void UpdateProperties(Action<PlayerPropertiesV001> action)
+        {
+            SaveDbWriter.Add(dbContext =>
+            {
+                var repo = new PlayerPropertiesV001Repo(dbContext);
+                var playerProperties = repo.Load();
+                action(playerProperties);
+                repo.Update(playerProperties);
+            });
+            LoadPlayerProperties();
+        }
+
         public void SetMode(PlayerMode mode)
         {
+            PreviousMode = Mode;
             Mode = mode;
             OnChangeMode.OnNext(Mode);
         }
@@ -199,11 +229,69 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
             OnChangePosition.OnNext(position);
         }
 
-        //public void AddStamina(int addition)
-        //{
-        //    Stamina = Math.Min(AppConstants.Stamina_Max, Stamina + addition);
-        //    OnChangeStamina.OnNext(Stamina);
-        //    SavePlayerProperties();
-        //}
+        public void SetLikeCount(int likeCount)
+        {
+            LikeCount = likeCount;
+            OnChangeLikeCount.OnNext(LikeCount);
+        }
+
+        // public void AddStamina(int addition)
+        // {
+        //     Stamina = Math.Min(AppConstants.Stamina_Max, AppConstants.Stamina + addition);
+        //     OnChangeStamina.OnNext(Stamina);
+        //     SavePlayerProperties();
+        // }
+
+        public void UpdateDayCount(int dayCount) => UpdateProperties(properties => properties.DayCount = dayCount);
+
+        public int GetDayCount()
+        {
+            using (var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = true }))
+            {
+                var repo = new PlayerPropertiesV001Repo(dbContext);
+                var properties = repo.Load();
+                return properties.DayCount;
+            }
+        }
+
+        public void UpdateTime(int hour, int minute)
+        {
+            UpdateProperties(properties =>
+            {
+                properties.CurrentHour = hour;
+                properties.CurrentMinute = minute;
+            });
+        }
+
+        public Tuple<int, int> GetTime()
+        {
+            using (var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = true }))
+            {
+                var repo = new PlayerPropertiesV001Repo(dbContext);
+                var properties = repo.Load();
+                return Tuple.Create(properties.CurrentHour, properties.CurrentMinute);
+            }
+        }
+
+        public void AddAchievedQuest(string questCode)
+        {
+            SaveDbWriter.Add(dbContext =>
+            {
+                var repo = new PlayerQuestV001Repo(dbContext);
+                var playerQuest = repo.FindByQuestCode(questCode);
+                if (playerQuest != null) return;
+                repo.Add(new PlayerQuestV001(questCode));
+            });
+        }
+
+        public bool IsQuestComplete(string questCode)
+        {
+            using (var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = true }))
+            {
+                var repo = new PlayerQuestV001Repo(dbContext);
+                return repo.FindByQuestCode(questCode) != null;
+            }
+        }
+        
     }
 }

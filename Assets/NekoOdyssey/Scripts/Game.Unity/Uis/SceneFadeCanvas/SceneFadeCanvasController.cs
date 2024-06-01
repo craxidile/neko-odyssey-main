@@ -44,6 +44,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.SceneFadeCanvas
                     _tween = null;
                     if (!opening) return;
                     _canvasGroup.gameObject.SetActive(false);
+
+                    GameRunner.Instance.Core.GameScene.OnChangeSceneFinish.OnNext(opening ? GameSceneMode.Opening : GameSceneMode.Closing);
                 });
         }
     }

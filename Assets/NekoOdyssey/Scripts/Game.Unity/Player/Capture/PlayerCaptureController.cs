@@ -1,5 +1,6 @@
 ﻿using System;
 using DG.Tweening;
+using NekoOdyssey.Scripts.Database.Domains.SaveV001.CatPhotoEntity.Models;
 using NekoOdyssey.Scripts.Game.Core.Capture;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 using NekoOdyssey.Scripts.Models;
@@ -26,15 +27,14 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Capture
             _animator.SetLayerWeight(_animator.GetLayerIndex($"Capture"), 1f);
             // _renderer.flipX = false;
 
-            GameRunner.Instance.Core.Player.Phone.SocialNetwork.Add(new SocialFeed()
-            {
-                CatCode = GameRunner.Instance.Core.Player.Capture.CatCode,
-            });
+            GameRunner.Instance.Core.Player.Phone.SocialNetwork.Add(
+                GameRunner.Instance.Core.Player.Capture.CatCode
+            );
 
-            GameRunner.Instance.Core.Player.Phone.PhotoGallery.Add(new PhotoGalleryEntry()
-            {
-                CatCode = GameRunner.Instance.Core.Player.Capture.CatCode,
-            });
+            GameRunner.Instance.Core.Player.Phone.PhotoGallery.Add(new CatPhotoV001(
+                GameRunner.Instance.Core.Player.Capture.CatCode,
+                GameRunner.Instance.Core.Player.Capture.CatCode
+            ));
 
             var assetBundleName = $"{GameRunner.Instance.Core.Player.Capture.CatCode.ToLower()}snap";
             Debug.Log($">>cat_code<< {_catPhotoContainer == null}");
@@ -152,9 +152,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Capture
 
             DOVirtual.DelayedCall(8f, () =>
             {
+                GameRunner.Instance.Core.Player.Capture.Finish();
                 // GameRunner.Instance.Core.PlayerMenu.SetCurrentSiteActive();
-                GameRunner.Instance.Core.PlayerMenu.SetCurrentSiteNameActive();
-                GameRunner.Instance.Core.Player.SetMode(PlayerMode.Move);
             });
         }
 

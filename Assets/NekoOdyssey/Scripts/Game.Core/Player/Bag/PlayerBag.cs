@@ -36,6 +36,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
         public Subject<BagItemV001> OnSelectBagItem { get; } = new();
         public Subject<BagItemV001> OnUseBagItem { get; } = new();
         public Subject<Dictionary<BagItemV001, Vector3>> OnBagItemPositionsReady { get; } = new();
+        public Subject<Unit> OnSearchBag { get; } = new();
+        public Subject<Unit> OnEat { get; } = new();
 
         public void Bind()
         {
@@ -64,7 +66,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
         public void Unbind()
         {
         }
-
+        
         private void InitializeItems()
         {
             SetDefaultItemType();
@@ -84,7 +86,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
             var index = itemTypes.IndexOf(CurrentItemType);
             SetItemType(itemTypes[Math.Max(0, index - 1)]);
         }
-
+        
         private void HandleNextTab()
         {
             if (GameRunner.Instance.Core.Player.Mode != PlayerMode.OpenBag) return;
@@ -98,7 +100,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
             var masterItems = GameRunner.Instance.Core.MasterData.ItemsMasterData.Items.ToList();
             ICollection<BagItemV001> bagItems;
 
-            using (var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = false }))
+            using (var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = true }))
             {
                 var bagItemRepo = new BagItemV001Repo(dbContext);
                 bagItems = bagItemRepo.List();
@@ -148,22 +150,27 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
         public void UseBagItem()
         {
             //GameRunner.Instance.Core.Player.AddStamina(CurrentBagItem.Item.Stamina);
+            var bagItem = CurrentBagItem;
+            var itemType = bagItem.Item.Type;
+            if (itemType.Name == "Food")
+                OnEat.OnNext(default);
+            else
+                OnSearchBag.OnNext(default);
+
+            // GameRunner.Instance.Core.Player.AddStamina(CurrentBagItem.Item.Stamina);
+            
             OnUseBagItem.OnNext(CurrentBagItem);
 
             var index = FilteredBagItems.IndexOf(CurrentBagItem);
 
             if (!CurrentBagItem.Item.SingleUse) return;
 
-            bool reomveItemEnable = false;
-            if (reomveItemEnable)
+            BagItems.Remove(CurrentBagItem);
+            GameRunner.Instance.Core.Player.SaveDbWriter.Add(dbContext =>
             {
-                BagItems.Remove(CurrentBagItem);
-                using (var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = false }))
-                {
-                    var bagItemRepo = new BagItemV001Repo(dbContext);
-                    bagItemRepo.Remove(CurrentBagItem);
-                }
-            }
+                var bagItemRepo = new BagItemV001Repo(dbContext);
+                bagItemRepo.Remove(CurrentBagItem);
+            });
 
             index = Math.Min(FilteredBagItems.Count - 1, Math.Max(0, index - 1));
             // SelectBagItem(null);

@@ -2,6 +2,7 @@
 using NekoOdyssey.Scripts.Game.Core.Ais;
 using NekoOdyssey.Scripts.Game.Core.Areas;
 using NekoOdyssey.Scripts.Game.Core.Cat;
+using NekoOdyssey.Scripts.Game.Core.Simulators;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 using UnityEngine;
 
@@ -14,14 +15,15 @@ namespace NekoOdyssey.Scripts.Game.Core
         public MasterData.MasterData MasterData { get; } = new();
         public CatCollection Cats { get; } = new();
         public GameAis Ais { get; } = new();
+        public GameSimulators Simulators { get; } = new();
         public GameAreas Areas { get; } = new();
-        public Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu.PlayerMenu PlayerMenu { get; } = new();
+        public global::Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu.PlayerMenu PlayerMenu { get; } = new();
         public PlayerMenuCandidateManager PlayerMenuCandidateManager { get; } = new();
 
         public GameScene.GameScene GameScene { get; } = new();
 
-        public Routine.Routine Routine { get; } = new(); //**Linias Edit
-        public EndDay.EndDayController EndDay { get; } = new(); //**Linias Edit
+        public Routine.Routine Routine { get; } = new(); // Linias Edit
+        public EndDay.EndDayController EndDay { get; } = new(); // Linias Edit
 
         public void Bind()
         {
@@ -29,6 +31,7 @@ namespace NekoOdyssey.Scripts.Game.Core
             MasterData.Bind();
             Player.Bind();
             Ais.Bind();
+            Simulators.Bind();
             Areas.Bind();
             PlayerMenu.Bind();
             PlayerMenuCandidateManager.Bind();
@@ -44,6 +47,7 @@ namespace NekoOdyssey.Scripts.Game.Core
             MasterData.Start();
             Player.Start();
             Ais.Start();
+            Simulators.Start();
             Areas.Start();
             PlayerMenu.Start();
             PlayerMenuCandidateManager.Start();
@@ -59,6 +63,7 @@ namespace NekoOdyssey.Scripts.Game.Core
             MasterData.Unbind();
             Player.Unbind();
             Ais.Unbind();
+            Simulators.Unbind();
             Areas.Unbind();
             PlayerMenu.Unbind();
             PlayerMenuCandidateManager.Unbind();
