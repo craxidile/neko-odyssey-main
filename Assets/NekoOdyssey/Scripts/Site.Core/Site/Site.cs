@@ -40,7 +40,7 @@ namespace NekoOdyssey.Scripts.Site.Core.Site
         private void InitializeDatabase()
         {
             if (_databaseInitialized) return;
-            using (new SitesDbContext(new() { CopyMode = DbCopyMode.ForceCopy, ReadOnly = false }));
+            using (new SitesDbContext(new() { CopyMode = DbCopyMode.ForceCopy, ReadOnly = false })) ;
             _databaseInitialized = true;
         }
 
@@ -50,13 +50,14 @@ namespace NekoOdyssey.Scripts.Site.Core.Site
             // SetSite("Intro", false);
             // SetSite("GamePlayZone4_01", false);
             // SetSite("GamePlayZone4_02", false);
-            //SetSite("GamePlayZone4_03", false);
-           // SetSite("GamePlayZone5_02", false);
-            //SetSite("GamePlayZone6_01", false);
+            // SetSite("GamePlayZone4_03", false);
+            // SetSite("GamePlayZone5_02", false);
+            // SetSite("GamePlayZone6_01", false);
             // SetSite("GamePlayZone6_02", false);
-            //SetSite("GamePlayZone3_01", false);
-            SetSite("GamePlayZone3_02", false);
-           //SetSite("GamePlayZone9_02", false);
+            // SetSite("GamePlayZone3_01", false);
+            // SetSite("GamePlayZone3_02", false);
+            //SetSite("GamePlayZone9_02", false);
+            SetSite("DemoTitle", false);
         }
 
         public void MoveToNextSite()
@@ -94,7 +95,7 @@ namespace NekoOdyssey.Scripts.Site.Core.Site
 
             if (site == null) return;
             _currentSite = site;
-            
+
             if (!reload) return;
             OnChangeSite.OnNext(site);
         }
