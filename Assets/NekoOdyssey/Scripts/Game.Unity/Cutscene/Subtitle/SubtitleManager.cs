@@ -1,17 +1,10 @@
+using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogEntity.Models;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Playables;
 
-public enum languageTypeSubtitle
-{
-    TH,
-    EN,
-    JP,
-    S_CN,
-    T_CN,
-}
 public class SubtitleData
 {
     public string SubtitleSentance;
@@ -24,20 +17,19 @@ public class SubtitleData
 
 public class SubtitleManager : MonoBehaviour
 {
+    //languege 
     int languageColumnIndex = 1;
-
-    //languege  
-    public languageTypeSubtitle language = languageTypeSubtitle.EN;
-    public static languageTypeSubtitle globalLanguage = languageTypeSubtitle.EN;
+    public languageType language = languageType.EN;
+    public static languageType globalLanguage = LanguageManager.globalLanguage;
 
     public void UpdateGlobalLanguage()
     {
-        Debug.Log($"ChangeLanguage : {language} / {globalLanguage}");
-        //language = globalLanguage;
+        Debug.Log($"ChangeLanguage : {language} to {globalLanguage}");
+        language = globalLanguage;
     }
 
-
     [SerializeField] TextAsset SubtitleAsset;
+
     static Dictionary<string, SubtitleData> AllSubtitleData = new Dictionary<string, SubtitleData>();
 
     public static SubtitleData GetSubtitle(string lineIndexID)
@@ -64,9 +56,13 @@ public class SubtitleManager : MonoBehaviour
 
             string subtitle = row[languageColumnIndex];
             subtitle = subtitle.Replace(';', ',');
+            subtitle = subtitle.Replace('_', '\n');
             newSubtitleData.SubtitleSentance = subtitle;
 
-            AllSubtitleData.Add(row[0], newSubtitleData);
+            if (!AllSubtitleData.ContainsKey(row[0]))
+            {
+                AllSubtitleData.Add(row[0], newSubtitleData);
+            }
         }
 
     }

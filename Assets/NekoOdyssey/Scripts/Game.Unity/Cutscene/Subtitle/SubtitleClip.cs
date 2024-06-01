@@ -11,6 +11,7 @@ public class SubtitleClip : PlayableAsset
     {
         var playable = ScriptPlayable<SubtitleBehaviour>.Create(graph);
         SubtitleBehaviour subtitleBehaviour = playable.GetBehaviour();
+        lineIndexID = lineIndexID.Replace(" ", string.Empty);
         subtitleBehaviour.lineIndexID = lineIndexID;
 
         return playable;

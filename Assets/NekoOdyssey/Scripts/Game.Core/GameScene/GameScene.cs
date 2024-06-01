@@ -8,6 +8,7 @@ namespace NekoOdyssey.Scripts.Game.Core.GameScene
         private GameSceneMode _sceneMode;
 
         public Subject<GameSceneMode> OnChangeSceneMode { get; } = new();
+        public Subject<GameSceneMode> OnChangeSceneFinish { get; } = new();
         
         public void OpenScene()
         {

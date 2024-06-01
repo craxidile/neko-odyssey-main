@@ -29,8 +29,13 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Stamina
             GameRunner.Instance.Core.Player.Bag.OnUseBagItem
                 .Subscribe(HandleFoodItemUsage)
                 .AddTo(GameRunner.Instance);
+
             OnChangeStamina
                 .Subscribe(CheckStaminaDisable)
+                .AddTo(GameRunner.Instance);
+
+            GameRunner.Instance.TimeRoutine.OnChangeDay
+                .Subscribe(HandleChangeDay)
                 .AddTo(GameRunner.Instance);
         }
 
@@ -46,6 +51,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Stamina
 
         void UpdateStamina(int deltaTime)
         {
+            if (deltaTime < 0) return;
             if (!_isEnable) return;
             var timeRoutine = GameRunner.Instance.TimeRoutine;
             if (timeRoutine.currentTime <= _startDayTime) return;
@@ -98,5 +104,11 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Stamina
         //    OnStaminaOutFinish.OnNext(Unit.Default);
         //    GameRunner.Instance.Core.Player.SetMode(PlayerMode.Stop);
         //}
+
+        void HandleChangeDay(int dayTotal)
+        {
+            ResetStamina();
+            _isEnable = true;
+        }
     }
 }
