@@ -465,6 +465,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e8b1a798f242186478247b493e4b733e, type: 3}
+--- !u!4 &276874896 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8275277512307606376, guid: e8b1a798f242186478247b493e4b733e, type: 3}
+  m_PrefabInstance: {fileID: 276874895}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &297837880
 GameObject:
   m_ObjectHideFlags: 0
@@ -625,7 +630,7 @@ Transform:
   - {fileID: 1636558214}
   - {fileID: 92142294}
   - {fileID: 1068020472048162037}
-  - {fileID: 461628224}
+  - {fileID: 276874896}
   - {fileID: 996425463}
   - {fileID: 412536046}
   - {fileID: 1407048049}
@@ -805,11 +810,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!4 &461628224 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7893265918585697894, guid: e8b1a798f242186478247b493e4b733e, type: 3}
-  m_PrefabInstance: {fileID: 276874895}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &493386896
 GameObject:
   m_ObjectHideFlags: 0
@@ -1584,6 +1584,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   photoTransform: {fileID: 1087008996}
+  likeText: {fileID: 0}
 --- !u!1001 &1237204098
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6444,15 +6445,18 @@ MonoBehaviour:
   phoneUiList:
   - phoneApp: 0
     canvasGroup: {fileID: 4851502076386553821}
+    grid: {fileID: 0}
     gridCell: {fileID: 1087008995}
     scrollRect: {fileID: 6411198102504704002}
   - phoneApp: 1
     canvasGroup: {fileID: 4179569392563621832}
+    grid: {fileID: 0}
     gridCell: {fileID: 1237204100}
     scrollRect: {fileID: 6684866020350034454}
   openPositionTransform: {fileID: 2083859513222582609}
   closePositionTransform: {fileID: 7569624687835915805}
   phoneTransform: {fileID: 4020798362958072348}
+  likeCountText: {fileID: 0}
 --- !u!114 &6279961462499382015
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7074,8 +7078,7 @@ MonoBehaviour:
   isActive: 0
   topLeftLayoutGroup: {fileID: 6279961462499382015}
   topRightLayoutGroup: {fileID: 1754882842553717816}
-  foodImage:
-  - {fileID: 0}
+  foodImages: []
   socialLikeText: {fileID: 2254935992333085117}
   followerText: {fileID: 8587885939364319724}
   moneyText: {fileID: 5854603607224131825}

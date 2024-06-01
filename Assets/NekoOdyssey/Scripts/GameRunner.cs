@@ -112,7 +112,7 @@ namespace NekoOdyssey.Scripts
             Debug.Log($">>boundary<< name 01 {cameraBoundaryName}");
 
             if (!AssetMap.ContainsKey(cameraBoundaryName)) return null;
-            var boundaryGameObject = Instantiate(AssetMap[cameraBoundaryName]) as GameObject;
+            var boundaryGameObject = Instantiate(AssetMap[cameraBoundaryName], transform) as GameObject;
             Debug.Log($">>boundary<< name 02 {boundaryGameObject.name}");
 
             return boundaryGameObject == null ? null : boundaryGameObject;
@@ -130,11 +130,14 @@ namespace NekoOdyssey.Scripts
                 Debug.Log($">>boundary<< 02 {boundary?.GetComponent<BoxCollider>()}");
             }
 
+            Debug.Log($">>boundary<< 03 {Camera.main}");
 
             if (boundary != null && Camera.main != null)
             {
+                
                 var confiner = Camera.main.GetComponent<CinemachineConfiner>();
                 confiner.m_BoundingVolume = boundary.GetComponent<BoxCollider>();
+                Debug.Log($">>boundary<< 04 {confiner}");
             }
 
             var cameraAnchor = FindAnyObjectByType<CameraAnchor>();
