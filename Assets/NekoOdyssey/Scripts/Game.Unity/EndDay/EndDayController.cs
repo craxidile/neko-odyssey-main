@@ -176,12 +176,16 @@ namespace NekoOdyssey.Scripts.Game.Core.EndDay
         void LoadNewDay()
         {
             endDayStep = EndDayStep.None;
+            endDayMode = EndDayMode.None;
 
             var newDaySite = "GamePlayZone3_02";
             SiteRunner.Instance.Core.Site.SetSite(newDaySite);
 
             GameRunner.Instance.TimeRoutine.SetTime(AppConstants.Time.StartDayTime);
             GameRunner.Instance.TimeRoutine.NextDay();
+
+            GameRunner.Instance.TimeRoutine.ContinueTime();
+
         }
 
     }

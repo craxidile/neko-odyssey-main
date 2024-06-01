@@ -9,7 +9,8 @@ using UniRx;
 [System.Serializable]
 public class TimeScriptable : ScriptableObject
 {
-    public Day currentDay;
+    //public Day currentDay;
+    [Tooltip("1 is first day (monday)")] public int currentDayCount = 1;
     [Range(0, AppConstants.Time.MaxDayMinute)] public int dayMinute;
 
     [ReadOnlyField]

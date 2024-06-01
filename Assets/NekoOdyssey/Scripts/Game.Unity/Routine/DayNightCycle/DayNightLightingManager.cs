@@ -23,6 +23,10 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         public static DayNightDataProfile_Scriptable currentDayNightProfile;
 
         float _delayTime;
+
+        bool _initialized = false;
+        bool _enabled = true;
+
         // Start is called before the first frame update
         public void Start()
         {
@@ -33,20 +37,23 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
             _delayTime = 0.1f;
 
-            if (SiteRunner.Instance.Core.Site.Ready)
-            {
-                currentDayNightProfile = null;
-                CheckDayNightCondition();
-                return;
-            }
+            //if (SiteRunner.Instance.Core.Site.Ready)
+            //{
+            //    currentDayNightProfile = null;
+            //    CheckDayNightCondition();
+            //    return;
+            //}
 
-            SiteRunner.Instance.Core.Site.OnReady
-                .Subscribe(_ =>
-                {
-                    currentDayNightProfile = null;
-                    CheckDayNightCondition();
-                })
-                .AddTo(SiteRunner.Instance);
+            //SiteRunner.Instance.Core.Site.OnReady
+            //    .Subscribe(_ =>
+            //    {
+            //        currentDayNightProfile = null;
+            //        CheckDayNightCondition();
+            //    })
+            //    .AddTo(SiteRunner.Instance);
+
+
+
             //SiteRunner.Instance.Core.Site.OnChangeSite
             //    .Subscribe(_ =>
             //    {
@@ -54,6 +61,10 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             //        CheckDayNightCondition();
             //    })
             //    .AddTo(SiteRunner.Instance);
+
+            GameRunner.Instance.TimeRoutine.OnChangeDay
+                .Subscribe(_ => HandleChangeDay())
+                .AddTo(GameRunner.Instance);
         }
 
         // Update is called once per frame
@@ -61,11 +72,26 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         {
             if (Time.time < _delayTime) return;
 
+            if (!_initialized)
+            {
+                Initialized();
+                return;
+            }
+
+            if (!_enabled) return;
+
             CheckDayNightCondition();
         }
 
-        void CheckDayNightCondition()
+        void Initialized()
         {
+            _initialized = true;
+            //_delayTime = 0.2f;
+
+            currentDayNightProfile = null;
+            //CheckDayNightCondition();
+
+
             if (timeProfile == null)
             {
                 timeProfile = GameRunner.Instance.CsvHolder.timeProfile;
@@ -74,8 +100,50 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                     Debug.Log("time profile is Null");
                     return;
                 }
-                UnloadAll();
+                //UnloadAll();
             }
+
+            _enabled = false;
+            foreach (var dnData in timeProfile.dayNightDataProfiles)
+            {
+                var scene = SceneManager.GetSceneByName(dnData.sceneName);
+
+                if (scene.IsValid())
+                {
+                    SceneManager.UnloadSceneAsync(scene);
+                    _enabled = true;
+                }
+            }
+
+            if (!_enabled) return;
+
+            //foreach (var dnData in timeProfile.dayNightDataProfiles)
+            //{
+            //    if (GameRunner.Instance.TimeRoutine.currentTime.inBetweenTime(dnData.enableTime))
+            //    {
+            //        if (currentDayNightProfile != dnData)
+            //        {
+            //            Debug.Log("time profile #1");
+            //            UpdateDayNightProfile(dnData);
+            //            _delayTime = Time.time + 1f;
+            //        }
+            //        return;
+            //    }
+            //}
+        }
+
+        void CheckDayNightCondition()
+        {
+            //if (timeProfile == null)
+            //{
+            //    timeProfile = GameRunner.Instance.CsvHolder.timeProfile;
+            //    if (timeProfile == null)
+            //    {
+            //        Debug.Log("time profile is Null");
+            //        return;
+            //    }
+            //    UnloadAll();
+            //}
 
             foreach (var dnData in timeProfile.dayNightDataProfiles)
             {
@@ -92,18 +160,18 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             }
         }
 
-        void UnloadAll()
-        {
-            foreach (var dnData in timeProfile.dayNightDataProfiles)
-            {
-                var scene = SceneManager.GetSceneByName(dnData.sceneName);
+        //void UnloadAll()
+        //{
+        //    foreach (var dnData in timeProfile.dayNightDataProfiles)
+        //    {
+        //        var scene = SceneManager.GetSceneByName(dnData.sceneName);
 
-                if (scene.IsValid())
-                {
-                    SceneManager.UnloadSceneAsync(scene);
-                }
-            }
-        }
+        //        if (scene.IsValid())
+        //        {
+        //            SceneManager.UnloadSceneAsync(scene);
+        //        }
+        //    }
+        //}
 
         void UpdateDayNightProfile(DayNightDataProfile_Scriptable dnData)
         {
@@ -142,6 +210,11 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             };
 
 
+        }
+
+        void HandleChangeDay()
+        {
+            currentDayNightProfile = null;
         }
 
 
