@@ -4,11 +4,12 @@ using UnityEngine;
 using System;
 using UnityEngine.InputSystem;
 using NekoOdyssey.Scripts;
+using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 using UniRx;
 
 public class EventPointInteractive : MonoBehaviour
 {
-    public float interactiveDistance = 1;
+    private const float InteractiveDistance = 1;
 
     public static EventPointInteractive NearestPoint;
 
@@ -25,8 +26,8 @@ public class EventPointInteractive : MonoBehaviour
 
 
         GameRunner.Instance.PlayerInputHandler.OnFireTriggerred
-                .Subscribe(_ => CheckInput())
-                .AddTo(gameObject);
+            .Subscribe(_ => CheckInput())
+            .AddTo(gameObject);
     }
 
     // Update is called once per frame
@@ -40,7 +41,7 @@ public class EventPointInteractive : MonoBehaviour
         //Debug.DrawLine(this.transform.position, player.transform.position, Color.red);
         //Debug.DrawLine(NearestPoint.transform.position + (Vector3.up * 0.3f), player.transform.position, Color.yellow);
 
-        if (thisPointDistance <= interactiveDistance) //inside range
+        if (thisPointDistance <= InteractiveDistance) //inside range
         {
             if (NearestPoint == this)
             {
@@ -49,7 +50,6 @@ public class EventPointInteractive : MonoBehaviour
                 //    Debug.Log($"Pressed space on {name}");
                 //    OnInteractive?.Invoke();
                 //}
-
             }
             else
             {
@@ -59,9 +59,6 @@ public class EventPointInteractive : MonoBehaviour
                 {
                     NearestPoint = this;
                 }
-
-
-
             }
 
             _isActive = NearestPoint == this;
@@ -70,13 +67,16 @@ public class EventPointInteractive : MonoBehaviour
         {
             _isActive = false;
         }
-
-
-
     }
 
     private void CheckInput()
     {
+        Debug.Log($">>interactive<< {GameRunner.Instance.Core.Player.Mode}");
+        if (
+            GameRunner.Instance.Core.Player.Mode != PlayerMode.Move &&
+            GameRunner.Instance.Core.Player.Mode != PlayerMode.Conversation &&
+            GameRunner.Instance.Core.Player.Mode != PlayerMode.QuestConversation
+        ) return;
         if (_isActive)
         {
             Debug.Log($"Pressed interactive on {name}");
@@ -89,14 +89,13 @@ public class EventPointInteractive : MonoBehaviour
         //Gizmos.color = Color.yellow;
         //Gizmos.DrawWireSphere(transform.position, interactiveDistance);
 
-
         var gizColor = Color.yellow;
 
         gizColor.a = 0.5f;
         Gizmos.color = gizColor;
-        Gizmos.DrawWireSphere(transform.position, interactiveDistance);
+        Gizmos.DrawWireSphere(transform.position, InteractiveDistance);
         gizColor.a = 0.1f;
         Gizmos.color = gizColor;
-        Gizmos.DrawSphere(transform.position, interactiveDistance);
+        Gizmos.DrawSphere(transform.position, InteractiveDistance);
     }
 }

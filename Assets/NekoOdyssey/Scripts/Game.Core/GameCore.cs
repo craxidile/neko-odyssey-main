@@ -3,6 +3,7 @@ using NekoOdyssey.Scripts.Game.Core.Ais;
 using NekoOdyssey.Scripts.Game.Core.Areas;
 using NekoOdyssey.Scripts.Game.Core.Cat;
 using NekoOdyssey.Scripts.Game.Core.Simulators;
+using NekoOdyssey.Scripts.Game.Core.Uis;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 using UnityEngine;
 
@@ -15,6 +16,7 @@ namespace NekoOdyssey.Scripts.Game.Core
         public MasterData.MasterData MasterData { get; } = new();
         public CatCollection Cats { get; } = new();
         public GameAis Ais { get; } = new();
+        public GameUis Uis { get; } = new();
         public GameSimulators Simulators { get; } = new();
         public GameAreas Areas { get; } = new();
         public global::Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu.PlayerMenu PlayerMenu { get; } = new();
@@ -31,12 +33,12 @@ namespace NekoOdyssey.Scripts.Game.Core
             MasterData.Bind();
             Player.Bind();
             Ais.Bind();
+            Uis.Bind();
             Simulators.Bind();
             Areas.Bind();
             PlayerMenu.Bind();
             PlayerMenuCandidateManager.Bind();
             GameScene.Bind();
-
             Routine.Bind();
             EndDay.Bind();
         }
@@ -47,12 +49,12 @@ namespace NekoOdyssey.Scripts.Game.Core
             MasterData.Start();
             Player.Start();
             Ais.Start();
+            Uis.Start();
             Simulators.Start();
             Areas.Start();
             PlayerMenu.Start();
             PlayerMenuCandidateManager.Start();
             GameScene.Start();
-
             Routine.Start();
             EndDay.Start();
         }
@@ -63,6 +65,7 @@ namespace NekoOdyssey.Scripts.Game.Core
             MasterData.Unbind();
             Player.Unbind();
             Ais.Unbind();
+            Uis.Unbind();
             Simulators.Unbind();
             Areas.Unbind();
             PlayerMenu.Unbind();

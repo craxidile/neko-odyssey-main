@@ -13,6 +13,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Bag
     public class BagCanvasController : MonoBehaviour
     {
         private const float PositionTransitionDuration = .2f;
+        private const float AnimationDelay = .6f;
 
         private GameObject _lastSelectedObject;
         private bool _active;
@@ -60,7 +61,17 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Bag
                 var targetPosition = Vector3.Lerp(_startPosition, _endPosition, _positionTransitionTimeCount);
                 _positionTransitionTimeCount += Time.deltaTime / PositionTransitionDuration;
                 bagTransform.position = targetPosition;
-                _transitionActive = Vector3.Distance(targetPosition, _endPosition) >= 1f;
+                
+                var transitionActive = Vector3.Distance(targetPosition, _endPosition) >= 1f;
+                if (_transitionActive && !transitionActive)
+                {
+                    DOVirtual.DelayedCall(!_active ? AnimationDelay : 0, () =>
+                    {
+                        GameRunner.Instance.Core.Player.Bag.SetAnimating(false);
+                    });
+                }
+
+                _transitionActive = transitionActive;
                 _isOpen = _active && !_transitionActive;
                 _canvasGroup.alpha = !_active && !_transitionActive ? 0 : 1;
                 _canvasGroup.interactable = _isOpen;
@@ -82,13 +93,13 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Bag
 
             var scrollRectRectTransform = bagItemsScrollRect.GetComponent<RectTransform>();
             var itemHoverRectTransform = hoverFrame.GetComponent<RectTransform>();
-            
+
             var viewPortCorners = new Vector3[4];
             scrollRectRectTransform.GetWorldCorners(viewPortCorners);
-            
+
             var itemHoverCorners = new Vector3[4];
             itemHoverRectTransform.GetWorldCorners(itemHoverCorners);
-            
+
             if (itemHoverCorners[1].y > viewPortCorners[1].y)
             {
                 var contentPosition = bagItemsScrollRect.content.anchoredPosition;
@@ -117,7 +128,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Bag
                 GameRunner.Instance.Core.Player.Bag.SetDefaultItemType();
             }
 
-            DOVirtual.DelayedCall(_active ? .6f : 0, () =>
+            GameRunner.Instance.Core.Player.Bag.SetAnimating(true);
+            DOVirtual.DelayedCall(_active ? AnimationDelay : 0, () =>
             {
                 _canvasGroup = GetComponent<CanvasGroup>();
                 _transitionActive = true;

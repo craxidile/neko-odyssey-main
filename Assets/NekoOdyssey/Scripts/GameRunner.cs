@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
+using NekoOdyssey.Scripts.Constants;
 using NekoOdyssey.Scripts.Game.Core;
 using NekoOdyssey.Scripts.Game.Core.Routine;
 using NekoOdyssey.Scripts.Game.Unity.AssetBundles;
@@ -120,6 +121,9 @@ namespace NekoOdyssey.Scripts
 
         private void InitializePositions()
         {
+            var newGameText = Core.Uis.Localisation.Translate("New Game", Locale.En);
+            Debug.Log($">>new_game_text<< {newGameText}");
+            
             Debug.Log($">>boundary<< start");
             var boundary = FindAnyObjectByType<CameraBoundary>()?.gameObject;
             Debug.Log($">>boundary<< 01 {boundary?.GetComponent<BoxCollider>()}");
