@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using UnityEngine.InputSystem;
 using NekoOdyssey.Scripts;
+using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 using UniRx;
 
 public class EventPointInteractive : MonoBehaviour
@@ -25,8 +26,8 @@ public class EventPointInteractive : MonoBehaviour
 
 
         GameRunner.Instance.PlayerInputHandler.OnFireTriggerred
-                .Subscribe(_ => CheckInput())
-                .AddTo(gameObject);
+            .Subscribe(_ => CheckInput())
+            .AddTo(gameObject);
     }
 
     // Update is called once per frame
@@ -49,7 +50,6 @@ public class EventPointInteractive : MonoBehaviour
                 //    Debug.Log($"Pressed space on {name}");
                 //    OnInteractive?.Invoke();
                 //}
-
             }
             else
             {
@@ -59,9 +59,6 @@ public class EventPointInteractive : MonoBehaviour
                 {
                     NearestPoint = this;
                 }
-
-
-
             }
 
             _isActive = NearestPoint == this;
@@ -70,13 +67,16 @@ public class EventPointInteractive : MonoBehaviour
         {
             _isActive = false;
         }
-
-
-
     }
 
     private void CheckInput()
     {
+        Debug.Log($">>interactive<< {GameRunner.Instance.Core.Player.Mode}");
+        if (
+            GameRunner.Instance.Core.Player.Mode != PlayerMode.Move &&
+            GameRunner.Instance.Core.Player.Mode != PlayerMode.Conversation &&
+            GameRunner.Instance.Core.Player.Mode != PlayerMode.QuestConversation
+        ) return;
         if (_isActive)
         {
             Debug.Log($"Pressed interactive on {name}");

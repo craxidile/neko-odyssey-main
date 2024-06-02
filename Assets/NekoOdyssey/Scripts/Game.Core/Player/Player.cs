@@ -167,7 +167,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
         public void SetBagMode()
         {
             ResetPlayerSubmenu();
-            if (Mode != PlayerMode.Move && Mode != PlayerMode.OpenBag) return;
+            if ((Mode != PlayerMode.Move && Mode != PlayerMode.OpenBag) || Bag.Animating) return;
             Mode = Mode == PlayerMode.Move ? PlayerMode.OpenBag : PlayerMode.Stop;
             OnChangeMode.OnNext(Mode);
             // switch (Mode)
