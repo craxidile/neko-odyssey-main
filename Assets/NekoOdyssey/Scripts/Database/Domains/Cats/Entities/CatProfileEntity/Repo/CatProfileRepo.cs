@@ -15,7 +15,8 @@ namespace NekoOdyssey.Scripts.Database.Domains.Cats.Entities.CatProfileEntity.Re
 
         public ICollection<CatProfile> List()
         {
-            return _dbContext.Context.Table<CatProfile>()
+            return _dbContext.Context
+                .Table<CatProfile>()
                 .OrderBy(cp => cp.Code)
                 .ToList();
         }

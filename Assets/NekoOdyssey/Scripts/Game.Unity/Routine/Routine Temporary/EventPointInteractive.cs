@@ -9,7 +9,7 @@ using UniRx;
 
 public class EventPointInteractive : MonoBehaviour
 {
-    public float interactiveDistance = 1;
+    private const float InteractiveDistance = 1;
 
     public static EventPointInteractive NearestPoint;
 
@@ -41,7 +41,7 @@ public class EventPointInteractive : MonoBehaviour
         //Debug.DrawLine(this.transform.position, player.transform.position, Color.red);
         //Debug.DrawLine(NearestPoint.transform.position + (Vector3.up * 0.3f), player.transform.position, Color.yellow);
 
-        if (thisPointDistance <= interactiveDistance) //inside range
+        if (thisPointDistance <= InteractiveDistance) //inside range
         {
             if (NearestPoint == this)
             {
@@ -89,14 +89,13 @@ public class EventPointInteractive : MonoBehaviour
         //Gizmos.color = Color.yellow;
         //Gizmos.DrawWireSphere(transform.position, interactiveDistance);
 
-
         var gizColor = Color.yellow;
 
         gizColor.a = 0.5f;
         Gizmos.color = gizColor;
-        Gizmos.DrawWireSphere(transform.position, interactiveDistance);
+        Gizmos.DrawWireSphere(transform.position, InteractiveDistance);
         gizColor.a = 0.1f;
         Gizmos.color = gizColor;
-        Gizmos.DrawSphere(transform.position, interactiveDistance);
+        Gizmos.DrawSphere(transform.position, InteractiveDistance);
     }
 }
