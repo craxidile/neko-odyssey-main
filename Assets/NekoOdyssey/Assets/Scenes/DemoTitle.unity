@@ -2435,10 +2435,22 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
-  hoverImage: {fileID: 0}
+  hoverImage: {fileID: 1420238719}
   onHover:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1578425961}
+        m_TargetAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+        m_MethodName: set_enableVertexGradient
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &600620629
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5149,6 +5161,7 @@ GameObject:
   - component: {fileID: 1245677616}
   - component: {fileID: 1245677620}
   - component: {fileID: 1245677621}
+  - component: {fileID: 1245677622}
   m_Layer: 0
   m_Name: MainMenuRunner
   m_TagString: Untagged
@@ -5210,6 +5223,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _languagePreset: {fileID: 11400000, guid: eaf10f37fa2da654abc80033a67adf7e, type: 2}
+--- !u!114 &1245677622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1245677615}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 411895e585adec24594eb990ae21941e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1268864002
 GameObject:
   m_ObjectHideFlags: 0
@@ -6191,7 +6216,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_FirstSelected: {fileID: 242938924}
+  m_FirstSelected: {fileID: 0}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
 --- !u!4 &1351669713
