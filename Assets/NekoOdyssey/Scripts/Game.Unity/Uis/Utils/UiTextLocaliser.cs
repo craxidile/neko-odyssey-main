@@ -11,6 +11,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.Utils
     {
         private Text _text;
         private string _originalText;
+        private int _baseFontSize;
         
         private void Awake()
         {
@@ -20,6 +21,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.Utils
         private void Start()
         {
             _originalText = _text.text;
+            _baseFontSize = _text.fontSize;
             if (GameRunner.Instance.Core.Uis.Ready)
             {
                 HandleLocalisationReady(default);
@@ -43,8 +45,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.Utils
 
         private void HandleLocaleChange(Locale locale)
         {
-            Debug.Log($">>locale<< change {locale}");
             _text.text = GameRunner.Instance.Core.Uis.Localisation.Translate(_originalText, locale);
+            _text.fontSize = locale != Locale.Th ? _baseFontSize : (int)Math.Ceiling(_baseFontSize * 0.8f);
         }
     }
 }
