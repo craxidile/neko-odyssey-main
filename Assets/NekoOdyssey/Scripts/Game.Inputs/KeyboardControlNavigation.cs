@@ -55,7 +55,7 @@ public class KeyboardControlNavigation : MonoBehaviour
     void FocusButton() => FocusButton(false);
     void FocusButton(bool isFlexing = false)
     {
-        if (!InputControls.isKeyboardControlling || keyboardControlLayer.Last() != this) return;
+        //if (!InputControls.isKeyboardControlling || keyboardControlLayer.Last() != this) return;
 
         //if (SoundEffectManager.Instance != null) SoundEffectManager.Instance.MakeSoundCheckDelay(0.1f);
 

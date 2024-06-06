@@ -11,6 +11,7 @@ public class Button_keyboardAddition : MonoBehaviour
 
     float _inputValue;
     float _inputDelay = 0.2f;
+    Vector2 input;
 
     // Start is called before the first frame update
     void Start()
@@ -21,36 +22,36 @@ public class Button_keyboardAddition : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //if (EventSystem.current.currentSelectedGameObject == this.gameObject)
-        //{
-        //    _inputValue -= Time.deltaTime;
-        //    if (_inputValue > 0)
-        //    {
-        //        return;
-        //    }
+        if (EventSystem.current.currentSelectedGameObject == this.gameObject)
+        {
+            _inputValue -= Time.deltaTime;
+            if (_inputValue > 0)
+            {
+                return;
+            }
 
-        //    Vector2 input = InputControls.input.UI.Navigate.ReadValue<Vector2>();
+            input = InputControls.input.UI.Navigate.ReadValue<Vector2>();
 
-        //    if (input.x != 0)
-        //    {
-        //        _inputValue = _inputDelay;
+            if (input.x != 0)
+            {
+                _inputValue = _inputDelay;
 
-        //        if (slider != null)
-        //        {
-        //            slider.value += input.x * (slider.maxValue / 10);
-        //        }
-        //        if (leftButton != null && rightButton != null)
-        //        {
-        //            if (input.x > 0) // +1
-        //            {
-        //                rightButton.onClick?.Invoke();
-        //            }
-        //            if (input.x < 0) // -1
-        //            {
-        //                leftButton.onClick?.Invoke();
-        //            }
-        //        }
-        //    }
-        //}
+                if (slider != null)
+                {
+                    slider.value += input.x * (slider.maxValue / 10);
+                }
+                if (leftButton != null && rightButton != null)
+                {
+                    if (input.x > 0) // +1
+                    {
+                        rightButton.onClick?.Invoke();
+                    }
+                    if (input.x < 0) // -1
+                    {
+                        leftButton.onClick?.Invoke();
+                    }
+                }
+            }
+        }
     }
 }

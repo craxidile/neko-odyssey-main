@@ -34,7 +34,6 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
         public PlayerCapture Capture { get; } = new();
         public PlayerPetting Petting { get; } = new();
         public PlayerConversation Conversation { get; } = new();
-        public SaveV001DbWriter SaveDbWriter { get; } = new();
         public PlayerStamina Stamina { get; } = new(); // linias added
 
         // public int Stamina { get; private set; }
@@ -141,7 +140,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
 
         private void SavePlayerProperties()
         {
-            SaveDbWriter.Add(dbContext =>
+            GameRunner.Instance.Core.SaveDbWriter.Add(dbContext =>
             {
                 var playerPropertiesRepo = new PlayerPropertiesV001Repo(dbContext);
                 var playerProperties = playerPropertiesRepo.Load();
@@ -206,7 +205,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
 
         private void UpdateProperties(Action<PlayerPropertiesV001> action)
         {
-            SaveDbWriter.Add(dbContext =>
+            GameRunner.Instance.Core.SaveDbWriter.Add(dbContext =>
             {
                 var repo = new PlayerPropertiesV001Repo(dbContext);
                 var playerProperties = repo.Load();
@@ -275,7 +274,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
 
         public void AddAchievedQuest(string questCode)
         {
-            SaveDbWriter.Add(dbContext =>
+            GameRunner.Instance.Core.SaveDbWriter.Add(dbContext =>
             {
                 var repo = new PlayerQuestV001Repo(dbContext);
                 var playerQuest = repo.FindByQuestCode(questCode);
