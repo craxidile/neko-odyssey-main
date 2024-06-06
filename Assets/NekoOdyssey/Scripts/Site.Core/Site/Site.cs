@@ -48,16 +48,16 @@ namespace NekoOdyssey.Scripts.Site.Core.Site
         {
             if (CurrentSite != null) return;
             // SetSite("Intro", false);
-            // SetSite("GamePlayZone4_01", false);
+            //SetSite("GamePlayZone4_01", false);
             // SetSite("GamePlayZone4_02", false);
             // SetSite("GamePlayZone4_03", false);
             // SetSite("GamePlayZone5_02", false);
-            SetSite("GamePlayZone6_01", false);
-            // SetSite("GamePlayZone6_02", false);
+            // SetSite("GamePlayZone6_01", false);
+             // SetSite("GamePlayZone6_02", false);
             // SetSite("GamePlayZone3_01", false);
             // SetSite("GamePlayZone3_02", false);
             // SetSite("GamePlayZone9_02", false);
-            // SetSite("DemoTitle", false);
+            SetSite("DemoTitle", false);
         }
 
         public void MoveToNextSite()
