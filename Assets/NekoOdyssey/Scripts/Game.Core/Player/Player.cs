@@ -22,8 +22,6 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
 {
     public class Player
     {
-        private static bool _initialized;
-        
         public PlayerMode Mode { get; private set; } = PlayerMode.Move;
         public PlayerMode PreviousMode { get; private set; } = PlayerMode.Move;
         public bool Running { get; private set; } = false;
@@ -64,8 +62,6 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
 
         public void Bind()
         {
-            InitializeDatabase();
-
             Phone.Bind();
             Bag.Bind();
             Capture.Bind();
@@ -115,13 +111,6 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
             Capture.Unbind();
             Conversation.Unbind();
             Stamina.Unbind();
-        }
-
-        private void InitializeDatabase()
-        {
-            if (_initialized) return;
-            _initialized = true;
-            using (new SaveV001DbContext(new() { CopyMode = DbCopyMode.ForceCopy, ReadOnly = false })) ;
         }
 
         private PlayerPropertiesV001 LoadPlayerProperties()

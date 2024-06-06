@@ -69,8 +69,9 @@ namespace NekoOdyssey.Scripts.Game.Core.MasterData.Items
             }
         }
 
-        public string GetLocalisedItemName(Item item, Locale locale)
+        public string GetLocalisedItemName(Item item)
         {
+            var locale = GameRunner.Instance.Core.Settings.Locale;
             switch (locale)
             {
                 case Locale.Th:
@@ -88,8 +89,9 @@ namespace NekoOdyssey.Scripts.Game.Core.MasterData.Items
             }
         }
 
-        public string GetLocalisedItemDescription(Item item, Locale locale)
+        public string GetLocalisedItemDescription(Item item)
         {
+            var locale = GameRunner.Instance.Core.Settings.Locale;
             switch (locale)
             {
                 case Locale.Th:

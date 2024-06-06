@@ -53,8 +53,9 @@ namespace NekoOdyssey.Scripts.Game.Core.MasterData.Items
             }
         }
 
-        public string GetLocalisedCatName(CatProfile catProfile, Locale locale)
+        public string GetLocalisedCatName(CatProfile catProfile)
         {
+            var locale = GameRunner.Instance.Core.Settings.Locale;
             switch (locale)
             {
                 case Locale.Th:

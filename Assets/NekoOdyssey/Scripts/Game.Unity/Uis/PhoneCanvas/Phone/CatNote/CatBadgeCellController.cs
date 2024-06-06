@@ -47,11 +47,10 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone.CatNote
 
         private void SetCollected(bool collected)
         {
-            var locale = GameRunner.Instance.Core.Settings.Locale;
             _collected = collected;
             catNameText.text = !collected
                 ? $"???"
-                : GameRunner.Instance.Core.MasterData.CatsMasterData.GetLocalisedCatName(CatProfile, locale);
+                : GameRunner.Instance.Core.MasterData.CatsMasterData.GetLocalisedCatName(CatProfile);
             catSilhouetteImage.gameObject.SetActive(!collected);
 
             var mask = catBadgeImage.GetComponent<Mask>();
