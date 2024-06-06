@@ -8,6 +8,8 @@ using NekoOdyssey.Scripts.Game.Core.Settings;
 using NekoOdyssey.Scripts.Game.Core.Simulators;
 using NekoOdyssey.Scripts.Game.Core.Uis;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
+using NekoOdyssey.Scripts.Game.Unity.Inputs;
+using UniRx;
 using UnityEngine;
 
 namespace NekoOdyssey.Scripts.Game.Core
@@ -66,6 +68,10 @@ namespace NekoOdyssey.Scripts.Game.Core
             GameScene.Start();
             Routine.Start();
             EndDay.Start();
+
+            GameRunner.Instance.PlayerInputHandler.OnResetSaveTriggerred
+                .Subscribe(ResetSave)
+                .AddTo(GameRunner.Instance);
         }
 
         public void Unbind()
@@ -87,8 +93,13 @@ namespace NekoOdyssey.Scripts.Game.Core
 
         private void InitializeSaveDatabase()
         {
-            // using (new SaveV001DbContext(new() { CopyMode = DbCopyMode.ForceCopy, ReadOnly = false })) ;
             using (new SaveV001DbContext(new() { CopyMode = DbCopyMode.CopyIfNotExists, ReadOnly = false })) ;
+        }
+
+        private void ResetSave(Unit _)
+        {
+            Debug.Log($">>reset_save<<");
+            using (new SaveV001DbContext(new() { CopyMode = DbCopyMode.ForceCopy, ReadOnly = false })) ;
         }
     }
 }

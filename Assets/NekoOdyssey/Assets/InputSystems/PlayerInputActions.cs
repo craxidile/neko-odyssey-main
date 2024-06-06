@@ -143,6 +143,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ResetSave"",
+                    ""type"": ""Button"",
+                    ""id"": ""203c16b3-bb87-41a8-9244-9891ff184105"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -594,6 +603,28 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""PrevTab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""843f7a17-7ebc-43cb-ae89-77f30d8a7d24"",
+                    ""path"": ""<Keyboard>/#(9)"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ResetSave"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""884d0c7f-07c2-4a49-84df-0971c23c8d90"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ResetSave"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1592,6 +1623,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_Cancel = m_Player.FindAction("Cancel", throwIfNotFound: true);
         m_Player_PrevTab = m_Player.FindAction("PrevTab", throwIfNotFound: true);
         m_Player_NextTab = m_Player.FindAction("NextTab", throwIfNotFound: true);
+        m_Player_ResetSave = m_Player.FindAction("ResetSave", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1683,6 +1715,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Cancel;
     private readonly InputAction m_Player_PrevTab;
     private readonly InputAction m_Player_NextTab;
+    private readonly InputAction m_Player_ResetSave;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -1700,6 +1733,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @Cancel => m_Wrapper.m_Player_Cancel;
         public InputAction @PrevTab => m_Wrapper.m_Player_PrevTab;
         public InputAction @NextTab => m_Wrapper.m_Player_NextTab;
+        public InputAction @ResetSave => m_Wrapper.m_Player_ResetSave;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1748,6 +1782,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @NextTab.started += instance.OnNextTab;
             @NextTab.performed += instance.OnNextTab;
             @NextTab.canceled += instance.OnNextTab;
+            @ResetSave.started += instance.OnResetSave;
+            @ResetSave.performed += instance.OnResetSave;
+            @ResetSave.canceled += instance.OnResetSave;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1791,6 +1828,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @NextTab.started -= instance.OnNextTab;
             @NextTab.performed -= instance.OnNextTab;
             @NextTab.canceled -= instance.OnNextTab;
+            @ResetSave.started -= instance.OnResetSave;
+            @ResetSave.performed -= instance.OnResetSave;
+            @ResetSave.canceled -= instance.OnResetSave;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -2048,6 +2088,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnCancel(InputAction.CallbackContext context);
         void OnPrevTab(InputAction.CallbackContext context);
         void OnNextTab(InputAction.CallbackContext context);
+        void OnResetSave(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
