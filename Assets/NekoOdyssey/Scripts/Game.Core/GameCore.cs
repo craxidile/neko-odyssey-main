@@ -87,7 +87,8 @@ namespace NekoOdyssey.Scripts.Game.Core
 
         private void InitializeSaveDatabase()
         {
-            using (new SaveV001DbContext(new() { CopyMode = DbCopyMode.ForceCopy, ReadOnly = false })) ;
+            // using (new SaveV001DbContext(new() { CopyMode = DbCopyMode.ForceCopy, ReadOnly = false })) ;
+            using (new SaveV001DbContext(new() { CopyMode = DbCopyMode.CopyIfNotExists, ReadOnly = false })) ;
         }
     }
 }

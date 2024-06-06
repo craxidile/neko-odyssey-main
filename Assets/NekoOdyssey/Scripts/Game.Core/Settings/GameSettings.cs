@@ -14,6 +14,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Settings
         private GameSettingsV001 Settings { get; set; }
 
         public Locale Locale => Settings.Locale.ToEnum<Locale>();
+        public float MasterVolume => Settings.MasterVolume;
         public float BgmVolume => Settings.BgmVolume;
         public float EffectVolume => Settings.EffectVolume;
         public int WindowMode => Settings.WindowMode;
