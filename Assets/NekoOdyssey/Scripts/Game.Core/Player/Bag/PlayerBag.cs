@@ -174,7 +174,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
             if (!CurrentBagItem.Item.SingleUse) return;
 
             BagItems.Remove(CurrentBagItem);
-            GameRunner.Instance.Core.Player.SaveDbWriter.Add(dbContext =>
+            GameRunner.Instance.Core.SaveDbWriter.Add(dbContext =>
             {
                 var bagItemRepo = new BagItemV001Repo(dbContext);
                 bagItemRepo.Remove(CurrentBagItem);

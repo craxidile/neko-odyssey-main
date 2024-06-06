@@ -22,8 +22,6 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
 {
     public class Player
     {
-        private static bool _initialized;
-        
         public PlayerMode Mode { get; private set; } = PlayerMode.Move;
         public PlayerMode PreviousMode { get; private set; } = PlayerMode.Move;
         public bool Running { get; private set; } = false;
@@ -34,7 +32,6 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
         public PlayerCapture Capture { get; } = new();
         public PlayerPetting Petting { get; } = new();
         public PlayerConversation Conversation { get; } = new();
-        public SaveV001DbWriter SaveDbWriter { get; } = new();
         public PlayerStamina Stamina { get; } = new(); // linias added
 
         // public int Stamina { get; private set; }
@@ -65,8 +62,6 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
 
         public void Bind()
         {
-            InitializeDatabase();
-
             Phone.Bind();
             Bag.Bind();
             Capture.Bind();
@@ -118,13 +113,6 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
             Stamina.Unbind();
         }
 
-        private void InitializeDatabase()
-        {
-            if (_initialized) return;
-            _initialized = true;
-            using (new SaveV001DbContext(new() { CopyMode = DbCopyMode.ForceCopy, ReadOnly = false })) ;
-        }
-
         private PlayerPropertiesV001 LoadPlayerProperties()
         {
             PlayerPropertiesV001 playerProperties;
@@ -141,7 +129,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
 
         private void SavePlayerProperties()
         {
-            SaveDbWriter.Add(dbContext =>
+            GameRunner.Instance.Core.SaveDbWriter.Add(dbContext =>
             {
                 var playerPropertiesRepo = new PlayerPropertiesV001Repo(dbContext);
                 var playerProperties = playerPropertiesRepo.Load();
@@ -206,7 +194,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
 
         private void UpdateProperties(Action<PlayerPropertiesV001> action)
         {
-            SaveDbWriter.Add(dbContext =>
+            GameRunner.Instance.Core.SaveDbWriter.Add(dbContext =>
             {
                 var repo = new PlayerPropertiesV001Repo(dbContext);
                 var playerProperties = repo.Load();
@@ -275,7 +263,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
 
         public void AddAchievedQuest(string questCode)
         {
-            SaveDbWriter.Add(dbContext =>
+            GameRunner.Instance.Core.SaveDbWriter.Add(dbContext =>
             {
                 var repo = new PlayerQuestV001Repo(dbContext);
                 var playerQuest = repo.FindByQuestCode(questCode);

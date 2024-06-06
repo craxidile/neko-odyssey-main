@@ -54,7 +54,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Simulators.SocialNetwork
             if (template == null) return;
 
             SocialPostV001 socialPost = null;
-            GameRunner.Instance.Core.Player.SaveDbWriter.Add(dbContext =>
+            GameRunner.Instance.Core.SaveDbWriter.Add(dbContext =>
             {
                 var catPhotoRepo = new CatPhotoV001Repo(dbContext);
                 var catPhoto = catPhotoRepo.FindByAssetBundleName(assetBundleName);

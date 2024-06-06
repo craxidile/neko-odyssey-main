@@ -50,7 +50,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Phone.Apps
         public void Add(string catCode)
         {
             var catPhoto = new CatPhotoV001(catCode, catCode);
-            GameRunner.Instance.Core.Player.SaveDbWriter.Add(dbContext =>
+            GameRunner.Instance.Core.SaveDbWriter.Add(dbContext =>
             {
                 var catPhotoRepo = new CatPhotoV001Repo(dbContext);
                 var dbCatPhoto = catPhotoRepo.FindByAssetBundleName(catCode);

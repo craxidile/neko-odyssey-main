@@ -27,6 +27,9 @@ namespace NekoOdyssey.Scripts.Game.Unity.Inputs
 
         public IObservable<Unit> OnBagTriggerred => this.UpdateAsObservable()
             .Where(_ => InputActions.Player.Bag.triggered);
+        
+        public IObservable<Unit> OnResetSaveTriggerred => this.UpdateAsObservable()
+            .Where(_ => InputActions.Player.ResetSave.triggered);
 
         public IObservable<Unit> OnPrevMenuTriggerred => this.UpdateAsObservable()
             .Where(_ => InputActions.Player.PrevMenu.triggered);
