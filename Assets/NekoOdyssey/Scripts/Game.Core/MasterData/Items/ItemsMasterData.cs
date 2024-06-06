@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using NekoOdyssey.Scripts.Constants;
 using NekoOdyssey.Scripts.Database.Domains;
 using NekoOdyssey.Scripts.Database.Domains.Items;
 using NekoOdyssey.Scripts.Database.Domains.Items.Entities.ItemEntity.Models;
@@ -60,10 +61,49 @@ namespace NekoOdyssey.Scripts.Game.Core.MasterData.Items
             {
                 Debug.Log($">>item_type<< {itemType.Code} {itemType.NormalIcon} {itemType.ActiveIcon}");
             }
+
             Debug.Log(">>items<<");
             foreach (var item in Items)
             {
                 Debug.Log($">>item<< {item.Code} {item.Type.Code}");
+            }
+        }
+
+        public string GetLocalisedItemName(Item item, Locale locale)
+        {
+            switch (locale)
+            {
+                case Locale.Th:
+                    return item.NameTh;
+                case Locale.En:
+                    return item.NameEn;
+                case Locale.ZhCn:
+                    return item.NameZhCn;
+                case Locale.ZhTw:
+                    return item.NameZhTw;
+                case Locale.Ja:
+                    return item.NameJa;
+                default:
+                    return null;
+            }
+        }
+
+        public string GetLocalisedItemDescription(Item item, Locale locale)
+        {
+            switch (locale)
+            {
+                case Locale.Th:
+                    return item.DescriptionTh;
+                case Locale.En:
+                    return item.DescriptionEn;
+                case Locale.ZhCn:
+                    return item.DescriptionZhCn;
+                case Locale.ZhTw:
+                    return item.DescriptionZhTw;
+                case Locale.Ja:
+                    return item.DescriptionJa;
+                default:
+                    return null;
             }
         }
     }
