@@ -53,6 +53,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Phone.Apps
                 repo.Add(photo);
             });
             LoadPhotos();
+            GameRunner.Instance.Core.Simulators.SocialNetworkSimulator.Add(photo.CatCode);
         }
     }
 }

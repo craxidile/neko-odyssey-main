@@ -67,7 +67,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
             
             HandleTimeChange();
 
-            socialLikeText.text = "0";
+            socialLikeText.text = $"{GameRunner.Instance.Core.Player.LikeCount}";
             followerText.text = followerCount.ToString("N0");
             moneyText.text = moneyCount.ToString("N0");
 

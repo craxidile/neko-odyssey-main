@@ -43,8 +43,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Phone.Apps
                 var socialPostRepo = new SocialPostV001Repo(dbContext);
                 Posts = new List<SocialPostV001>(socialPostRepo.List());
             }
-
             OnChangeFeeds.OnNext(Posts);
+            GameRunner.Instance.Core.Player.UpdateTotalLikeCount();
         }
 
         public void Add(string catCode)
