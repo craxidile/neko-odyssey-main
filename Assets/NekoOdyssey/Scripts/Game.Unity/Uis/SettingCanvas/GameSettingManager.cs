@@ -26,7 +26,7 @@ public class GameSettingManager : MonoBehaviour, IStackPanel
     [SerializeField] Button _resolutionLeftButton, _resolutionRightButton;
     [SerializeField] TextMeshProUGUI _resolutionText;
     [SerializeField] Button _fullscreenLeftButton, _fullscreenRightButton;
-    [SerializeField] TextMeshProUGUI _fullscreenText;
+    [SerializeField] Text _fullscreenText;
 
     [SerializeField] ConfirmPopUpPanel changingLanguageConfirmPopUpPanel;
 
