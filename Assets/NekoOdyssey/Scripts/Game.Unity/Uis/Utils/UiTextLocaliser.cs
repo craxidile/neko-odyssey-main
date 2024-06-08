@@ -12,6 +12,12 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.Utils
         private Text _text;
         private string _originalText;
         private int _baseFontSize;
+
+        public string OriginalText
+        {
+            get => _originalText;
+            set => SetOriginalText(value);
+        }
         
         private void Awake()
         {
@@ -47,6 +53,12 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.Utils
         {
             _text.text = GameRunner.Instance.Core.Uis.Localisation.Translate(_originalText, locale);
             _text.fontSize = locale != Locale.Th ? _baseFontSize : (int)Math.Ceiling(_baseFontSize * 0.8f);
+        }
+
+        private void SetOriginalText(string text)
+        {
+            _originalText = text;
+            HandleLocaleChange(GameRunner.Instance.Core.Settings.Locale);
         }
     }
 }
