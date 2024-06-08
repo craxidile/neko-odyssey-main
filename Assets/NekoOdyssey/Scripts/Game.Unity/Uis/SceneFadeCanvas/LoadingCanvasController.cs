@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UniRx;
 using NekoOdyssey.Scripts.Game.Core.GameScene;
+using NekoOdyssey.Scripts.Game.Core.EndDay;
 
 public class LoadingCanvasController : MonoBehaviour
 {
@@ -30,14 +31,25 @@ public class LoadingCanvasController : MonoBehaviour
     {
         _loadingStarterText = loadingText.text;
 
-        GameRunner.Instance.Core.GameScene.OnChangeSceneMode
-                .Subscribe(OnChangeScene)
+        //GameRunner.Instance.Core.GameScene.OnChangeSceneMode
+        //        .Subscribe(OnChangeScene)
+        //        .AddTo(this);
+        //GameRunner.Instance.Core.GameScene.OnChangeSceneFinish
+        //       .Subscribe(OnChangeSceneFinish)
+        //       .AddTo(this);
+
+        SiteRunner.Instance.Core.Site.OnChangeSite
+                .Subscribe(_ =>
+                {
+                    Show();
+                })
                 .AddTo(this);
-        GameRunner.Instance.Core.GameScene.OnChangeSceneFinish
-               .Subscribe(OnChangeSceneFinish)
-               .AddTo(this);
+
+
+        Hide();
 
         gameObject.SetActive(false);
+        //CheckForRemain();
     }
 
     // Update is called once per frame
@@ -88,6 +100,8 @@ public class LoadingCanvasController : MonoBehaviour
 
     void OnChangeScene(GameSceneMode gameSceneMode)
     {
+        if (EndDayController.endDayMode == EndDayMode.None) return;
+
         Debug.Log($"OnChangeScene {gameSceneMode}");
         if (gameSceneMode == GameSceneMode.Opening)
         {
@@ -101,5 +115,9 @@ public class LoadingCanvasController : MonoBehaviour
         {
             Show();
         }
+    }
+    void CheckForRemain()
+    {
+
     }
 }

@@ -13,6 +13,7 @@ public class PauseCanvasController : MonoBehaviour
     [SerializeField] ButtonHover resumeButton, titleButton, settingButton;
 
     bool _isShowed;
+    float _nextInputTime;
 
     private void Awake()
     {
@@ -23,6 +24,10 @@ public class PauseCanvasController : MonoBehaviour
     {
         GameRunner.Instance.PlayerInputHandler.OnPauseGameTriggerred
                 .Subscribe(_ => PauseGameTriggered())
+                .AddTo(this);
+
+        GameRunner.Instance.Core.Player.OnChangeMode
+                .Subscribe(_ => DelayInput())
                 .AddTo(this);
 
 
@@ -44,6 +49,11 @@ public class PauseCanvasController : MonoBehaviour
 
     void PauseGameTriggered()
     {
+        if (Time.time < _nextInputTime) return;
+        if (GameRunner.Instance.Core.Player.Mode != NekoOdyssey.Scripts.Game.Unity.Game.Core.PlayerMode.Move) return;
+
+
+
         if (!_isShowed)
         {
             ShowPanel();
@@ -52,6 +62,10 @@ public class PauseCanvasController : MonoBehaviour
         {
             ClosePanel();
         }
+    }
+    void DelayInput()
+    {
+        _nextInputTime = Time.time + 0.1f;
     }
 
     void ShowPanel()

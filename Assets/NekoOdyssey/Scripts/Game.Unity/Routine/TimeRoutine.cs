@@ -207,7 +207,6 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             ProcessTime();
 
 
-
             //SetTime($"{dayMinute / 60}:{dayMinute % 60}");
 
 
