@@ -27,12 +27,14 @@ namespace NekoOdyssey.Scripts.Game.Core
         public GameAreas Areas { get; } = new();
         public global::Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu.PlayerMenu PlayerMenu { get; } = new();
         public PlayerMenuCandidateManager PlayerMenuCandidateManager { get; } = new();
-
-        public GameScene.GameScene GameScene { get; } = new();
-        public SaveV001DbWriter SaveDbWriter { get; } = new();
-
         public Routine.Routine Routine { get; } = new(); // Linias Edit
         public EndDay.EndDayController EndDay { get; } = new(); // Linias Edit
+        public GameScene.GameScene GameScene { get; } = new();
+        public SaveV001DbWriter SaveDbWriter { get; } = new();
+        
+        public bool SaveReady { get; private set; }
+
+        public Subject<Unit> OnSaveReady { get; } = new();
 
         public void Bind()
         {
@@ -94,6 +96,8 @@ namespace NekoOdyssey.Scripts.Game.Core
         private void InitializeSaveDatabase()
         {
             using (new SaveV001DbContext(new() { CopyMode = DbCopyMode.CopyIfNotExists, ReadOnly = false })) ;
+            SaveReady = true;
+            OnSaveReady.OnNext(default);
         }
 
         private void ResetSave(Unit _)

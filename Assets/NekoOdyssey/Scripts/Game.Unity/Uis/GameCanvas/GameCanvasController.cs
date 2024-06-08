@@ -74,7 +74,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
             HandleTimeChange();
 
             socialLikeText.text = $"{GameRunner.Instance.Core.Player.LikeCount}";
-            followerText.text = followerCount.ToString("N0");
+            followerText.text = $"{GameRunner.Instance.Core.Player.FollowerCount}";
             moneyText.text = moneyCount.ToString("N0");
 
             socialNotificationCanvasGroup.alpha = socialNotificationCount == 0 ? 0 : 1;
