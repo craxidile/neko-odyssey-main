@@ -56,6 +56,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
 
         private void Start()
         {
+            Debug.Log($">>test<< {GameRunner.Instance.Core}");
             GameRunner.Instance.Core.PlayerMenu.OnChangeAction
                 .Subscribe(TriggerCurrentAction)
                 .AddTo(this);

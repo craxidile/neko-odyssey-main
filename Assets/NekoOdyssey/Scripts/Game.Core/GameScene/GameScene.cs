@@ -28,7 +28,7 @@ namespace NekoOdyssey.Scripts.Game.Core.GameScene
 
         public void Start()
         {
-            DOVirtual.DelayedCall(1, OpenScene);
+            DOVirtual.DelayedCall(1f, OpenScene , false);
         }
 
         public void Unbind()

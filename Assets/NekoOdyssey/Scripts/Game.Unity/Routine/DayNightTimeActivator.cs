@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UniRx;
 
 namespace NekoOdyssey.Scripts.Game.Core.Routine
 {
@@ -22,6 +23,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         private void Start()
         {
             DayNightTimeActivators.Add(this);
+
             CheckActivation();
         }
         private void OnDestroy()
@@ -32,6 +34,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         void CheckActivation()
         {
             if (Time.time < _delayTime) return;
+            if (GameRunner.Instance == null || GameRunner.Instance.TimeRoutine == null) return;
 
             if (GameRunner.Instance.TimeRoutine.inBetweenDayAndTime(enableDays, enableTime))
             {
