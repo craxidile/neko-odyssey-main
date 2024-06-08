@@ -108,13 +108,17 @@ namespace NekoOdyssey.Scripts.Game.Core.Simulators.SocialNetwork
                 if (post == null) continue;
 
                 post.LikeCount += likeCount;
+                GameRunner.Instance.Core.SaveDbWriter.Add(dbContext =>
+                {
+                    var repo = new SocialPostV001Repo(dbContext);
+                    repo.Update(post);
+                });
+                
                 Debug.Log($">>like_count<< {post.LikeCount}");
                 GameRunner.Instance.Core.Player.Phone.SocialNetwork.RefreshPost(post);
             }
 
-            var totalLikeCount = posts.Sum(p => p.LikeCount);
-            GameRunner.Instance.Core.Player.SetLikeCount(totalLikeCount);
-            
+            GameRunner.Instance.Core.Player.UpdateTotalLikeCount();
             FutureLikes.RemoveAll(fl => futureLikesToRemove.Contains(fl));
         }
     }

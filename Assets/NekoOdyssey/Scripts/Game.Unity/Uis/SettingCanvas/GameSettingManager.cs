@@ -12,6 +12,7 @@ using DataPersistence;
 using NekoOdyssey.Scripts;
 using NekoOdyssey.Scripts.Constants;
 using NekoOdyssey.Scripts.Extensions;
+using NekoOdyssey.Scripts.Game.Unity.Uis.Utils;
 using UnityEngine.SceneManagement;
 
 public class GameSettingManager : MonoBehaviour, IStackPanel
@@ -20,11 +21,12 @@ public class GameSettingManager : MonoBehaviour, IStackPanel
     [SerializeField] Button _backButton;
     [SerializeField] Button _resetSettingButton, _saveSettingButton;
     [SerializeField] Button _languageLeftButton, _languageRightButton;
-    [SerializeField] Image _languageNameImage;
+    // [SerializeField] Image _languageNameImage;
+    [SerializeField] Image _localeText;
     [SerializeField] AudioMixer _audioMixer;
     [SerializeField] Slider _masterVolumeSlider, _bgmVolumeSlider, _effectVolumeSlider;
     [SerializeField] Button _resolutionLeftButton, _resolutionRightButton;
-    [SerializeField] TextMeshProUGUI _resolutionText;
+    [SerializeField] Text _resolutionText;
     [SerializeField] Button _fullscreenLeftButton, _fullscreenRightButton;
     [SerializeField] Text _fullscreenText;
 
@@ -159,11 +161,13 @@ public class GameSettingManager : MonoBehaviour, IStackPanel
         _resolutionText.text = $"{Screen.width}x{Screen.height}";
 
         var fullscreenModeText = Screen.fullScreen ? "Fullscreen" : "Windowed";
-        //_fullscreenText.text = Screen.fullScreen ? "Fullscreen" : "Windowed";
-        _fullscreenText.text = LoadUiLanguageFromCSV.GetUiLanguageText(fullscreenModeText);
+        // _fullscreenText.text = Screen.fullScreen ? "Fullscreen" : "Windowed";
+        // _fullscreenText.text = LoadUiLanguageFromCSV.GetUiLanguageText(fullscreenModeText);
+        var fullscreenTextLocaliser = _fullscreenText.GetComponent<UiTextLocaliser>();
+        if (fullscreenTextLocaliser != null) fullscreenTextLocaliser.OriginalText = fullscreenModeText;
 
-        var fullscreenTextMultiLanguageUi = _fullscreenText.GetComponent<UI_MultipleLanguage>();
-        fullscreenTextMultiLanguageUi.OverideInitialText(fullscreenModeText);
+        // var fullscreenTextMultiLanguageUi = _fullscreenText.GetComponent<UI_MultipleLanguage>();
+        // fullscreenTextMultiLanguageUi.OverideInitialText(fullscreenModeText);
     }
 
     public void SaveSetting(bool askingConfirm)
@@ -222,8 +226,8 @@ public class GameSettingManager : MonoBehaviour, IStackPanel
             LanguageManager.globalLanguage = language;
 
             FindFirstObjectByType<LoadUiLanguageFromCSV>().ReloadUiLanguage();
-            _languageNameImage.sprite = LanguagePresetProvider.Instance.GetLanguageComponent().languageNameImage;
-            _languageNameImage.SetNativeSize();
+            // _languageNameImage.sprite = LanguagePresetProvider.Instance.GetLanguageComponent().languageNameImage;
+            // _languageNameImage.SetNativeSize();
 
             var locale = Locale.None;
             switch (language.ToText())
@@ -244,7 +248,7 @@ public class GameSettingManager : MonoBehaviour, IStackPanel
                     locale = Locale.En;
                     break;
             }
-
+            
             GameRunner.Instance.Core.Settings.SetLocale(locale);
         }
 
@@ -297,12 +301,17 @@ public class GameSettingManager : MonoBehaviour, IStackPanel
         WindowMode = (WindowMode + value) % 2;
         Screen.fullScreen = WindowMode == 0;
 
-        string textOption = WindowMode == 0 ? "Fullscreen" : "Windowed";
+        var textOption = WindowMode == 0 ? "Fullscreen" : "Windowed";
+        Debug.Log($">>text_option<< {textOption}");
         //_fullscreenText.text = WindowMode == 0 ? "Fullscreen" : "Windowed";
-        _fullscreenText.text = LoadUiLanguageFromCSV.GetUiLanguageText(textOption);
+        // _fullscreenText.text = LoadUiLanguageFromCSV.GetUiLanguageText(textOption);
+        var localiser = _fullscreenText.GetComponent<UiTextLocaliser>();
+        if (localiser == null) return;
+        Debug.Log($">>text_option<< {textOption} {GameRunner.Instance.Core.Uis.Localisation.TranslateCurrent(textOption)}");
+        localiser.OriginalText = textOption;
 
-        var fullscreenTextMultiLanguageUi = _fullscreenText.GetComponent<UI_MultipleLanguage>();
-        fullscreenTextMultiLanguageUi.OverideInitialText(textOption);
+        // var fullscreenTextMultiLanguageUi = _fullscreenText.GetComponent<UI_MultipleLanguage>();
+        // fullscreenTextMultiLanguageUi.OverideInitialText(textOption);
     }
 
     void UpdateMultilanguageUi()

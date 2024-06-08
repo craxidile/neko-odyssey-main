@@ -19,6 +19,11 @@ namespace NekoOdyssey.Scripts.Game.Core.Uis.Localisation
         {
         }
 
+        public string TranslateCurrent(string original)
+        {
+            return Translate(original, GameRunner.Instance.Core.Settings.Locale);
+        }
+
         public string Translate(string original, Locale locale)
         {
             using (var dbContext = new UiDbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = true }))

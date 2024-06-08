@@ -76,7 +76,6 @@ namespace NekoOdyssey.Scripts
             AssetBundleUtils.OnReady(InitializePositions);
 
             StartCoroutine(IUpdate());
-            TestNetworkSimulator();
         }
 
         private void OnDestroy()
@@ -110,38 +109,26 @@ namespace NekoOdyssey.Scripts
 
             if (cameraBoundaryName == null) return null;
             cameraBoundaryName = cameraBoundaryName.ToLower();
-            Debug.Log($">>boundary<< name 01 {cameraBoundaryName}");
 
             if (!AssetMap.ContainsKey(cameraBoundaryName)) return null;
             var boundaryGameObject = Instantiate(AssetMap[cameraBoundaryName], transform) as GameObject;
-            Debug.Log($">>boundary<< name 02 {boundaryGameObject.name}");
 
             return boundaryGameObject == null ? null : boundaryGameObject;
         }
 
         private void InitializePositions()
         {
-            var newGameText = Core.Uis.Localisation.Translate("New Game", Locale.En);
-            Debug.Log($">>new_game_text<< {newGameText}");
-            
-            Debug.Log($">>boundary<< start");
             var boundary = FindAnyObjectByType<CameraBoundary>()?.gameObject;
-            Debug.Log($">>boundary<< 01 {boundary?.GetComponent<BoxCollider>()}");
             if (boundary == null)
             {
                 var currentSite = SiteRunner.Instance.Core.Site.CurrentSite;
                 boundary = LoadCameraBoundaryFromSite(currentSite);
-                Debug.Log($">>boundary<< 02 {boundary?.GetComponent<BoxCollider>()}");
             }
-
-            Debug.Log($">>boundary<< 03 {Camera.main}");
 
             if (boundary != null && Camera.main != null)
             {
-                
                 var confiner = Camera.main.GetComponent<CinemachineConfiner>();
                 confiner.m_BoundingVolume = boundary.GetComponent<BoxCollider>();
-                Debug.Log($">>boundary<< 04 {confiner}");
             }
 
             var cameraAnchor = FindAnyObjectByType<CameraAnchor>();
@@ -149,12 +136,6 @@ namespace NekoOdyssey.Scripts
             {
                 Camera.main.transform.position = cameraAnchor.transform.position;
             }
-        }
-
-        private void TestNetworkSimulator()
-        {
-            // Core.Simulators.SocialNetworkSimulator.Start(1, AppConstants.RapidExpCdfLambda);
-            Core.Simulators.SocialNetworkSimulator.Add("A02");
         }
     }
 }

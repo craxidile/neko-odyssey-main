@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NekoOdyssey.Scripts.Constants;
 using NekoOdyssey.Scripts.Database.Domains;
 using NekoOdyssey.Scripts.Database.Domains.SaveV001;
@@ -12,6 +13,7 @@ using NekoOdyssey.Scripts.Game.Core.Player.Capture;
 using NekoOdyssey.Scripts.Game.Core.Player.Conversation;
 using NekoOdyssey.Scripts.Game.Core.Player.Petting;
 using NekoOdyssey.Scripts.Game.Core.Player.Phone;
+using NekoOdyssey.Scripts.Game.Core.Player.Phone.Apps;
 using NekoOdyssey.Scripts.Game.Core.Player.Stamina;
 using NekoOdyssey.Scripts.Game.Unity;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
@@ -97,7 +99,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
             Bag.Start();
             Capture.Start();
             Conversation.Start();
-            
+
             Stamina.Start();
             Stamina.OnChangeStamina
                 .Subscribe(_ => SavePlayerProperties())
@@ -280,6 +282,11 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
                 return repo.FindByQuestCode(questCode) != null;
             }
         }
-        
+
+        public void UpdateTotalLikeCount()
+        {
+            var totalLikeCount = Phone.SocialNetwork.Posts.Sum(p => p.LikeCount);
+            SetLikeCount(totalLikeCount);
+        }
     }
 }
