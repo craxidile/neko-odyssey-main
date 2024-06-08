@@ -77,6 +77,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             //UpdateWorld();
 
             dayNightLightingManager.Start();
+
         }
 
         public void Unbind()
@@ -471,6 +472,11 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             }
         }
 
+
+        void PlayerInputIndle()
+        {
+
+        }
 
         public void ConversationHandle(QuestEventDetail questEventDetail)
         {

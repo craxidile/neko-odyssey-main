@@ -13,7 +13,7 @@ namespace NekoOdyssey.Scripts.Site.Unity.Transition
                 .Subscribe(_ =>
                 {
                     Debug.Log($">>reload<<");
-                    SceneManager.LoadScene("SceneLoader");
+                    SceneManager.LoadSceneAsync("SceneLoader");
                 })
                 .AddTo(this);
         }

@@ -54,7 +54,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Conversations
                 if (mode != PlayerMode.Conversation && _dialogCanvas != null)
                     Destroy(_dialogCanvas);
 
-            });
+            }).AddTo(GameRunner.Instance);
         }
 
         public void OnDestroy()

@@ -26,14 +26,14 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
         float _staminaGaugeRatio;
 
         [SerializeField] TextMeshProUGUI socialLikeText, followerText, moneyText;
-        [SerializeField] TextMeshProUGUI gameTimeText;
+        [SerializeField] Text gameTimeText, gameDayText;
         [SerializeField] ButtonHover phoneButton, bagButton;
         [SerializeField] CanvasGroup socialNotificationCanvasGroup, bagNotificationCanvasGroup;
         [SerializeField] TextMeshProUGUI socialNotificationText, bagNotificationText;
 
         CanvasGroup canvasGroup;
 
-        [Header("testing")] [SerializeField] int testNumber;
+        [Header("testing")][SerializeField] int testNumber;
         [SerializeField] public float hungryValue;
         [SerializeField] int socialLikeCount, followerCount, moneyCount;
         [SerializeField] int socialNotificationCount, bagNotificationCount;
@@ -64,7 +64,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
                 .AddTo(this);
 
             UpdateStamina(GameRunner.Instance.Core.Player.Stamina.Stamina);
-            
+
             HandleTimeChange();
 
             socialLikeText.text = "0";
@@ -111,16 +111,10 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
         private void HandleTimeChange()
         {
             var timeRoutine = GameRunner.Instance.TimeRoutine;
-            var currentTimeText = timeRoutine.currentTime.ToString();
-            if (currentTimeText.StartsWith("0")) currentTimeText = currentTimeText.Substring(1);
-            string timeAffixText = "AM";
-            var midDayTime = new TimeHrMin("12:00");
-            if (timeRoutine.currentTime > midDayTime)
-                timeAffixText = "PM";
+            gameTimeText.text = timeRoutine.GetUiTimeText();
 
             var dayText = timeRoutine.CurrentDay.ToString();
-
-            gameTimeText.text = $"{dayText} {currentTimeText} {timeAffixText}";
+            gameDayText.text = dayText;
 
             RebuildLayout();
         }
