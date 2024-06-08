@@ -65,6 +65,9 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
             GameRunner.Instance.Core.Player.OnChangeLikeCount
                 .Subscribe(HandleLikeCountChange)
                 .AddTo(this);
+            GameRunner.Instance.Core.Player.OnChangeFollowerCount
+                .Subscribe(HandleFollowerCountChange)
+                .AddTo(this);
 
             UpdateStamina(GameRunner.Instance.Core.Player.Stamina.Stamina);
 
@@ -108,6 +111,13 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
         private void HandleLikeCountChange(int likeCount)
         {
             socialLikeText.text = likeCount.ToString("N0");
+            RebuildLayout();
+        }
+
+        private void HandleFollowerCountChange(int followerCount)
+        {
+            Debug.Log($">>follower_count<< {followerCount}");
+            followerText.text = followerCount.ToString("N0");
             RebuildLayout();
         }
 
