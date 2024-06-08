@@ -21,11 +21,12 @@ public class GameSettingManager : MonoBehaviour, IStackPanel
     [SerializeField] Button _backButton;
     [SerializeField] Button _resetSettingButton, _saveSettingButton;
     [SerializeField] Button _languageLeftButton, _languageRightButton;
-    [SerializeField] Image _languageNameImage;
+    // [SerializeField] Image _languageNameImage;
+    [SerializeField] Image _localeText;
     [SerializeField] AudioMixer _audioMixer;
     [SerializeField] Slider _masterVolumeSlider, _bgmVolumeSlider, _effectVolumeSlider;
     [SerializeField] Button _resolutionLeftButton, _resolutionRightButton;
-    [SerializeField] TextMeshProUGUI _resolutionText;
+    [SerializeField] Text _resolutionText;
     [SerializeField] Button _fullscreenLeftButton, _fullscreenRightButton;
     [SerializeField] Text _fullscreenText;
 
@@ -225,8 +226,8 @@ public class GameSettingManager : MonoBehaviour, IStackPanel
             LanguageManager.globalLanguage = language;
 
             FindFirstObjectByType<LoadUiLanguageFromCSV>().ReloadUiLanguage();
-            _languageNameImage.sprite = LanguagePresetProvider.Instance.GetLanguageComponent().languageNameImage;
-            _languageNameImage.SetNativeSize();
+            // _languageNameImage.sprite = LanguagePresetProvider.Instance.GetLanguageComponent().languageNameImage;
+            // _languageNameImage.SetNativeSize();
 
             var locale = Locale.None;
             switch (language.ToText())
@@ -247,7 +248,7 @@ public class GameSettingManager : MonoBehaviour, IStackPanel
                     locale = Locale.En;
                     break;
             }
-
+            
             GameRunner.Instance.Core.Settings.SetLocale(locale);
         }
 
