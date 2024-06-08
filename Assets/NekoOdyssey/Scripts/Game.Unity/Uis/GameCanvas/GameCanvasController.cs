@@ -1,10 +1,13 @@
 ﻿using System;
 using DG.Tweening;
 using NekoOdyssey.Scripts.Constants;
+using NekoOdyssey.Scripts.Extensions;
 using NekoOdyssey.Scripts.Game.Unity.AssetBundles;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
+using NekoOdyssey.Scripts.Game.Unity.Uis.Utils;
 using TMPro;
 using UniRx;
+using UnityEditor.UI;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -113,8 +116,9 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
             var timeRoutine = GameRunner.Instance.TimeRoutine;
             gameTimeText.text = timeRoutine.GetUiTimeText();
 
-            var dayText = timeRoutine.CurrentDay.ToString();
-            gameDayText.text = dayText;
+            var dayText = timeRoutine.CurrentDay.ToText();
+            var gameDayLocaliser = gameDayText.GetComponent<UiTextLocaliser>();
+            gameDayLocaliser.OriginalText = dayText;
 
             RebuildLayout();
         }
