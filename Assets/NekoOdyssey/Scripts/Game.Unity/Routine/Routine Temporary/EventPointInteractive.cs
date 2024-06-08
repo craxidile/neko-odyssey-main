@@ -4,12 +4,12 @@ using UnityEngine;
 using System;
 using UnityEngine.InputSystem;
 using NekoOdyssey.Scripts;
-using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 using UniRx;
+using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 
 public class EventPointInteractive : MonoBehaviour
 {
-    private const float InteractiveDistance = 1;
+    public float interactiveDistance = 1;
 
     public static EventPointInteractive NearestPoint;
 
@@ -17,6 +17,8 @@ public class EventPointInteractive : MonoBehaviour
 
 
     bool _isActive = false;
+
+    float _delayTime;
 
     // Start is called before the first frame update
     void Start()
@@ -26,8 +28,12 @@ public class EventPointInteractive : MonoBehaviour
 
 
         GameRunner.Instance.PlayerInputHandler.OnFireTriggerred
-            .Subscribe(_ => CheckInput())
-            .AddTo(gameObject);
+                .Subscribe(_ => CheckInput())
+                .AddTo(gameObject);
+
+        GameRunner.Instance.Core.Player.OnChangeMode
+            .Subscribe(HandlePlayerModeChange)
+            .AddTo(GameRunner.Instance);
     }
 
     // Update is called once per frame
@@ -41,7 +47,7 @@ public class EventPointInteractive : MonoBehaviour
         //Debug.DrawLine(this.transform.position, player.transform.position, Color.red);
         //Debug.DrawLine(NearestPoint.transform.position + (Vector3.up * 0.3f), player.transform.position, Color.yellow);
 
-        if (thisPointDistance <= InteractiveDistance) //inside range
+        if (thisPointDistance <= interactiveDistance) //inside range
         {
             if (NearestPoint == this)
             {
@@ -50,6 +56,7 @@ public class EventPointInteractive : MonoBehaviour
                 //    Debug.Log($"Pressed space on {name}");
                 //    OnInteractive?.Invoke();
                 //}
+
             }
             else
             {
@@ -59,6 +66,9 @@ public class EventPointInteractive : MonoBehaviour
                 {
                     NearestPoint = this;
                 }
+
+
+
             }
 
             _isActive = NearestPoint == this;
@@ -67,21 +77,43 @@ public class EventPointInteractive : MonoBehaviour
         {
             _isActive = false;
         }
+
+
+
     }
 
-    private void CheckInput()
+    void HandlePlayerModeChange(PlayerMode mode)
     {
-        Debug.Log($">>interactive<< {GameRunner.Instance.Core.Player.Mode}");
-        if (
-            GameRunner.Instance.Core.Player.Mode != PlayerMode.Move &&
-            GameRunner.Instance.Core.Player.Mode != PlayerMode.Conversation &&
-            GameRunner.Instance.Core.Player.Mode != PlayerMode.QuestConversation
-        ) return;
+        if (mode != PlayerMode.Conversation) return;
+
         if (_isActive)
         {
             Debug.Log($"Pressed interactive on {name}");
             OnInteractive?.Invoke();
         }
+
+        _delayTime = Time.time + 0.1f;
+    }
+    private void CheckInput()
+    {
+        var playerMode = GameRunner.Instance.Core.Player.Mode;
+        if (
+            playerMode != PlayerMode.Move &&
+            playerMode != PlayerMode.Conversation &&
+            playerMode != PlayerMode.QuestConversation
+        ) return;
+        
+        if (Time.time < _delayTime) return;
+
+        if (GameRunner.Instance.Core.Player.Mode != PlayerMode.QuestConversation) return;
+
+        if (_isActive)
+        {
+            Debug.Log($"Pressed interactive on {name}");
+            OnInteractive?.Invoke();
+        }
+
+        _delayTime = Time.time + 0.1f;
     }
 
     private void OnDrawGizmosSelected()
@@ -89,13 +121,14 @@ public class EventPointInteractive : MonoBehaviour
         //Gizmos.color = Color.yellow;
         //Gizmos.DrawWireSphere(transform.position, interactiveDistance);
 
+
         var gizColor = Color.yellow;
 
         gizColor.a = 0.5f;
         Gizmos.color = gizColor;
-        Gizmos.DrawWireSphere(transform.position, InteractiveDistance);
+        Gizmos.DrawWireSphere(transform.position, interactiveDistance);
         gizColor.a = 0.1f;
         Gizmos.color = gizColor;
-        Gizmos.DrawSphere(transform.position, InteractiveDistance);
+        Gizmos.DrawSphere(transform.position, interactiveDistance);
     }
 }

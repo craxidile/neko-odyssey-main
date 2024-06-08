@@ -48,5 +48,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.Inputs
 
         public IObservable<Unit> OnCancelTriggerred => this.UpdateAsObservable()
             .Where(_ => InputActions.Player.Cancel.triggered);
+
+        public IObservable<Unit> OnPauseGameTriggerred => this.UpdateAsObservable()
+            .Where(_ => InputActions.Player.PauseGame.triggered);
     }
 }

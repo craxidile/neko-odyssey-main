@@ -31,6 +31,9 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone
 
         public TextMeshProUGUI likeCountText;
 
+        public Text phoneTimeText;
+        public Text phoneDayText;
+
         private bool _active;
         private bool _isOpen;
         private bool _transitionActive;
@@ -85,6 +88,11 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone
             GameRunner.Instance.Core.Player.Phone.OnChangeApp
                 .Subscribe(AnimateCanvasSwap)
                 .AddTo(this);
+
+            GameRunner.Instance.TimeRoutine.OnTimeUpdate
+                .Subscribe(_ => HandleTimeChange())
+                .AddTo(this);
+            HandleTimeChange();
         }
 
         private void Update()
@@ -131,7 +139,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone
 
             prevCanvasUi.canvasGroup.DOFade(0f, AppSwapDuration);
             currentCanvasUi.canvasGroup.DOFade(1f, AppSwapDuration);
-            
+
             _playerAnimator.SetTrigger($"Swipe");
         }
 
@@ -153,7 +161,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone
 
             var deltaY = Mathf.Abs(scrollRectDelta.y);
             if (deltaY is <= ScrollAnimationTriggerMinDelta or >= ScrollAnimationTriggerMaxDelta) return;
-            
+
             TriggerSwipeAnimation();
         }
 
@@ -163,5 +171,15 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone
             _slideDelayTime = Time.time + SlideDelayTimeDelta;
             _playerAnimator.SetTrigger($"Swipe");
         }
+
+        private void HandleTimeChange()
+        {
+            var timeRoutine = GameRunner.Instance.TimeRoutine;
+            phoneTimeText.text = timeRoutine.GetUiTimeText();
+
+            var dayText = timeRoutine.CurrentDay.ToString();
+            phoneDayText.text = dayText;
+        }
+
     }
 }

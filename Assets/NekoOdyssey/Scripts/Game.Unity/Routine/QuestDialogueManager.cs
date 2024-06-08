@@ -45,8 +45,11 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                     if (columnText.ToLowerInvariant().Equals("jump")) jumpColumn = i;
                     if (columnText.ToLowerInvariant().Equals("actor")) actorColumn = i;
                     if (columnText.ToLowerInvariant().Equals("th")) firstTextColumn = i;
-                }
 
+                    var language = LanguageManager.globalLanguage;
+                    if (columnText.ToLowerInvariant().Equals(language.ToString().ToLowerInvariant()))
+                        firstTextColumn = i;
+                }
 
                 for (int i = 1; i < lines.Length; i++)
                 {
@@ -73,6 +76,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
                     var actor = row[actorColumn];
                     var messageText = row[firstTextColumn];
+                    messageText = messageText.Replace(";", ",");
+                    messageText = messageText.Replace("_", "\n");
 
                     var choiceTargetText = "";
                     if (jumpColumn >= 0)
