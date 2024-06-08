@@ -73,8 +73,6 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
 
         public void Start()
         {
-            LoadPlayerProperties();
-
             GameRunner.Instance.PlayerInputHandler.OnPhoneTriggerred
                 .Subscribe(_ => SetPhoneMode())
                 .AddTo(GameRunner.Instance);
@@ -104,6 +102,13 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
             Stamina.OnChangeStamina
                 .Subscribe(_ => SavePlayerProperties())
                 .AddTo(GameRunner.Instance);
+
+            if (GameRunner.Instance.Core.SaveReady)
+                HandleGameSaveReady(default);
+            else
+                GameRunner.Instance.Core.OnSaveReady
+                    .Subscribe(HandleGameSaveReady)
+                    .AddTo(GameRunner.Instance);
         }
 
         public void Unbind()
@@ -124,7 +129,10 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
                 playerProperties = playerPropertiesRepo.Load();
                 //AddStamina(playerProperties.Stamina);
                 Stamina.SetStamina(playerProperties.Stamina);
+                UpdateFollowerCount(playerProperties.FollowerCount);
             }
+
+            UpdateFollowerCount(playerProperties.LikeCount);
 
             return playerProperties;
         }
@@ -136,6 +144,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
                 var playerPropertiesRepo = new PlayerPropertiesV001Repo(dbContext);
                 var playerProperties = playerPropertiesRepo.Load();
                 playerProperties.Stamina = Stamina.Stamina;
+                playerProperties.LikeCount = LikeCount;
+                playerProperties.FollowerCount = FollowerCount;
                 playerPropertiesRepo.Update(playerProperties);
             });
         }
@@ -206,6 +216,11 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
             LoadPlayerProperties();
         }
 
+        private void HandleGameSaveReady(Unit _)
+        {
+            LoadPlayerProperties();
+        }
+
         public void SetMode(PlayerMode mode)
         {
             PreviousMode = Mode;
@@ -234,8 +249,9 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
 
         public void UpdateFollowerCount(int likeCount)
         {
-            FollowerCount = (int) Math.Floor(.05f * likeCount);
+            FollowerCount = (int)Math.Floor(.05f * likeCount);
             OnChangeFollowerCount.OnNext(FollowerCount);
+            SavePlayerProperties();
         }
 
         // public void AddStamina(int addition)
