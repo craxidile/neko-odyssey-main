@@ -166,8 +166,8 @@ public class GameSettingManager : MonoBehaviour, IStackPanel
         var fullscreenTextLocaliser = _fullscreenText.GetComponent<UiTextLocaliser>();
         if (fullscreenTextLocaliser != null) fullscreenTextLocaliser.OriginalText = fullscreenModeText;
 
-        var fullscreenTextMultiLanguageUi = _fullscreenText.GetComponent<UI_MultipleLanguage>();
-        fullscreenTextMultiLanguageUi.OverideInitialText(fullscreenModeText);
+        // var fullscreenTextMultiLanguageUi = _fullscreenText.GetComponent<UI_MultipleLanguage>();
+        // fullscreenTextMultiLanguageUi.OverideInitialText(fullscreenModeText);
     }
 
     public void SaveSetting(bool askingConfirm)
