@@ -223,6 +223,19 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
         {
             LikeCount = likeCount;
             OnChangeLikeCount.OnNext(LikeCount);
+            UpdateFollowerCount(likeCount);
+        }
+
+        public void UpdateTotalLikeCount()
+        {
+            var totalLikeCount = Phone.SocialNetwork.Posts.Sum(p => p.LikeCount);
+            SetLikeCount(totalLikeCount);
+        }
+
+        public void UpdateFollowerCount(int likeCount)
+        {
+            FollowerCount = (int) Math.Floor(.05f * likeCount);
+            OnChangeFollowerCount.OnNext(FollowerCount);
         }
 
         // public void AddStamina(int addition)
@@ -281,12 +294,6 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
                 var repo = new PlayerQuestV001Repo(dbContext);
                 return repo.FindByQuestCode(questCode) != null;
             }
-        }
-
-        public void UpdateTotalLikeCount()
-        {
-            var totalLikeCount = Phone.SocialNetwork.Posts.Sum(p => p.LikeCount);
-            SetLikeCount(totalLikeCount);
         }
     }
 }

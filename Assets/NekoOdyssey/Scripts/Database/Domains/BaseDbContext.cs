@@ -41,7 +41,11 @@ namespace NekoOdyssey.Scripts.Database.Domains
 #if UNITY_EDITOR
             var sourceFilePath = $"{Application.streamingAssetsPath}/{fileName}";
             var destFilePath = $"{_databasePath}/{fileName}";
-            if (_options.CopyMode == DbCopyMode.CopyIfNotExists && File.Exists(destFilePath)) return;
+            if (
+                _options.CopyMode == DbCopyMode.CopyIfNotExists &&
+                File.Exists(destFilePath) &&
+                new FileInfo(destFilePath).Length > 0
+            ) return;
             Debug.Log($">>copy_database<< {_databaseName}");
             File.Copy(sourceFilePath, destFilePath, true);
 #elif UNITY_SWITCH
