@@ -55,10 +55,10 @@ namespace NekoOdyssey.Scripts
             gameObject.AddComponent<CentralConversationActionHandler>();
             gameObject.AddComponent<CentralPlayerPettingHandler>();
             gameObject.AddComponent<AssetBundleLoader>();
+            TimeRoutine = gameObject.AddComponent<TimeRoutine>();
 
             Core.Bind();
 
-            TimeRoutine = gameObject.AddComponent<TimeRoutine>();
             //new GameObject("Time Controller").AddComponent<NekoOdyssey.Scripts.Game.Core.Routine.TimeRoutine>().transform.SetParent(transform);
         }
 

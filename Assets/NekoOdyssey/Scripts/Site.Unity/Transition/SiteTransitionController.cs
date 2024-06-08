@@ -45,14 +45,14 @@ namespace NekoOdyssey.Scripts.Site.Unity.Transition
 
             var mainScene = scenes.FirstOrDefault();
             if (mainScene == null) return;
-            SceneManager.LoadScene(mainScene.Name, LoadSceneMode.Single);
+            SceneManager.LoadSceneAsync(mainScene.Name, LoadSceneMode.Single);
             Debug.Log($">>load_scene<< main {mainScene.Name}");
 
             var otherScenes = scenes.Skip(1);
 
             foreach (var scene in otherScenes)
             {
-                SceneManager.LoadScene(scene.Name, LoadSceneMode.Additive);
+                SceneManager.LoadSceneAsync(scene.Name, LoadSceneMode.Additive);
                 Debug.Log($">>load_scene<< other {scene.Name}");
             }
         }
