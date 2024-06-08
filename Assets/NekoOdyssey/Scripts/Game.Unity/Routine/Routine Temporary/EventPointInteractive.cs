@@ -5,6 +5,7 @@ using System;
 using UnityEngine.InputSystem;
 using NekoOdyssey.Scripts;
 using UniRx;
+using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 
 public class EventPointInteractive : MonoBehaviour
 {
@@ -17,6 +18,8 @@ public class EventPointInteractive : MonoBehaviour
 
     bool _isActive = false;
 
+    float _delayTime;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -27,6 +30,10 @@ public class EventPointInteractive : MonoBehaviour
         GameRunner.Instance.PlayerInputHandler.OnFireTriggerred
                 .Subscribe(_ => CheckInput())
                 .AddTo(gameObject);
+
+        GameRunner.Instance.Core.Player.OnChangeMode
+            .Subscribe(HandlePlayerModeChange)
+            .AddTo(GameRunner.Instance);
     }
 
     // Update is called once per frame
@@ -75,13 +82,31 @@ public class EventPointInteractive : MonoBehaviour
 
     }
 
-    private void CheckInput()
+    void HandlePlayerModeChange(PlayerMode mode)
     {
+        if (mode != PlayerMode.Conversation) return;
+
         if (_isActive)
         {
             Debug.Log($"Pressed interactive on {name}");
             OnInteractive?.Invoke();
         }
+
+        _delayTime = Time.time + 0.1f;
+    }
+    private void CheckInput()
+    {
+        if (Time.time < _delayTime) return;
+
+        if (GameRunner.Instance.Core.Player.Mode != PlayerMode.QuestConversation) return;
+
+        if (_isActive)
+        {
+            Debug.Log($"Pressed interactive on {name}");
+            OnInteractive?.Invoke();
+        }
+
+        _delayTime = Time.time + 0.1f;
     }
 
     private void OnDrawGizmosSelected()
