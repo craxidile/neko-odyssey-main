@@ -111,15 +111,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
         private void HandleTimeChange()
         {
             var timeRoutine = GameRunner.Instance.TimeRoutine;
-            var currentTimeText = timeRoutine.currentTime.ToString();
-            if (currentTimeText.StartsWith("0")) currentTimeText = currentTimeText.Substring(1);
-            string timeAffixText = "AM";
-            var midDayTime = new TimeHrMin("12:00");
-            if (timeRoutine.currentTime > midDayTime)
-                timeAffixText = "PM";
-
-
-            gameTimeText.text = $"{currentTimeText} {timeAffixText}";
+            gameTimeText.text = timeRoutine.GetUiTimeText();
 
             var dayText = timeRoutine.CurrentDay.ToString();
             gameDayText.text = dayText;

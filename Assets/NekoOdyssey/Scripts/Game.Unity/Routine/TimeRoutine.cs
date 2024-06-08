@@ -254,6 +254,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
         public void ProcessTime()
         {
+            if (GameRunner.Instance.Core.Player.Mode != Unity.Game.Core.PlayerMode.Move) return;
+
             if (timeScriptable._isTimer)
             {
                 var secondPerSecond = AppConstants.Time.GameHourPerMinute * timeScriptable.timeMultiplier;
@@ -291,6 +293,19 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
                 SaveTimeData();
             }
+        }
+
+        public string GetUiTimeText()
+        {
+            var currentTimeText = currentTime.ToString();
+            if (currentTimeText.StartsWith("0")) currentTimeText = currentTimeText.Substring(1);
+            string timeAffixText = "AM";
+            var midDayTime = new TimeHrMin("12:00");
+            if (currentTime > midDayTime)
+                timeAffixText = "PM";
+
+
+            return $"{currentTimeText} {timeAffixText}";
         }
 
 
