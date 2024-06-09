@@ -60,10 +60,10 @@ namespace NekoOdyssey.Scripts.Database.Domains.SaveV001
                 {
                     var func = _queue.Dequeue();
                     func(dbContext);
-                    yield return new WaitForSeconds(.1f);
                 }
             }
             _running = false;
+            yield return null;
         }
 
         private void Finish(Unit _)
