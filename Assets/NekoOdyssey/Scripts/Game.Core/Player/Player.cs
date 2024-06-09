@@ -129,10 +129,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
                 playerProperties = playerPropertiesRepo.Load();
                 //AddStamina(playerProperties.Stamina);
                 Stamina.SetStamina(playerProperties.Stamina);
-                UpdateFollowerCount(playerProperties.FollowerCount);
+                UpdateFollowerCount(playerProperties.LikeCount);
             }
-
-            UpdateFollowerCount(playerProperties.LikeCount);
 
             return playerProperties;
         }
@@ -251,7 +249,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
         {
             FollowerCount = (int)Math.Floor(.05f * likeCount);
             OnChangeFollowerCount.OnNext(FollowerCount);
-            SavePlayerProperties();
+            // SavePlayerProperties();
+            Debug.Log($">>follower_count<< {FollowerCount}");
         }
 
         // public void AddStamina(int addition)
