@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using NekoOdyssey.Scripts.Constants;
 using NekoOdyssey.Scripts.Database.Domains;
 using NekoOdyssey.Scripts.Database.Domains.SaveV001;
@@ -19,11 +20,14 @@ using NekoOdyssey.Scripts.Game.Unity;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 using UniRx;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace NekoOdyssey.Scripts.Game.Core.Player
 {
     public class Player
     {
+        private static bool _finalSceneLoaded = false;
+
         public PlayerMode Mode { get; private set; } = PlayerMode.Move;
         public PlayerMode PreviousMode { get; private set; } = PlayerMode.Move;
         public bool Running { get; private set; } = false;
@@ -38,6 +42,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
 
         // public int Stamina { get; private set; }
         public int PocketMoney { get; private set; }
+        public bool DemoFinished { get; private set; }
         public int LikeCount { get; private set; }
         public int FollowerCount { get; private set; }
         public int DayCount => LoadPlayerProperties().DayCount;
@@ -129,6 +134,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
                 playerProperties = playerPropertiesRepo.Load();
                 //AddStamina(playerProperties.Stamina);
                 Stamina.SetStamina(playerProperties.Stamina);
+                DemoFinished = playerProperties.DemoFinished;
                 UpdateFollowerCount(playerProperties.LikeCount);
             }
 
@@ -251,6 +257,28 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
             OnChangeFollowerCount.OnNext(FollowerCount);
             // SavePlayerProperties();
             Debug.Log($">>follower_count<< {FollowerCount}");
+            if (!_finalSceneLoaded && !DemoFinished && FollowerCount >= 200)
+            {
+                _finalSceneLoaded = true;
+                Debug.Log($">>load_final<<");
+                
+                GameRunner.Instance.Core.SaveDbWriter.Add(dbContext =>
+                {
+                    var repo = new PlayerPropertiesV001Repo(dbContext);
+                    var properties = repo.Load();
+                    properties.DemoFinished = true;
+                    repo.Update(properties);
+                });
+                
+                DOVirtual.DelayedCall(2f, () =>
+                {
+                    GameRunner.Instance.Core.GameScene.CloseScene();
+                    DOVirtual.DelayedCall(4f, () =>
+                    {
+                        SiteRunner.Instance.Core.Site.SetSite("NekoInside28BedroomFinal");
+                    });
+                });
+            }
         }
 
         // public void AddStamina(int addition)

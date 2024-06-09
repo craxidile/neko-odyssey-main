@@ -58,6 +58,7 @@ namespace NekoOdyssey.Scripts.Site.Core.Site
             // SetSite("GamePlayZone3_02", false);
             // SetSite("GamePlayZone9_02", false);
              // SetSite("DemoTitle", false);
+             // SetSite("NekoInside28BedroomFinal", false);
         }
 
         public void MoveToNextSite()
