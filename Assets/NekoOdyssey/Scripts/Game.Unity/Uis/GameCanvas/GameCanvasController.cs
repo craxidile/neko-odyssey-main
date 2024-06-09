@@ -7,7 +7,7 @@ using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 using NekoOdyssey.Scripts.Game.Unity.Uis.Utils;
 using TMPro;
 using UniRx;
-using UnityEditor.UI;
+// using UnityEditor.UI;
 using UnityEngine;
 using UnityEngine.UI;
 
