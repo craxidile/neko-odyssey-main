@@ -21,7 +21,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Simulators.SocialNetwork
 {
     public class SocialNetworkSimulator
     {
-        private const int SimulationInterval = 15000;
+        private const int SimulationInterval = 30000;
 
         public List<SocialFutureLikeV001> FutureLikes { get; } = new();
         public List<SocialFutureCommentV001> FutureComments { get; } = new();
