@@ -257,7 +257,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
             OnChangeFollowerCount.OnNext(FollowerCount);
             // SavePlayerProperties();
             Debug.Log($">>follower_count<< {FollowerCount}");
-            if (!_finalSceneLoaded && !DemoFinished && FollowerCount >= 1)
+            if (!_finalSceneLoaded && !DemoFinished && FollowerCount >= 200)
             {
                 _finalSceneLoaded = true;
                 Debug.Log($">>load_final<<");
