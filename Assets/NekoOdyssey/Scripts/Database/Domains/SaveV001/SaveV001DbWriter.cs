@@ -70,8 +70,8 @@ namespace NekoOdyssey.Scripts.Database.Domains.SaveV001
             {
                 var func = _queue.Dequeue();
                 func(_dbContext);
-                yield return null;
             }
+            yield return null;
             _running = false;
         }
 
