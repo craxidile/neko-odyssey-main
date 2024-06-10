@@ -39,7 +39,6 @@ namespace NekoOdyssey.Scripts.Game.Core
         public void Bind()
         {
             InitializeSaveDatabase();
-            SaveDbWriter.Open();
 
             Settings.Bind();
             Metadata.Bind();
@@ -92,8 +91,6 @@ namespace NekoOdyssey.Scripts.Game.Core
             GameScene.Unbind();
             Routine.Unbind();
             EndDay.Unbind();
-            
-            SaveDbWriter.Close();
         }
 
         private void InitializeSaveDatabase()

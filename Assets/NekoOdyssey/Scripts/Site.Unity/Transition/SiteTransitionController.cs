@@ -49,10 +49,10 @@ namespace NekoOdyssey.Scripts.Site.Unity.Transition
             _asyncLoading.Clear();
             Debug.Log($">>load_scene<< start");
             StartCoroutine(LoadSceneAsync());
-            DOVirtual.DelayedCall(10f, () =>
-            {
-                GameObject.Find("Loading").SetActive(false);
-            });
+            // DOVirtual.DelayedCall(10f, () =>
+            // {
+            //     GameObject.Find("Loading").SetActive(false);
+            // });
         }
 
         private IEnumerator LoadSceneAsync()
@@ -78,7 +78,7 @@ namespace NekoOdyssey.Scripts.Site.Unity.Transition
                 _asyncLoading.Add(otherAsyncLoad);
             }
             
-            SceneManager.LoadScene($"Loading", LoadSceneMode.Additive);
+            // SceneManager.LoadScene($"Loading", LoadSceneMode.Additive);
             
             while (_asyncLoading.Any(al => al.progress < .9f)) yield return null;
         }
