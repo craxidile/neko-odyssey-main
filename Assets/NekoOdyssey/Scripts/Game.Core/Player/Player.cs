@@ -66,6 +66,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
         public Subject<int> OnChangePocketMoney { get; } = new();
         public Subject<int> OnChangeLikeCount { get; } = new();
         public Subject<int> OnChangeFollowerCount { get; } = new();
+        public Subject<Unit> OnFinishDemo { get; } = new();
 
         public void Bind()
         {
@@ -134,8 +135,9 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
                 playerProperties = playerPropertiesRepo.Load();
                 //AddStamina(playerProperties.Stamina);
                 Stamina.SetStamina(playerProperties.Stamina);
-                DemoFinished = playerProperties.DemoFinished;
                 UpdateFollowerCount(playerProperties.LikeCount);
+                DemoFinished = playerProperties.DemoFinished;
+                if (DemoFinished) OnFinishDemo.OnNext(default);
             }
 
             return playerProperties;
@@ -267,6 +269,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
                     var repo = new PlayerPropertiesV001Repo(dbContext);
                     var properties = repo.Load();
                     properties.DemoFinished = true;
+                    OnFinishDemo.OnNext(default);
                     repo.Update(properties);
                 });
                 

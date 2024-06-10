@@ -45,6 +45,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
         public Image psBagKey;
         public Image xboxPhoneKey;
         public Image xboxBagKey;
+        public Text activeMissionText;
+        public Text finishedMissionText;
 
         CanvasGroup canvasGroup;
 
@@ -79,6 +81,11 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
                 .AddTo(this);
             GameRunner.Instance.Core.Player.OnChangeFollowerCount
                 .Subscribe(HandleFollowerCountChange)
+                .AddTo(this);
+
+            UpdateMissionText(default);
+            GameRunner.Instance.Core.Player.OnFinishDemo
+                .Subscribe(UpdateMissionText)
                 .AddTo(this);
 
             UpdateStamina(GameRunner.Instance.Core.Player.Stamina.Stamina);
@@ -116,6 +123,14 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
                 Debug.Log($">>gamepad_count<< {gamepadCount}");
                 UpdateGamepadButtons();
             }
+        }
+
+        private void UpdateMissionText(Unit _)
+        {
+            var finished = GameRunner.Instance.Core.Player.DemoFinished;
+            Debug.Log($">>finished<< {finished}");
+            activeMissionText.gameObject.SetActive(!finished);
+            finishedMissionText.gameObject.SetActive(finished);
         }
 
         private void UpdateGamepadButtons()
