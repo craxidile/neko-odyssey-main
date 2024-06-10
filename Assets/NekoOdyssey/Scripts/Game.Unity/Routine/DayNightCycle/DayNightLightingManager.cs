@@ -92,6 +92,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             //CheckDayNightCondition();
 
 
+            if (GameRunner.Instance.CsvHolder == null) return;
             if (timeProfile == null)
             {
                 timeProfile = GameRunner.Instance.CsvHolder.timeProfile;
@@ -145,6 +146,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             //    UnloadAll();
             //}
 
+            if (timeProfile == null) return;
             foreach (var dnData in timeProfile.dayNightDataProfiles)
             {
                 if (GameRunner.Instance.TimeRoutine.currentTime.inBetweenTime(dnData.enableTime))

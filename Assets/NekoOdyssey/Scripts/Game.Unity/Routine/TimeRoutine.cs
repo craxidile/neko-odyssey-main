@@ -160,6 +160,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                 SaveTimeData(true);
             }
 
+            if (GameRunner.Instance.CsvHolder == null) return;
 
             timeScriptable = GameRunner.Instance.CsvHolder.timeProfile;
             timeScriptable.OnValidated.Subscribe(OnTimeProfileValidate).AddTo(this);
@@ -254,6 +255,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
         public void ProcessTime()
         {
+            if (timeScriptable == null) return;
             if (GameRunner.Instance.Core.Player.Mode != Unity.Game.Core.PlayerMode.Move) return;
 
             if (timeScriptable._isTimer)
