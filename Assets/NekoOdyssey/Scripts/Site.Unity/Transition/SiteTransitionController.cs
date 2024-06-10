@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using DG.Tweening;
 using NekoOdyssey.Scripts.Game.Unity.Player;
-using NekoOdyssey.Scripts.Game.Unity.Scenes;
 using UniRx;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -14,8 +10,6 @@ namespace NekoOdyssey.Scripts.Site.Unity.Transition
     public class SiteTransitionController : MonoBehaviour
     {
         private static bool _screenInitialized;
-        
-        private List<AsyncOperation> _asyncLoading = new();
 
         private void Awake()
         {
@@ -46,41 +40,21 @@ namespace NekoOdyssey.Scripts.Site.Unity.Transition
 
         private void LoadScenes()
         {
-            _asyncLoading.Clear();
-            Debug.Log($">>load_scene<< start");
-            StartCoroutine(LoadSceneAsync());
-            // DOVirtual.DelayedCall(10f, () =>
-            // {
-            //     GameObject.Find("Loading").SetActive(false);
-            // });
-        }
-
-        private IEnumerator LoadSceneAsync()
-        {
             var currentSite = SiteRunner.Instance.Core.Site.CurrentSite;
             var scenes = currentSite.Scenes.OrderBy(s => s.Id);
 
             var mainScene = scenes.FirstOrDefault();
-            Debug.Log($">>load_scene<< {mainScene}");
-            if (mainScene == null) yield break;
-            
-            var asyncLoad = SceneManager.LoadSceneAsync(mainScene.Name, LoadSceneMode.Single);
+            if (mainScene == null) return;
+            SceneManager.LoadScene(mainScene.Name, LoadSceneMode.Single);
             Debug.Log($">>load_scene<< main {mainScene.Name}");
-            _asyncLoading.Add(asyncLoad);
-            
+
             var otherScenes = scenes.Skip(1);
-            Debug.Log($">>load_scene<< other_scenes {otherScenes.Count()}");
 
             foreach (var scene in otherScenes)
             {
-                var otherAsyncLoad = SceneManager.LoadSceneAsync(scene.Name, LoadSceneMode.Additive);
+                SceneManager.LoadScene(scene.Name, LoadSceneMode.Additive);
                 Debug.Log($">>load_scene<< other {scene.Name}");
-                _asyncLoading.Add(otherAsyncLoad);
             }
-            
-            // SceneManager.LoadScene($"Loading", LoadSceneMode.Additive);
-            
-            while (_asyncLoading.Any(al => al.progress < .9f)) yield return null;
         }
     }
 }
