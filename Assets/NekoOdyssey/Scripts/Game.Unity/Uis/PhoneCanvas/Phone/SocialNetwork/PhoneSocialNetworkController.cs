@@ -17,6 +17,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone.SocialNetwork
         private GameObject _gridCell;
         private ScrollRect _scrollRect;
         private TextMeshProUGUI _likeCountText;
+        private TextMeshProUGUI _followerCountText;
 
         private readonly List<GameObject> _socialFeedCells = new();
 
@@ -30,6 +31,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone.SocialNetwork
             _gridCell = phoneCanvasUi.gridCell;
             _scrollRect = phoneCanvasUi.scrollRect;
             _likeCountText = phoneCanvasController.likeCountText;
+            _followerCountText = phoneCanvasController.followerCountText;
 
             _likeCountText.text = "0";
 
@@ -47,11 +49,19 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone.SocialNetwork
             GameRunner.Instance.Core.Player.OnChangeLikeCount
                 .Subscribe(HandleLikeCountChange)
                 .AddTo(this);
+            GameRunner.Instance.Core.Player.OnChangeFollowerCount
+                .Subscribe(HandleFollowerCountChange)
+                .AddTo(this);
         }
 
         private void HandleLikeCountChange(int likeCount)
         {
             _likeCountText.text = likeCount.ToString("N0");
+        }
+
+        private void HandleFollowerCountChange(int followerCount)
+        {
+            _followerCountText.text = followerCount.ToString("N0");
         }
 
         private void GenerateSocialPostGrid(ICollection<SocialPostV001> posts)

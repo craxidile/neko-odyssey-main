@@ -32,6 +32,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone
         public Transform phoneTransform;
 
         public TextMeshProUGUI likeCountText;
+        public TextMeshProUGUI followerCountText;
 
         public Text phoneTimeText;
         public Text phoneDayText;
