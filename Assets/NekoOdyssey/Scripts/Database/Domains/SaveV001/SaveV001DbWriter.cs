@@ -34,20 +34,16 @@ namespace NekoOdyssey.Scripts.Database.Domains.SaveV001
     public class SaveV001DbWriter
     {
         private readonly SaveV001DbQueue _queue = new();
-
-        private SaveV001DbContext _dbContext;
+        
         private bool _running;
         private IDisposable _subscription;
 
         public void Open()
         {
-            _dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = false });
         }
 
         public void Close()
         {
-            if (_dbContext == null) return;
-            _dbContext.Dispose();
         }
 
         public void Add(SaveV001DbQueueFunc func)
@@ -66,13 +62,16 @@ namespace NekoOdyssey.Scripts.Database.Domains.SaveV001
         private IEnumerator ExecuteAsync()
         {
             _running = true;
-            while (_queue.Size > 0)
+            using (var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = false }))
             {
-                var func = _queue.Dequeue();
-                func(_dbContext);
-                yield return null;
+                while (_queue.Size > 0)
+                {
+                    var func = _queue.Dequeue();
+                    func(dbContext);
+                }
             }
             _running = false;
+            yield return null;
         }
 
         private void Finish(Unit _)
@@ -82,7 +81,6 @@ namespace NekoOdyssey.Scripts.Database.Domains.SaveV001
                 _running = false;
                 return;
             }
-
             _subscription.Dispose();
             _subscription = null;
             _running = false;
