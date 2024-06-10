@@ -143,6 +143,8 @@ public class GameSettingManager : MonoBehaviour, IStackPanel
         activeResolutions = resolutions
             .Where(res => res.refreshRateRatio.Equals(currentRefrestRate))
             .Where(res => res.width / res.height >= 16 / 9)
+            .Where(res => res.width >= 1000)
+            .Where(res => res.width <= 3000)
             .ToList();
 
         for (int i = 0; i < activeResolutions.Count; i++)
