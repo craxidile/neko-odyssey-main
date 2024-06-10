@@ -38,14 +38,6 @@ namespace NekoOdyssey.Scripts.Database.Domains.SaveV001
         private bool _running;
         private IDisposable _subscription;
 
-        public void Open()
-        {
-        }
-
-        public void Close()
-        {
-        }
-
         public void Add(SaveV001DbQueueFunc func)
         {
             _queue.Enqueue(func);
