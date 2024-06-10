@@ -307,7 +307,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                 timeAffixText = "PM";
 
 
-            return $"{currentTimeText} {timeAffixText}";
+            return $"{currentTimeText}";
+            // return $"{currentTimeText} {timeAffixText}";
         }
 
 
