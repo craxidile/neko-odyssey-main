@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cinemachine;
+using DG.Tweening;
 using NekoOdyssey.Scripts.Constants;
 using NekoOdyssey.Scripts.Game.Core;
 using NekoOdyssey.Scripts.Game.Core.Routine;
@@ -60,7 +61,6 @@ namespace NekoOdyssey.Scripts
             TimeRoutine = gameObject.AddComponent<TimeRoutine>();
 
             Core.Bind();
-            SetReady(true);
 
             //new GameObject("Time Controller").AddComponent<NekoOdyssey.Scripts.Game.Core.Routine.TimeRoutine>().transform.SetParent(transform);
         }
@@ -74,6 +74,10 @@ namespace NekoOdyssey.Scripts
         private void Start()
         {
             Core.Start();
+            DOVirtual.DelayedCall(1f, () =>
+            {
+                SetReady(true);
+            });
 
             AssetBundleUtils.OnReady(InitializePositions);
 

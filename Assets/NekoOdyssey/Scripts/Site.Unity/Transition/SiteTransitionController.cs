@@ -153,11 +153,11 @@ namespace NekoOdyssey.Scripts.Site.Unity.Transition
             _asyncOperationList.Add(asyncOperation);
             while (asyncOperation.progress < 0.9f)
             {
-                Debug.Log($">>load_scene<< progress {sceneName} {asyncOperation.progress}");
+                Debug.LogError($">>load_scene<< progress {sceneName} {asyncOperation.progress}");
                 yield return null;
             }
 
-            Debug.Log($">>load_scene<< progress {sceneName} {asyncOperation.progress}");
+            Debug.LogError($">>load_scene<< progress {sceneName} {asyncOperation.progress}");
             StartCoroutine(PreloadSceneAsync());
         }
 
