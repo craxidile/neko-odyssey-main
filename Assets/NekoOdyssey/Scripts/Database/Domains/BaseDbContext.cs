@@ -21,7 +21,7 @@ namespace NekoOdyssey.Scripts.Database.Domains
         protected BaseDbContext(string databaseName, DbContextOptions options)
         {
             _databaseName = databaseName;
-#if UNITY_EDITOR
+#if UNITY_EDITOR || UNITY_STANDALONE_WIN
             _databasePath = Application.persistentDataPath;
 #else
             _databasePath = Application.streamingAssetsPath;
@@ -38,7 +38,7 @@ namespace NekoOdyssey.Scripts.Database.Domains
         {
             if (_options.CopyMode == DbCopyMode.DoNotCopy) return;
             var fileName = $"{_databaseName}.db";
-#if UNITY_EDITOR
+#if UNITY_EDITOR || UNITY_STANDALONE_WIN
             var sourceFilePath = $"{Application.streamingAssetsPath}/{fileName}";
             var destFilePath = $"{_databasePath}/{fileName}";
             if (
