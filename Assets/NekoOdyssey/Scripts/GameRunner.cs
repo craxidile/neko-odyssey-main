@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Cinemachine;
 using NekoOdyssey.Scripts.Constants;
 using NekoOdyssey.Scripts.Game.Core;
@@ -23,6 +24,7 @@ namespace NekoOdyssey.Scripts
         public static GameRunner Instance;
 
         private PlayerInputActions _inputActions;
+        public static readonly Dictionary<string, Object> StaticAssetMap = new();
 
         public GameCameras cameras;
 
@@ -30,7 +32,7 @@ namespace NekoOdyssey.Scripts
 
         public PlayerInputHandler PlayerInputHandler { get; private set; }
         public UiInputHandler UiInputHandler { get; private set; }
-        public Dictionary<string, Object> AssetMap { get; } = new();
+        public Dictionary<string, Object> AssetMap => StaticAssetMap;
         public bool Ready { get; private set; } = false;
 
         public Subject<bool> OnReady { get; } = new();
@@ -55,10 +57,10 @@ namespace NekoOdyssey.Scripts
             gameObject.AddComponent<CentralCaptureActionHandler>();
             gameObject.AddComponent<CentralConversationActionHandler>();
             gameObject.AddComponent<CentralPlayerPettingHandler>();
-            gameObject.AddComponent<AssetBundleLoader>();
             TimeRoutine = gameObject.AddComponent<TimeRoutine>();
 
             Core.Bind();
+            SetReady(true);
 
             //new GameObject("Time Controller").AddComponent<NekoOdyssey.Scripts.Game.Core.Routine.TimeRoutine>().transform.SetParent(transform);
         }
