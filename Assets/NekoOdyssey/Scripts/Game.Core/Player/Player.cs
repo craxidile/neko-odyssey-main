@@ -137,7 +137,6 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
                 Stamina.SetStamina(playerProperties.Stamina);
                 UpdateFollowerCount(playerProperties.LikeCount);
                 DemoFinished = playerProperties.DemoFinished;
-                if (DemoFinished) OnFinishDemo.OnNext(default);
             }
 
             return playerProperties;
@@ -255,15 +254,22 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
 
         public void UpdateFollowerCount(int likeCount)
         {
+            using (var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = true }))
+            {
+                var playerPropertiesRepo = new PlayerPropertiesV001Repo(dbContext);
+                var playerProperties = playerPropertiesRepo.Load();
+                DemoFinished = playerProperties.DemoFinished;
+            }
+
             FollowerCount = (int)Math.Floor(.05f * likeCount);
             OnChangeFollowerCount.OnNext(FollowerCount);
             // SavePlayerProperties();
             Debug.Log($">>follower_count<< {FollowerCount}");
-            if (!_finalSceneLoaded && !DemoFinished && FollowerCount >= 200)
+            if (!_finalSceneLoaded && !DemoFinished && FollowerCount >= 20)
             {
                 _finalSceneLoaded = true;
                 Debug.Log($">>load_final<<");
-                
+
                 GameRunner.Instance.Core.SaveDbWriter.Add(dbContext =>
                 {
                     var repo = new PlayerPropertiesV001Repo(dbContext);
@@ -272,14 +278,12 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
                     OnFinishDemo.OnNext(default);
                     repo.Update(properties);
                 });
-                
+
                 DOVirtual.DelayedCall(2f, () =>
                 {
                     GameRunner.Instance.Core.GameScene.CloseScene();
-                    DOVirtual.DelayedCall(4f, () =>
-                    {
-                        SiteRunner.Instance.Core.Site.SetSite("NekoInside28BedroomFinal");
-                    });
+                    DOVirtual.DelayedCall(4f,
+                        () => { SiteRunner.Instance.Core.Site.SetSite("NekoInside28BedroomFinal"); });
                 });
             }
         }
