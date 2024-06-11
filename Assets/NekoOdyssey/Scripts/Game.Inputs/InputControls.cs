@@ -199,17 +199,17 @@ public class InputControls : MonoBehaviour
                 break;
         }
     }
-    void OnGUI()
-    {
-        var targetSelect = EventSystem.current.currentSelectedGameObject;
-        if (targetSelect != null)
-        {
-            GUI.Label(new Rect(10, 10, 100, 20), targetSelect.name);
-
-        }
-
-
-    }
+    // void OnGUI()
+    // {
+    //     var targetSelect = EventSystem.current.currentSelectedGameObject;
+    //     if (targetSelect != null)
+    //     {
+    //         GUI.Label(new Rect(10, 10, 100, 20), targetSelect.name);
+    //
+    //     }
+    //
+    //
+    // }
 
     void DebugCheck()
     {

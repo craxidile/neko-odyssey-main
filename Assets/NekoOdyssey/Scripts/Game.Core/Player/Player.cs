@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using DG.Tweening;
 using NekoOdyssey.Scripts.Constants;
 using NekoOdyssey.Scripts.Database.Domains;
 using NekoOdyssey.Scripts.Database.Domains.SaveV001;
@@ -12,18 +14,20 @@ using NekoOdyssey.Scripts.Game.Core.Player.Capture;
 using NekoOdyssey.Scripts.Game.Core.Player.Conversation;
 using NekoOdyssey.Scripts.Game.Core.Player.Petting;
 using NekoOdyssey.Scripts.Game.Core.Player.Phone;
+using NekoOdyssey.Scripts.Game.Core.Player.Phone.Apps;
 using NekoOdyssey.Scripts.Game.Core.Player.Stamina;
 using NekoOdyssey.Scripts.Game.Unity;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 using UniRx;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace NekoOdyssey.Scripts.Game.Core.Player
 {
     public class Player
     {
-        private static bool _initialized;
-        
+        private static bool _finalSceneLoaded = false;
+
         public PlayerMode Mode { get; private set; } = PlayerMode.Move;
         public PlayerMode PreviousMode { get; private set; } = PlayerMode.Move;
         public bool Running { get; private set; } = false;
@@ -34,11 +38,11 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
         public PlayerCapture Capture { get; } = new();
         public PlayerPetting Petting { get; } = new();
         public PlayerConversation Conversation { get; } = new();
-        public SaveV001DbWriter SaveDbWriter { get; } = new();
         public PlayerStamina Stamina { get; } = new(); // linias added
 
         // public int Stamina { get; private set; }
         public int PocketMoney { get; private set; }
+        public bool DemoFinished { get; private set; }
         public int LikeCount { get; private set; }
         public int FollowerCount { get; private set; }
         public int DayCount => LoadPlayerProperties().DayCount;
@@ -62,11 +66,10 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
         public Subject<int> OnChangePocketMoney { get; } = new();
         public Subject<int> OnChangeLikeCount { get; } = new();
         public Subject<int> OnChangeFollowerCount { get; } = new();
+        public Subject<Unit> OnFinishDemo { get; } = new();
 
         public void Bind()
         {
-            InitializeDatabase();
-
             Phone.Bind();
             Bag.Bind();
             Capture.Bind();
@@ -76,8 +79,6 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
 
         public void Start()
         {
-            LoadPlayerProperties();
-
             GameRunner.Instance.PlayerInputHandler.OnPhoneTriggerred
                 .Subscribe(_ => SetPhoneMode())
                 .AddTo(GameRunner.Instance);
@@ -102,11 +103,18 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
             Bag.Start();
             Capture.Start();
             Conversation.Start();
-            
+
             Stamina.Start();
             Stamina.OnChangeStamina
                 .Subscribe(_ => SavePlayerProperties())
                 .AddTo(GameRunner.Instance);
+
+            if (GameRunner.Instance.Core.SaveReady)
+                HandleGameSaveReady(default);
+            else
+                GameRunner.Instance.Core.OnSaveReady
+                    .Subscribe(HandleGameSaveReady)
+                    .AddTo(GameRunner.Instance);
         }
 
         public void Unbind()
@@ -118,13 +126,6 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
             Stamina.Unbind();
         }
 
-        private void InitializeDatabase()
-        {
-            if (_initialized) return;
-            _initialized = true;
-            using (new SaveV001DbContext(new() { CopyMode = DbCopyMode.ForceCopy, ReadOnly = false })) ;
-        }
-
         private PlayerPropertiesV001 LoadPlayerProperties()
         {
             PlayerPropertiesV001 playerProperties;
@@ -134,6 +135,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
                 playerProperties = playerPropertiesRepo.Load();
                 //AddStamina(playerProperties.Stamina);
                 Stamina.SetStamina(playerProperties.Stamina);
+                UpdateFollowerCount(playerProperties.LikeCount);
+                DemoFinished = playerProperties.DemoFinished;
             }
 
             return playerProperties;
@@ -141,11 +144,13 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
 
         private void SavePlayerProperties()
         {
-            SaveDbWriter.Add(dbContext =>
+            GameRunner.Instance.Core.SaveDbWriter.Add(dbContext =>
             {
                 var playerPropertiesRepo = new PlayerPropertiesV001Repo(dbContext);
                 var playerProperties = playerPropertiesRepo.Load();
                 playerProperties.Stamina = Stamina.Stamina;
+                playerProperties.LikeCount = LikeCount;
+                playerProperties.FollowerCount = FollowerCount;
                 playerPropertiesRepo.Update(playerProperties);
             });
         }
@@ -167,7 +172,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
         public void SetBagMode()
         {
             ResetPlayerSubmenu();
-            if (Mode != PlayerMode.Move && Mode != PlayerMode.OpenBag) return;
+            if ((Mode != PlayerMode.Move && Mode != PlayerMode.OpenBag) || Bag.Animating) return;
             Mode = Mode == PlayerMode.Move ? PlayerMode.OpenBag : PlayerMode.Stop;
             OnChangeMode.OnNext(Mode);
             // switch (Mode)
@@ -206,13 +211,18 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
 
         private void UpdateProperties(Action<PlayerPropertiesV001> action)
         {
-            SaveDbWriter.Add(dbContext =>
+            GameRunner.Instance.Core.SaveDbWriter.Add(dbContext =>
             {
                 var repo = new PlayerPropertiesV001Repo(dbContext);
                 var playerProperties = repo.Load();
                 action(playerProperties);
                 repo.Update(playerProperties);
             });
+            LoadPlayerProperties();
+        }
+
+        private void HandleGameSaveReady(Unit _)
+        {
             LoadPlayerProperties();
         }
 
@@ -233,6 +243,49 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
         {
             LikeCount = likeCount;
             OnChangeLikeCount.OnNext(LikeCount);
+            UpdateFollowerCount(likeCount);
+        }
+
+        public void UpdateTotalLikeCount()
+        {
+            var totalLikeCount = Phone.SocialNetwork.Posts.Sum(p => p.LikeCount);
+            SetLikeCount(totalLikeCount);
+        }
+
+        public void UpdateFollowerCount(int likeCount)
+        {
+            using (var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = true }))
+            {
+                var playerPropertiesRepo = new PlayerPropertiesV001Repo(dbContext);
+                var playerProperties = playerPropertiesRepo.Load();
+                DemoFinished = playerProperties.DemoFinished;
+            }
+
+            FollowerCount = (int)Math.Floor(.05f * likeCount);
+            OnChangeFollowerCount.OnNext(FollowerCount);
+            // SavePlayerProperties();
+            Debug.Log($">>follower_count<< {FollowerCount}");
+            if (!_finalSceneLoaded && !DemoFinished && FollowerCount >= 200)
+            {
+                _finalSceneLoaded = true;
+                Debug.Log($">>load_final<<");
+
+                GameRunner.Instance.Core.SaveDbWriter.Add(dbContext =>
+                {
+                    var repo = new PlayerPropertiesV001Repo(dbContext);
+                    var properties = repo.Load();
+                    properties.DemoFinished = true;
+                    OnFinishDemo.OnNext(default);
+                    repo.Update(properties);
+                });
+
+                DOVirtual.DelayedCall(2f, () =>
+                {
+                    GameRunner.Instance.Core.GameScene.CloseScene();
+                    DOVirtual.DelayedCall(4f,
+                        () => { SiteRunner.Instance.Core.Site.SetSite("NekoInside28BedroomFinal"); });
+                });
+            }
         }
 
         // public void AddStamina(int addition)
@@ -275,7 +328,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
 
         public void AddAchievedQuest(string questCode)
         {
-            SaveDbWriter.Add(dbContext =>
+            GameRunner.Instance.Core.SaveDbWriter.Add(dbContext =>
             {
                 var repo = new PlayerQuestV001Repo(dbContext);
                 var playerQuest = repo.FindByQuestCode(questCode);
@@ -292,6 +345,5 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
                 return repo.FindByQuestCode(questCode) != null;
             }
         }
-        
     }
 }

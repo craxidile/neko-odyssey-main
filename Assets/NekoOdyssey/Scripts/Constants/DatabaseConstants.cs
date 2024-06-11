@@ -1,4 +1,4 @@
-﻿namespace NekoOdyssey.Constants
+﻿namespace NekoOdyssey.Scripts.Constants
 {
     public abstract class DatabaseConstants
     {
@@ -19,6 +19,9 @@
 
         public const string DbFriendsVersion = "1";
         public const string DbSocialName = "social";
+
+        public const string DbUiVersion = "1";
+        public const string DbUiName = "ui";
         
         public const string DbSaveVersion = "2";
         public const string DbSaveVersion001Name = "save001";

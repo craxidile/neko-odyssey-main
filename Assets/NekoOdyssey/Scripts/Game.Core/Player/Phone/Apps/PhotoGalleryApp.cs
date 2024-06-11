@@ -45,7 +45,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Phone.Apps
             // var photoList = Photos as List<CatPhotoV001>;
             // photoList?.Insert(0, photo);
             // OnChangePhotos.OnNext(Photos);
-            GameRunner.Instance.Core.Player.SaveDbWriter.Add(dbContext =>
+            GameRunner.Instance.Core.SaveDbWriter.Add(dbContext =>
             {
                 var repo = new CatPhotoV001Repo(dbContext);
                 var catPhoto = repo.FindByAssetBundleName(photo.CatCode);
@@ -53,6 +53,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Phone.Apps
                 repo.Add(photo);
             });
             LoadPhotos();
+            GameRunner.Instance.Core.Simulators.SocialNetworkSimulator.Add(photo.CatCode);
         }
     }
 }

@@ -9,6 +9,10 @@ using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
 using TMPro;
 using DataPersistence;
+using NekoOdyssey.Scripts;
+using NekoOdyssey.Scripts.Constants;
+using NekoOdyssey.Scripts.Extensions;
+using NekoOdyssey.Scripts.Game.Unity.Uis.Utils;
 using UnityEngine.SceneManagement;
 
 public class GameSettingManager : MonoBehaviour, IStackPanel
@@ -17,13 +21,14 @@ public class GameSettingManager : MonoBehaviour, IStackPanel
     [SerializeField] Button _backButton;
     [SerializeField] Button _resetSettingButton, _saveSettingButton;
     [SerializeField] Button _languageLeftButton, _languageRightButton;
-    [SerializeField] Image _languageNameImage;
+    // [SerializeField] Image _languageNameImage;
+    [SerializeField] Image _localeText;
     [SerializeField] AudioMixer _audioMixer;
     [SerializeField] Slider _masterVolumeSlider, _bgmVolumeSlider, _effectVolumeSlider;
     [SerializeField] Button _resolutionLeftButton, _resolutionRightButton;
-    [SerializeField] TextMeshProUGUI _resolutionText;
+    [SerializeField] Text _resolutionText;
     [SerializeField] Button _fullscreenLeftButton, _fullscreenRightButton;
-    [SerializeField] TextMeshProUGUI _fullscreenText;
+    [SerializeField] Text _fullscreenText;
 
     [SerializeField] ConfirmPopUpPanel changingLanguageConfirmPopUpPanel;
 
@@ -48,6 +53,7 @@ public class GameSettingManager : MonoBehaviour, IStackPanel
     public Action OnOpenPanel { get; set; }
 
     public static GameSettingManager Instance;
+
     private void Awake()
     {
         Instance = this;
@@ -97,16 +103,15 @@ public class GameSettingManager : MonoBehaviour, IStackPanel
         ShowPanel(false);
 
 #if UNITY_SWITCH
-
         SwitchSetting();
 #endif
-
     }
 
     void LoadSetting()
     {
         if (settingData == null) settingData = DataPersistenceManager.instance.GetSettingData();
     }
+
     void SetupLanguage()
     {
         _starterLanguageIndex = settingData.LanguageIndex;
@@ -122,12 +127,14 @@ public class GameSettingManager : MonoBehaviour, IStackPanel
 
         ChangeLanguage(1);
     }
+
     void SetupVolume()
     {
         _masterVolumeSlider.value = settingData.MasterVolume;
         _bgmVolumeSlider.value = settingData.BgmVolume;
         _effectVolumeSlider.value = settingData.EffectVolume;
     }
+
     void SetupScreen()
     {
         var resolutions = Screen.resolutions;
@@ -136,6 +143,8 @@ public class GameSettingManager : MonoBehaviour, IStackPanel
         activeResolutions = resolutions
             .Where(res => res.refreshRateRatio.Equals(currentRefrestRate))
             .Where(res => res.width / res.height >= 16 / 9)
+            .Where(res => res.width >= 1000)
+            .Where(res => res.width <= 3000)
             .ToList();
 
         for (int i = 0; i < activeResolutions.Count; i++)
@@ -154,11 +163,13 @@ public class GameSettingManager : MonoBehaviour, IStackPanel
         _resolutionText.text = $"{Screen.width}x{Screen.height}";
 
         var fullscreenModeText = Screen.fullScreen ? "Fullscreen" : "Windowed";
-        //_fullscreenText.text = Screen.fullScreen ? "Fullscreen" : "Windowed";
-        _fullscreenText.text = LoadUiLanguageFromCSV.GetUiLanguageText(fullscreenModeText);
+        // _fullscreenText.text = Screen.fullScreen ? "Fullscreen" : "Windowed";
+        // _fullscreenText.text = LoadUiLanguageFromCSV.GetUiLanguageText(fullscreenModeText);
+        var fullscreenTextLocaliser = _fullscreenText.GetComponent<UiTextLocaliser>();
+        if (fullscreenTextLocaliser != null) fullscreenTextLocaliser.OriginalText = fullscreenModeText;
 
-        var fullscreenTextMultiLanguageUi = _fullscreenText.GetComponent<UI_MultipleLanguage>();
-        fullscreenTextMultiLanguageUi.OverideInitialText(fullscreenModeText);
+        // var fullscreenTextMultiLanguageUi = _fullscreenText.GetComponent<UI_MultipleLanguage>();
+        // fullscreenTextMultiLanguageUi.OverideInitialText(fullscreenModeText);
     }
 
     public void SaveSetting(bool askingConfirm)
@@ -180,7 +191,6 @@ public class GameSettingManager : MonoBehaviour, IStackPanel
         settingData.EffectVolume = _effectVolumeSlider.value;
 
 
-
         DataPersistenceManager.instance.SaveSetting();
 
         //override temp
@@ -190,9 +200,8 @@ public class GameSettingManager : MonoBehaviour, IStackPanel
 
         //close panel
         ShowPanel(false);
-
-
     }
+
     public void ResetSetting()
     {
         SetupLanguage();
@@ -203,7 +212,6 @@ public class GameSettingManager : MonoBehaviour, IStackPanel
 
         WindowMode = _oldFullscreen ? 0 : 1;
         ChangeWindowMode(0);
-
     }
 
 
@@ -213,23 +221,43 @@ public class GameSettingManager : MonoBehaviour, IStackPanel
         int languageIndex = Mathf.Clamp(LanguageIndex + value, 0, maxLanguageIndex);
         if (languageIndex != LanguageIndex)
         {
+            Debug.Log($">>test<<");
             LanguageIndex = languageIndex;
             var language = (languageType)languageIndex;
             Debug.Log($"ChangeLanguage : {language}");
             LanguageManager.globalLanguage = language;
 
-            FindFirstObjectByType<LoadUiLanguageFromCSV>().ReloadUiLanguage(); 
-            _languageNameImage.sprite = LanguagePresetProvider.Instance.GetLanguageComponent().languageNameImage;
-            _languageNameImage.SetNativeSize();
+            FindFirstObjectByType<LoadUiLanguageFromCSV>().ReloadUiLanguage();
+            // _languageNameImage.sprite = LanguagePresetProvider.Instance.GetLanguageComponent().languageNameImage;
+            // _languageNameImage.SetNativeSize();
 
+            var locale = Locale.None;
+            switch (language.ToText())
+            {
+                case "TH":
+                    locale = Locale.Th;
+                    break;
+                case "JP":
+                    locale = Locale.Ja;
+                    break;
+                case "S_CN":
+                    locale = Locale.ZhCn;
+                    break;
+                case "T_CN":
+                    locale = Locale.ZhTw;
+                    break;
+                default:
+                    locale = Locale.En;
+                    break;
+            }
+            
+            GameRunner.Instance.Core.Settings.SetLocale(locale);
         }
 
-
-        _languageLeftButton.gameObject.SetActive(!(languageIndex == 0));
-        _languageRightButton.gameObject.SetActive(!(languageIndex == maxLanguageIndex));
+        _languageLeftButton.gameObject.SetActive(languageIndex != 0);
+        _languageRightButton.gameObject.SetActive(languageIndex != maxLanguageIndex);
 
         UpdateMultilanguageUi();
-
     }
 
     public void ChangeMasterVolume(float value)
@@ -237,6 +265,7 @@ public class GameSettingManager : MonoBehaviour, IStackPanel
         AudioListener.volume = value;
         _audioMixer.SetFloat("Master Volume", Mathf.Log10(value) * 20);
     }
+
     public void ChangeBGMVolume(float value)
     {
         float targetValue = Mathf.Log10(value) * 20;
@@ -244,8 +273,10 @@ public class GameSettingManager : MonoBehaviour, IStackPanel
         {
             targetValue = -80;
         }
+
         _audioMixer.SetFloat("BGM Volume", targetValue);
     }
+
     public void ChangeEffectVolume(float value)
     {
         var targetValue = Mathf.Log10(value) * 20;
@@ -253,6 +284,7 @@ public class GameSettingManager : MonoBehaviour, IStackPanel
         {
             targetValue = -80;
         }
+
         _audioMixer.SetFloat("SFX Volume", targetValue);
     }
 
@@ -265,18 +297,23 @@ public class GameSettingManager : MonoBehaviour, IStackPanel
 
         _resolutionText.text = $"{res.width}x{res.height}";
     }
+
     public void ChangeWindowMode(int value)
     {
         WindowMode = (WindowMode + value) % 2;
         Screen.fullScreen = WindowMode == 0;
 
-        string textOption = WindowMode == 0 ? "Fullscreen" : "Windowed";
+        var textOption = WindowMode == 0 ? "Fullscreen" : "Windowed";
+        Debug.Log($">>text_option<< {textOption}");
         //_fullscreenText.text = WindowMode == 0 ? "Fullscreen" : "Windowed";
-        _fullscreenText.text = LoadUiLanguageFromCSV.GetUiLanguageText(textOption);
+        // _fullscreenText.text = LoadUiLanguageFromCSV.GetUiLanguageText(textOption);
+        var localiser = _fullscreenText.GetComponent<UiTextLocaliser>();
+        if (localiser == null) return;
+        Debug.Log($">>text_option<< {textOption} {GameRunner.Instance.Core.Uis.Localisation.TranslateCurrent(textOption)}");
+        localiser.OriginalText = textOption;
 
-        var fullscreenTextMultiLanguageUi = _fullscreenText.GetComponent<UI_MultipleLanguage>();
-        fullscreenTextMultiLanguageUi.OverideInitialText(textOption);
-
+        // var fullscreenTextMultiLanguageUi = _fullscreenText.GetComponent<UI_MultipleLanguage>();
+        // fullscreenTextMultiLanguageUi.OverideInitialText(textOption);
     }
 
     void UpdateMultilanguageUi()
@@ -308,12 +345,13 @@ public class GameSettingManager : MonoBehaviour, IStackPanel
         {
             changingLanguageConfirmPopUpPanel.ShowPanel();
         }
-        changingLanguageConfirmPopUpPanel.canvasGroup.LerpAlpha(condition ? 1f : 0f, 0.2f);
 
+        changingLanguageConfirmPopUpPanel.canvasGroup.LerpAlpha(condition ? 1f : 0f, 0.2f);
     }
 
 
     public void ShowPanel() => ShowPanel(!IsActivation);
+
     public void ShowPanel(bool condition)
     {
         IsActivation = condition;
@@ -330,6 +368,7 @@ public class GameSettingManager : MonoBehaviour, IStackPanel
             OnClosePanel?.Invoke();
             //canvasGroup.SetAlpha(0f);
         }
+
         canvasGroup.LerpAlpha(condition ? 1f : 0f, 0.2f);
     }
 

@@ -50,7 +50,10 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Panels
         private void HandleItemSelection(BagItemV001 bagItem)
         {
             if (bagItem == null) return;
-            descriptionText.text = $"{bagItem.Item.Name}\n{bagItem.Item.Description}";
+            var itemsMasterData = GameRunner.Instance.Core.MasterData.ItemsMasterData;
+            var name = itemsMasterData.GetLocalisedItemName(bagItem.Item);
+            var description = itemsMasterData.GetLocalisedItemDescription(bagItem.Item);
+            descriptionText.text = $"{name}\n{description}";
         }
 
         private void HandleConfirmationVisibilityChange(bool visible)

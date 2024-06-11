@@ -103,7 +103,8 @@ public class PauseCanvasController : MonoBehaviour
     }
     void BackToTitle()
     {
-
+        Application.Quit();
+        // SiteRunner.Instance.Core.Site.SetSite("DemoTitle");
     }
     void Setting()
     {

@@ -24,7 +24,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone.CatNote
 
         public Image catBadgeImage;
         public Image catSilhouetteImage;
-        public TextMeshProUGUI catNameText;
+        public Text catNameText;
 
         private void SetCat(CatProfile catProfile)
         {
@@ -48,7 +48,9 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone.CatNote
         private void SetCollected(bool collected)
         {
             _collected = collected;
-            catNameText.text = !collected ? $"???" : CatProfile.NameEn;
+            catNameText.text = !collected
+                ? $"???"
+                : GameRunner.Instance.Core.MasterData.CatsMasterData.GetLocalisedCatName(CatProfile);
             catSilhouetteImage.gameObject.SetActive(!collected);
 
             var mask = catBadgeImage.GetComponent<Mask>();

@@ -43,14 +43,14 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Phone.Apps
                 var socialPostRepo = new SocialPostV001Repo(dbContext);
                 Posts = new List<SocialPostV001>(socialPostRepo.List());
             }
-
             OnChangeFeeds.OnNext(Posts);
+            GameRunner.Instance.Core.Player.UpdateTotalLikeCount();
         }
 
         public void Add(string catCode)
         {
             var catPhoto = new CatPhotoV001(catCode, catCode);
-            GameRunner.Instance.Core.Player.SaveDbWriter.Add(dbContext =>
+            GameRunner.Instance.Core.SaveDbWriter.Add(dbContext =>
             {
                 var catPhotoRepo = new CatPhotoV001Repo(dbContext);
                 var dbCatPhoto = catPhotoRepo.FindByAssetBundleName(catCode);

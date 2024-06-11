@@ -36,7 +36,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Panels
         private void HandleItemSelection(BagItemV001 bagItem)
         {
             if (bagItem == null) return;
-            nameText.text = bagItem.Item.Name;
+            nameText.text = GameRunner.Instance.Core.MasterData.ItemsMasterData.GetLocalisedItemName(bagItem.Item);
         }
     }
 }
