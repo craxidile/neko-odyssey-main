@@ -66,21 +66,21 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone.SocialNetwork
 
         private void GenerateSocialPostGrid(ICollection<SocialPostV001> posts)
         {
-            foreach (var socialFeedCells in _socialFeedCells)
-            {
-                Destroy(socialFeedCells);
-            }
-
-            _socialFeedCells.Clear();
-            foreach (var post in posts)
-            {
-                AddSocialPostCell(post);
-            }
-
-            var phoneCanvasController = GetComponent<PhoneCanvasController>();
-            var contentPosition = _scrollRect.content.anchoredPosition;
-            contentPosition.y = 0;
-            _scrollRect.content.anchoredPosition = contentPosition;
+            // foreach (var socialFeedCells in _socialFeedCells)
+            // {
+            //     Destroy(socialFeedCells);
+            // }
+            //
+            // _socialFeedCells.Clear();
+            // foreach (var post in posts)
+            // {
+            //     AddSocialPostCell(post);
+            // }
+            //
+            // var phoneCanvasController = GetComponent<PhoneCanvasController>();
+            // var contentPosition = _scrollRect.content.anchoredPosition;
+            // contentPosition.y = 0;
+            // _scrollRect.content.anchoredPosition = contentPosition;
         }
 
         private void AddSocialPostCell(SocialPostV001 post)
