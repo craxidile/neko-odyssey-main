@@ -44,21 +44,21 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone.PhotoGallery
 
         private void GeneratePhotoGalleryEntryGrid(ICollection<CatPhotoV001> photoGalleryEntries)
         {
-            foreach (var socialFeedCells in _photoGalleryEntryCells)
-            {
-                Destroy(socialFeedCells);
-            }
-
-            _photoGalleryEntryCells.Clear();
-            foreach (var photoGalleryEntry in photoGalleryEntries)
-            {
-                AddPhotoGalleryEntryCell(photoGalleryEntry);
-            }
-
-            var phoneCanvasController = GetComponent<PhoneCanvasController>();
-            var contentPosition = _scrollRect.content.anchoredPosition;
-            contentPosition.y = 0;
-            _scrollRect.content.anchoredPosition = contentPosition;
+            // foreach (var socialFeedCells in _photoGalleryEntryCells)
+            // {
+            //     Destroy(socialFeedCells);
+            // }
+            //
+            // _photoGalleryEntryCells.Clear();
+            // foreach (var photoGalleryEntry in photoGalleryEntries)
+            // {
+            //     AddPhotoGalleryEntryCell(photoGalleryEntry);
+            // }
+            //
+            // var phoneCanvasController = GetComponent<PhoneCanvasController>();
+            // var contentPosition = _scrollRect.content.anchoredPosition;
+            // contentPosition.y = 0;
+            // _scrollRect.content.anchoredPosition = contentPosition;
         }
 
         private void AddPhotoGalleryEntryCell(CatPhotoV001 catPhotoEntry)
