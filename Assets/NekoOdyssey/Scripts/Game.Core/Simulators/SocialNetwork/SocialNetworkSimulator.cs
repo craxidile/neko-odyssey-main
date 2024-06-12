@@ -65,14 +65,13 @@ namespace NekoOdyssey.Scripts.Game.Core.Simulators.SocialNetwork
                 var socialPostRepo = new SocialPostV001Repo(dbContext);
                 socialPost = socialPostRepo.FindByCatPhotoId(catPhoto.Id);
                 if (socialPost == null) socialPost = socialPostRepo.Add(new SocialPostV001(catPhoto));
+
+                StoreFutureLikes(
+                    new SocialFutureLikeV001(socialPost.Id, template.FinalLikeCount, template.ExpCdfLambda));
+                StoreFutureComments(
+                    new SocialFutureCommentV001(socialPost.Id, template.FinalCommentCount, template.ExpCdfLambda)
+                );
             });
-
-            if (socialPost == null) return;
-
-            StoreFutureLikes(new SocialFutureLikeV001(socialPost.Id, template.FinalLikeCount, template.ExpCdfLambda));
-            StoreFutureComments(
-                new SocialFutureCommentV001(socialPost.Id, template.FinalCommentCount, template.ExpCdfLambda)
-            );
         }
 
         private void LoadFutureLikes()
@@ -86,11 +85,13 @@ namespace NekoOdyssey.Scripts.Game.Core.Simulators.SocialNetwork
 
         private void StoreFutureLikes(SocialFutureLikeV001 likes)
         {
+            Debug.Log($">>save_social_post<< {likes.SocialPostId} store");
             FutureLikes.Add(likes);
             GameRunner.Instance.Core.SaveDbWriter.Add(dbContext =>
             {
                 var repo = new SocialFutureLikeV001Repo(dbContext);
                 var futureLike = repo.FindBySocialPostId(likes.SocialPostId);
+                Debug.Log($">>save_social_post<< {likes.SocialPostId} {futureLike}");
                 if (futureLike != null) return;
                 repo.Add(likes);
             });
