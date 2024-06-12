@@ -48,6 +48,7 @@ namespace NekoOdyssey.Scripts.Database.Domains.SaveV001
         private void Execute()
         {
             _running = true;
+            Debug.Log(">>db_writer<< running true");
             MainThreadDispatcher.StartCoroutine(ExecuteAsync());
         }
 
@@ -57,6 +58,7 @@ namespace NekoOdyssey.Scripts.Database.Domains.SaveV001
             if (func == null)
             {
                 _running = false;
+                Debug.Log(">>db_writer<< running false");
                 yield break;
             }
 
