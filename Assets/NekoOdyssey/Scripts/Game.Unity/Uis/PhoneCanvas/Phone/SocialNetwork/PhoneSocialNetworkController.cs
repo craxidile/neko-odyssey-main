@@ -18,8 +18,10 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone.SocialNetwork
         private ScrollRect _scrollRect;
         private TextMeshProUGUI _likeCountText;
         private TextMeshProUGUI _followerCountText;
+        private int _previousFeedCount;
 
         private readonly List<GameObject> _socialFeedCells = new();
+        private readonly Dictionary<int, SocialFeedCellController> _socialFeedMap = new();
 
         private void Awake()
         {
@@ -66,21 +68,36 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone.SocialNetwork
 
         private void GenerateSocialPostGrid(ICollection<SocialPostV001> posts)
         {
-            // foreach (var socialFeedCells in _socialFeedCells)
-            // {
-            //     Destroy(socialFeedCells);
-            // }
-            //
-            // _socialFeedCells.Clear();
-            // foreach (var post in posts)
-            // {
-            //     AddSocialPostCell(post);
-            // }
-            //
-            // var phoneCanvasController = GetComponent<PhoneCanvasController>();
-            // var contentPosition = _scrollRect.content.anchoredPosition;
-            // contentPosition.y = 0;
-            // _scrollRect.content.anchoredPosition = contentPosition;
+            if (_previousFeedCount == posts.Count)
+            {
+                Debug.Log(">>grid_posts<< update");
+                foreach (var post in posts)
+                {
+                    if (!_socialFeedMap.ContainsKey(post.Id)) continue;
+                    var controller = _socialFeedMap[post.Id];
+                    controller.likeText.text = $"{post.LikeCount}";
+                }
+
+                return;
+            }
+            
+            _previousFeedCount = posts.Count;
+            
+            foreach (var socialFeedCells in _socialFeedCells)
+            {
+                Destroy(socialFeedCells);
+            }
+
+            _socialFeedCells.Clear();
+            foreach (var post in posts)
+            {
+                AddSocialPostCell(post);
+            }
+
+            var phoneCanvasController = GetComponent<PhoneCanvasController>();
+            var contentPosition = _scrollRect.content.anchoredPosition;
+            contentPosition.y = 0;
+            _scrollRect.content.anchoredPosition = contentPosition;
         }
 
         private void AddSocialPostCell(SocialPostV001 post)
@@ -103,6 +120,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone.SocialNetwork
             }
 
             _socialFeedCells.Add(newPostObject);
+            _socialFeedMap[post.Id] = controller;
             newPostObject.SetActive(true);
         }
     }
