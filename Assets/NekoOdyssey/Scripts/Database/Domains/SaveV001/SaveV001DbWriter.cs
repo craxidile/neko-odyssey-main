@@ -39,16 +39,6 @@ namespace NekoOdyssey.Scripts.Database.Domains.SaveV001
         private bool _running;
         private SaveV001DbContext _dbContext;
 
-        public void Open()
-        {
-            _dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = false });
-        }
-
-        public void Close()
-        {
-            _dbContext?.Dispose();
-        }
-
         public void Add(SaveV001DbQueueFunc func)
         {
             _queue.Enqueue(func);
@@ -69,8 +59,12 @@ namespace NekoOdyssey.Scripts.Database.Domains.SaveV001
                 _running = false;
                 yield break;
             }
-            
-            func(_dbContext);
+
+            using (var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = false }))
+            {
+                func(dbContext);
+            }
+
             yield return null;
 
             MainThreadDispatcher.StartCoroutine(ExecuteAsync());
