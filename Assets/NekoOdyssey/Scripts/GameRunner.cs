@@ -28,6 +28,7 @@ namespace NekoOdyssey.Scripts
         public static readonly Dictionary<string, Object> StaticAssetMap = new();
 
         public GameCameras cameras;
+        public GameCoreMode gameCoreMode = GameCoreMode.All;
 
         public GameCore Core { get; } = new();
 
@@ -54,32 +55,30 @@ namespace NekoOdyssey.Scripts
             PlayerInputHandler = gameObject.AddComponent<PlayerInputHandler>();
             PlayerInputHandler.InputActions = _inputActions;
 
-            gameObject.AddComponent<CentralSiteActionController>();
-            gameObject.AddComponent<CentralCaptureActionHandler>();
-            gameObject.AddComponent<CentralConversationActionHandler>();
-            gameObject.AddComponent<CentralPlayerPettingHandler>();
-            TimeRoutine = gameObject.AddComponent<TimeRoutine>();
+            if (gameCoreMode == GameCoreMode.All)
+            {
+                gameObject.AddComponent<CentralSiteActionController>();
+                gameObject.AddComponent<CentralCaptureActionHandler>();
+                gameObject.AddComponent<CentralConversationActionHandler>();
+                gameObject.AddComponent<CentralPlayerPettingHandler>();
+                TimeRoutine = gameObject.AddComponent<TimeRoutine>();
+            }
 
-            Core.Bind();
+            Debug.Log($">>bind_game<< {gameCoreMode}");
+            Core.Bind(gameCoreMode);
 
             //new GameObject("Time Controller").AddComponent<NekoOdyssey.Scripts.Game.Core.Routine.TimeRoutine>().transform.SetParent(transform);
-        }
-
-        public void SetReady(bool ready)
-        {
-            Ready = ready;
-            OnReady.OnNext(ready);
         }
 
         private void Start()
         {
             Core.Start();
-            DOVirtual.DelayedCall(1f, () =>
-            {
-                SetReady(true);
-            });
+            DOVirtual.DelayedCall(1f, () => SetReady(true));
 
-            AssetBundleUtils.OnReady(InitializePositions);
+            if (gameCoreMode == GameCoreMode.All)
+            {
+                AssetBundleUtils.OnReady(InitializePositions);
+            }
 
             StartCoroutine(IUpdate());
         }
@@ -87,6 +86,12 @@ namespace NekoOdyssey.Scripts
         private void OnDestroy()
         {
             Core.Unbind();
+        }
+
+        public void SetReady(bool ready)
+        {
+            Ready = ready;
+            OnReady.OnNext(ready);
         }
 
         IEnumerator IUpdate()
