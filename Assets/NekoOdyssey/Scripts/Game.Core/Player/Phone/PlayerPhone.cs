@@ -58,6 +58,10 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Phone
                 .Subscribe(HandleScroll)
                 .AddTo(GameRunner.Instance);
 
+            playerInputHandler.OnCancelTriggerred
+                .Subscribe(HandleCancellation)
+                .AddTo(GameRunner.Instance);
+
             playerInputHandler.OnNextMenuTriggerred
                 .Subscribe(HandleNextMenuInput)
                 .AddTo(GameRunner.Instance);
@@ -99,6 +103,13 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Phone
 
             _scrolling = true;
             OnScroll.OnNext(input);
+        }
+
+        private void HandleCancellation(Unit _)
+        {
+            if (!IsPhoneMode) return;
+            Debug.Log($">>back_to_walk<<");
+            GameRunner.Instance.Core.Player.SetMode(PlayerMode.Move);
         }
 
         private void HandleNextMenuInput(Unit _)
