@@ -31,7 +31,6 @@ namespace NekoOdyssey.Scripts.Site.Unity.Transition
         private List<AsyncOperation> _asyncOperationList = new();
         private List<string> _scenesToPreload = new();
         private List<string> _scenesToLoad = new();
-        private float _startTime = 0;
         private StreamWriter _logWriter;
         private bool _ready;
 
@@ -40,15 +39,15 @@ namespace NekoOdyssey.Scripts.Site.Unity.Transition
         private void Awake()
         {
             InitializeScreen();
-            try
-            {
-                var logPath = Path.Combine(Application.persistentDataPath, "loading_log.txt");
-                _logWriter = new StreamWriter(new FileStream(logPath, FileMode.Append));
-            }
-            catch (Exception ex)
-            {
-                LogLine($">>load_scene_async<< error_log {ex.Message}\n{ex.StackTrace}");
-            }
+            // try
+            // {
+            //     var logPath = Path.Combine(Application.persistentDataPath, "loading_log.txt");
+            //     _logWriter = new StreamWriter(new FileStream(logPath, FileMode.Append));
+            // }
+            // catch (Exception ex)
+            // {
+            //     LogLine($">>load_scene_async<< error_log {ex.Message}\n{ex.StackTrace}");
+            // }
         }
 
         private void Start()
@@ -77,15 +76,8 @@ namespace NekoOdyssey.Scripts.Site.Unity.Transition
 
         private void LogLine(string text)
         {
-            if (_logWriter?.BaseStream == null) return;
-            _logWriter?.WriteLine($"[${DateTime.Now:MM/dd/yyyy HH:mm:ss}] {text}");
-        }
-
-        private static float GetCurrentSeconds()
-        {
-            var jan1970 = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            var javaSpan = DateTime.UtcNow - jan1970;
-            return (float)javaSpan.TotalMilliseconds / 1000;
+            // if (_logWriter?.BaseStream == null) return;
+            // _logWriter?.WriteLine($"[${DateTime.Now:MM/dd/yyyy HH:mm:ss}] {text}");
         }
 
         private void LoadAll()
@@ -98,7 +90,6 @@ namespace NekoOdyssey.Scripts.Site.Unity.Transition
 
             LogLine($">>load_all<< scene_ready start");
             _ready = true;
-            _startTime = GetCurrentSeconds();
             var currentSite = SiteRunner.Instance.Core.Site.CurrentSite;
             var scenes = currentSite.Scenes.OrderBy(s => s.Id).Select(s => s.Name).ToList();
             _scenesToPreload.AddRange(scenes);
@@ -174,10 +165,6 @@ namespace NekoOdyssey.Scripts.Site.Unity.Transition
             LogLine($">>preload_scene_async<< scene_name {sceneName}");
             if (sceneName == null)
             {
-                // var now = GetCurrentSeconds();
-                // var timeDiff = now - _startTime;
-                // Debug.Log($">>load_scene<< ready {timeDiff}");
-                // yield return new WaitForSeconds(Math.Max(0, 2f - timeDiff));
                 StartCoroutine(LoadSceneAsync());
                 LogLine($">>preload_scene_async<< done goto load_scene_async");
                 yield break;
@@ -243,14 +230,14 @@ namespace NekoOdyssey.Scripts.Site.Unity.Transition
             _ready = false;
             LogLine($">>load_scene_async<< done");
 
-            try
-            {
-                _logWriter.Close();
-            }
-            catch (Exception ex)
-            {
-                LogLine($">>load_scene_async<< error_log {ex.Message}\n{ex.StackTrace}");
-            }
+            // try
+            // {
+            //     _logWriter.Close();
+            // }
+            // catch (Exception ex)
+            // {
+            //     LogLine($">>load_scene_async<< error_log {ex.Message}\n{ex.StackTrace}");
+            // }
 
             yield break;
         }
