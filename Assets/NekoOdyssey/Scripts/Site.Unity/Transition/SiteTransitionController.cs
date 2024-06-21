@@ -190,7 +190,7 @@ namespace NekoOdyssey.Scripts.Site.Unity.Transition
             loading.SetActive(false);
             var currentSite = SiteRunner.Instance.Core.Site.CurrentSite;
             var scenes = currentSite.Scenes.OrderBy(s => s.Id).Select(s => s.Name);
-            SceneManager.SetActiveScene(SceneManager.GetSceneByName(scenes.First()));
+            //SceneManager.SetActiveScene(SceneManager.GetSceneByName(scenes.First()));
             yield break;
         }
     }

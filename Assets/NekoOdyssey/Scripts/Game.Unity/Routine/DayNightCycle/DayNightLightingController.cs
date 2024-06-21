@@ -75,8 +75,8 @@ public class DayNightLightingController : MonoBehaviour
         currentDayNightProfile = lightProfile;
 
 
-        //var scene = SceneManager.GetSceneByName(lightProfile.sceneName);
-        //SceneManager.SetActiveScene(scene);
+        var scene = SceneManager.GetSceneByName("SkyBox");
+        SceneManager.SetActiveScene(scene);
 
 
         lightProfile.gameObject.SetActive(true);
