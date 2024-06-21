@@ -62,6 +62,10 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             //    })
             //    .AddTo(SiteRunner.Instance);
 
+
+
+
+
             GameRunner.Instance.TimeRoutine.OnChangeDay
                 .Subscribe(_ => HandleChangeDay())
                 .AddTo(GameRunner.Instance);
@@ -70,17 +74,17 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         // Update is called once per frame
         public void Update()
         {
-            if (Time.time < _delayTime) return;
+            //if (Time.time < _delayTime) return;
 
-            if (!_initialized)
-            {
-                Initialized();
-                return;
-            }
+            //if (!_initialized)
+            //{
+            //    Initialized();
+            //    return;
+            //}
 
-            if (!_enabled) return;
+            //if (!_enabled) return;
 
-            CheckDayNightCondition();
+            //CheckDayNightCondition();
         }
 
         void Initialized()
