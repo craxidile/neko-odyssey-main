@@ -13,6 +13,7 @@ namespace NekoOdyssey.Scripts.Site.Unity.Transition
     public class SiteTransitionController : MonoBehaviour
     {
         private static bool _screenInitialized;
+        public static bool isSetActiveScene;
 
         private static readonly List<string> BundleNames = new()
         {
@@ -37,6 +38,7 @@ namespace NekoOdyssey.Scripts.Site.Unity.Transition
         private void Awake()
         {
             InitializeScreen();
+            isSetActiveScene = false;
         }
 
         private void Start()
@@ -190,7 +192,8 @@ namespace NekoOdyssey.Scripts.Site.Unity.Transition
             loading.SetActive(false);
             var currentSite = SiteRunner.Instance.Core.Site.CurrentSite;
             var scenes = currentSite.Scenes.OrderBy(s => s.Id).Select(s => s.Name);
-            //SceneManager.SetActiveScene(SceneManager.GetSceneByName(scenes.First()));
+            SceneManager.SetActiveScene(SceneManager.GetSceneByName(scenes.First()));
+            isSetActiveScene = true;
             yield break;
         }
     }

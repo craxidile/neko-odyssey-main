@@ -16,6 +16,8 @@ public class DayNightLightingController : MonoBehaviour
 
     float _delayTime;
 
+    bool _needSetActive;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -66,6 +68,14 @@ public class DayNightLightingController : MonoBehaviour
                 lightProfile.gameObject.SetActive(false);
             }
         }
+
+        if (NekoOdyssey.Scripts.Site.Unity.Transition.SiteTransitionController.isSetActiveScene && _needSetActive)
+        {
+            _needSetActive = false;
+
+            var scene = SceneManager.GetSceneByName("SkyBox");
+            SceneManager.SetActiveScene(scene);
+        }
     }
 
     void UpdateDayNightProfile(DayNightLightingProfile lightProfile)
@@ -77,6 +87,7 @@ public class DayNightLightingController : MonoBehaviour
 
         var scene = SceneManager.GetSceneByName("SkyBox");
         SceneManager.SetActiveScene(scene);
+        _needSetActive = true;
 
 
         lightProfile.gameObject.SetActive(true);
