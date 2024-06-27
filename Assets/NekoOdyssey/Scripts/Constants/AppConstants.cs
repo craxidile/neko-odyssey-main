@@ -21,13 +21,13 @@ namespace NekoOdyssey.Scripts.Constants
             public const int NewDay = 10000;
 
             // Length of tie (in-game minutes) that player can stay idle with `NewDay` stamina
-            public const int LiveTime = 360;
+            public const int LiveTime = 480;
         }
 
         public static class Time
         {
             public const int MaxDayMinute = 1440;
-            public const string StartDayTime = "10:00"; // 60 = 1 hours in game; 600 = 10:00
+            public const string StartDayTime = "8:00"; // 60 = 1 hours in game; 600 = 10:00
             public const string EndDayTime = "22:00";
             public const float GameHourPerMinute = 0.25f; //how many in game hours per real life minute
         }

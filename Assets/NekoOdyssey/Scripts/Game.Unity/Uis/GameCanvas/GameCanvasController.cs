@@ -1,11 +1,18 @@
 ﻿using System;
+using System.Linq;
 using DG.Tweening;
 using NekoOdyssey.Scripts.Constants;
+using NekoOdyssey.Scripts.Extensions;
 using NekoOdyssey.Scripts.Game.Unity.AssetBundles;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
+using NekoOdyssey.Scripts.Game.Unity.Uis.Utils;
 using TMPro;
 using UniRx;
+// using UnityEditor.UI;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.DualShock;
+using UnityEngine.InputSystem.XInput;
 using UnityEngine.UI;
 
 namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
@@ -16,6 +23,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
 
         private bool _initialized;
         private Tween _staminaTween;
+        private bool _gamepadConnected;
 
         public bool isActive;
 
@@ -30,6 +38,15 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
         [SerializeField] ButtonHover phoneButton, bagButton;
         [SerializeField] CanvasGroup socialNotificationCanvasGroup, bagNotificationCanvasGroup;
         [SerializeField] TextMeshProUGUI socialNotificationText, bagNotificationText;
+
+        public Image keyboardPhoneKey;
+        public Image keyboardBagKey;
+        public Image psPhoneKey;
+        public Image psBagKey;
+        public Image xboxPhoneKey;
+        public Image xboxBagKey;
+        public Text activeMissionText;
+        public Text finishedMissionText;
 
         CanvasGroup canvasGroup;
 
@@ -62,13 +79,21 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
             GameRunner.Instance.Core.Player.OnChangeLikeCount
                 .Subscribe(HandleLikeCountChange)
                 .AddTo(this);
+            GameRunner.Instance.Core.Player.OnChangeFollowerCount
+                .Subscribe(HandleFollowerCountChange)
+                .AddTo(this);
+
+            UpdateMissionText(default);
+            GameRunner.Instance.Core.Player.OnFinishDemo
+                .Subscribe(UpdateMissionText)
+                .AddTo(this);
 
             UpdateStamina(GameRunner.Instance.Core.Player.Stamina.Stamina);
 
             HandleTimeChange();
 
-            socialLikeText.text = "0";
-            followerText.text = followerCount.ToString("N0");
+            socialLikeText.text = $"{GameRunner.Instance.Core.Player.LikeCount}";
+            followerText.text = $"{GameRunner.Instance.Core.Player.FollowerCount}";
             moneyText.text = moneyCount.ToString("N0");
 
             socialNotificationCanvasGroup.alpha = socialNotificationCount == 0 ? 0 : 1;
@@ -84,6 +109,63 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
         void Update()
         {
             CheckActivation();
+            var gamepadCount = Gamepad.all.Count();
+            if (gamepadCount == 0)
+            {
+                _gamepadConnected = false;
+                UpdateGamepadButtons();
+                return;
+            }
+
+            if (gamepadCount > 0 && !_gamepadConnected)
+            {
+                _gamepadConnected = true;
+                Debug.Log($">>gamepad_count<< {gamepadCount}");
+                UpdateGamepadButtons();
+            }
+        }
+
+        private void UpdateMissionText(Unit _)
+        {
+            var finished = GameRunner.Instance.Core.Player.DemoFinished;
+            Debug.Log($">>finished<< {finished}");
+            activeMissionText.gameObject.SetActive(!finished);
+            finishedMissionText.gameObject.SetActive(finished);
+        }
+
+        private void UpdateGamepadButtons()
+        {
+            var gamepad = Gamepad.current;
+            if (gamepad == null)
+            {
+                keyboardPhoneKey.gameObject.SetActive(true);
+                keyboardBagKey.gameObject.SetActive(true);
+                psPhoneKey.gameObject.SetActive(false);
+                psBagKey.gameObject.SetActive(false);
+                xboxPhoneKey.gameObject.SetActive(false);
+                xboxBagKey.gameObject.SetActive(false);
+            }
+            else if (gamepad is DualShockGamepad)
+            {
+                keyboardPhoneKey.gameObject.SetActive(false);
+                keyboardBagKey.gameObject.SetActive(false);
+                psPhoneKey.gameObject.SetActive(true);
+                psBagKey.gameObject.SetActive(true);
+                xboxPhoneKey.gameObject.SetActive(false);
+                xboxBagKey.gameObject.SetActive(false);
+                print(">>gamepad<< Playstation gamepad");
+            }
+            else if (gamepad is XInputController) 
+            {
+                keyboardPhoneKey.gameObject.SetActive(false);
+                keyboardBagKey.gameObject.SetActive(false);
+                psPhoneKey.gameObject.SetActive(false);
+                psBagKey.gameObject.SetActive(false);
+                xboxPhoneKey.gameObject.SetActive(true);
+                xboxBagKey.gameObject.SetActive(true);
+                print(">>gamepad<< Xbox gamepad");
+            }
+            
         }
 
         private void HandlePhoneClick()
@@ -108,13 +190,21 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
             RebuildLayout();
         }
 
+        private void HandleFollowerCountChange(int followerCount)
+        {
+            Debug.Log($">>follower_count<< {followerCount}");
+            followerText.text = followerCount.ToString("N0");
+            RebuildLayout();
+        }
+
         private void HandleTimeChange()
         {
             var timeRoutine = GameRunner.Instance.TimeRoutine;
             gameTimeText.text = timeRoutine.GetUiTimeText();
 
-            var dayText = timeRoutine.CurrentDay.ToString();
-            gameDayText.text = dayText;
+            var dayText = timeRoutine.CurrentDay.ToText();
+            var gameDayLocaliser = gameDayText.GetComponent<UiTextLocaliser>();
+            gameDayLocaliser.OriginalText = dayText;
 
             RebuildLayout();
         }

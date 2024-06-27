@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using NekoOdyssey.Scripts.Constants;
 using NekoOdyssey.Scripts.Database.Domains;
 using NekoOdyssey.Scripts.Database.Domains.Cats;
 using NekoOdyssey.Scripts.Database.Domains.Cats.Entities.CatProfileEntity.Models;
@@ -51,6 +52,25 @@ namespace NekoOdyssey.Scripts.Game.Core.MasterData.Items
                 CatProfiles = catProfileRepo.List();
             }
         }
-        
+
+        public string GetLocalisedCatName(CatProfile catProfile)
+        {
+            var locale = GameRunner.Instance.Core.Settings.Locale;
+            switch (locale)
+            {
+                case Locale.Th:
+                    return catProfile.NameTh;
+                case Locale.En:
+                    return catProfile.NameEn;
+                case Locale.ZhCn:
+                    return catProfile.NameZhCn;
+                case Locale.ZhTw:
+                    return catProfile.NameZhTw;
+                case Locale.Ja:
+                    return catProfile.NameJa;
+                default:
+                    return null;
+            }
+        }
     }
 }

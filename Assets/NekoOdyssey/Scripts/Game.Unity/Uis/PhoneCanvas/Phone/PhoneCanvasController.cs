@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
+using NekoOdyssey.Scripts.Extensions;
 using NekoOdyssey.Scripts.Game.Core.Player.Phone;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 using NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone.CatNote;
 using NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone.PhotoGallery;
 using NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone.SocialNetwork;
+using NekoOdyssey.Scripts.Game.Unity.Uis.Utils;
 using TMPro;
 using UniRx;
 using UnityEngine;
@@ -30,8 +32,10 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone
         public Transform phoneTransform;
 
         public TextMeshProUGUI likeCountText;
+        public TextMeshProUGUI followerCountText;
 
-        public Text phoneTimeText, phoneDayText;
+        public Text phoneTimeText;
+        public Text phoneDayText;
 
         private bool _active;
         private bool _isOpen;
@@ -176,8 +180,10 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone
             var timeRoutine = GameRunner.Instance.TimeRoutine;
             phoneTimeText.text = timeRoutine.GetUiTimeText();
 
-            var dayText = timeRoutine.CurrentDay.ToString();
-            phoneDayText.text = dayText;
+            var dayText = timeRoutine.CurrentDay.ToText();
+            var phoneDayLocaliser = phoneDayText.GetComponent<UiTextLocaliser>();
+            if (phoneDayLocaliser == null) return;
+            phoneDayLocaliser.OriginalText = dayText;
         }
 
     }

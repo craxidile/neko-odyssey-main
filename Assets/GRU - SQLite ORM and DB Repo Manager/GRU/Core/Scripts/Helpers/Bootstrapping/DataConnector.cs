@@ -41,7 +41,7 @@ namespace Database.Repository
         {
             databaseName = databaseName.ToDatabaseName();
 
-#if UNITY_EDITOR
+#if UNITY_EDITOR || UNITY_STANDALONE_WIN
             var dbFilePath = string.Format("{0}/{1}", databasePath, databaseName);
 #elif UNITY_SWITCH
             SQLite3.NlibSetDirectory(SQLite3.SQLiteNlibDirectoryType.Data, "save:");

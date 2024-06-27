@@ -28,6 +28,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         {
             //csv loader
 
+            if (GameRunner.Instance.CsvHolder == null) return;
+            
             foreach (var dialogueCSV in GameRunner.Instance.CsvHolder.allQuestDialoguesCSV)
             {
                 if (dialogueCSV == null) continue;

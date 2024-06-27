@@ -318,10 +318,10 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                                 ////Debug.Log($"Check index : {dialogueGroup._currentDialogueIndex}");
                             };
                         }
-                        else
-                        {
-                            Debug.Log("dialogueActors != null && dialogueActors.Length > 0 && eventPointInteractive != null           is false");
-                        }
+                        //else
+                        //{
+                        //    Debug.Log("dialogueActors != null && dialogueActors.Length > 0 && eventPointInteractive != null           is false");
+                        //}
 
                     }
                     else //outside event time

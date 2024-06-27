@@ -7,6 +7,7 @@ using NekoOdyssey.Scripts.Database.Domains.SaveV001.CatPhotoEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.SaveV001.CatPhotoEntity.Repo;
 using NekoOdyssey.Scripts.Database.Domains.SaveV001.SocialFutureCommentEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.SaveV001.SocialFutureLikeEntity.Models;
+using NekoOdyssey.Scripts.Database.Domains.SaveV001.SocialFutureLikeEntity.Repo;
 using NekoOdyssey.Scripts.Database.Domains.SaveV001.SocialPostEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.SaveV001.SocialPostEntity.Repo;
 using NekoOdyssey.Scripts.Database.Domains.Social;
@@ -20,7 +21,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Simulators.SocialNetwork
 {
     public class SocialNetworkSimulator
     {
-        private const int SimulationInterval = 60000;
+        private const int SimulationInterval = 15000;
 
         public List<SocialFutureLikeV001> FutureLikes { get; } = new();
         public List<SocialFutureCommentV001> FutureComments { get; } = new();
@@ -32,6 +33,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Simulators.SocialNetwork
 
         public void Start()
         {
+            LoadFutureLikes();
             Observable.Interval(TimeSpan.FromMilliseconds(SimulationInterval))
                 .Subscribe(HandleTimeElapsed)
                 .AddTo(GameRunner.Instance);
@@ -54,7 +56,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Simulators.SocialNetwork
             if (template == null) return;
 
             SocialPostV001 socialPost = null;
-            GameRunner.Instance.Core.Player.SaveDbWriter.Add(dbContext =>
+            GameRunner.Instance.Core.SaveDbWriter.Add(dbContext =>
             {
                 var catPhotoRepo = new CatPhotoV001Repo(dbContext);
                 var catPhoto = catPhotoRepo.FindByAssetBundleName(assetBundleName);
@@ -73,9 +75,43 @@ namespace NekoOdyssey.Scripts.Game.Core.Simulators.SocialNetwork
             );
         }
 
+        private void LoadFutureLikes()
+        {
+            using (var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = true }))
+            {
+                var repo = new SocialFutureLikeV001Repo(dbContext);
+                FutureLikes.AddRange(repo.List());
+            }
+        }
+
         private void StoreFutureLikes(SocialFutureLikeV001 likes)
         {
             FutureLikes.Add(likes);
+            GameRunner.Instance.Core.SaveDbWriter.Add(dbContext =>
+            {
+                var repo = new SocialFutureLikeV001Repo(dbContext);
+                var futureLike = repo.FindBySocialPostId(likes.SocialPostId);
+                if (futureLike != null) return;
+                repo.Add(likes);
+            });
+        }
+
+        private void UpdateFutureLikes(SocialFutureLikeV001 likes)
+        {
+            GameRunner.Instance.Core.SaveDbWriter.Add(dbContext =>
+            {
+                var repo = new SocialFutureLikeV001Repo(dbContext);
+                var futureLike = repo.FindBySocialPostId(likes.SocialPostId);
+                if (futureLike == null) return;
+                futureLike.Round = likes.Round;
+                futureLike.LikeCount = likes.LikeCount;
+                repo.Update(futureLike);
+            });
+        }
+
+        private void RemoveFutureLikes(ICollection<SocialFutureLikeV001> allLikes)
+        {
+            FutureLikes.RemoveAll(allLikes.Contains);
         }
 
         private void StoreFutureComments(SocialFutureCommentV001 comments)
@@ -87,13 +123,13 @@ namespace NekoOdyssey.Scripts.Game.Core.Simulators.SocialNetwork
         {
             // For random: -ln(1 - (1 - exp(-λ)) * U) / λ
             var maxRandom = Math.Max(2f, Mathf.Floor(max * expCdfLambda * Mathf.Exp(-expCdfLambda * round)));
-            return Math.Min(max, (int)Random.Range(0, maxRandom));
+            return Math.Min(max, (int)Random.Range(maxRandom / 2, maxRandom));
         }
 
         private void HandleTimeElapsed(long ticks)
         {
             var posts = GameRunner.Instance.Core.Player.Phone.SocialNetwork.Posts;
-            
+
             var futureLikesToRemove = new List<SocialFutureLikeV001>();
             foreach (var futureLike in FutureLikes)
             {
@@ -102,20 +138,25 @@ namespace NekoOdyssey.Scripts.Game.Core.Simulators.SocialNetwork
                 var likeCount = GenerateExpRandom(futureLike.ExpCdfLambda, currentRound, futureLike.LikeCount);
                 futureLike.Round = currentRound;
                 futureLike.LikeCount -= likeCount;
+                UpdateFutureLikes(futureLike);
                 if (futureLike.LikeCount == 0) futureLikesToRemove.Add(futureLike);
 
                 var post = posts.FirstOrDefault(p => p.Id == futureLike.SocialPostId);
                 if (post == null) continue;
 
                 post.LikeCount += likeCount;
-                Debug.Log($">>like_count<< {post.LikeCount}");
+                GameRunner.Instance.Core.SaveDbWriter.Add(dbContext =>
+                {
+                    var repo = new SocialPostV001Repo(dbContext);
+                    repo.Update(post);
+                });
+
+                Debug.Log($">>like_count<< {post.Photo.CatCode} {post.LikeCount}");
                 GameRunner.Instance.Core.Player.Phone.SocialNetwork.RefreshPost(post);
             }
 
-            var totalLikeCount = posts.Sum(p => p.LikeCount);
-            GameRunner.Instance.Core.Player.SetLikeCount(totalLikeCount);
-            
-            FutureLikes.RemoveAll(fl => futureLikesToRemove.Contains(fl));
+            GameRunner.Instance.Core.Player.UpdateTotalLikeCount();
+            RemoveFutureLikes(futureLikesToRemove);
         }
     }
 }

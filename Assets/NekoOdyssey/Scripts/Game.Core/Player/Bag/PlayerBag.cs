@@ -18,6 +18,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
     {
         private const float SelectBagItemDelay = .3f;
 
+        public bool Animating { get; private set; }
         public int GridColumnCount { get; private set; }
         public ItemType CurrentItemType { get; private set; }
         public BagItemV001 CurrentBagItem { get; private set; }
@@ -76,7 +77,14 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
         private void HandleCancellation()
         {
             if (GameRunner.Instance.Core.Player.Mode != PlayerMode.OpenBag) return;
-            SetConfirmationVisible(false);
+            if (ConfirmationVisible)
+            {
+                SetConfirmationVisible(false);
+            }
+            else
+            {
+                Finish();
+            }
         }
 
         private void HandlePrevTab()
@@ -166,7 +174,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
             if (!CurrentBagItem.Item.SingleUse) return;
 
             BagItems.Remove(CurrentBagItem);
-            GameRunner.Instance.Core.Player.SaveDbWriter.Add(dbContext =>
+            GameRunner.Instance.Core.SaveDbWriter.Add(dbContext =>
             {
                 var bagItemRepo = new BagItemV001Repo(dbContext);
                 bagItemRepo.Remove(CurrentBagItem);
@@ -205,8 +213,14 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
             GridColumnCount = count;
         }
 
+        public void SetAnimating(bool animating)
+        {
+            Animating = animating;
+        }
+
         public void Finish()
         {
+            SetConfirmationVisible(false);
             GameRunner.Instance.Core.Player.SetMode(PlayerMode.Move);
         }
     }

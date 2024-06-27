@@ -1,8 +1,10 @@
 using NekoOdyssey.Scripts;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.Timeline;
 
 public class DemoCutsceneManager : MonoBehaviour
 {
@@ -15,6 +17,15 @@ public class DemoCutsceneManager : MonoBehaviour
         directorIntro.gameObject.SetActive(true);
         directorGoToGame.gameObject.SetActive(false);
         isDone = false;
+        
+        // Debug.Log($">>timeline<< {GameObject.Find("Intro")}");
+        // var timeline = GameObject.Find("Intro").GetComponent<PlayableDirector>();
+        // Debug.Log($">>timeline<< {timeline}");
+        // if (timeline == null) return;
+        // Debug.Log($">>timeline<< play");
+        // timeline.time = 0;
+        // timeline.Stop();
+        // timeline.Evaluate();
     }
 
     // Update is called once per frame
@@ -24,14 +35,17 @@ public class DemoCutsceneManager : MonoBehaviour
         {
             buttonGroup.SetActive(true);
             directorIntro.gameObject.SetActive(false);
+            Debug.Log($">>valid<< 01 false");
         }
         if (!directorGoToGame.playableGraph.IsValid() && !isDone)
         {
             CutSceneIntroIsDone();
+            Debug.Log($">>valid<< 02 false");
         }
         if (Input.GetKeyUp(KeyCode.KeypadEnter))
         {
             GoToGame();
+            Debug.Log($">>valid<< 03 false");
         }
     }
 

@@ -1,4 +1,5 @@
 ﻿using NekoOdyssey.Constants;
+using NekoOdyssey.Scripts.Constants;
 
 namespace NekoOdyssey.Scripts.Database.Domains.Npc
 {
