@@ -92,9 +92,9 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone
                 .Subscribe(AnimateCanvasSwap)
                 .AddTo(this);
 
-            GameRunner.Instance.TimeRoutine.OnTimeUpdate
-                .Subscribe(_ => HandleTimeChange())
-                .AddTo(this);
+            //GameRunner.Instance.TimeRoutine.OnTimeUpdate
+            //    .Subscribe(_ => HandleTimeChange())
+            //    .AddTo(this);
             HandleTimeChange();
         }
 

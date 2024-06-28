@@ -306,7 +306,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
 
                 OnTimeUpdate.OnNext(Mathf.Max(timeScriptable.dayMinute - previosMinute, 0));
-                Debug.Log($"OnTimeUpdate = {(timeScriptable.dayMinute - previosMinute)}");
+                //Debug.Log($"OnTimeUpdate = {(timeScriptable.dayMinute - previosMinute)}");
 
 
                 SaveTimeData();
