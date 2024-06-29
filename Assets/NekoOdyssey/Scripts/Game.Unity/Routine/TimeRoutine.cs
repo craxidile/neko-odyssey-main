@@ -102,6 +102,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         //public Day currentDay;
         //[Range(0, AppConstants.Time.MaxDayMinute)] public int dayMinute;
         float dayMinuteFloat;
+        bool _isOverTime; //time have pass 1 hour
 
         //[ReadOnlyField]
         //[SerializeField]
@@ -195,9 +196,20 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             //dayMinute = Mathf.RoundToInt(s_dayMinuteFloat);
         }
 
+        private void OnDestroy()
+        {
+            if (_isOverTime)
+            {
+                GameRunner.Instance.Core.Player.UpdateTime(currentTime.Hour + 1, 0);
+            }
+        }
+
         // Update is called once per frame
         public void Update()
         {
+            if (_isOverTime) return;
+
+
             //if (timeScriptable == null) return;
             //day = currentDay;
             //timeHrMin.Hour = currentHours;
@@ -207,7 +219,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             //currentDay = day;
             ProcessTime();
 
-
+            if (_isOverTime) return;
             //SetTime($"{dayMinute / 60}:{dayMinute % 60}");
 
 
@@ -271,6 +283,10 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                 }
 
 
+                if (Mathf.RoundToInt(dayMinuteFloat) % 60 == 59 && !_isOverTime)
+                {
+                    _isOverTime = true;
+                }
             }
             else
             {
@@ -290,7 +306,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
 
                 OnTimeUpdate.OnNext(Mathf.Max(timeScriptable.dayMinute - previosMinute, 0));
-                Debug.Log($"OnTimeUpdate = {(timeScriptable.dayMinute - previosMinute)}");
+                //Debug.Log($"OnTimeUpdate = {(timeScriptable.dayMinute - previosMinute)}");
 
 
                 SaveTimeData();

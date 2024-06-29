@@ -9,7 +9,7 @@ using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 
 public class EventPointInteractive : MonoBehaviour
 {
-    public float interactiveDistance = 1;
+    //public float interactiveDistance = 1;
 
     public static EventPointInteractive NearestPoint;
 
@@ -47,8 +47,8 @@ public class EventPointInteractive : MonoBehaviour
         //Debug.DrawLine(this.transform.position, player.transform.position, Color.red);
         //Debug.DrawLine(NearestPoint.transform.position + (Vector3.up * 0.3f), player.transform.position, Color.yellow);
 
-        if (thisPointDistance <= interactiveDistance) //inside range
-        {
+        //if (thisPointDistance <= interactiveDistance) //inside range
+        //{
             if (NearestPoint == this)
             {
                 //if (Keyboard.current.spaceKey.wasPressedThisFrame)
@@ -72,11 +72,11 @@ public class EventPointInteractive : MonoBehaviour
             }
 
             _isActive = NearestPoint == this;
-        }
-        else
-        {
-            _isActive = false;
-        }
+        //}
+        //else
+        //{
+        //    _isActive = false;
+        //}
 
 
 
@@ -116,19 +116,19 @@ public class EventPointInteractive : MonoBehaviour
         _delayTime = Time.time + 0.1f;
     }
 
-    private void OnDrawGizmosSelected()
-    {
-        //Gizmos.color = Color.yellow;
-        //Gizmos.DrawWireSphere(transform.position, interactiveDistance);
+    //private void OnDrawGizmosSelected()
+    //{
+    //    //Gizmos.color = Color.yellow;
+    //    //Gizmos.DrawWireSphere(transform.position, interactiveDistance);
 
 
-        var gizColor = Color.yellow;
+    //    var gizColor = Color.yellow;
 
-        gizColor.a = 0.5f;
-        Gizmos.color = gizColor;
-        Gizmos.DrawWireSphere(transform.position, interactiveDistance);
-        gizColor.a = 0.1f;
-        Gizmos.color = gizColor;
-        Gizmos.DrawSphere(transform.position, interactiveDistance);
-    }
+    //    gizColor.a = 0.5f;
+    //    Gizmos.color = gizColor;
+    //    Gizmos.DrawWireSphere(transform.position, interactiveDistance);
+    //    gizColor.a = 0.1f;
+    //    Gizmos.color = gizColor;
+    //    Gizmos.DrawSphere(transform.position, interactiveDistance);
+    //}
 }

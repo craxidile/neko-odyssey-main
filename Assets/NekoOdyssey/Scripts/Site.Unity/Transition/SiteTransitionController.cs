@@ -14,6 +14,7 @@ namespace NekoOdyssey.Scripts.Site.Unity.Transition
     public class SiteTransitionController : MonoBehaviour
     {
         private static bool _screenInitialized;
+        public static bool isSetActiveScene;
 
         private static readonly List<string> BundleNames = new()
         {
@@ -39,6 +40,7 @@ namespace NekoOdyssey.Scripts.Site.Unity.Transition
         private void Awake()
         {
             InitializeScreen();
+            isSetActiveScene = false;
             // try
             // {
             //     var logPath = Path.Combine(Application.persistentDataPath, "loading_log.txt");
@@ -239,6 +241,7 @@ namespace NekoOdyssey.Scripts.Site.Unity.Transition
             //     LogLine($">>load_scene_async<< error_log {ex.Message}\n{ex.StackTrace}");
             // }
 
+            isSetActiveScene = true;
             yield break;
         }
     }

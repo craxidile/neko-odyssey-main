@@ -17,27 +17,27 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Conversations
         private GameObject _dialogCanvas;
         private PlayerMode _previousMode;
 
-        private IDisposable _playerModeChangedSubscription;
+        //private IDisposable _playerModeChangedSubscription;
         private IDisposable _activeChangeSubscription;
 
-        private void SetActive(PlayerMode mode)
-        {
-            _active = mode == PlayerMode.Conversation;
-            if (!_active) return;
+        //private void SetActive(PlayerMode mode)
+        //{
+        //    _active = mode == PlayerMode.Conversation;
+        //    if (!_active) return;
 
-            //if (!GameRunner.Instance.AssetMap.ContainsKey("dialogcanvas")) return;
+        //    //if (!GameRunner.Instance.AssetMap.ContainsKey("dialogcanvas")) return;
 
-            //_dialogCanvas = Instantiate(
-            //    GameRunner.Instance.AssetMap["dialogcanvas"],
-            //    GameRunner.Instance.Core.PlayerMenu.GameObject.transform
-            //) as GameObject;
-            //Debug.Log($">>dialog_canvas<< {_dialogCanvas}");
-            //var dialogCanvasController = _dialogCanvas.GetComponent<DialogCanvasController>();
-            //dialogCanvasController.SetText(GameRunner.Instance.Core.Player.Conversation.Dialog);
+        //    //_dialogCanvas = Instantiate(
+        //    //    GameRunner.Instance.AssetMap["dialogcanvas"],
+        //    //    GameRunner.Instance.Core.PlayerMenu.GameObject.transform
+        //    //) as GameObject;
+        //    //Debug.Log($">>dialog_canvas<< {_dialogCanvas}");
+        //    //var dialogCanvasController = _dialogCanvas.GetComponent<DialogCanvasController>();
+        //    //dialogCanvasController.SetText(GameRunner.Instance.Core.Player.Conversation.Dialog);
 
 
-            //GameRunner.Instance.Core.Routine.ConversationHandle();
-        }
+        //    //GameRunner.Instance.Core.Routine.ConversationHandle();
+        //}
 
         public void Awake()
         {
@@ -48,7 +48,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Conversations
 
         public void Start()
         {
-            _playerModeChangedSubscription = GameRunner.Instance.Core.Player.OnChangeMode.Subscribe(SetActive);
+            //_playerModeChangedSubscription = GameRunner.Instance.Core.Player.OnChangeMode.Subscribe(SetActive);
             GameRunner.Instance.Core.Player.OnChangeMode.Subscribe(mode =>
             {
                 if (mode != PlayerMode.Conversation && _dialogCanvas != null)
@@ -57,9 +57,9 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Conversations
             }).AddTo(GameRunner.Instance);
         }
 
-        public void OnDestroy()
-        {
-            _playerModeChangedSubscription.Dispose();
-        }
+        //public void OnDestroy()
+        //{
+        //    _playerModeChangedSubscription.Dispose();
+        //}
     }
 }

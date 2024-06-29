@@ -62,6 +62,10 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             //    })
             //    .AddTo(SiteRunner.Instance);
 
+
+
+
+
             GameRunner.Instance.TimeRoutine.OnChangeDay
                 .Subscribe(_ => HandleChangeDay())
                 .AddTo(GameRunner.Instance);
@@ -70,97 +74,97 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         // Update is called once per frame
         public void Update()
         {
-            if (Time.time < _delayTime) return;
+            //if (Time.time < _delayTime) return;
 
-            if (!_initialized)
-            {
-                Initialized();
-                return;
-            }
+            //if (!_initialized)
+            //{
+            //    Initialized();
+            //    return;
+            //}
 
-            if (!_enabled) return;
+            //if (!_enabled) return;
 
-            CheckDayNightCondition();
-        }
-
-        void Initialized()
-        {
-            _initialized = true;
-            //_delayTime = 0.2f;
-
-            currentDayNightProfile = null;
             //CheckDayNightCondition();
-
-
-            if (GameRunner.Instance.CsvHolder == null) return;
-            if (timeProfile == null)
-            {
-                timeProfile = GameRunner.Instance.CsvHolder.timeProfile;
-                if (timeProfile == null)
-                {
-                    Debug.Log("time profile is Null");
-                    return;
-                }
-                //UnloadAll();
-            }
-
-            _enabled = false;
-            foreach (var dnData in timeProfile.dayNightDataProfiles)
-            {
-                var scene = SceneManager.GetSceneByName(dnData.sceneName);
-
-                if (scene.IsValid())
-                {
-                    SceneManager.UnloadSceneAsync(scene);
-                    _enabled = true;
-                }
-            }
-
-            if (!_enabled) return;
-
-            //foreach (var dnData in timeProfile.dayNightDataProfiles)
-            //{
-            //    if (GameRunner.Instance.TimeRoutine.currentTime.inBetweenTime(dnData.enableTime))
-            //    {
-            //        if (currentDayNightProfile != dnData)
-            //        {
-            //            Debug.Log("time profile #1");
-            //            UpdateDayNightProfile(dnData);
-            //            _delayTime = Time.time + 1f;
-            //        }
-            //        return;
-            //    }
-            //}
         }
 
-        void CheckDayNightCondition()
-        {
-            //if (timeProfile == null)
-            //{
-            //    timeProfile = GameRunner.Instance.CsvHolder.timeProfile;
-            //    if (timeProfile == null)
-            //    {
-            //        Debug.Log("time profile is Null");
-            //        return;
-            //    }
-            //    UnloadAll();
-            //}
+        //void Initialized()
+        //{
+        //    _initialized = true;
+        //    //_delayTime = 0.2f;
 
-            if (timeProfile == null) return;
-            foreach (var dnData in timeProfile.dayNightDataProfiles)
-            {
-                if (GameRunner.Instance.TimeRoutine.currentTime.inBetweenTime(dnData.enableTime))
-                {
-                    if (currentDayNightProfile != dnData)
-                    {
-                        Debug.Log("time profile #1");
-                        UpdateDayNightProfile(dnData);
-                        _delayTime = Time.time + 1f;
-                    }
-                    return;
-                }
-            }
-        }
+        //    currentDayNightProfile = null;
+        //    //CheckDayNightCondition();
+
+
+        //    if (GameRunner.Instance.CsvHolder == null) return;
+        //    if (timeProfile == null)
+        //    {
+        //        timeProfile = GameRunner.Instance.CsvHolder.timeProfile;
+        //        if (timeProfile == null)
+        //        {
+        //            Debug.Log("time profile is Null");
+        //            return;
+        //        }
+        //        //UnloadAll();
+        //    }
+
+        //    _enabled = false;
+        //    foreach (var dnData in timeProfile.dayNightDataProfiles)
+        //    {
+        //        var scene = SceneManager.GetSceneByName(dnData.sceneName);
+
+        //        if (scene.IsValid())
+        //        {
+        //            SceneManager.UnloadSceneAsync(scene);
+        //            _enabled = true;
+        //        }
+        //    }
+
+        //    if (!_enabled) return;
+
+        //    //foreach (var dnData in timeProfile.dayNightDataProfiles)
+        //    //{
+        //    //    if (GameRunner.Instance.TimeRoutine.currentTime.inBetweenTime(dnData.enableTime))
+        //    //    {
+        //    //        if (currentDayNightProfile != dnData)
+        //    //        {
+        //    //            Debug.Log("time profile #1");
+        //    //            UpdateDayNightProfile(dnData);
+        //    //            _delayTime = Time.time + 1f;
+        //    //        }
+        //    //        return;
+        //    //    }
+        //    //}
+        //}
+
+        //void CheckDayNightCondition()
+        //{
+        //    //if (timeProfile == null)
+        //    //{
+        //    //    timeProfile = GameRunner.Instance.CsvHolder.timeProfile;
+        //    //    if (timeProfile == null)
+        //    //    {
+        //    //        Debug.Log("time profile is Null");
+        //    //        return;
+        //    //    }
+        //    //    UnloadAll();
+        //    //}
+
+        //    if (timeProfile == null) return;
+        //    foreach (var dnData in timeProfile.dayNightDataProfiles)
+        //    {
+        //        if (GameRunner.Instance.TimeRoutine.currentTime.inBetweenTime(dnData.enableTime))
+        //        {
+        //            if (currentDayNightProfile != dnData)
+        //            {
+        //                Debug.Log("time profile #1");
+        //                UpdateDayNightProfile(dnData);
+        //                _delayTime = Time.time + 1f;
+        //            }
+        //            return;
+        //        }
+        //    }
+        //}
 
         //void UnloadAll()
         //{
