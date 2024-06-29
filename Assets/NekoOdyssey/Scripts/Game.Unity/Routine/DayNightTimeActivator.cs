@@ -7,9 +7,12 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 {
     public class DayNightTimeActivator : MonoBehaviour
     {
+        [SerializeField] string enableTime = "09.00-18.00";
         [SerializeField]
         List<Day> enableDays = new List<Day>() { Day.Mon, Day.Tue, Day.Wed, Day.Thu, Day.Fri, Day.Sat, Day.Sun };
-        [SerializeField] string enableTime = "09.00-18.00";
+
+
+        [SerializeField] List<GameObject> additionTargets = new List<GameObject>();
 
 
         public static List<DayNightTimeActivator> DayNightTimeActivators { get; set; } = new List<DayNightTimeActivator>();
@@ -38,7 +41,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
             if (GameRunner.Instance.TimeRoutine.inBetweenDayAndTime(enableDays, enableTime))
             {
-                gameObject.SetActive(true);
+                SetActive(true);
 
 
                 _delayTime = Time.time + 1f;
@@ -46,8 +49,18 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             }
             else
             {
-                gameObject.SetActive(false);
+                SetActive(false);
 
+            }
+        }
+
+        void SetActive(bool condition)
+        {
+            gameObject.SetActive(condition);
+            foreach (var target in additionTargets)
+            {
+                if (target == null) continue;
+                target.SetActive(condition);
             }
         }
 
