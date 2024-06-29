@@ -25,8 +25,8 @@ public class TimeScriptable : ScriptableObject
     public float hungryOverTimeMultiplier = 1;
 
 
-    [Space(50)]
-    public List<DayNightDataProfile_Scriptable> dayNightDataProfiles;
+    //[Space(50)]
+    //public List<DayNightDataProfile_Scriptable> dayNightDataProfiles;
 
 
     public Subject<Unit> OnValidated = new();
