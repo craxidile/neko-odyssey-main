@@ -45,6 +45,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
         public Image psBagKey;
         public Image xboxPhoneKey;
         public Image xboxBagKey;
+        public GameObject pcKeysSuggestion;
+        public GameObject joyKeysSuggestion;
         public Text activeMissionText;
         public Text finishedMissionText;
 
@@ -166,7 +168,9 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
                 xboxBagKey.gameObject.SetActive(true);
                 print(">>gamepad<< Xbox gamepad");
             }
-            
+
+            pcKeysSuggestion.SetActive(gamepad == null);
+            joyKeysSuggestion.SetActive(gamepad != null);
         }
 
         private void HandlePhoneClick()
