@@ -5,6 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using UniRx;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace NekoOdyssey.Scripts.Database.Domains.SaveV001
 {
@@ -34,9 +35,9 @@ namespace NekoOdyssey.Scripts.Database.Domains.SaveV001
     public class SaveV001DbWriter
     {
         private readonly SaveV001DbQueue _queue = new();
-        
+
         private bool _running;
-        private IDisposable _subscription;
+        private SaveV001DbContext _dbContext;
 
         public void Add(SaveV001DbQueueFunc func)
         {
@@ -46,36 +47,29 @@ namespace NekoOdyssey.Scripts.Database.Domains.SaveV001
 
         private void Execute()
         {
-            _subscription = Observable
-                .FromCoroutine(ExecuteAsync)
-                .Subscribe(Finish);
+            _running = true;
+            Debug.Log(">>db_writer<< running true");
+            MainThreadDispatcher.StartCoroutine(ExecuteAsync());
         }
 
         private IEnumerator ExecuteAsync()
         {
-            _running = true;
-            using (var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = false }))
-            {
-                while (_queue.Size > 0)
-                {
-                    var func = _queue.Dequeue();
-                    func(dbContext);
-                }
-            }
-            _running = false;
-            yield return null;
-        }
-
-        private void Finish(Unit _)
-        {
-            if (_subscription == null)
+            var func = _queue.Dequeue();
+            if (func == null)
             {
                 _running = false;
-                return;
+                Debug.Log(">>db_writer<< running false");
+                yield break;
             }
-            _subscription.Dispose();
-            _subscription = null;
-            _running = false;
+
+            using (var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = false }))
+            {
+                func(dbContext);
+            }
+
+            yield return null;
+
+            MainThreadDispatcher.StartCoroutine(ExecuteAsync());
         }
     }
 }
