@@ -31,28 +31,34 @@ namespace NekoOdyssey.Scripts.Game.Core
         public EndDay.EndDayController EndDay { get; } = new(); // Linias Edit
         public GameScene.GameScene GameScene { get; } = new();
         public SaveV001DbWriter SaveDbWriter { get; } = new();
-        
+
         public bool SaveReady { get; private set; }
+        public GameCoreMode Mode { get; private set; }
 
         public Subject<Unit> OnSaveReady { get; } = new();
 
-        public void Bind()
+        public void Bind(GameCoreMode mode)
         {
+            Mode = mode;
             InitializeSaveDatabase();
 
             Settings.Bind();
             Metadata.Bind();
             MasterData.Bind();
-            Player.Bind();
-            Ais.Bind();
             Uis.Bind();
-            Simulators.Bind();
-            Areas.Bind();
-            PlayerMenu.Bind();
-            PlayerMenuCandidateManager.Bind();
-            GameScene.Bind();
-            Routine.Bind();
-            EndDay.Bind();
+
+            if (Mode == GameCoreMode.All)
+            {
+                Player.Bind();
+                Ais.Bind();
+                Simulators.Bind();
+                Areas.Bind();
+                PlayerMenu.Bind();
+                PlayerMenuCandidateManager.Bind();
+                GameScene.Bind();
+                Routine.Bind();
+                EndDay.Bind();
+            }
         }
 
         public void Start()
@@ -60,20 +66,24 @@ namespace NekoOdyssey.Scripts.Game.Core
             Settings.Start();
             Metadata.Start();
             MasterData.Start();
-            Player.Start();
-            Ais.Start();
             Uis.Start();
-            Simulators.Start();
-            Areas.Start();
-            PlayerMenu.Start();
-            PlayerMenuCandidateManager.Start();
-            GameScene.Start();
-            Routine.Start();
-            EndDay.Start();
 
-            GameRunner.Instance.PlayerInputHandler.OnResetSaveTriggerred
-                .Subscribe(ResetSave)
-                .AddTo(GameRunner.Instance);
+            if (Mode == GameCoreMode.All)
+            {
+                Player.Start();
+                Ais.Start();
+                Simulators.Start();
+                Areas.Start();
+                PlayerMenu.Start();
+                PlayerMenuCandidateManager.Start();
+                GameScene.Start();
+                Routine.Start();
+                EndDay.Start();
+
+                GameRunner.Instance.PlayerInputHandler.OnResetSaveTriggerred
+                    .Subscribe(ResetSave)
+                    .AddTo(GameRunner.Instance);
+            }
         }
 
         public void Unbind()
@@ -81,16 +91,20 @@ namespace NekoOdyssey.Scripts.Game.Core
             Settings.Unbind();
             Metadata.Unbind();
             MasterData.Unbind();
-            Player.Unbind();
-            Ais.Unbind();
             Uis.Unbind();
-            Simulators.Unbind();
-            Areas.Unbind();
-            PlayerMenu.Unbind();
-            PlayerMenuCandidateManager.Unbind();
-            GameScene.Unbind();
-            Routine.Unbind();
-            EndDay.Unbind();
+
+            if (Mode == GameCoreMode.All)
+            {
+                Player.Unbind();
+                Ais.Unbind();
+                Simulators.Unbind();
+                Areas.Unbind();
+                PlayerMenu.Unbind();
+                PlayerMenuCandidateManager.Unbind();
+                GameScene.Unbind();
+                Routine.Unbind();
+                EndDay.Unbind();
+            }
         }
 
         private void InitializeSaveDatabase()

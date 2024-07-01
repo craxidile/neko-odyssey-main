@@ -32,7 +32,11 @@ public class DayNightLightingController : MonoBehaviour
     {
         if (Time.time < _delayTime) return;
 
-        if (GameRunner.Instance == null || GameRunner.Instance.TimeRoutine == null) return;
+        if (GameRunner.Instance == null || GameRunner.Instance.TimeRoutine == null)
+        {
+            UpdateDayNightProfile(LightingProfiles[0]);
+            return;
+        }
         //if (timeProfile == null)
         //{
         //    timeProfile = GameRunner.Instance.CsvHolder.timeProfile;
@@ -44,6 +48,7 @@ public class DayNightLightingController : MonoBehaviour
         //}
 
         //bool alreadySet = false;
+        DayNightLightingProfile targetProfile = currentDayNightProfile;
         foreach (var lightProfile in LightingProfiles)
         {
 
@@ -54,12 +59,13 @@ public class DayNightLightingController : MonoBehaviour
 
             if (GameRunner.Instance.TimeRoutine.currentTime.inBetweenTime(lightProfile.enableTime))
             {
-                if (currentDayNightProfile != lightProfile)
-                {
-                    Debug.Log("time profile #1");
-                    UpdateDayNightProfile(lightProfile);
-                    _delayTime = Time.time + 1f;
-                }
+                //if (currentDayNightProfile != lightProfile)
+                //{
+                Debug.Log("time profile #1");
+                targetProfile = lightProfile;
+                //UpdateDayNightProfile(lightProfile);
+                //_delayTime = Time.time + 1f;
+                //}
 
                 //alreadySet = true;
             }
@@ -68,6 +74,12 @@ public class DayNightLightingController : MonoBehaviour
                 lightProfile.gameObject.SetActive(false);
             }
         }
+        if (currentDayNightProfile != targetProfile)
+        {
+            UpdateDayNightProfile(targetProfile);
+            _delayTime = Time.time + 1f;
+        }
+
 
         if (NekoOdyssey.Scripts.Site.Unity.Transition.SiteTransitionController.isSetActiveScene && _needSetActive)
         {

@@ -45,14 +45,17 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
         public Image psBagKey;
         public Image xboxPhoneKey;
         public Image xboxBagKey;
+        public GameObject pcKeysSuggestion;
+        public GameObject joyKeysSuggestion;
         public Text activeMissionText;
         public Text finishedMissionText;
 
         CanvasGroup canvasGroup;
 
-        [Header("testing")][SerializeField] int testNumber;
-        [SerializeField] public float hungryValue;
-        [SerializeField] int socialLikeCount, followerCount, moneyCount;
+        [Header("testing")]
+        //[SerializeField] int testNumber;
+        //[SerializeField] public float hungryValue;
+        //[SerializeField] int socialLikeCount, followerCount, moneyCount;
         [SerializeField] int socialNotificationCount, bagNotificationCount;
 
         private void Awake()
@@ -73,9 +76,9 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
             GameRunner.Instance.Core.Player.Stamina.OnChangeStamina
                 .Subscribe(HandleStaminaChange)
                 .AddTo(this);
-            GameRunner.Instance.TimeRoutine.OnTimeUpdate
-                .Subscribe(_ => HandleTimeChange())
-                .AddTo(this);
+            //GameRunner.Instance.TimeRoutine.OnTimeUpdate
+            //    .Subscribe(_ => HandleTimeChange())
+            //    .AddTo(this);
             GameRunner.Instance.Core.Player.OnChangeLikeCount
                 .Subscribe(HandleLikeCountChange)
                 .AddTo(this);
@@ -94,7 +97,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
 
             socialLikeText.text = $"{GameRunner.Instance.Core.Player.LikeCount}";
             followerText.text = $"{GameRunner.Instance.Core.Player.FollowerCount}";
-            moneyText.text = moneyCount.ToString("N0");
+            //moneyText.text = moneyCount.ToString("N0");
 
             socialNotificationCanvasGroup.alpha = socialNotificationCount == 0 ? 0 : 1;
             socialNotificationText.text = socialNotificationCount.ToString("N0");
@@ -102,7 +105,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
             bagNotificationCanvasGroup.alpha = bagNotificationCount == 0 ? 0 : 1;
             bagNotificationText.text = bagNotificationCount.ToString("N0");
 
-            testNumber = (int)Time.time;
+            //testNumber = (int)Time.time;
         }
 
         // Update is called once per frame
@@ -165,7 +168,9 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
                 xboxBagKey.gameObject.SetActive(true);
                 print(">>gamepad<< Xbox gamepad");
             }
-            
+
+            pcKeysSuggestion.SetActive(gamepad == null);
+            joyKeysSuggestion.SetActive(gamepad != null);
         }
 
         private void HandlePhoneClick()

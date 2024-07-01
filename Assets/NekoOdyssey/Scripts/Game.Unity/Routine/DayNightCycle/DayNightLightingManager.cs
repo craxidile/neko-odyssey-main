@@ -87,84 +87,84 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             //CheckDayNightCondition();
         }
 
-        void Initialized()
-        {
-            _initialized = true;
-            //_delayTime = 0.2f;
+        //void Initialized()
+        //{
+        //    _initialized = true;
+        //    //_delayTime = 0.2f;
 
-            currentDayNightProfile = null;
-            //CheckDayNightCondition();
+        //    currentDayNightProfile = null;
+        //    //CheckDayNightCondition();
 
 
-            if (GameRunner.Instance.CsvHolder == null) return;
-            if (timeProfile == null)
-            {
-                timeProfile = GameRunner.Instance.CsvHolder.timeProfile;
-                if (timeProfile == null)
-                {
-                    Debug.Log("time profile is Null");
-                    return;
-                }
-                //UnloadAll();
-            }
+        //    if (GameRunner.Instance.CsvHolder == null) return;
+        //    if (timeProfile == null)
+        //    {
+        //        timeProfile = GameRunner.Instance.CsvHolder.timeProfile;
+        //        if (timeProfile == null)
+        //        {
+        //            Debug.Log("time profile is Null");
+        //            return;
+        //        }
+        //        //UnloadAll();
+        //    }
 
-            _enabled = false;
-            foreach (var dnData in timeProfile.dayNightDataProfiles)
-            {
-                var scene = SceneManager.GetSceneByName(dnData.sceneName);
+        //    _enabled = false;
+        //    foreach (var dnData in timeProfile.dayNightDataProfiles)
+        //    {
+        //        var scene = SceneManager.GetSceneByName(dnData.sceneName);
 
-                if (scene.IsValid())
-                {
-                    SceneManager.UnloadSceneAsync(scene);
-                    _enabled = true;
-                }
-            }
+        //        if (scene.IsValid())
+        //        {
+        //            SceneManager.UnloadSceneAsync(scene);
+        //            _enabled = true;
+        //        }
+        //    }
 
-            if (!_enabled) return;
+        //    if (!_enabled) return;
 
-            //foreach (var dnData in timeProfile.dayNightDataProfiles)
-            //{
-            //    if (GameRunner.Instance.TimeRoutine.currentTime.inBetweenTime(dnData.enableTime))
-            //    {
-            //        if (currentDayNightProfile != dnData)
-            //        {
-            //            Debug.Log("time profile #1");
-            //            UpdateDayNightProfile(dnData);
-            //            _delayTime = Time.time + 1f;
-            //        }
-            //        return;
-            //    }
-            //}
-        }
+        //    //foreach (var dnData in timeProfile.dayNightDataProfiles)
+        //    //{
+        //    //    if (GameRunner.Instance.TimeRoutine.currentTime.inBetweenTime(dnData.enableTime))
+        //    //    {
+        //    //        if (currentDayNightProfile != dnData)
+        //    //        {
+        //    //            Debug.Log("time profile #1");
+        //    //            UpdateDayNightProfile(dnData);
+        //    //            _delayTime = Time.time + 1f;
+        //    //        }
+        //    //        return;
+        //    //    }
+        //    //}
+        //}
 
-        void CheckDayNightCondition()
-        {
-            //if (timeProfile == null)
-            //{
-            //    timeProfile = GameRunner.Instance.CsvHolder.timeProfile;
-            //    if (timeProfile == null)
-            //    {
-            //        Debug.Log("time profile is Null");
-            //        return;
-            //    }
-            //    UnloadAll();
-            //}
+        //void CheckDayNightCondition()
+        //{
+        //    //if (timeProfile == null)
+        //    //{
+        //    //    timeProfile = GameRunner.Instance.CsvHolder.timeProfile;
+        //    //    if (timeProfile == null)
+        //    //    {
+        //    //        Debug.Log("time profile is Null");
+        //    //        return;
+        //    //    }
+        //    //    UnloadAll();
+        //    //}
 
-            if (timeProfile == null) return;
-            foreach (var dnData in timeProfile.dayNightDataProfiles)
-            {
-                if (GameRunner.Instance.TimeRoutine.currentTime.inBetweenTime(dnData.enableTime))
-                {
-                    if (currentDayNightProfile != dnData)
-                    {
-                        Debug.Log("time profile #1");
-                        UpdateDayNightProfile(dnData);
-                        _delayTime = Time.time + 1f;
-                    }
-                    return;
-                }
-            }
-        }
+        //    if (timeProfile == null) return;
+        //    foreach (var dnData in timeProfile.dayNightDataProfiles)
+        //    {
+        //        if (GameRunner.Instance.TimeRoutine.currentTime.inBetweenTime(dnData.enableTime))
+        //        {
+        //            if (currentDayNightProfile != dnData)
+        //            {
+        //                Debug.Log("time profile #1");
+        //                UpdateDayNightProfile(dnData);
+        //                _delayTime = Time.time + 1f;
+        //            }
+        //            return;
+        //        }
+        //    }
+        //}
 
         //void UnloadAll()
         //{
