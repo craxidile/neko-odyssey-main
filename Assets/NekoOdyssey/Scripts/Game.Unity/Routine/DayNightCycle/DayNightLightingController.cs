@@ -32,7 +32,11 @@ public class DayNightLightingController : MonoBehaviour
     {
         if (Time.time < _delayTime) return;
 
-        if (GameRunner.Instance == null || GameRunner.Instance.TimeRoutine == null) return;
+        if (GameRunner.Instance == null || GameRunner.Instance.TimeRoutine == null)
+        {
+            UpdateDayNightProfile(LightingProfiles[0]);
+            return;
+        }
         //if (timeProfile == null)
         //{
         //    timeProfile = GameRunner.Instance.CsvHolder.timeProfile;
