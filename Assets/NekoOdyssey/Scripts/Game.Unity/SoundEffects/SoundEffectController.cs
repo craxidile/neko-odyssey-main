@@ -11,6 +11,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.SoundEffects
         public AudioSource openPhone;
         public AudioSource closePhone;
         public AudioSource talk;
+        public AudioSource hungry;
 
         private void Awake()
         {

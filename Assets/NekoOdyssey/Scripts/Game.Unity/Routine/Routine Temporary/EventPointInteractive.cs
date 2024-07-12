@@ -83,7 +83,7 @@ public class EventPointInteractive : MonoBehaviour
 
     void HandlePlayerModeChange(PlayerMode mode)
     {
-        Debug.Log($"HandlePlayerModeChange {mode}");
+        //Debug.Log($"HandlePlayerModeChange {mode}");
         if (mode != PlayerMode.Conversation) return;
 
         //if (_isActive)
