@@ -20,7 +20,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.Utils
             get => _originalText;
             set => SetOriginalText(value);
         }
-        
+
         private void Awake()
         {
             _text = gameObject.GetComponent<Text>();
@@ -59,7 +59,9 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.Utils
             Debug.Log($">>locale<< change {locale}");
             _text.text = GameRunner.Instance.Core.Uis.Localisation.Translate(_originalText, locale);
             Debug.Log($">>locale<< text {GameRunner.Instance.Core.Uis.Localisation.Translate(_originalText, locale)}");
-            _text.fontSize = locale != Locale.Th ? _baseFontSize : (int)Math.Ceiling(_baseFontSize * 0.8f);
+
+            int fontSize = _baseFontSize == 0 ? _text.fontSize : _baseFontSize;
+            _text.fontSize = locale != Locale.Th ? fontSize : (int)Math.Ceiling(fontSize * 0.8f);
         }
 
         private void SetOriginalText(string text)

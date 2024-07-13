@@ -32,7 +32,11 @@ public class DayNightLightingController : MonoBehaviour
     {
         if (Time.time < _delayTime) return;
 
-        if (GameRunner.Instance == null || GameRunner.Instance.TimeRoutine == null) return;
+        if (GameRunner.Instance == null || GameRunner.Instance.TimeRoutine == null)
+        {
+            UpdateDayNightProfile(LightingProfiles[0]);
+            return;
+        }
         //if (timeProfile == null)
         //{
         //    timeProfile = GameRunner.Instance.CsvHolder.timeProfile;
@@ -57,7 +61,7 @@ public class DayNightLightingController : MonoBehaviour
             {
                 //if (currentDayNightProfile != lightProfile)
                 //{
-                Debug.Log("time profile #1");
+                //Debug.Log("time profile #1");
                 targetProfile = lightProfile;
                 //UpdateDayNightProfile(lightProfile);
                 //_delayTime = Time.time + 1f;
@@ -72,6 +76,7 @@ public class DayNightLightingController : MonoBehaviour
         }
         if (currentDayNightProfile != targetProfile)
         {
+            _needSetActive = true;
             UpdateDayNightProfile(targetProfile);
             _delayTime = Time.time + 1f;
         }
@@ -81,27 +86,32 @@ public class DayNightLightingController : MonoBehaviour
         {
             _needSetActive = false;
 
-            var scene = SceneManager.GetSceneByName("SkyBox");
-            SceneManager.SetActiveScene(scene);
+            //var scene = SceneManager.GetSceneByName("SkyBox");
+            //SceneManager.SetActiveScene(scene);
+            UpdateDayNightProfile(currentDayNightProfile);
         }
     }
 
     void UpdateDayNightProfile(DayNightLightingProfile lightProfile)
     {
         Debug.Log($"time profile #2 {lightProfile.gameObject.name}");
+        var cam = Camera.main;
+        if (cam == null)
+        {
+            Debug.LogWarning("UpdateDayNightProfile #camera null");
+            return;
+        }
 
         currentDayNightProfile = lightProfile;
 
 
         var scene = SceneManager.GetSceneByName("SkyBox");
         SceneManager.SetActiveScene(scene);
-        _needSetActive = true;
 
 
         lightProfile.gameObject.SetActive(true);
 
 
-        var cam = Camera.main;
         var postProcessVolumn = cam.GetComponent<PostProcessVolume>();
         postProcessVolumn.profile = lightProfile.postProcessProfile;
 
