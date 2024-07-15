@@ -279,12 +279,12 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
                     repo.Update(properties);
                 });
 
-                DOVirtual.DelayedCall(2f, () =>
-                {
-                    GameRunner.Instance.Core.GameScene.CloseScene();
-                    DOVirtual.DelayedCall(4f,
-                        () => { SiteRunner.Instance.Core.Site.SetSite("NekoInside28BedroomFinal"); });
-                });
+                //DOVirtual.DelayedCall(2f, () =>
+                //{
+                //    GameRunner.Instance.Core.GameScene.CloseScene();
+                //    DOVirtual.DelayedCall(4f,
+                //        () => { SiteRunner.Instance.Core.Site.SetSite("NekoInside28BedroomFinal"); });
+                //});
             }
         }
 
