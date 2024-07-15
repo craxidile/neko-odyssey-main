@@ -24,7 +24,18 @@ namespace NekoOdyssey.Scripts.Game.Core.EndDay
 
         static List<string> temp_visitedEndDayCutscene = new List<string>();
         static Queue<EndDayCutsceneDetail> EndDayCutSceneQuene = new Queue<EndDayCutsceneDetail>();
+        static bool isPlayCutsceneToday = false;
         List<EndDayCutsceneDetail> temp_avaliableEndDayCutscene = new List<EndDayCutsceneDetail> { new EndDayCutsceneDetail("NekoInside28BedroomFinal", 200) };
+        class EndDayCutsceneDetail
+        {
+            public string siteName;
+            public int followerNeeded;
+            public EndDayCutsceneDetail(string siteName, int followerNeeded)
+            {
+                this.siteName = siteName;
+                this.followerNeeded = followerNeeded;
+            }
+        }
 
 
         public Subject<Unit> OnStaminaOutFinish { get; } = new();
@@ -183,16 +194,6 @@ namespace NekoOdyssey.Scripts.Game.Core.EndDay
             };
         }
 
-        class EndDayCutsceneDetail
-        {
-            public string siteName;
-            public int followerNeeded;
-            public EndDayCutsceneDetail(string siteName, int followerNeeded)
-            {
-                this.siteName = siteName;
-                this.followerNeeded = followerNeeded;
-            }
-        }
         void CheckEndDayCutscene()
         {
             //bool isCutsceneAvaliable = false;
@@ -204,6 +205,7 @@ namespace NekoOdyssey.Scripts.Game.Core.EndDay
             {
                 Debug.Log($"check endDay cutscene : {endDayCutscene.siteName} / {endDayCutscene.followerNeeded}");
                 if (temp_visitedEndDayCutscene.Contains(endDayCutscene.siteName)) continue;
+                if (EndDayCutSceneQuene.Any(cutscne => cutscne.siteName.Equals(endDayCutscene.siteName))) continue;
 
                 if (follower >= endDayCutscene.followerNeeded)
                 {
@@ -240,33 +242,37 @@ namespace NekoOdyssey.Scripts.Game.Core.EndDay
 
 
             //if (isCutsceneAvaliable)
-            //if (EndDayCutSceneQuene.Count > 0)
-            //{
-            //endDayStep = EndDayStep.EndDayCutscene;
-            //}
-            //else
-            //{
-            //    endDayStep = EndDayStep.NewDay;
-            //}
-            //ProcessEndDayStep();
+            if (EndDayCutSceneQuene.Count > 0)
+            {
+                endDayStep = EndDayStep.EndDayCutscene;
+            }
+            else
+            {
+                endDayStep = EndDayStep.NewDay;
+            }
+            ProcessEndDayStep();
 
-            PlayEndDayCutscene();
+            //PlayEndDayCutscene();
         }
 
         void PlayEndDayCutscene()
         {
-            if (EndDayCutSceneQuene.Count > 0)
+            if (!isPlayCutsceneToday)
             {
-                endDayStep = EndDayStep.EndDayCutscene;
-
                 Debug.Log("PlayEndDayCutscene");
                 var cutsceneDetail = EndDayCutSceneQuene.Dequeue();
+
+                isPlayCutsceneToday = true;
+
+                temp_visitedEndDayCutscene.Add(cutsceneDetail.siteName);
+
 
                 GameRunner.Instance.Core.GameScene.CloseScene();
                 GameRunner.Instance.Core.GameScene.OnChangeSceneFinish.Subscribe(_ =>
                 {
                     SiteRunner.Instance.Core.Site.SetSite(cutsceneDetail.siteName);
                 });
+
             }
             else
             {
@@ -293,6 +299,7 @@ namespace NekoOdyssey.Scripts.Game.Core.EndDay
 
             GameRunner.Instance.TimeRoutine.ContinueTime();
 
+            isPlayCutsceneToday = false;
         }
 
 
