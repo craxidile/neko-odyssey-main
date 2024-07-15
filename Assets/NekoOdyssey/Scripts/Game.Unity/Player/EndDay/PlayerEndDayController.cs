@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using NekoOdyssey.Scripts.Constants;
+using NekoOdyssey.Scripts.Game.Unity.SoundEffects;
 
 namespace NekoOdyssey.Scripts.Game.Unity.Player.EndDay
 {
@@ -11,6 +12,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.EndDay
     {
         private Animator _animator;
         private SpriteRenderer _renderer;
+
+        bool _isExcecuted = false;
 
         public void Awake()
         {
@@ -45,15 +48,20 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.EndDay
 
         void CheckEndDayStaminaOut(int stamina)
         {
+            if (_isExcecuted) return;
             if (stamina > 0) return;
 
             Debug.Log($"player EndDayStaminaOut");
 
             GameRunner.Instance.TimeRoutine.PauseTime();
             GameRunner.Instance.Core.Player.SetMode(PlayerMode.EndDay_StaminaOut);
+
+            _isExcecuted = true;
         }
         void CheckEndDayTimeOut()
         {
+            if (_isExcecuted) return;
+
             var currentTime = GameRunner.Instance.TimeRoutine.currentTime;
             if (currentTime >= new TimeHrMin(AppConstants.Time.EndDayTime))
             {
@@ -61,7 +69,10 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.EndDay
 
                 GameRunner.Instance.TimeRoutine.PauseTime();
                 GameRunner.Instance.Core.Player.SetMode(PlayerMode.EndDay_TimeOut);
+
+                _isExcecuted = true;
             }
+
         }
 
         void CheckPlayerMode(PlayerMode mode)
@@ -82,6 +93,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.EndDay
         {
             _animator.SetLayerWeight(_animator.GetLayerIndex($"EndDay"), 1f);
             _animator.SetInteger("EndDayState", 1);
+
+            SoundEffectController.Instance.hungry.Play();
         }
 
         void HandleEndDayFinish_StaminaOut(Unit _)
