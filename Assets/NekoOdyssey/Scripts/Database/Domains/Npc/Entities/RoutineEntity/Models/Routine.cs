@@ -9,17 +9,26 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.RoutineEntity.Models
     [Serializable]
     public class Routine : EntityBase<int>, IAggregateRoot
     {
-        [Indexed] public string TargetEventPoint { get; set; }
-        
-        [Indexed] [ForeignKey(typeof(Dialog))] public int DialogId { get; set; }
+       [NotNull]
+       [Indexed]
+       public string Code { get; set; }
+               
+       [NotNull]
+       public string TargetEventPoint { get; set; }
 
-        public string DialogCode { get; set; }
-
-        public string RoutineDays { get; set; }
-
-        public int StartingHour { get; set; }
-        public int StartingMinute { get; set; }
-        public int EndingHour { get; set; }
-        public int EndingMinute { get; set; }
+       [NotNull]
+       public string ActiveDaysOfWeek { get; set; }
+       [NotNull]
+       public int StartingHour { get; set; }
+       [NotNull]
+       public int StartingMinute { get; set; }
+       [NotNull]
+       public int EndingHour { get; set; }
+       [NotNull]
+       public int EndingMinute { get; set; }
+       
+       [Indexed]
+       [ForeignKey(typeof(Dialog))]
+       public int DialogId { get; set; }
     }
 }
