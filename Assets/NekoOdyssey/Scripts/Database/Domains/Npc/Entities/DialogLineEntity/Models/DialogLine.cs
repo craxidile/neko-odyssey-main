@@ -1,7 +1,4 @@
 ﻿using System;
-using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogEntity.Models;
-using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestEntity.Models;
-using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.SubDialogEntity.Models;
 using SpatiumInteractive.Libraries.Unity.GRU.Base;
 using SpatiumInteractive.Libraries.Unity.GRU.Contracts;
 using SQLite4Unity3d;
