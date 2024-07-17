@@ -12,7 +12,7 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestEntity.Models
     {
        [Indexed]
        [ForeignKey(typeof(QuestGroup))]
-       public int QuestionGroupId { get; set; }
+       public int QuestGroupId { get; set; }
                
        [NotNull]
        [Indexed]
