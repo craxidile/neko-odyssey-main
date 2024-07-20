@@ -22,6 +22,7 @@ namespace NekoOdyssey.Scripts.Game.Core.EndDay
 
 
 
+        #region remove this part after linked with database
         static List<string> temp_visitedEndDayCutscene = new List<string>();
         static Queue<EndDayCutsceneDetail> EndDayCutSceneQuene = new Queue<EndDayCutsceneDetail>();
         static bool isPlayCutsceneToday = false;
@@ -36,6 +37,7 @@ namespace NekoOdyssey.Scripts.Game.Core.EndDay
                 this.followerNeeded = followerNeeded;
             }
         }
+        #endregion
 
 
         public Subject<Unit> OnStaminaOutFinish { get; } = new();
