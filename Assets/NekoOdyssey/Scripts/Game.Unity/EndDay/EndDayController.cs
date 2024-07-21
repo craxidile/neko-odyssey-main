@@ -26,7 +26,7 @@ namespace NekoOdyssey.Scripts.Game.Core.EndDay
         static List<string> temp_visitedEndDayCutscene = new List<string>();
         static Queue<EndDayCutsceneDetail> EndDayCutSceneQuene = new Queue<EndDayCutsceneDetail>();
         static bool isPlayCutsceneToday = false;
-        List<EndDayCutsceneDetail> temp_avaliableEndDayCutscene = new List<EndDayCutsceneDetail> { new EndDayCutsceneDetail("FinishDemo", 220) };
+        List<EndDayCutsceneDetail> temp_avaliableEndDayCutscene = new List<EndDayCutsceneDetail> { new EndDayCutsceneDetail("FinishDemo", 200) };
         class EndDayCutsceneDetail
         {
             public string siteName;
