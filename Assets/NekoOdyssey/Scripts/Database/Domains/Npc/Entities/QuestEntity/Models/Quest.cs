@@ -1,5 +1,6 @@
 ﻿using System;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogEntity.Models;
+using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestGroupEntity.Models;
 using SpatiumInteractive.Libraries.Unity.GRU.Base;
 using SpatiumInteractive.Libraries.Unity.GRU.Contracts;
 using SQLite4Unity3d;
@@ -9,22 +10,49 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestEntity.Models
     [Serializable]
     public class Quest : EntityBase<int>, IAggregateRoot
     {
-        [NotNull] [Indexed] public string Code { get; set; }
+       [Indexed]
+       [ForeignKey(typeof(QuestGroup))]
+       public int QuestGroupId { get; set; }
+               
+       [NotNull]
+       [Indexed]
+       public string Code { get; set; }
+       
+       public string TitleOriginal { get; set; }
+       public string TitleTh { get; set; }
+       public string TitleEn { get; set; }
+       public string TitleZhCn { get; set; }
+       public string TitleZhTw { get; set; }
+       public string TitleJa { get; set; }
+       
+       public string DescriptionOriginal { get; set; }
+       public string DescriptionTh { get; set; }
+       public string DescriptionEn { get; set; }
+       public string DescriptionZhCn { get; set; }
+       public string DescriptionZhTw { get; set; }
+       public string DescriptionJa { get; set; }
 
-        public string Name { get; set; }
-
-        public string Description { get; set; }
-
-        public string NameTh { get; set; }
-        public string NameEn { get; set; }
-        public string NameZhCn { get; set; }
-        public string NameZhTw { get; set; }
-        public string NameJa { get; set; }
-
-        public string DescriptionTh { get; set; }
-        public string DescriptionEn { get; set; }
-        public string DescriptionZhCn { get; set; }
-        public string DescriptionZhTw { get; set; }
-        public string DescriptionJa { get; set; }
+       [NotNull]
+       public string TargetEventPoint { get; set; }
+       [NotNull]
+       public string TargetActors { get; set; }
+       
+       [NotNull]
+       public string ActiveDaysOfWeek { get; set; }
+       [NotNull]
+       public int StartingHour { get; set; }
+       [NotNull]
+       public int StartingMinute { get; set; }
+       [NotNull]
+       public int EndingHour { get; set; }
+       [NotNull]
+       public int EndingMinute { get; set; }
+       
+       [NotNull]
+       public bool DisableRoutine { get; set; }
+       
+       [Indexed]
+       [ForeignKey(typeof(Dialog))]
+       public int DialogId { get; set; }
     }
 }
