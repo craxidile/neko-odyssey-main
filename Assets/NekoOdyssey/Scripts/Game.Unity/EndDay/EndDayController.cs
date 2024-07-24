@@ -200,48 +200,39 @@ namespace NekoOdyssey.Scripts.Game.Core.EndDay
         {
             //bool isCutsceneAvaliable = false;
             var follower = GameRunner.Instance.Core.Player.FollowerCount;
-            //var DemoFinished = GameRunner.Instance.Core.Player.DemoFinished;
             //follower = 200; //ignore real value for now
-
-            foreach (var endDayCutscene in temp_avaliableEndDayCutscene)
+            var DemoFinished = GameRunner.Instance.Core.Player.DemoFinished;
+            if (!DemoFinished)
             {
-                Debug.Log($"check endDay cutscene : {endDayCutscene.siteName} / {endDayCutscene.followerNeeded}");
-                if (temp_visitedEndDayCutscene.Contains(endDayCutscene.siteName)) continue;
-                if (EndDayCutSceneQuene.Any(cutscne => cutscne.siteName.Equals(endDayCutscene.siteName))) continue;
 
-                if (follower >= endDayCutscene.followerNeeded)
+                #region for demo
+                GameRunner.Instance.Core.SaveDbWriter.Add(dbContext =>
                 {
-                    Debug.Log($"load end day cutscene : {endDayCutscene.siteName}");
+                    var repo = new Database.Domains.SaveV001.PlayerPropertiesEntity.Repo.PlayerPropertiesV001Repo(dbContext);
+                    var properties = repo.Load();
+                    properties.DemoFinished = true;
+                    repo.Update(properties);
+                });
+                #endregion
 
-                    //isCutsceneAvaliable = true;
 
-                    EndDayCutSceneQuene.Enqueue(endDayCutscene);
+
+                foreach (var endDayCutscene in temp_avaliableEndDayCutscene)
+                {
+                    Debug.Log($"check endDay cutscene : {endDayCutscene.siteName} / {endDayCutscene.followerNeeded}");
+                    if (temp_visitedEndDayCutscene.Contains(endDayCutscene.siteName)) continue;
+                    if (EndDayCutSceneQuene.Any(cutscne => cutscne.siteName.Equals(endDayCutscene.siteName))) continue;
+
+                    if (follower >= endDayCutscene.followerNeeded)
+                    {
+                        Debug.Log($"load end day cutscene : {endDayCutscene.siteName}");
+
+                        //isCutsceneAvaliable = true;
+
+                        EndDayCutSceneQuene.Enqueue(endDayCutscene);
+                    }
                 }
             }
-
-
-            //if (!_finalSceneLoaded && !DemoFinished && follower >= 200)
-            //{
-            //    _finalSceneLoaded = true;
-            //    Debug.Log($">>load_final<<");
-
-            //    GameRunner.Instance.Core.SaveDbWriter.Add(dbContext =>
-            //    {
-            //        var repo = new PlayerPropertiesV001Repo(dbContext);
-            //        var properties = repo.Load();
-            //        properties.DemoFinished = true;
-            //        OnFinishDemo.OnNext(default);
-            //        repo.Update(properties);
-            //    });
-
-            //    DOVirtual.DelayedCall(2f, () =>
-            //    {
-            //        GameRunner.Instance.Core.GameScene.CloseScene();
-            //        DOVirtual.DelayedCall(4f,
-            //            () => { SiteRunner.Instance.Core.Site.SetSite("NekoInside28BedroomFinal"); });
-            //    });
-            //}
-
 
             //if (isCutsceneAvaliable)
             if (EndDayCutSceneQuene.Count > 0)

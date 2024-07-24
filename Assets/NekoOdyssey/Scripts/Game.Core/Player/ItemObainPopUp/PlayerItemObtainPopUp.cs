@@ -6,6 +6,7 @@ using UniRx;
 using NekoOdyssey.Scripts.Game.Unity.Uis.ItemObtain;
 using NekoOdyssey.Scripts.Game.Unity.Inputs;
 using NekoOdyssey.Scripts.Database.Domains.Items.Entities.ItemEntity.Models;
+using System.Linq;
 
 namespace NekoOdyssey.Scripts.Game.Core.Player.ItemObain
 {
@@ -24,11 +25,16 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.ItemObain
 
         public void Start()
         {
-            var playerInputHandler = GameRunner.Instance.PlayerInputHandler;
+            //var playerInputHandler = GameRunner.Instance.PlayerInputHandler;
 
-            GameRunner.Instance.PlayerInputHandler.OnBagTriggerred
-                .Subscribe(_ => ShowPopUp(new Item()))
-                .AddTo(GameRunner.Instance);
+            //GameRunner.Instance.PlayerInputHandler.OnBagTriggerred
+            //    .Subscribe(_ => ShowPopUp())
+            //    .AddTo(GameRunner.Instance);
+
+
+            //GameRunner.Instance.Core.Player.Bag.AddBagItem(item);
+
+            //GameRunner.Instance.Core.Player.ItemObtainPopUp.ShowPopUp("PlayerFood001");
         }
 
         public void Unbind()
@@ -38,9 +44,13 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.ItemObain
 
 
 
-        public void ShowPopUp(Item item)
+        public void ShowPopUp(string itemCode)
         {
-            var popUpDetail = new ItemObtainPopUpDetail();
+            var masterItems = GameRunner.Instance.Core.MasterData.ItemsMasterData.Items.ToList();
+
+            var item = masterItems.FirstOrDefault(i => i.Code == itemCode);
+
+            var popUpDetail = new ItemObtainPopUpDetail(item , 1);
 
             OnShowPopUp.OnNext(popUpDetail);
         }

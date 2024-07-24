@@ -13,6 +13,7 @@ using NekoOdyssey.Scripts.Game.Unity.Conversations;
 using NekoOdyssey.Scripts.Game.Unity.Inputs;
 using NekoOdyssey.Scripts.Game.Unity.Petting;
 using NekoOdyssey.Scripts.Game.Unity.Sites;
+using NekoOdyssey.Scripts.Game.Unity.SkipTime;
 using UniRx;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -61,6 +62,7 @@ namespace NekoOdyssey.Scripts
                 gameObject.AddComponent<CentralCaptureActionHandler>();
                 gameObject.AddComponent<CentralConversationActionHandler>();
                 gameObject.AddComponent<CentralPlayerPettingHandler>();
+                gameObject.AddComponent<CentralSkipTimeActionHandler>();
                 TimeRoutine = gameObject.AddComponent<TimeRoutine>();
             }
 

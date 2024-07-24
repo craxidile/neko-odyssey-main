@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using NekoOdyssey.Scripts;
+using NekoOdyssey.Scripts.Database.Domains.Items.Entities.ItemEntity.Models;
 using NekoOdyssey.Scripts.Extensions;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 using NekoOdyssey.Scripts.Game.Unity.Uis.Utils;
@@ -16,8 +17,13 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.ItemObtain
 {
     public class ItemObtainCanvasController : MonoBehaviour
     {
+        [SerializeField] float popUpShowDuration = 1, popUpFadeDuration = 0.3f;
+
+        [Space]
+
         [SerializeField] CanvasGroup popUpCanvasGroup;
         [SerializeField] Text popUpText;
+        [SerializeField] Image popUpImage;
         [SerializeField] GameObject imageGroupObject;
 
 
@@ -43,9 +49,9 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.ItemObtain
         }
 
 
-        void HandleItemPopUp(ItemObtainPopUpDetail popUpDetail)
+        void HandleItemPopUp(ItemObtainPopUpDetail itemPopUp)
         {
-            _itemPopUpQuene.Enqueue(popUpDetail);
+            _itemPopUpQuene.Enqueue(itemPopUp);
 
             if (_isActive)
             {
@@ -59,36 +65,36 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.ItemObtain
         int _debugBreak;
         void ShowItemPopUpQuene()
         {
-            var popUpDetail = _itemPopUpQuene.Dequeue();
+            var item = _itemPopUpQuene.Dequeue();
 
             var obtainedText = "obtained";
-            var text = $"{popUpDetail.itemName} - {popUpDetail.itemQty} {obtainedText}";
+            var text = $"{item.itemName} - {item.itemQty} {obtainedText}";
             popUpText.text = text;
 
 
-            if (string.IsNullOrEmpty(popUpDetail.itemImageName))
+            if (item.itemIcon == default)
             {
                 imageGroupObject.SetActive(false);
             }
             else
             {
+                popUpImage.sprite = item.itemIcon;
                 imageGroupObject.SetActive(true);
-
             }
 
             _debugBreak++;
-            if(_debugBreak >= 100)
+            if (_debugBreak >= 100)
             {
                 Debug.LogError("Loop more than 100");
                 return;
             }
 
 
-            popUpCanvasGroup.LerpAlpha(1, 0.3f, onComplete: () =>
+            popUpCanvasGroup.LerpAlpha(1, popUpFadeDuration, onComplete: () =>
             {
-                DOVirtual.DelayedCall(1, () =>
+                DOVirtual.DelayedCall(popUpShowDuration, () =>
                 {
-                    popUpCanvasGroup.LerpAlpha(0, 0.3f, onComplete: () =>
+                    popUpCanvasGroup.LerpAlpha(0, popUpFadeDuration, onComplete: () =>
                     {
                         if (_itemPopUpQuene.Count > 0)
                         {
@@ -107,7 +113,23 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.ItemObtain
 
     public class ItemObtainPopUpDetail
     {
-        public string itemName, itemImageName;
+        public Item item;
+        public string itemName;
+        public Sprite itemIcon;
         public int itemQty;
+
+        public ItemObtainPopUpDetail(Item item, int itemQty)
+        {
+            this.item = item;
+            itemName = GameRunner.Instance.Core.MasterData.ItemsMasterData.GetLocalisedItemName(item);
+
+            var normalIcon = item.NormalIcon.ToLower();
+            if (GameRunner.Instance.AssetMap.ContainsKey(normalIcon))
+            {
+                itemIcon = GameRunner.Instance.AssetMap[normalIcon] as Sprite;
+            }
+
+            this.itemQty = itemQty;
+        }
     }
 }

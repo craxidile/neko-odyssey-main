@@ -276,14 +276,14 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
                 _finalSceneLoaded = true;
                 Debug.Log($">>load_final<<");
 
-                GameRunner.Instance.Core.SaveDbWriter.Add(dbContext =>
-                {
-                    var repo = new PlayerPropertiesV001Repo(dbContext);
-                    var properties = repo.Load();
-                    properties.DemoFinished = true;
-                    OnFinishDemo.OnNext(default);
-                    repo.Update(properties);
-                });
+                //GameRunner.Instance.Core.SaveDbWriter.Add(dbContext =>
+                //{
+                //    var repo = new PlayerPropertiesV001Repo(dbContext);
+                //    var properties = repo.Load();
+                //    properties.DemoFinished = true;
+                //    OnFinishDemo.OnNext(default);
+                //    repo.Update(properties);
+                //});
 
                 //DOVirtual.DelayedCall(2f, () =>
                 //{
@@ -291,6 +291,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
                 //    DOVirtual.DelayedCall(4f,
                 //        () => { SiteRunner.Instance.Core.Site.SetSite("NekoInside28BedroomFinal"); });
                 //});
+
+                OnFinishDemo.OnNext(default);
             }
         }
 
