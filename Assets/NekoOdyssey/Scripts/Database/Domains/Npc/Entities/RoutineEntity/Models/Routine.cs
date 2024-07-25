@@ -15,6 +15,8 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.RoutineEntity.Models
                
        [NotNull]
        public string TargetEventPoint { get; set; }
+       [NotNull]
+       public string TargetActors { get; set; }
 
        [NotNull]
        public string ActiveDaysOfWeek { get; set; }

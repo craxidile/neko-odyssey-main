@@ -24,5 +24,6 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogLineEntity.Mod
         
         public string AnimatorParam { get; set; }
         public string AnimatorParamValue { get; set; }
+        public int? AnimatorDelay { get; set; }
     }
 }
