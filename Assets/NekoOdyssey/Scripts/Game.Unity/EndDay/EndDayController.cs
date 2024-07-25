@@ -21,6 +21,25 @@ namespace NekoOdyssey.Scripts.Game.Core.EndDay
         public static EndDayStep endDayStep = EndDayStep.None;
 
 
+
+        #region remove this part after linked with database
+        static List<string> temp_visitedEndDayCutscene = new List<string>();
+        static Queue<EndDayCutsceneDetail> EndDayCutSceneQuene = new Queue<EndDayCutsceneDetail>();
+        static bool isPlayCutsceneToday = false;
+        List<EndDayCutsceneDetail> temp_avaliableEndDayCutscene = new List<EndDayCutsceneDetail> { new EndDayCutsceneDetail("FinishDemo", 200) };
+        class EndDayCutsceneDetail
+        {
+            public string siteName;
+            public int followerNeeded;
+            public EndDayCutsceneDetail(string siteName, int followerNeeded)
+            {
+                this.siteName = siteName;
+                this.followerNeeded = followerNeeded;
+            }
+        }
+        #endregion
+
+
         public Subject<Unit> OnStaminaOutFinish { get; } = new();
         public Subject<Unit> OnTimeOutFinish { get; } = new();
 
@@ -125,6 +144,9 @@ namespace NekoOdyssey.Scripts.Game.Core.EndDay
                 case EndDayStep.Result:
                     ShowResultPanel();
                     break;
+                case EndDayStep.EndDayCutscene:
+                    PlayEndDayCutscene();
+                    break;
                 case EndDayStep.NewDay:
                     LoadNewDay();
                     break;
@@ -166,12 +188,96 @@ namespace NekoOdyssey.Scripts.Game.Core.EndDay
                 var endDayResultCanvas = Object.FindFirstObjectByType<EndDayResult_CanvasController>();
                 endDayResultCanvas.OnEndDayResultFinish.Subscribe(_ =>
                 {
-                    endDayStep = EndDayStep.NewDay;
-                    ProcessEndDayStep();
+                    CheckEndDayCutscene();
+                    //endDayStep = EndDayStep.NewDay;
+                    //ProcessEndDayStep();
                 })
                 .AddTo(endDayResultCanvas);
             };
         }
+
+        void CheckEndDayCutscene()
+        {
+            //bool isCutsceneAvaliable = false;
+            var follower = GameRunner.Instance.Core.Player.FollowerCount;
+            //follower = 200; //ignore real value for now
+            var DemoFinished = GameRunner.Instance.Core.Player.DemoFinished;
+            if (!DemoFinished)
+            {
+
+                #region for demo
+                GameRunner.Instance.Core.SaveDbWriter.Add(dbContext =>
+                {
+                    var repo = new Database.Domains.SaveV001.PlayerPropertiesEntity.Repo.PlayerPropertiesV001Repo(dbContext);
+                    var properties = repo.Load();
+                    properties.DemoFinished = true;
+                    repo.Update(properties);
+                });
+                #endregion
+
+
+
+                foreach (var endDayCutscene in temp_avaliableEndDayCutscene)
+                {
+                    Debug.Log($"check endDay cutscene : {endDayCutscene.siteName} / {endDayCutscene.followerNeeded}");
+                    if (temp_visitedEndDayCutscene.Contains(endDayCutscene.siteName)) continue;
+                    if (EndDayCutSceneQuene.Any(cutscne => cutscne.siteName.Equals(endDayCutscene.siteName))) continue;
+
+                    if (follower >= endDayCutscene.followerNeeded)
+                    {
+                        Debug.Log($"load end day cutscene : {endDayCutscene.siteName}");
+
+                        //isCutsceneAvaliable = true;
+
+                        EndDayCutSceneQuene.Enqueue(endDayCutscene);
+                    }
+                }
+            }
+
+            //if (isCutsceneAvaliable)
+            if (EndDayCutSceneQuene.Count > 0)
+            {
+                endDayStep = EndDayStep.EndDayCutscene;
+            }
+            else
+            {
+                endDayStep = EndDayStep.NewDay;
+            }
+            ProcessEndDayStep();
+
+            //PlayEndDayCutscene();
+        }
+
+        void PlayEndDayCutscene()
+        {
+            if (!isPlayCutsceneToday)
+            {
+                Debug.Log("PlayEndDayCutscene");
+                var cutsceneDetail = EndDayCutSceneQuene.Dequeue();
+
+                isPlayCutsceneToday = true;
+
+                temp_visitedEndDayCutscene.Add(cutsceneDetail.siteName);
+
+
+                GameRunner.Instance.Core.GameScene.CloseScene();
+                GameRunner.Instance.Core.GameScene.OnChangeSceneFinish.Subscribe(_ =>
+                {
+                    SiteRunner.Instance.Core.Site.SetSite(cutsceneDetail.siteName);
+                });
+
+            }
+            else
+            {
+                endDayStep = EndDayStep.NewDay;
+                ProcessEndDayStep();
+            }
+
+
+
+
+        }
+
 
         void LoadNewDay()
         {
@@ -186,7 +292,11 @@ namespace NekoOdyssey.Scripts.Game.Core.EndDay
 
             GameRunner.Instance.TimeRoutine.ContinueTime();
 
+            isPlayCutsceneToday = false;
         }
+
+
+
 
     }
 
@@ -197,6 +307,7 @@ namespace NekoOdyssey.Scripts.Game.Core.EndDay
     public enum EndDayStep
     {
         None, PlayerAnimation, MikiHome, Result, NewDay,
+        EndDayCutscene,
     }
 
 }
