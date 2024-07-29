@@ -23,5 +23,8 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.ChatConditionEntity.
         
         [NotNull]
         public int Value { get; set; }
+        
+        [Ignore]
+        public virtual Chat Chat { get; set; }
     }
 }

@@ -4,17 +4,9 @@ using NekoOdyssey.Scripts.Database.Domains;
 using NekoOdyssey.Scripts.Database.Domains.Cats;
 using NekoOdyssey.Scripts.Database.Domains.Cats.Entities.CatProfileEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.Cats.Entities.CatProfileEntity.Repo;
-using NekoOdyssey.Scripts.Database.Domains.Items;
-using NekoOdyssey.Scripts.Database.Domains.Items.Entities.ItemEntity.Models;
-using NekoOdyssey.Scripts.Database.Domains.Items.Entities.ItemEntity.Repo;
-using NekoOdyssey.Scripts.Database.Domains.Items.Entities.ItemTypeEntity.Models;
-using NekoOdyssey.Scripts.Database.Domains.Items.Entities.ItemTypeEntity.Repo;
-using NekoOdyssey.Scripts.Database.Domains.Sites.Entities.SiteEntity.Repo;
 using UniRx;
-using UnityEngine;
-using UnityEngine.Rendering.Universal;
 
-namespace NekoOdyssey.Scripts.Game.Core.MasterData.Items
+namespace NekoOdyssey.Scripts.Game.Core.MasterData.Cats
 {
     public class CatsMasterData
     {

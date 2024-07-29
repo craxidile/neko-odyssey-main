@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogEntity.Models;
+using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestConditionEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestGroupEntity.Models;
 using SpatiumInteractive.Libraries.Unity.GRU.Base;
 using SpatiumInteractive.Libraries.Unity.GRU.Contracts;
@@ -54,5 +57,14 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestEntity.Models
        [Indexed]
        [ForeignKey(typeof(Dialog))]
        public int DialogId { get; set; }
+
+       [Ignore]
+       public virtual Dialog Dialog { get; set; }
+       
+       [Ignore]
+       public virtual QuestGroup QuestGroup { get; set; }
+       
+       [Ignore]
+       public virtual ICollection<QuestCondition> Conditions { get; set; }
     }
 }
