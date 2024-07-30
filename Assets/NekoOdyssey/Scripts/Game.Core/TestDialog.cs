@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Commons;
+using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.ChatGroupEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogAnswerEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogConditionEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogQuestionEntity.Models;
+using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestGroupEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.SubDialogEntity.Models;
+using UniRx;
 using UnityEngine;
 
 namespace NekoOdyssey.Scripts.Game.Core
@@ -15,9 +18,99 @@ namespace NekoOdyssey.Scripts.Game.Core
     {
         public void Test()
         {
-            IDialogNextEntity next;
+            const string questGroupCode = "Q005";
+            const string chatGroupCode = "npc41";
+            const string routineCode = "Npc01DrinkTea";
+            var questGroupsMasterData = GameRunner.Instance.Core.MasterData.NpcMasterData.QuestGroupsMasterData;
+            var chatGroupsMasterData = GameRunner.Instance.Core.MasterData.NpcMasterData.ChatGroupsMasterData;
+            var routinesMasterData = GameRunner.Instance.Core.MasterData.NpcMasterData.RoutinesMasterData;
+            if (questGroupsMasterData.Ready)
+            {
+                ExecuteQuestGroup(questGroupsMasterData.QuestGroups.FirstOrDefault(qg => qg.Code == questGroupCode));
+                ExecuteChatGroup(chatGroupsMasterData.ChatGroups.FirstOrDefault(cg => cg.Code == chatGroupCode));
+                ExecuteRoutine(routinesMasterData.Routines.FirstOrDefault(r => r.Code == routineCode));
+            }
+            else
+            {
+                questGroupsMasterData.OnReady
+                    .Subscribe(_ =>
+                    {
+                        ExecuteQuestGroup(
+                            questGroupsMasterData.QuestGroups.FirstOrDefault(qg => qg.Code == questGroupCode)
+                        );
+                        ExecuteChatGroup(
+                            chatGroupsMasterData.ChatGroups.FirstOrDefault(cg => cg.Code == chatGroupCode)
+                        );
+                        ExecuteRoutine(routinesMasterData.Routines.FirstOrDefault(r => r.Code == routineCode));
+                    })
+                    .AddTo(GameRunner.Instance);
+            }
+        }
 
-            var dialog = new Dialog();
+        private void ExecuteQuestGroup(QuestGroup questGroup)
+        {
+            Debug.Log($">>test_npc<<<color=red>========== Quest Group ==========</color>");
+            Debug.Log($">>test_npc<< >>quest_group<< {questGroup.Code}");
+            foreach (var condition in questGroup.Conditions)
+            {
+                Debug.Log(
+                    $">>test_npc<< >>quest_group<< condition {condition.Type} {condition.Code} {condition.Operator} {condition.Value}");
+            }
+
+            foreach (var quest in questGroup.Quests)
+            {
+                Debug.Log($">>test_npc<< >>quest<< {quest.Code}");
+                foreach (var condition in quest.Conditions)
+                {
+                    Debug.Log(
+                        $">>test_npc<< >>quest<< condition {condition.Type} {condition.Code} {condition.Operator} {condition.Value}");
+                }
+
+                Debug.Log($">>test_npc<< >>quest<< dialog_exists {quest.Dialog != null}");
+                if (quest.Dialog == null) continue;
+                ExecuteDialog(quest.Dialog);
+            }
+        }
+
+        private void ExecuteChatGroup(ChatGroup chatGroup)
+        {
+            Debug.Log($">>test_npc<<<color=red>========== Chat Group ==========</color>");
+            Debug.Log($">>test_npc<< >>chat_group<< {chatGroup.Code}");
+            foreach (var condition in chatGroup.Conditions)
+            {
+                Debug.Log(
+                    $">>test_npc<< >>chat_group<< condition {condition.Type} {condition.Code} {condition.Operator} {condition.Value}");
+            }
+
+            foreach (var chat in chatGroup.Chats)
+            {
+                Debug.Log($">>test_npc<< >>chat<< {chat.Code}");
+                foreach (var condition in chat.Conditions)
+                {
+                    Debug.Log(
+                        $">>test_npc<< >>quest<< condition {condition.Type} {condition.Code} {condition.Operator} {condition.Value}");
+                }
+
+                Debug.Log($">>test_npc<< >>quest<< dialog_exists {chat.Dialog != null}");
+                if (chat.Dialog == null) continue;
+                ExecuteDialog(chat.Dialog);
+            }
+        }
+
+        private void ExecuteRoutine(Database.Domains.Npc.Entities.RoutineEntity.Models.Routine routine)
+        {
+            Debug.Log($">>test_npc<<<color=red>========== Routine ==========</color>");
+            Debug.Log($">>test_npc<< >>routine<< {routine.Code}");
+            if (routine.Dialog == null) return;
+            Debug.Log($">>test_npc<< >>routine<< dialog_exists {routine.Dialog != null}");
+            ExecuteDialog(routine.Dialog);
+        }
+
+        private void ExecuteDialog(Dialog dialog)
+        {
+            Debug.Log($">>test_npc<< >>dialog<< {dialog.Code}");
+
+            IDialogNextEntity next;
             next = dialog.NextEntity;
             if (next is SubDialog)
             {
@@ -35,23 +128,26 @@ namespace NekoOdyssey.Scripts.Game.Core
 
         private void ExecuteSubDialog(SubDialog subDialog)
         {
-            var a = new Animator();
+            Debug.Log($">>sub_dialog<< {subDialog.Id}");
+
+            // var a = new Animator();
             foreach (var line in subDialog.Lines)
             {
-                if (line.AnimatorParamValue == "true")
-                {
-                    a.SetBool(line.AnimatorParam, true);
-                }
-                else if (line.AnimatorParamValue == "false")
-                {
-                    a.SetBool(line.AnimatorParam, false);
-                }
-                else if (line.AnimatorParamValue == "trigger")
-                {
-                    a.SetTrigger(line.AnimatorParam);
-                }
-                
-                Debug.Log($">>line<< {line.Actor} {line.TextTh}");
+                // if (line.AnimatorParamValue == "true")
+                // {
+                //     a.SetBool(line.AnimatorParam, true);
+                // }
+                // else if (line.AnimatorParamValue == "false")
+                // {
+                //     a.SetBool(line.AnimatorParam, false);
+                // }
+                // else if (line.AnimatorParamValue == "trigger")
+                // {
+                //     a.SetTrigger(line.AnimatorParam);
+                // }
+
+                Debug.Log(
+                    $">>test_npc<< >>line<< {line.Actor} {line.Original} <color=purple>{line.AnimatorParam} {line.AnimatorParamValue}</color> <color=green>{line.Photo}</color>");
             }
 
             var childFlag = subDialog.DialogChildFlag;
@@ -76,10 +172,10 @@ namespace NekoOdyssey.Scripts.Game.Core
 
         private void ExecuteQuestion(DialogQuestion question)
         {
-            Debug.Log($">>question<< {question.Original}");
+            Debug.Log($">>test_npc<< >>question<< {question.Original}");
             foreach (var answer in question.Answers)
             {
-                Debug.Log($">>answer<< {answer.Original}");
+                Debug.Log($">>test_npc<< >>answer<< {answer.Original}");
             }
 
             var selectedAnswer = (question.Answers as List<DialogAnswer>)?[0];
@@ -113,7 +209,7 @@ namespace NekoOdyssey.Scripts.Game.Core
             foreach (var conditionCase in condition.ConditionCases)
             {
                 Debug.Log(
-                    $">>condition<< {conditionCase.Type} {conditionCase.Code} {conditionCase.Operator} {conditionCase.Value}");
+                    $">>test_npc<< >>condition<< {conditionCase.Type} {conditionCase.Code} {conditionCase.Operator} {conditionCase.Value}");
             }
 
             var options = condition.Options;
@@ -144,12 +240,12 @@ namespace NekoOdyssey.Scripts.Game.Core
 
         private void EndDialog()
         {
-            Debug.Log($">>end<<");
+            Debug.Log($">>test_npc<< >>end<<");
         }
 
         private void CancelDialog()
         {
-            Debug.Log($">>cancel<<");
+            Debug.Log($">>test_npc<< >>cancel<<");
         }
     }
 }

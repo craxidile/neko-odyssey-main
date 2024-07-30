@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestEntity.Models;
+using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestGroupConditionEntity.Models;
 using SpatiumInteractive.Libraries.Unity.GRU.Base;
 using SpatiumInteractive.Libraries.Unity.GRU.Contracts;
 using SQLite4Unity3d;
@@ -25,5 +28,11 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestGroupEntity.Mod
         public string DescriptionZhCn { get; set; }
         public string DescriptionZhTw { get; set; }
         public string DescriptionJa { get; set; }
+        
+        [Ignore]
+        public virtual ICollection<Quest> Quests { get; set; }
+        
+        [Ignore]
+        public virtual ICollection<QuestGroupCondition> Conditions { get; set; }
     }
 }

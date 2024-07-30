@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.ChatConditionEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.ChatGroupEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogEntity.Models;
 using SpatiumInteractive.Libraries.Unity.GRU.Base;
@@ -34,6 +37,15 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.ChatEntity.Models
 
        [Indexed]
        [ForeignKey(typeof(Dialog))]
-       public int DialogId { get; set; }
+       public int? DialogId { get; set; }
+       
+       [Ignore]
+       public virtual Dialog Dialog { get; set; }
+       
+       [Ignore]
+       public virtual ChatGroup ChatGroup { get; set; }
+       
+       [Ignore]
+       public virtual ICollection<ChatCondition> Conditions { get; set; }
     }
 }

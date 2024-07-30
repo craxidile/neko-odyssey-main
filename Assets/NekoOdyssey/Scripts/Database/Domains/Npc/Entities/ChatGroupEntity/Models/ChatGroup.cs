@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.ChatEntity.Models;
+using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.ChatGroupConditionEntity.Models;
 using SpatiumInteractive.Libraries.Unity.GRU.Base;
 using SpatiumInteractive.Libraries.Unity.GRU.Contracts;
 using SQLite4Unity3d;
@@ -25,5 +28,10 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.ChatGroupEntity.Mode
         public string DescriptionZhCn { get; set; }
         public string DescriptionZhTw { get; set; }
         public string DescriptionJa { get; set; }
+        
+        [Ignore]
+        public virtual ICollection<Chat> Chats { get; set; }
+        [Ignore]
+        public virtual ICollection<ChatGroupCondition> Conditions { get; set; }
     }
 }

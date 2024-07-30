@@ -24,8 +24,8 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogEntity.Models
         
         [Ignore]
         public virtual DialogCondition Condition { get; set; }
-        
-        [Ignore]
-        public virtual IDialogNextEntity NextEntity { get; set; }
+
+        [Ignore] public virtual IDialogNextEntity NextEntity =>
+            (IDialogNextEntity)SubDialog ?? (IDialogNextEntity)Question ?? Condition;
     }
 }
