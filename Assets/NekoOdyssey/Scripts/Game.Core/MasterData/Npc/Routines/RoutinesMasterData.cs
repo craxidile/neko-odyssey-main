@@ -57,7 +57,8 @@ namespace NekoOdyssey.Scripts.Game.Core.MasterData.Npc.Routines
 
                 foreach (var routine in Routines)
                 {
-                    routine.Dialog = dialogs.FirstOrDefault(d => d.Id == routine.DialogId);
+                    if (routine.DialogId == null) continue;
+                    routine.Dialog = dialogs.FirstOrDefault(d => d.Id == routine.DialogId.Value);
                 }
             }
         }

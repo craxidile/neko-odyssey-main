@@ -37,7 +37,7 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.ChatEntity.Models
 
        [Indexed]
        [ForeignKey(typeof(Dialog))]
-       public int DialogId { get; set; }
+       public int? DialogId { get; set; }
        
        [Ignore]
        public virtual Dialog Dialog { get; set; }

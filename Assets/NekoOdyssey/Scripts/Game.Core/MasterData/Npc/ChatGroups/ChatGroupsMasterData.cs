@@ -75,7 +75,8 @@ namespace NekoOdyssey.Scripts.Game.Core.MasterData.Npc.ChatGroups
                     foreach (var chat in chatGroup.Chats)
                     {
                         chat.Conditions = chatConditionRepo.ListByChatId(chat.Id);
-                        chat.Dialog = dialogs.FirstOrDefault(d => d.Id == chat.DialogId);
+                        if (chat.DialogId == null) continue;
+                        chat.Dialog = dialogs.FirstOrDefault(d => d.Id == chat.DialogId.Value);
                     }
                 }
             }

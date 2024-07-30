@@ -6,7 +6,9 @@ using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogAnswerEntity.Model
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogConditionEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogQuestionEntity.Models;
+using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestGroupEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.SubDialogEntity.Models;
+using UniRx;
 using UnityEngine;
 
 namespace NekoOdyssey.Scripts.Game.Core
@@ -15,9 +17,51 @@ namespace NekoOdyssey.Scripts.Game.Core
     {
         public void Test()
         {
-            IDialogNextEntity next;
+            const string questGroupCode = "Q005";
+            var questGroupsMasterData = GameRunner.Instance.Core.MasterData.NpcMasterData.QuestGroupsMasterData;
+            if (questGroupsMasterData.Ready)
+            {
+                ExecuteQuestGroup(questGroupsMasterData.QuestGroups.FirstOrDefault(qg => qg.Code == questGroupCode));
+            }
+            else
+            {
+                questGroupsMasterData.OnReady
+                    .Subscribe(_ =>
+                    {
+                        ExecuteQuestGroup(
+                            questGroupsMasterData.QuestGroups.FirstOrDefault(qg => qg.Code == questGroupCode)
+                        );
+                    })
+                    .AddTo(GameRunner.Instance);
+            }
+        }
 
-            var dialog = new Dialog();
+        private void ExecuteQuestGroup(QuestGroup questGroup)
+        {
+            Debug.Log($">>quest_group<< {questGroup.Code}");
+            foreach (var condition in questGroup.Conditions)
+            {
+                Debug.Log($">>quest_group<< condition {condition.Type} {condition.Code} {condition.Operator} {condition.Value}");
+            }
+
+            foreach (var quest in questGroup.Quests)
+            {
+                Debug.Log($">>quest<< {quest.Code}");
+                foreach (var condition in quest.Conditions)
+                {
+                    Debug.Log($">>quest<< condition {condition.Type} {condition.Code} {condition.Operator} {condition.Value}");
+                }
+                Debug.Log($">>quest<< dialog_exists {quest.Dialog != null}");
+                if (quest.Dialog == null) continue;
+                ExecuteDialog(quest.Dialog);
+            }
+        }
+
+        private void ExecuteDialog(Dialog dialog)
+        {
+            Debug.Log($">>dialog<< {dialog.Code}");
+            
+            IDialogNextEntity next;
             next = dialog.NextEntity;
             if (next is SubDialog)
             {
@@ -35,21 +79,23 @@ namespace NekoOdyssey.Scripts.Game.Core
 
         private void ExecuteSubDialog(SubDialog subDialog)
         {
-            var a = new Animator();
+            Debug.Log($">>sub_dialog<< {subDialog.Id}");
+            
+            // var a = new Animator();
             foreach (var line in subDialog.Lines)
             {
-                if (line.AnimatorParamValue == "true")
-                {
-                    a.SetBool(line.AnimatorParam, true);
-                }
-                else if (line.AnimatorParamValue == "false")
-                {
-                    a.SetBool(line.AnimatorParam, false);
-                }
-                else if (line.AnimatorParamValue == "trigger")
-                {
-                    a.SetTrigger(line.AnimatorParam);
-                }
+                // if (line.AnimatorParamValue == "true")
+                // {
+                //     a.SetBool(line.AnimatorParam, true);
+                // }
+                // else if (line.AnimatorParamValue == "false")
+                // {
+                //     a.SetBool(line.AnimatorParam, false);
+                // }
+                // else if (line.AnimatorParamValue == "trigger")
+                // {
+                //     a.SetTrigger(line.AnimatorParam);
+                // }
                 
                 Debug.Log($">>line<< {line.Actor} {line.TextTh}");
             }

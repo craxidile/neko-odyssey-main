@@ -70,7 +70,8 @@ namespace NekoOdyssey.Scripts.Game.Core.MasterData.Npc.QuestGroups
                     foreach (var quest in questGroup.Quests)
                     {
                         quest.Conditions = questConditionRepo.ListByQuestId(quest.Id);
-                        quest.Dialog = dialogs.FirstOrDefault(d => d.Id == quest.DialogId);
+                        if (quest.DialogId == null) continue;
+                        quest.Dialog = dialogs.FirstOrDefault(d => d.Id == quest.DialogId.Value);
                     }
                 }
             }

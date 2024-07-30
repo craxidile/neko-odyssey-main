@@ -47,7 +47,7 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.RoutineEntity.Models
             }
         }
 
-        [Indexed] [ForeignKey(typeof(Dialog))] public int DialogId { get; set; }
+        [Indexed] [ForeignKey(typeof(Dialog))] public int? DialogId { get; set; }
 
         [Ignore]
         public virtual Dialog Dialog { get; set; }
