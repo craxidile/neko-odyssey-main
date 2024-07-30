@@ -1,24 +1,19 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using NekoOdyssey.Scripts.Database.Domains;
 using NekoOdyssey.Scripts.Database.Domains.Npc;
-using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestConditionEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestConditionEntity.Repo;
-using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestEntity.Repo;
-using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestGroupConditionEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestGroupConditionEntity.Repo;
-using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestGroupEntity.Models;
-using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestGroupEntity.Repo;
+using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.RoutineEntity.Repo;
 using UniRx;
 
-namespace NekoOdyssey.Scripts.Game.Core.MasterData.Npc.QuestGroups
+namespace NekoOdyssey.Scripts.Game.Core.MasterData.Npc.Routines
 {
-    public class QuestGroupsMasterData
+    public class RoutinesMasterData
     {
         public bool Ready { get; private set; }
-        public ICollection<QuestGroup> QuestGroups { get; private set; }
+        public ICollection<Database.Domains.Npc.Entities.RoutineEntity.Models.Routine> Routines { get; private set; }
 
         public Subject<Unit> OnReady { get; } = new();
 
@@ -54,24 +49,15 @@ namespace NekoOdyssey.Scripts.Game.Core.MasterData.Npc.QuestGroups
         private void ListAll()
         {
             var dialogs = GameRunner.Instance.Core.MasterData.NpcMasterData.DialogsMasterData.Dialogs;
-            
+
             using (var npcDbContext = new NpcDbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = true }))
             {
-                var questGroupRepo = new QuestGroupRepo(npcDbContext);
-                var questGroupConditionRepo = new QuestGroupConditionRepo(npcDbContext);
-                var questRepo = new QuestRepo(npcDbContext);
-                var questConditionRepo = new QuestConditionRepo(npcDbContext);
+                var routineRepo = new RoutineRepo(npcDbContext);
+                Routines = routineRepo.List();
 
-                QuestGroups = questGroupRepo.List();
-                foreach (var questGroup in QuestGroups)
+                foreach (var routine in Routines)
                 {
-                    questGroup.Conditions = questGroupConditionRepo.ListByQuestGroupId(questGroup.Id);
-                    questGroup.Quests = questRepo.ListByQuestGroupId(questGroup.Id);
-                    foreach (var quest in questGroup.Quests)
-                    {
-                        quest.Conditions = questConditionRepo.ListByQuestId(quest.Id);
-                        quest.Dialog = dialogs.FirstOrDefault(d => d.Id == quest.DialogId);
-                    }
+                    routine.Dialog = dialogs.FirstOrDefault(d => d.Id == routine.DialogId);
                 }
             }
         }

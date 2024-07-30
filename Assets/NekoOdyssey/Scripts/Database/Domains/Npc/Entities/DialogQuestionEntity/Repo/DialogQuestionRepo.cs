@@ -30,7 +30,7 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogQuestionEntity
                 .FirstOrDefault(dc => dc.AnswerId == answerId);
         }
 
-        public DialogQuestion FindByOption(int optionId)
+        public DialogQuestion FindByOptionId(int optionId)
         {
             return _dbContext.Context.Table<DialogQuestion>()
                 .FirstOrDefault(dc => dc.OptionId == optionId);
