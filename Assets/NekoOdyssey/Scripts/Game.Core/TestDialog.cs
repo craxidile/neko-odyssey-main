@@ -11,6 +11,7 @@ using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestGroupEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.SubDialogEntity.Models;
 using UniRx;
 using UnityEngine;
+using DayOfWeek = NekoOdyssey.Scripts.Database.Commons.Models.DayOfWeek;
 
 namespace NekoOdyssey.Scripts.Game.Core
 {
@@ -59,7 +60,7 @@ namespace NekoOdyssey.Scripts.Game.Core
 
             foreach (var quest in questGroup.Quests)
             {
-                Debug.Log($">>test_npc<< >>quest<< {quest.Code}");
+                Debug.Log($">>test_npc<< >>quest<< {quest.Code} {string.Join(',', quest.TargetActorList)} {quest.TargetActorExists("player")} {string.Join(',', quest.ActiveDayOfWeekList)} {quest.DayOfWeekExists(DayOfWeek.Monday)}");
                 foreach (var condition in quest.Conditions)
                 {
                     Debug.Log(
@@ -100,7 +101,7 @@ namespace NekoOdyssey.Scripts.Game.Core
         private void ExecuteRoutine(Database.Domains.Npc.Entities.RoutineEntity.Models.Routine routine)
         {
             Debug.Log($">>test_npc<<<color=red>========== Routine ==========</color>");
-            Debug.Log($">>test_npc<< >>routine<< {routine.Code}");
+            Debug.Log($">>test_npc<< >>routine<< {routine.Code} {string.Join(',', routine.TargetActorList)} {routine.TargetActorExists("player")} {string.Join(',', routine.ActiveDayOfWeekList)} {routine.DayOfWeekExists(DayOfWeek.Monday)}");
             if (routine.Dialog == null) return;
             Debug.Log($">>test_npc<< >>routine<< dialog_exists {routine.Dialog != null}");
             ExecuteDialog(routine.Dialog);
