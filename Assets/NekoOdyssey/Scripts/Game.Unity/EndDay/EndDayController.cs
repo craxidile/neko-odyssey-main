@@ -205,16 +205,6 @@ namespace NekoOdyssey.Scripts.Game.Core.EndDay
             if (!DemoFinished)
             {
 
-                #region for demo
-                GameRunner.Instance.Core.SaveDbWriter.Add(dbContext =>
-                {
-                    var repo = new Database.Domains.SaveV001.PlayerPropertiesEntity.Repo.PlayerPropertiesV001Repo(dbContext);
-                    var properties = repo.Load();
-                    properties.DemoFinished = true;
-                    repo.Update(properties);
-                });
-                #endregion
-
 
 
                 foreach (var endDayCutscene in temp_avaliableEndDayCutscene)
@@ -230,6 +220,17 @@ namespace NekoOdyssey.Scripts.Game.Core.EndDay
                         //isCutsceneAvaliable = true;
 
                         EndDayCutSceneQuene.Enqueue(endDayCutscene);
+
+
+                        #region for demo
+                        GameRunner.Instance.Core.SaveDbWriter.Add(dbContext =>
+                        {
+                            var repo = new Database.Domains.SaveV001.PlayerPropertiesEntity.Repo.PlayerPropertiesV001Repo(dbContext);
+                            var properties = repo.Load();
+                            properties.DemoFinished = true;
+                            repo.Update(properties);
+                        });
+                        #endregion
                     }
                 }
             }
