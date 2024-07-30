@@ -18,4 +18,7 @@ public class CSVHolderScriptable : ScriptableObject
     [Space]
     [Header("All Quest Dialogue")]
     public TextAsset[] allQuestDialoguesCSV;
+
+    [Space]
+    public bool playFinishDemoVideo;
 }
