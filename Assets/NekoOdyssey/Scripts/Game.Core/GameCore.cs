@@ -83,6 +83,9 @@ namespace NekoOdyssey.Scripts.Game.Core
                 GameRunner.Instance.PlayerInputHandler.OnResetSaveTriggerred
                     .Subscribe(ResetSave)
                     .AddTo(GameRunner.Instance);
+                
+                // Remove this later
+                new TestDialog().Test();
             }
         }
 

@@ -9,15 +9,19 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestConditionEntity
     [Serializable]
     public class QuestCondition : EntityBase<int>, IAggregateRoot
     {
-        [NotNull]
         [Indexed]
         [ForeignKey(typeof(Quest))]
         public int QuestId { get; set; }
-
-        public string QuestCode { get; set; }
         
-        public string QuestItemCode { get; set; }
+        [NotNull]
+        public string Type { get; set; }
         
-        [NotNull] public bool Inclusive { get; set; }
+        public string Code { get; set; }
+        
+        [NotNull]
+        public string Operator { get; set; }
+        
+        [NotNull]
+        public int Value { get; set; }
     }
 }
