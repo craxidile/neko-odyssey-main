@@ -12,6 +12,7 @@ using NekoOdyssey.Scripts.Database.Domains.SaveV001.PlayerQuestEntity.Repo;
 using NekoOdyssey.Scripts.Game.Core.Player.Bag;
 using NekoOdyssey.Scripts.Game.Core.Player.Capture;
 using NekoOdyssey.Scripts.Game.Core.Player.Conversation;
+using NekoOdyssey.Scripts.Game.Core.Player.ItemObain;
 using NekoOdyssey.Scripts.Game.Core.Player.Petting;
 using NekoOdyssey.Scripts.Game.Core.Player.Phone;
 using NekoOdyssey.Scripts.Game.Core.Player.Phone.Apps;
@@ -39,6 +40,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
         public PlayerPetting Petting { get; } = new();
         public PlayerConversation Conversation { get; } = new();
         public PlayerStamina Stamina { get; } = new(); // linias added
+        public PlayerItemObtainPopUp ItemObtainPopUp { get; } = new();
 
         // public int Stamina { get; private set; }
         public int PocketMoney { get; private set; }
@@ -75,6 +77,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
             Capture.Bind();
             Conversation.Bind();
             Stamina.Bind();
+            ItemObtainPopUp.Bind();
         }
 
         public void Start()
@@ -115,6 +118,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
                 GameRunner.Instance.Core.OnSaveReady
                     .Subscribe(HandleGameSaveReady)
                     .AddTo(GameRunner.Instance);
+
+            ItemObtainPopUp.Start();
         }
 
         public void Unbind()
@@ -124,6 +129,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
             Capture.Unbind();
             Conversation.Unbind();
             Stamina.Unbind();
+            ItemObtainPopUp.Unbind();
         }
 
         private PlayerPropertiesV001 LoadPlayerProperties()
@@ -270,21 +276,23 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
                 _finalSceneLoaded = true;
                 Debug.Log($">>load_final<<");
 
-                GameRunner.Instance.Core.SaveDbWriter.Add(dbContext =>
-                {
-                    var repo = new PlayerPropertiesV001Repo(dbContext);
-                    var properties = repo.Load();
-                    properties.DemoFinished = true;
-                    OnFinishDemo.OnNext(default);
-                    repo.Update(properties);
-                });
+                //GameRunner.Instance.Core.SaveDbWriter.Add(dbContext =>
+                //{
+                //    var repo = new PlayerPropertiesV001Repo(dbContext);
+                //    var properties = repo.Load();
+                //    properties.DemoFinished = true;
+                //    OnFinishDemo.OnNext(default);
+                //    repo.Update(properties);
+                //});
 
-                DOVirtual.DelayedCall(2f, () =>
-                {
-                    GameRunner.Instance.Core.GameScene.CloseScene();
-                    DOVirtual.DelayedCall(4f,
-                        () => { SiteRunner.Instance.Core.Site.SetSite("NekoInside28BedroomFinal"); });
-                });
+                //DOVirtual.DelayedCall(2f, () =>
+                //{
+                //    GameRunner.Instance.Core.GameScene.CloseScene();
+                //    DOVirtual.DelayedCall(4f,
+                //        () => { SiteRunner.Instance.Core.Site.SetSite("NekoInside28BedroomFinal"); });
+                //});
+
+                OnFinishDemo.OnNext(default);
             }
         }
 

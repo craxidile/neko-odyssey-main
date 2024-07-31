@@ -49,6 +49,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
         public GameObject joyKeysSuggestion;
         public Text activeMissionText;
         public Text finishedMissionText;
+        public Text DomoFinishText;
 
         CanvasGroup canvasGroup;
 
@@ -130,10 +131,16 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
 
         private void UpdateMissionText(Unit _)
         {
-            var finished = GameRunner.Instance.Core.Player.DemoFinished;
-            Debug.Log($">>finished<< {finished}");
-            activeMissionText.gameObject.SetActive(!finished);
-            finishedMissionText.gameObject.SetActive(finished);
+            var demoFinished = GameRunner.Instance.Core.Player.DemoFinished;
+            Debug.Log($">>finished<< {demoFinished}");
+
+            var followerReach = GameRunner.Instance.Core.Player.FollowerCount >= 200;
+
+            activeMissionText.gameObject.SetActive(!demoFinished && !followerReach);
+            finishedMissionText.gameObject.SetActive(!demoFinished && followerReach);
+
+            DomoFinishText.gameObject.SetActive(demoFinished);
+
         }
 
         private void UpdateGamepadButtons()
@@ -158,7 +165,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
                 xboxBagKey.gameObject.SetActive(false);
                 print(">>gamepad<< Playstation gamepad");
             }
-            else if (gamepad is XInputController) 
+            else if (gamepad is XInputController)
             {
                 keyboardPhoneKey.gameObject.SetActive(false);
                 keyboardBagKey.gameObject.SetActive(false);

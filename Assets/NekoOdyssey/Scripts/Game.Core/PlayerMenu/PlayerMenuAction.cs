@@ -19,6 +19,7 @@
         LeftExit,
         RightEnter,
         RightExit,
-        NoEntry
+        NoEntry,
+        SkipTime
     }
 }

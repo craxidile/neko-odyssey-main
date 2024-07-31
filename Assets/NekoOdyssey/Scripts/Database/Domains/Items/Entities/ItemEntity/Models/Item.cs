@@ -10,7 +10,7 @@ namespace NekoOdyssey.Scripts.Database.Domains.Items.Entities.ItemEntity.Models
     [Serializable]
     public class Item : EntityBase<int>, IAggregateRoot
     {
-        [NotNull] [Indexed] public string Code { get; set; }
+        [NotNull][Indexed] public string Code { get; set; }
 
         [NotNull] public string Name { get; set; }
 
@@ -28,21 +28,21 @@ namespace NekoOdyssey.Scripts.Database.Domains.Items.Entities.ItemEntity.Models
         [Ignore] public ItemType Type { get; set; }
 
         public string ItemTypeCode { get; set; }
-        
+
         [Indexed]
         [ForeignKey(typeof(ItemShop))]
         public int ItemShopId { get; set; }
-        
+
         public string ItemShopCode { get; set; }
-        
+
         [Ignore] public ItemShop Shop { get; set; }
-        
+
         [NotNull] public int Stamina { get; set; }
 
         [NotNull] public bool SingleUse { get; set; }
 
         [NotNull] public bool Collectible { get; set; }
-        
+
         [NotNull] public int Price { get; set; }
 
         public string NameTh { get; set; }
@@ -59,6 +59,10 @@ namespace NekoOdyssey.Scripts.Database.Domains.Items.Entities.ItemEntity.Models
 
         public Item()
         {
+        }
+        public Item(string code)
+        {
+            Code = code;
         }
 
         public Item(string code, string normalIcon, string activeIcon)
