@@ -3,12 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using NekoOdyssey.Scripts.Database.Commons.Models;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestConditionEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestGroupEntity.Models;
 using SpatiumInteractive.Libraries.Unity.GRU.Base;
 using SpatiumInteractive.Libraries.Unity.GRU.Contracts;
 using SQLite4Unity3d;
+using UnityEngine;
+using DayOfWeek = NekoOdyssey.Scripts.Database.Commons.Models.DayOfWeek;
 
 namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestEntity.Models
 {
@@ -44,10 +47,15 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestEntity.Models
             get
             {
                 if (string.IsNullOrEmpty(TargetActors)) return Array.Empty<string>();
-                var actorsText = Regex.Replace(TargetActors, "^|", "");
-                actorsText = Regex.Replace(actorsText, "|$", "");
+                var actorsText = Regex.Replace(TargetActors, "^\\|", "");
+                actorsText = Regex.Replace(actorsText, "\\|$", "");
                 return actorsText.Split('|').ToList();
             }
+        }
+        
+        public bool TargetActorExists(string actor)
+        {
+            return TargetActors?.Contains($"|{actor}|") ?? false;
         }
 
         [NotNull] public string ActiveDaysOfWeek { get; set; }
@@ -62,10 +70,21 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestEntity.Models
             get
             {
                 if (string.IsNullOrEmpty(ActiveDaysOfWeek)) return Array.Empty<string>();
-                var daysText = Regex.Replace(ActiveDaysOfWeek, "^|", "");
-                daysText = Regex.Replace(daysText, "|$", "");
+                var daysText = Regex.Replace(ActiveDaysOfWeek, "^\\|", "");
+                daysText = Regex.Replace(daysText, "\\|$", "");
+                Debug.Log($">>test_npc<< days_text {daysText}");
                 return daysText.Split('|').ToList();
             }
+        }
+        
+        public bool DayOfWeekExists(string dayOfWeek)
+        {
+            return ActiveDaysOfWeek?.Contains($"|{dayOfWeek}|") ?? false;
+        }
+        
+        public bool DayOfWeekExists(DayOfWeek dayOfWeek)
+        {
+            return ActiveDaysOfWeek?.Contains($"|{dayOfWeek.GetShortName()}|") ?? false;
         }
 
         [NotNull] public bool DisableRoutine { get; set; }
