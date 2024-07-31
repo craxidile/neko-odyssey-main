@@ -18,9 +18,9 @@ public class DialogueData
 public class DialogueManager : MonoBehaviour
 {
     public static DialogueManager instance;
-    [HideInInspector]
     public PlayableDirector director;
     public DialogCanvasController canvasController;
+    [HideInInspector]
     public bool endBubble;
 
     //languege
@@ -35,6 +35,7 @@ public class DialogueManager : MonoBehaviour
     }
 
     // Dialogue
+    public bool useCSV =true;
     [SerializeField] TextAsset DialogueAsset;
 
     
@@ -47,9 +48,18 @@ public class DialogueManager : MonoBehaviour
     private void Awake()
     {
         director = GetComponent<PlayableDirector>();
+        canvasController = FindAnyObjectByType<DialogCanvasController>();
         canvasController.SetOpened(false);
         UpdateGlobalLanguage();
-        LoadDialogueCSV();
+        if (useCSV)
+        {
+            LoadDialogueCSV();
+        }
+        else
+        {
+            LoadDialogueCMS();
+        }
+
     }
 
     private void Update()
@@ -85,6 +95,29 @@ public class DialogueManager : MonoBehaviour
             newDialogueData.DialogueSentance = dialogue;
 
             if (!AllDialogueData.ContainsKey(row[0])) 
+            {
+                AllDialogueData.Add(row[0], newDialogueData);
+            }
+        }
+
+    }
+    public void LoadDialogueCMS()
+    {
+        string[] data = DialogueAsset.text.Split(('\n')).ToArray();
+        CheckColumnIndex(data[0]);
+
+        for (int i = 1; i < data.Length; i++)
+        {
+            string[] row = data[i].Split((',')).ToArray();
+
+            DialogueData newDialogueData = new DialogueData();
+
+            string dialogue = row[languageColumnIndex];
+            dialogue = dialogue.Replace(';', ',');
+            dialogue = dialogue.Replace('_', '\n');
+            newDialogueData.DialogueSentance = dialogue;
+
+            if (!AllDialogueData.ContainsKey(row[0]))
             {
                 AllDialogueData.Add(row[0], newDialogueData);
             }

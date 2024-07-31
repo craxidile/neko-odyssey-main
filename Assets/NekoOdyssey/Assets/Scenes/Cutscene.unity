@@ -3019,6 +3019,7 @@ MonoBehaviour:
   canvasController: {fileID: 949533038}
   endBubble: 0
   language: 1
+  useCSV: 0
   DialogueAsset: {fileID: 4900000, guid: 3ee4f69fe5cfedf468ee543c7424154d, type: 3}
 --- !u!320 &455220797
 PlayableDirector:
@@ -3041,8 +3042,6 @@ PlayableDirector:
     value: {fileID: 2066507067}
   - key: {fileID: -477926979765669823, guid: 23718df98aa781847a558e72cc5d0025, type: 2}
     value: {fileID: 2066507071}
-  - key: {fileID: 4719301847395869153, guid: 23718df98aa781847a558e72cc5d0025, type: 2}
-    value: {fileID: 949533037}
   - key: {fileID: -9214241668957282427, guid: 23718df98aa781847a558e72cc5d0025, type: 2}
     value: {fileID: 949533038}
   - key: {fileID: 7530475423664373765, guid: 23718df98aa781847a558e72cc5d0025, type: 2}
@@ -6040,17 +6039,12 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!1 &949533037 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8395892105349879262, guid: c72dce06505800d4ea0ae409dfaea0a7, type: 3}
-  m_PrefabInstance: {fileID: 137202407}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &949533038 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2869955955061809488, guid: c72dce06505800d4ea0ae409dfaea0a7, type: 3}
   m_PrefabInstance: {fileID: 137202407}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 949533037}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c90dc0a9e658402b9bfe4ecf13c61dfd, type: 3}
@@ -6970,6 +6964,7 @@ MonoBehaviour:
   canvasController: {fileID: 1373956152}
   endBubble: 0
   language: 1
+  useCSV: 0
   DialogueAsset: {fileID: 4900000, guid: 71e3827838da3dc418e7fca12803a184, type: 3}
 --- !u!114 &1070239357
 MonoBehaviour:
@@ -7159,6 +7154,7 @@ MonoBehaviour:
   canvasController: {fileID: 1668572763}
   endBubble: 0
   language: 1
+  useCSV: 0
   DialogueAsset: {fileID: 4900000, guid: 3ee4f69fe5cfedf468ee543c7424154d, type: 3}
 --- !u!114 &1101709103
 MonoBehaviour:
@@ -7678,7 +7674,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1193577897}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.060808633, y: 0.29216215, z: -0.018617703, w: 0.95425206}
+  m_LocalRotation: {x: 0.060808647, y: 0.29216218, z: -0.01861771, w: 0.95425206}
   m_LocalPosition: {x: 24.84, y: -1.5, z: -26.86}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -8307,8 +8303,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1356351167}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 23, y: -1.47, z: -25.984}
+  m_LocalRotation: {x: 0.061628457, y: 0.7044161, z: -0.061628457, w: 0.7044161}
+  m_LocalPosition: {x: 23.5, y: -0.95000005, z: -22.73}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -11217,16 +11213,10 @@ PlayableDirector:
     value: {fileID: 759671811}
   - key: {fileID: 5397964404462881097, guid: bbde2d9d20697cf4f81d4e441859ecf3, type: 2}
     value: {fileID: 759671812}
-  - key: {fileID: -9201983304225221737, guid: bbde2d9d20697cf4f81d4e441859ecf3, type: 2}
-    value: {fileID: 1218939454}
   - key: {fileID: -4361947012443448740, guid: bbde2d9d20697cf4f81d4e441859ecf3, type: 2}
     value: {fileID: 3211414}
   - key: {fileID: -2497929755132286657, guid: bbde2d9d20697cf4f81d4e441859ecf3, type: 2}
     value: {fileID: 702264271}
-  - key: {fileID: 6012571484472073047, guid: bbde2d9d20697cf4f81d4e441859ecf3, type: 2}
-    value: {fileID: 635740548}
-  - key: {fileID: -8237791914166039043, guid: bbde2d9d20697cf4f81d4e441859ecf3, type: 2}
-    value: {fileID: 466606945}
   m_ExposedReferences:
     m_References:
     - 74e8328f4ec6d9841b1b4149c99a24c7: {fileID: 1193577899}
@@ -12474,8 +12464,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2103985733}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 23, y: -1.47, z: -25.984}
+  m_LocalRotation: {x: 0.061628457, y: 0.7044161, z: -0.061628457, w: 0.7044161}
+  m_LocalPosition: {x: 23.5, y: -0.95000005, z: -22.73}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
