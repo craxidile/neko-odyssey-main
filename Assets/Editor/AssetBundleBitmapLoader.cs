@@ -9,6 +9,7 @@ public class AssetBundleBitmapLoader
 {
     public static void Test()
     {
+        Debug.Log($">>hello_world<<");
         var args = Environment.GetCommandLineArgs();
         var outputPath = args.Skip(1).First();
         var assetBundle = args.Skip(2).First();
