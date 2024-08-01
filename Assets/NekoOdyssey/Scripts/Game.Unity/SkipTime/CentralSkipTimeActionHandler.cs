@@ -33,9 +33,24 @@ namespace NekoOdyssey.Scripts.Game.Unity.SkipTime
             //player.Conversation.Dialog = attributes.dialog;
             //player.SetMode(PlayerMode.Conversation);
 
-            GameRunner.Instance.TimeRoutine.PauseTime();
+            var tempPlayerMode = player.Mode;
+            player.SetMode(PlayerMode.Stop);
 
-            player.SetMode(PlayerMode.EndDay_TimeOut);
+            var confirmPanelTitle = "Confirm";
+            var confirmPanelDescription = "Go to next day";
+            GameRunner.Instance.Core.Player.ConfirmationPanel.ShowConfirmation(confirmPanelTitle, confirmPanelDescription,
+            confirmCallback: () =>
+            {
+                player.SetMode(PlayerMode.EndDay_TimeOut);
+                GameRunner.Instance.TimeRoutine.PauseTime();
+
+            }
+            , cancelCallback: () =>
+            {
+                player.SetMode(tempPlayerMode);
+            });
+
+
 
 
             Debug.Log("HandlePlayerMenuAction SkipTime");
