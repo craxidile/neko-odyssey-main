@@ -2507,7 +2507,10 @@ namespace SQLite4Unity3d
 					}
 					else {
 						var text = SQLite3.ColumnString (stmt, index);
-						return DateTime.Parse (text);
+						if (text == null) return null;
+						return DateTime.TryParse(text, out var dateTime)
+							? dateTime
+							: new DateTime(SQLite3.ColumnInt64 (stmt, index));
 					}
 				} else if (clrType == typeof(DateTimeOffset)) {
 					return new DateTimeOffset(SQLite3.ColumnInt64 (stmt, index),TimeSpan.Zero);

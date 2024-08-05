@@ -346,6 +346,7 @@ MonoBehaviour:
   cameras:
     mainCamera: {fileID: 1570213365}
     playerCamera: {fileID: 1407168270}
+  gameCoreMode: 0
   CsvHolder: {fileID: 0}
 --- !u!114 &45801739
 MonoBehaviour:
@@ -1931,17 +1932,25 @@ MonoBehaviour:
   socialLikeText: {fileID: 1548377429}
   followerText: {fileID: 826504190}
   moneyText: {fileID: 356945849}
-  gameTimeText: {fileID: 1102169024}
+  gameTimeText: {fileID: 0}
+  gameDayText: {fileID: 0}
   phoneButton: {fileID: 1177440861}
   bagButton: {fileID: 1619305993}
   socialNotificationCanvasGroup: {fileID: 1236140843}
   bagNotificationCanvasGroup: {fileID: 162561603}
   socialNotificationText: {fileID: 114136168}
   bagNotificationText: {fileID: 1904926595}
-  testNumber: 0
-  socialLikeCount: 2000
-  followerCount: 245
-  moneyCount: 3700
+  keyboardPhoneKey: {fileID: 0}
+  keyboardBagKey: {fileID: 0}
+  psPhoneKey: {fileID: 0}
+  psBagKey: {fileID: 0}
+  xboxPhoneKey: {fileID: 0}
+  xboxBagKey: {fileID: 0}
+  pcKeysSuggestion: {fileID: 0}
+  joyKeysSuggestion: {fileID: 0}
+  activeMissionText: {fileID: 0}
+  finishedMissionText: {fileID: 0}
+  DomoFinishText: {fileID: 0}
   socialNotificationCount: 0
   bagNotificationCount: 2
 --- !u!225 &346124205
@@ -2404,6 +2413,7 @@ MonoBehaviour:
   openPhone: {fileID: 2004856144}
   closePhone: {fileID: 1512460886}
   talk: {fileID: 1585232160}
+  hungry: {fileID: 0}
 --- !u!1 &437101385
 GameObject:
   m_ObjectHideFlags: 0
@@ -3040,15 +3050,21 @@ MonoBehaviour:
   phoneUiList:
   - phoneApp: 0
     canvasGroup: {fileID: 1960379457}
+    grid: {fileID: 0}
     gridCell: {fileID: 828487014}
     scrollRect: {fileID: 410988162}
   - phoneApp: 1
     canvasGroup: {fileID: 127823883}
+    grid: {fileID: 0}
     gridCell: {fileID: 1997362445}
     scrollRect: {fileID: 1331751354}
   openPositionTransform: {fileID: 204591151}
   closePositionTransform: {fileID: 941804218}
   phoneTransform: {fileID: 1788723888}
+  likeCountText: {fileID: 0}
+  followerCountText: {fileID: 0}
+  phoneTimeText: {fileID: 0}
+  phoneDayText: {fileID: 0}
 --- !u!225 &551281163
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -3968,6 +3984,77 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 762906024}
   m_CullTransparentMesh: 1
+--- !u!1 &789645950
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 789645953}
+  - component: {fileID: 789645952}
+  - component: {fileID: 789645951}
+  m_Layer: 0
+  m_Name: CameraBoundary
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &789645951
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 789645950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IsGlobal: 0
+  priority: 0
+  blendDistance: 1
+  weight: 1
+  sharedProfile: {fileID: 0}
+--- !u!65 &789645952
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 789645950}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 0.89172053}
+  m_Center: {x: 1.5068067e-14, y: 0, z: -0.089493215}
+--- !u!4 &789645953
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 789645950}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 39.61, y: -0.47, z: -52.2}
+  m_LocalScale: {x: 1, y: 1, z: 21}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!1 &825101358
 GameObject:
   m_ObjectHideFlags: 0
@@ -4330,6 +4417,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   photoTransform: {fileID: 828487012}
+  likeText: {fileID: 0}
 --- !u!1 &828771091
 GameObject:
   m_ObjectHideFlags: 0
@@ -6863,7 +6951,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1306693803}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 44c3aa08ae314b4685919c3fbde30217, type: 3}
+  m_Script: {fileID: 11500000, guid: 0cf0fb79b846c3a44b66a96167a395ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   canvasGroup: {fileID: 1306693808}
@@ -12142,4 +12230,5 @@ CanvasRenderer:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 789645953}
   - {fileID: 700222784}

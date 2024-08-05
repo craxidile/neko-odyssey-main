@@ -198,14 +198,11 @@ namespace NekoOdyssey.Scripts.Game.Core.EndDay
 
         void CheckEndDayCutscene()
         {
-            //bool isCutsceneAvaliable = false;
             var follower = GameRunner.Instance.Core.Player.FollowerCount;
             //follower = 200; //ignore real value for now
             var DemoFinished = GameRunner.Instance.Core.Player.DemoFinished;
             if (!DemoFinished)
             {
-
-
 
                 foreach (var endDayCutscene in temp_avaliableEndDayCutscene)
                 {
@@ -216,8 +213,6 @@ namespace NekoOdyssey.Scripts.Game.Core.EndDay
                     if (follower >= endDayCutscene.followerNeeded)
                     {
                         Debug.Log($"load end day cutscene : {endDayCutscene.siteName}");
-
-                        //isCutsceneAvaliable = true;
 
                         EndDayCutSceneQuene.Enqueue(endDayCutscene);
 
@@ -230,12 +225,12 @@ namespace NekoOdyssey.Scripts.Game.Core.EndDay
                             properties.DemoFinished = true;
                             repo.Update(properties);
                         });
+
                         #endregion
                     }
                 }
             }
 
-            //if (isCutsceneAvaliable)
             if (EndDayCutSceneQuene.Count > 0)
             {
                 endDayStep = EndDayStep.EndDayCutscene;
