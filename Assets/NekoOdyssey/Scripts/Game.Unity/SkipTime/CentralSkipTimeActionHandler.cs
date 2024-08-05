@@ -37,7 +37,9 @@ namespace NekoOdyssey.Scripts.Game.Unity.SkipTime
             player.SetMode(PlayerMode.Stop);
 
             var confirmPanelTitle = "Confirm";
-            var confirmPanelDescription = "Go to next day";
+            var confirmPanelDescription = "Go_to_next_day";
+            //var confirmPanelTitle = "Confirm";
+            //var confirmPanelDescription = "Cancel";
             GameRunner.Instance.Core.Player.ConfirmationPanel.ShowConfirmation(confirmPanelTitle, confirmPanelDescription,
             confirmCallback: () =>
             {

@@ -1,4 +1,5 @@
 ﻿using DG.Tweening;
+using NekoOdyssey.Scripts.Game.Unity.Uis.Utils;
 using UniRx;
 using UnityEngine;
 using UnityEngine.Events;
@@ -13,6 +14,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.ConfirmationPanel
 
         public CanvasGroup canvasGroup;
         public Text descriptionText;
+        //public UiTextLocaliser descriptionTextLocaliser;
         public ButtonHover confirmButton;
         public ButtonHover cancelButton;
 
@@ -81,9 +83,14 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.ConfirmationPanel
 
         public void SetDescription(string titleName, string description)
         {
-            //var localize_name = itemsMasterData.GetLocalisedItemName(bagItem.Item);
-            //var localize_description = itemsMasterData.GetLocalisedItemDescription(bagItem.Item);
-            descriptionText.text = $"{titleName}\n{description}";
+            var locale = GameRunner.Instance.Core.Settings.Locale;
+            //var locale = Constants.Locale.Th;
+            var localize_name = GameRunner.Instance.Core.Uis.Localisation.Translate(titleName, locale);
+            var localize_description = GameRunner.Instance.Core.Uis.Localisation.Translate(description, locale);
+            //descriptionText.text = $"{titleName}\n{description}";
+
+            //descriptionTextLocaliser.OriginalText = $"{localize_name}\n{localize_description}";
+            descriptionText.text = $"{localize_name}\n{localize_description}";
         }
 
         public void SetVisible(bool visible, bool animating = true)
