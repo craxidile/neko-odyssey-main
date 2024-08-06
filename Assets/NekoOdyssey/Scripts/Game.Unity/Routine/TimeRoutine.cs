@@ -4,6 +4,7 @@ using UniRx;
 using UnityEngine;
 using NekoOdyssey.Scripts.Constants;
 using NekoOdyssey.Scripts.Game.Core.GameScene;
+using DayOfWeek = NekoOdyssey.Scripts.Database.Commons.Models.DayOfWeek;
 
 public enum Day
 {
