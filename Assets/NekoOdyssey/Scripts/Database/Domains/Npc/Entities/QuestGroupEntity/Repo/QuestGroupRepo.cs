@@ -26,5 +26,11 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestGroupEntity.Rep
             return _dbContext.Context.Table<QuestGroup>()
                 .FirstOrDefault(qg => qg.Id == id);
         }
+
+        public QuestGroup FindByCode(string code)
+        {
+            return _dbContext.Context.Table<QuestGroup>()
+                .FirstOrDefault(qg => qg.Code == code);
+        }
     }
 }

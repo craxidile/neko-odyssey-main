@@ -7,6 +7,7 @@ using NekoOdyssey.Scripts.Database.Commons.Models;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestConditionEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestGroupEntity.Models;
+using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestRewardEntity.Models;
 using SpatiumInteractive.Libraries.Unity.GRU.Base;
 using SpatiumInteractive.Libraries.Unity.GRU.Contracts;
 using SQLite4Unity3d;
@@ -38,8 +39,10 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestEntity.Models
         public string DescriptionZhTw { get; set; }
         public string DescriptionJa { get; set; }
 
-        [NotNull] public string TargetEventPoint { get; set; }
-        [NotNull] public string TargetActors { get; set; }
+        [NotNull]
+        public string TargetEventPoint { get; set; }
+        [NotNull]
+        public string TargetActors { get; set; }
 
         [Ignore]
         public ICollection<string> TargetActorList
@@ -58,8 +61,10 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestEntity.Models
             return TargetActors?.Contains($"|{actor}|") ?? false;
         }
 
-        [NotNull] public string ActiveDaysOfWeek { get; set; }
-        [NotNull] public int StartingHour { get; set; }
+        [NotNull]
+        public string ActiveDaysOfWeek { get; set; }
+        [NotNull]
+        public int StartingHour { get; set; }
         [NotNull] public int StartingMinute { get; set; }
         [NotNull] public int EndingHour { get; set; }
         [NotNull] public int EndingMinute { get; set; }
@@ -87,14 +92,23 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestEntity.Models
             return ActiveDaysOfWeek?.Contains($"|{dayOfWeek.GetShortName()}|") ?? false;
         }
 
-        [NotNull] public bool DisableRoutine { get; set; }
+        [NotNull]
+        public bool DisableRoutine { get; set; }
 
-        [Indexed] [ForeignKey(typeof(Dialog))] public int? DialogId { get; set; }
+        [Indexed]
+        [ForeignKey(typeof(Dialog))]
+        public int? DialogId { get; set; }
 
-        [Ignore] public virtual Dialog Dialog { get; set; }
+        [Ignore]
+        public virtual Dialog Dialog { get; set; }
 
-        [Ignore] public virtual QuestGroup QuestGroup { get; set; }
+        [Ignore]
+        public virtual QuestGroup QuestGroup { get; set; }
 
-        [Ignore] public virtual ICollection<QuestCondition> Conditions { get; set; }
+        [Ignore]
+        public virtual ICollection<QuestCondition> Conditions { get; set; }
+        
+        [Ignore]
+        public virtual ICollection<QuestReward> Rewards { get; set; }
     }
 }

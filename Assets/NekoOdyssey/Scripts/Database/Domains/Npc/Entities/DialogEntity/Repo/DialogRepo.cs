@@ -26,5 +26,11 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogEntity.Repo
             return _dbContext.Context.Table<Dialog>()
                 .FirstOrDefault(c => c.Id == id);
         }
+
+        public Dialog FindByCode(string code)
+        {
+            return _dbContext.Context.Table<Dialog>()
+                .FirstOrDefault(c => c.Code == code);
+        }
     }
 }
