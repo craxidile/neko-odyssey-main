@@ -14,6 +14,19 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.SubDialogEntity.Repo
         {
         }
 
+        public ICollection<SubDialog> List()
+        {
+            return _dbContext.Context.Table<SubDialog>()
+                .OrderBy(sd => sd.Id)
+                .ToList();
+        }
+
+        public SubDialog FindById(int id)
+        {
+            return _dbContext.Context.Table<SubDialog>()
+                .FirstOrDefault(sd => sd.Id == id);
+        }
+
         public SubDialog FindByDialogId(int dialogId)
         {
             return _dbContext.Context.Table<SubDialog>()

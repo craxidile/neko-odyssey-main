@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogAnswerEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogConditionEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogConditionOptionEntity.Models;
@@ -12,6 +13,19 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogConditionEntit
     {
         public DialogConditionRepo(IDbContext<SQLiteConnection> dbContext) : base(dbContext)
         {
+        }
+
+        public ICollection<DialogCondition> List()
+        {
+            return _dbContext.Context.Table<DialogCondition>()
+                .OrderBy(dc => dc.Id)
+                .ToList();
+        }
+
+        public DialogCondition FindById(int id)
+        {
+            return _dbContext.Context.Table<DialogCondition>()
+                .FirstOrDefault(dc => dc.Id == id);
         }
 
         public DialogCondition FindByDialogId(int dialogId)
