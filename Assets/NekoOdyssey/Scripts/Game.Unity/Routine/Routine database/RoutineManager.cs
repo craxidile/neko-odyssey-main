@@ -207,7 +207,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                         {
                             eventPointInteractive.OnInteractive = () =>
                             {
-                                ConversationHandle(quest);
+                                var activeQuest = quest;
+                                ConversationHandle(activeQuest);
 
                             };
                         }
@@ -241,52 +242,99 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                 }
             }
         }
+
         bool CheckQuestGroupCondition(ICollection<QuestGroupCondition> conditionList)
         {
-            //if (conditionList.Count > 0)
-            //{
-            //    foreach (var condition in conditionList)
-            //    {
-            //        if (!ownedQuestKey.Contains(condition))
-            //        {
-            //            //if (!playerInventory.Contains(key))
-            //            //{
-
-
-            //            return false;
-
-            //            //}
-            //            //else
-            //            //{
-            //            //return true;
-            //            //}
-            //        }
-
-            //    }
-            //}
-
-
-            //if (conditionExcludeList.Count > 0)
-            //{
-            //    foreach (var condition in conditionExcludeList)
-            //    {
-            //        if (ownedQuestKey.Contains(condition))
-            //        {
-            //            return false;
-            //        }
-            //    }
-            //}
-
-
+            foreach (var condition in conditionList)
+            {
+                if (!CheckCondition(condition.Type, condition.Code, condition.Operator, condition.Value)) return false;
+            }
             return true;
         }
         bool CheckQuestCondition(ICollection<QuestCondition> conditionList)
         {
+            foreach (var condition in conditionList)
+            {
+                if (!CheckCondition(condition.Type, condition.Code, condition.Operator, condition.Value)) return false;
+            }
             return true;
         }
         bool CheckDialogueCondition(ICollection<DialogConditionCase> conditionList)
         {
+            foreach (var condition in conditionList)
+            {
+                if (!CheckCondition(condition.Type, condition.Code, condition.Operator, condition.Value)) return false;
+            }
             return true;
+        }
+
+        bool CheckCondition(string type, string code, string operation, int value)
+        {
+            if (type == "Quest Key" || type == "Quest Group Key")
+            {
+                if (!GameRunner.Instance.Core.Player.IsQuestComplete(code)) return false;
+            }
+            if (type == "Exclude Quest Key" || type == "Exclude Quest Group Key")
+            {
+                if (GameRunner.Instance.Core.Player.IsQuestComplete(code)) return false;
+            }
+
+            if (type == "Item Count")
+            {
+                var itemCount = GameRunner.Instance.Core.Player.Bag.CheckBagItem(code);
+                if (!ExtecuteOperation(itemCount, value, operation)) return false;
+            }
+            if (type == "Stamina")
+            {
+                var stamina = GameRunner.Instance.Core.Player.Stamina.Stamina;
+                if (!ExtecuteOperation(stamina, value, operation)) return false;
+            }
+            if (type == "Followers")
+            {
+                var follower = GameRunner.Instance.Core.Player.FollowerCount;
+                if (!ExtecuteOperation(follower, value, operation)) return false;
+            }
+            if (type == "Likes")
+            {
+                var like = GameRunner.Instance.Core.Player.LikeCount;
+                if (!ExtecuteOperation(like, value, operation)) return false;
+            }
+            if (type == "Money")
+            {
+                var money = GameRunner.Instance.Core.Player.PocketMoney;
+                if (!ExtecuteOperation(money, value, operation)) return false;
+            }
+
+            return true;
+        }
+        bool ExtecuteOperation(int a, int b, string opeator)
+        {
+            bool result = false;
+            switch (opeator)
+            {
+                case ">=":
+                    result = a >= b;
+                    break;
+                case "<=":
+                    result = a <= b;
+                    break;
+                case ">":
+                    result = a > b;
+                    break;
+                case "<":
+                    result = a < b;
+                    break;
+                case "==":
+                    result = a == b;
+                    break;
+                case "!=":
+                    result = a != b;
+                    break;
+                default:
+                    break;
+            }
+            Debug.Log($"{a} {opeator} {b} = {result}");
+            return result;
         }
 
 
@@ -415,13 +463,16 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         //public void ConversationHandle(QuestEventDetail questEventDetail)
         public void ConversationHandle(Quest quest)
         {
+            Debug.Log("ConversationHandle 0");
             //if (_withinDialogue)
             if (_lastestQuest != null)
             {
+                Debug.Log($"ConversationHandle _nextDialogueCallback");
                 _nextDialogueCallback?.Invoke();
             }
             else
             {
+                Debug.Log($"ConversationHandle 1 {quest.Code}");
                 //var targetEventPoint = EventPoint.GetEventPoint(quest.TargetEventPoint);
 
                 //var dialogueActors = targetEventPoint?.GetComponentsInChildren<DialogueActor>();
@@ -543,6 +594,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
         void ExecuteDialog(Dialog dialog)
         {
+            Debug.Log($"ConversationHandle 2");
             Debug.Log($">>test_npc<< >>dialog<< {dialog.Code}");
 
             IDialogNextEntity next;
@@ -587,15 +639,24 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
                 var targetEventPoint = EventPoint.GetEventPoint(_lastestQuest.TargetEventPoint);
                 var dialogueActors = targetEventPoint?.GetComponentsInChildren<DialogueActor>();
-                var targetActor = dialogueActors.FirstOrDefault(actor => actor.actorId == line.Actor);
+                var targetActor = dialogueActors.FirstOrDefault(actor => actor.actorId.Equals(line.Actor, System.StringComparison.InvariantCultureIgnoreCase));
                 if (targetActor != null)
                 {
-                    ChatBalloonManager.ShowChatBalloon(targetActor.transform, line.GetLocalisedText());
                     GameRunner.Instance.Core.PlayerMenu.GameObject = targetActor.gameObject;
                     GameRunner.Instance.Core.Player.SetMode(PlayerMode.QuestConversation);
+
+                    if (!string.IsNullOrEmpty(line.Original))
+                    {
+                        ChatBalloonManager.ShowChatBalloon(targetActor.transform, line.GetLocalisedText());
+                    }
+                    else
+                    {
+                        ChatBalloonManager.HideChatBalloon();
+                    }
                 }
                 else
                 {
+                    ChatBalloonManager.HideChatBalloon();
                     Debug.Log($"npc actor {line.Actor} cannot found ({line.GetLocalisedText()})");
                 }
 

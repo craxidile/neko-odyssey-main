@@ -189,7 +189,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         // Start is called before the first frame update
         public void Start()
         {
-
+            GameRunner.Instance.Core.RoutineManger.UpdateWorld();
 
 
             //s_isTimeRunning = true;
@@ -229,7 +229,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             //GameRunner.Instance.Core.Routine.UpdateWorld();
             //GameRunner.Instance.Core.Routine.dayNightLightingManager.Update();
 
-            GameRunner.Instance.Core.RoutineManger.UpdateWorld();
+            //GameRunner.Instance.Core.RoutineManger.UpdateWorld();
             GameRunner.Instance.Core.RoutineManger.dayNightLightingManager.Update();
 
             DayNightTimeActivator.UpdateActivator();
