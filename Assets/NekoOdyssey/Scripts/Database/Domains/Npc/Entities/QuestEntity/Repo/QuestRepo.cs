@@ -16,7 +16,7 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestEntity.Repo
         public ICollection<Quest> List()
         {
             return _dbContext.Context.Table<Quest>()
-                .OrderBy(i => i.Id)
+                .OrderBy(q => q.Id)
                 .ToList();
         }
 
@@ -26,11 +26,17 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestEntity.Repo
                 .FirstOrDefault(q => q.Id == id);
         }
 
+        public Quest FindByCode(string code)
+        {
+            return _dbContext.Context.Table<Quest>()
+                .FirstOrDefault(q => q.Code == code);
+        }
+
         public ICollection<Quest> ListByQuestGroupId(int questGroupId)
         {
             return _dbContext.Context.Table<Quest>()
                 .Where(q => q.QuestGroupId == questGroupId)
-                .OrderBy(i => i.Id)
+                .OrderBy(q => q.Id)
                 .ToList();
         }
     }

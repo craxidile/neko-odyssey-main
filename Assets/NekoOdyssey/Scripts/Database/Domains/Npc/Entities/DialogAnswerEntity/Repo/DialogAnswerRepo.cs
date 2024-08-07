@@ -13,6 +13,19 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogAnswerEntity.R
         {
         }
 
+        public ICollection<DialogAnswer> List()
+        {
+            return _dbContext.Context.Table<DialogAnswer>()
+                .OrderBy(da => da.Id)
+                .ToList();
+        }
+
+        public DialogAnswer FindById(int id)
+        {
+            return _dbContext.Context.Table<DialogAnswer>()
+                .FirstOrDefault(da => da.Id == id);
+        }
+
         public ICollection<DialogAnswer> ListByQuestionId(int questionId)
         {
             return _dbContext.Context.Table<DialogAnswer>()

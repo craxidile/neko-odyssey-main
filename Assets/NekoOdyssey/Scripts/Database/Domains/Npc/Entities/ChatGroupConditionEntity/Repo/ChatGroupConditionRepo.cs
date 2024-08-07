@@ -26,10 +26,10 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.ChatGroupConditionEn
                 .FirstOrDefault(cgc => cgc.Id == id);
         }
 
-        public ICollection<ChatGroupCondition> ListByChatGroupId(int groupId)
+        public ICollection<ChatGroupCondition> ListByChatGroupId(int chatGroupId)
         {
             return _dbContext.Context.Table<ChatGroupCondition>()
-                .Where(cgc => cgc.ChatGroupId == groupId)
+                .Where(cgc => cgc.ChatGroupId == chatGroupId)
                 .OrderBy(cgc => cgc.Id)
                 .ToList();
         }

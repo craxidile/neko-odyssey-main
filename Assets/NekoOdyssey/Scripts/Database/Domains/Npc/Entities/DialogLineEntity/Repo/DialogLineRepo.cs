@@ -13,10 +13,24 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogLineEntity.Rep
         {
         }
 
+        public ICollection<DialogLine> List()
+        {
+            return _dbContext.Context.Table<DialogLine>()
+                .OrderBy(dl => dl.Id)
+                .ToList();
+        }
+
+        public DialogLine FindById(int id)
+        {
+            return _dbContext.Context.Table<DialogLine>()
+                .FirstOrDefault(dl => dl.Id == id);
+        }
+
         public ICollection<DialogLine> ListBySubDialogId(int subDialogId)
         {
             return _dbContext.Context.Table<DialogLine>()
                 .Where(dl => dl.SubDialogId == subDialogId)
+                .OrderBy(dl => dl.Id)
                 .ToList();
         }
     }

@@ -5,6 +5,7 @@ using NekoOdyssey.Scripts.Database.Domains.Npc;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestConditionEntity.Repo;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestEntity.Repo;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestGroupConditionEntity.Repo;
+using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.RoutineConditionEntity.Repo;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.RoutineEntity.Repo;
 using UniRx;
 
@@ -53,10 +54,13 @@ namespace NekoOdyssey.Scripts.Game.Core.MasterData.Npc.Routines
             using (var npcDbContext = new NpcDbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = true }))
             {
                 var routineRepo = new RoutineRepo(npcDbContext);
+                var routineConditionRepo = new RoutineConditionRepo(npcDbContext);
+                
                 Routines = routineRepo.List();
 
                 foreach (var routine in Routines)
                 {
+                    routine.Conditions = routineConditionRepo.ListByRoutineId(routine.Id);
                     if (routine.DialogId == null) continue;
                     routine.Dialog = dialogs.FirstOrDefault(d => d.Id == routine.DialogId.Value);
                 }
