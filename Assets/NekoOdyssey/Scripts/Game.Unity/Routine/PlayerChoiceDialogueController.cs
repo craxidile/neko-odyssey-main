@@ -15,6 +15,7 @@ public class PlayerChoiceDialogueController : MonoBehaviour
     private void Awake()
     {
         Routine.playerChoiceDialogueController = this;
+        RoutineManger.playerChoiceDialogueController = this;
 
         buttons = new List<Button>()
         {

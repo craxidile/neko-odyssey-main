@@ -226,8 +226,12 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
             //Debug.Log($"current time : {currentTimeText}");
 
-            GameRunner.Instance.Core.Routine.UpdateWorld();
-            GameRunner.Instance.Core.Routine.dayNightLightingManager.Update();
+            //GameRunner.Instance.Core.Routine.UpdateWorld();
+            //GameRunner.Instance.Core.Routine.dayNightLightingManager.Update();
+
+            GameRunner.Instance.Core.RoutineManger.UpdateWorld();
+            GameRunner.Instance.Core.RoutineManger.dayNightLightingManager.Update();
+
             DayNightTimeActivator.UpdateActivator();
 
         }

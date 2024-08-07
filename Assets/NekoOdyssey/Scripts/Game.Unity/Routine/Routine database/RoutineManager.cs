@@ -52,11 +52,11 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
         public void Bind()
         {
-            questEventManager = new QuestEventManager();
+            //questEventManager = new QuestEventManager();
             //BindQuestGroup();
 
-            npcRoutineManager = new NpcRoutineManager();
-            questDialogueManager = new QuestDialogueManager();
+            //npcRoutineManager = new NpcRoutineManager();
+            //questDialogueManager = new QuestDialogueManager();
             dayNightLightingManager = new DayNightLightingManager();
             ChatBalloonManager = new ChatBalloonManager();
 
@@ -64,9 +64,9 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
         public void Start()
         {
-            questEventManager.Start();
-            npcRoutineManager.Start();
-            questDialogueManager.Start();
+            //questEventManager.Start();
+            //npcRoutineManager.Start();
+            //questDialogueManager.Start();
             ChatBalloonManager.Start();
 
             dayNightLightingManager.Start();
@@ -114,9 +114,9 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
 
 
-        public QuestEventManager questEventManager { get; set; }
-        public NpcRoutineManager npcRoutineManager { get; set; }
-        public QuestDialogueManager questDialogueManager { get; set; }
+        //public QuestEventManager questEventManager { get; set; }
+        //public NpcRoutineManager npcRoutineManager { get; set; }
+        //public QuestDialogueManager questDialogueManager { get; set; }
         public ChatBalloonManager ChatBalloonManager { get; set; }
 
         public static PlayerChoiceDialogueController playerChoiceDialogueController { get; set; }
@@ -712,7 +712,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
             Debug.Log("Complete dialogue");
 
-            questEventManager.ownedQuestKey.Add(_lastestQuest.Code);
+            //questEventManager.ownedQuestKey.Add(_lastestQuest.Code);
+            GameRunner.Instance.Core.Player.AddAchievedQuest(_lastestQuest.Code);
 
             //_withinDialogue = false;
             _lastestQuest = null;
