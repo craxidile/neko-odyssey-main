@@ -35,10 +35,10 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
         //public QuestEventDetail _lastestQuestEventDetail;
         Quest _lastestQuest;
-        int _dialogueIndex = 0;
+        //int _dialogueIndex = 0;
 
         UnityAction _nextDialogueCallback;
-        bool _withinDialogue = false;
+        //bool _withinDialogue = false;
 
 
         public DayNightLightingManager dayNightLightingManager;
@@ -415,16 +415,17 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         //public void ConversationHandle(QuestEventDetail questEventDetail)
         public void ConversationHandle(Quest quest)
         {
-            if (_withinDialogue)
+            //if (_withinDialogue)
+            if (_lastestQuest != null)
             {
                 _nextDialogueCallback?.Invoke();
             }
             else
             {
-                var targetEventPoint = EventPoint.GetEventPoint(quest.TargetEventPoint);
+                //var targetEventPoint = EventPoint.GetEventPoint(quest.TargetEventPoint);
 
-                var dialogueActors = targetEventPoint?.GetComponentsInChildren<DialogueActor>();
-                var eventPointInteractive = targetEventPoint?.GetComponent<EventPointInteractive>();
+                //var dialogueActors = targetEventPoint?.GetComponentsInChildren<DialogueActor>();
+                //var eventPointInteractive = targetEventPoint?.GetComponent<EventPointInteractive>();
 
 
                 _lastestQuest = quest;
@@ -582,20 +583,20 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                 //     a.SetTrigger(line.AnimatorParam);
                 // }
 
-                Debug.Log($">>test_npc<< >>line<< {line.Actor} {line.Original} <color=purple>{line.AnimatorParam} {line.AnimatorParamValue}</color> <color=green>{line.Photo}</color>");
+                Debug.Log($">>test_npc<< >>line<< {line.Actor} {line.GetLocalisedText()} <color=purple>{line.AnimatorParam} {line.AnimatorParamValue}</color> <color=green>{line.Photo}</color>");
 
                 var targetEventPoint = EventPoint.GetEventPoint(_lastestQuest.TargetEventPoint);
                 var dialogueActors = targetEventPoint?.GetComponentsInChildren<DialogueActor>();
                 var targetActor = dialogueActors.FirstOrDefault(actor => actor.actorId == line.Actor);
                 if (targetActor != null)
                 {
-                    ChatBalloonManager.ShowChatBalloon(targetActor.transform, line.Original);
+                    ChatBalloonManager.ShowChatBalloon(targetActor.transform, line.GetLocalisedText());
                     GameRunner.Instance.Core.PlayerMenu.GameObject = targetActor.gameObject;
                     GameRunner.Instance.Core.Player.SetMode(PlayerMode.QuestConversation);
                 }
                 else
                 {
-                    Debug.Log($"npc actor {line.Actor} cannot found ({line.Original})");
+                    Debug.Log($"npc actor {line.Actor} cannot found ({line.GetLocalisedText()})");
                 }
 
 
@@ -713,7 +714,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
             questEventManager.ownedQuestKey.Add(_lastestQuest.Code);
 
-            _withinDialogue = false;
+            //_withinDialogue = false;
             _lastestQuest = null;
 
             UpdateWorld();
@@ -722,7 +723,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         {
             EndDialogue();
 
-            _withinDialogue = false;
+            //_withinDialogue = false;
             _lastestQuest = null;
         }
 
