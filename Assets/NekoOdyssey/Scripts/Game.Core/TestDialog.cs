@@ -25,6 +25,7 @@ namespace NekoOdyssey.Scripts.Game.Core
             var questGroupsMasterData = GameRunner.Instance.Core.MasterData.NpcMasterData.QuestGroupsMasterData;
             var chatGroupsMasterData = GameRunner.Instance.Core.MasterData.NpcMasterData.ChatGroupsMasterData;
             var routinesMasterData = GameRunner.Instance.Core.MasterData.NpcMasterData.RoutinesMasterData;
+            
             if (questGroupsMasterData.Ready)
             {
                 ExecuteQuestGroup(questGroupsMasterData.QuestGroups.FirstOrDefault(qg => qg.Code == questGroupCode));
@@ -57,7 +58,7 @@ namespace NekoOdyssey.Scripts.Game.Core
                 Debug.Log(
                     $">>test_npc<< >>quest_group<< condition {condition.Type} {condition.Code} {condition.Operator} {condition.Value}");
             }
-
+            
             foreach (var quest in questGroup.Quests)
             {
                 Debug.Log($">>test_npc<< >>quest<< {quest.Code} {string.Join(',', quest.TargetActorList)} {quest.TargetActorExists("player")} {string.Join(',', quest.ActiveDayOfWeekList)} {quest.DayOfWeekExists(DayOfWeek.Monday)}");
@@ -65,6 +66,11 @@ namespace NekoOdyssey.Scripts.Game.Core
                 {
                     Debug.Log(
                         $">>test_npc<< >>quest<< condition {condition.Type} {condition.Code} {condition.Operator} {condition.Value}");
+                }
+
+                foreach (var reward in quest.Rewards)
+                {
+                    Debug.Log($">>test_npc<< >>quest<< reward {reward.Type} {reward.Code} {reward.Value}");
                 }
 
                 Debug.Log($">>test_npc<< >>quest<< dialog_exists {quest.Dialog != null}");
@@ -102,6 +108,11 @@ namespace NekoOdyssey.Scripts.Game.Core
         {
             Debug.Log($">>test_npc<<<color=red>========== Routine ==========</color>");
             Debug.Log($">>test_npc<< >>routine<< {routine.Code} {string.Join(',', routine.TargetActorList)} {routine.TargetActorExists("player")} {string.Join(',', routine.ActiveDayOfWeekList)} {routine.DayOfWeekExists(DayOfWeek.Monday)}");
+            foreach (var condition in routine.Conditions)
+            {
+                Debug.Log(
+                    $">>test_npc<< >>routine<< condition {condition.Type} {condition.Code} {condition.Operator} {condition.Value}");
+            }
             if (routine.Dialog == null) return;
             Debug.Log($">>test_npc<< >>routine<< dialog_exists {routine.Dialog != null}");
             ExecuteDialog(routine.Dialog);

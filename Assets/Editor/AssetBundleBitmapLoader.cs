@@ -7,7 +7,7 @@ using Object = UnityEngine.Object;
 
 public class AssetBundleBitmapLoader
 {
-    public static void Test()
+    public static void Load()
     {
         Debug.Log($">>hello_world<<");
         var args = Environment.GetCommandLineArgs();
@@ -34,9 +34,17 @@ public class AssetBundleBitmapLoader
         {
             foreach (var item in request.LoadAllAssets())
             {
-                var texture =  Object.Instantiate(item) as Texture2D;
-                if (!texture) continue;
-                writer.WriteLine($"{item.name};{texture?.width};{texture?.height};{Convert.ToBase64String(texture?.EncodeToPNG())}");
+                try
+                {
+                    var texture = Object.Instantiate(item) as Texture2D;
+                    if (!texture) continue;
+                    writer.WriteLine(
+                        $"{item.name};{texture?.width};{texture?.height};{Convert.ToBase64String(texture?.EncodeToPNG())}");
+                }
+                catch (Exception)
+                {
+                    //
+                }
             }
         }
     }

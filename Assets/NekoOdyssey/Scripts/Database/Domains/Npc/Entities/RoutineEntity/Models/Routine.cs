@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using NekoOdyssey.Scripts.Database.Commons.Models;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogEntity.Models;
+using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.RoutineConditionEntity.Models;
 using SpatiumInteractive.Libraries.Unity.GRU.Base;
 using SpatiumInteractive.Libraries.Unity.GRU.Contracts;
 using SQLite4Unity3d;
@@ -69,5 +70,8 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.RoutineEntity.Models
 
         [Ignore]
         public virtual Dialog Dialog { get; set; }
+        
+        [Ignore]
+        public virtual ICollection<RoutineCondition> Conditions { get; set; }
     }
 }

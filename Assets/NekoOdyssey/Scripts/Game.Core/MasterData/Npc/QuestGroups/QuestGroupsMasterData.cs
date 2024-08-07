@@ -11,6 +11,7 @@ using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestGroupConditionEntit
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestGroupConditionEntity.Repo;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestGroupEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestGroupEntity.Repo;
+using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestRewardEntity.Repo;
 using UniRx;
 
 namespace NekoOdyssey.Scripts.Game.Core.MasterData.Npc.QuestGroups
@@ -61,6 +62,7 @@ namespace NekoOdyssey.Scripts.Game.Core.MasterData.Npc.QuestGroups
                 var questGroupConditionRepo = new QuestGroupConditionRepo(npcDbContext);
                 var questRepo = new QuestRepo(npcDbContext);
                 var questConditionRepo = new QuestConditionRepo(npcDbContext);
+                var questRewardRepo = new QuestRewardRepo(npcDbContext);
 
                 QuestGroups = questGroupRepo.List();
                 foreach (var questGroup in QuestGroups)
@@ -70,6 +72,7 @@ namespace NekoOdyssey.Scripts.Game.Core.MasterData.Npc.QuestGroups
                     foreach (var quest in questGroup.Quests)
                     {
                         quest.Conditions = questConditionRepo.ListByQuestId(quest.Id);
+                        quest.Rewards = questRewardRepo.ListByQuestId(quest.Id);
                         if (quest.DialogId == null) continue;
                         quest.Dialog = dialogs.FirstOrDefault(d => d.Id == quest.DialogId.Value);
                     }

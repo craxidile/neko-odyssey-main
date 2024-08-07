@@ -25,5 +25,11 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.RoutineEntity.Repo
             return _dbContext.Context.Table<Routine>()
                 .FirstOrDefault(r => r.Id == id);
         }
+
+        public Routine FindByCode(string code)
+        {
+            return _dbContext.Context.Table<Routine>()
+                .FirstOrDefault(r => r.Code == code);
+        }
     }
 }
