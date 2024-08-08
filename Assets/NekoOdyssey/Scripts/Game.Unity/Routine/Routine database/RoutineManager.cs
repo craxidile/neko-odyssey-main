@@ -22,6 +22,7 @@ using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestGroupConditionEntit
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestConditionEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogConditionCaseEntity.Models;
+using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogLineEntity.Models;
 
 namespace NekoOdyssey.Scripts.Game.Core.Routine
 {
@@ -487,108 +488,32 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                 if (quest.Dialog == null) return;
                 ExecuteDialog(quest.Dialog);
 
+            }
+        }
 
-                /*
-                if (dialogueMessage != null)
+        void ShowDialog(string dialog, string actor)
+        {
+            var targetEventPoint = EventPoint.GetEventPoint(_lastestQuest.TargetEventPoint);
+            var dialogueActors = targetEventPoint?.GetComponentsInChildren<DialogueActor>();
+            var targetActor = dialogueActors.FirstOrDefault(dialogActor => dialogActor.actorId.Equals(actor, System.StringComparison.InvariantCultureIgnoreCase));
+            if (targetActor != null)
+            {
+                GameRunner.Instance.Core.PlayerMenu.GameObject = targetActor.gameObject;
+                GameRunner.Instance.Core.Player.SetMode(PlayerMode.QuestConversation);
+
+                if (!string.IsNullOrEmpty(dialog))
                 {
-                    Debug.Log($"npc Talk quest id : {quest.questId} , text : {dialogueMessage.messageIndex}, {dialogueMessage.message}");
-
-                    if (dialogueMessage.messageIndex.Equals("choice"))
-                    {
-                        var choiceGroup = dialogue.GetDialogueGroup(dialogueMessage.messageIndex);
-                        playerChoiceDialogueController.ShowChoice(choiceGroup, choice =>
-                        {
-                            var nextDialogue = dialogue.GetNextDialogue(choice);
-
-                            //same as #else1
-                            if (nextDialogue != null)
-                            {
-                                dialogueMessage = nextDialogue;
-                                var targetActor = dialogueActors.FirstOrDefault(actor => actor.actorId == dialogueMessage.actor);
-                                if (targetActor != null)
-                                {
-                                    ChatBalloonManager.ShowChatBalloon(targetActor.transform, dialogueMessage.message);
-                                    //NekoOdyssey.Scripts.GameRunner.Instance.Core.Player.SetMode(NekoOdyssey.Scripts.Game.Unity.Game.Core.PlayerMode.Conversation);
-                                }
-                                else
-                                {
-                                    Debug.Log($"npc actor {dialogueMessage.actor} cannot found ({dialogueMessage.messageIndex}/{dialogueMessage.message})");
-                                }
-
-                                if (dialogueMessage.choiceTarget.ToLowerInvariant().Equals("cancel"))
-                                {
-                                    dialogue.isCanceled = true;
-                                }
-                            }
-
-                            //Debug.Log($"Check index : {dialogueGroup._currentDialogueIndex}");
-                        });
-
-                        ChatBalloonManager.HideChatBalloon();
-                    }
-                    else
-                    {
-                        //Debug.Log($"dialoge {quest.questId} is null");
-                        ////#else1
-                        //var targetActor = dialogueActors.FirstOrDefault(actor => actor.actorId == dialogueMessage.actor);
-                        //if (targetActor != null)
-                        //{
-                        //    ChatBalloonManager.ShowChatBalloon(targetActor.transform, dialogueMessage.message);
-                        //    GameRunner.Instance.Core.PlayerMenu.GameObject = targetActor.gameObject;
-                        //    GameRunner.Instance.Core.Player.SetMode(PlayerMode.QuestConversation);
-                        //}
-                        //else
-                        //{
-                        //    Debug.Log($"npc actor {dialogueMessage.actor} cannot found ({dialogueMessage.messageIndex}/{dialogueMessage.message})");
-                        //}
-                    }
-
-                    if (dialogueMessage.choiceTarget.ToLowerInvariant().Equals("cancel"))
-                    {
-                        dialogue.isCanceled = true;
-                    }
-
+                    ChatBalloonManager.ShowChatBalloon(targetActor.transform, dialog);
                 }
                 else
                 {
-                    //complete talking
-                    //restore player control
                     ChatBalloonManager.HideChatBalloon();
-                    GameRunner.Instance.Core.Player.SetMode(PlayerMode.Move);
-
-                    if (!dialogue.isCanceled)
-                    {
-                        Debug.Log("Complete dialogue");
-                        quest.GetTargetEventPoint()?.gameObject.SetActive(false);
-
-
-                        CompleteQuest();
-                        //questEventManager.ownedQuestKey.Add(questEventDetail.questId);
-                        //UpdateWorld();
-                    }
-                    else
-                    {
-                        Debug.Log("Cancel dialogue");
-                        dialogue.isCanceled = false;
-
-                        CancelQuest();
-                    }
-
-
                 }
-
-
-                if (quest.GetTargetEventPoint().TryGetComponent(out EventPoint_AutoComplete eventPointAutoComplete))
-                {
-                    DG.Tweening.DOVirtual.DelayedCall(eventPointAutoComplete.CompleteDelay, () =>
-                    {
-                        Debug.Log("Complete dialogue");
-                        quest.GetTargetEventPoint()?.gameObject.SetActive(false);
-                        CompleteQuest();
-                    });
-                }
-                */
-
+            }
+            else
+            {
+                ChatBalloonManager.HideChatBalloon();
+                Debug.Log($"npc actor {actor} cannot found ({dialog})");
             }
         }
 
@@ -637,28 +562,30 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
                 Debug.Log($">>test_npc<< >>line<< {line.Actor} {line.GetLocalisedText()} <color=purple>{line.AnimatorParam} {line.AnimatorParamValue}</color> <color=green>{line.Photo}</color>");
 
-                var targetEventPoint = EventPoint.GetEventPoint(_lastestQuest.TargetEventPoint);
-                var dialogueActors = targetEventPoint?.GetComponentsInChildren<DialogueActor>();
-                var targetActor = dialogueActors.FirstOrDefault(actor => actor.actorId.Equals(line.Actor, System.StringComparison.InvariantCultureIgnoreCase));
-                if (targetActor != null)
-                {
-                    GameRunner.Instance.Core.PlayerMenu.GameObject = targetActor.gameObject;
-                    GameRunner.Instance.Core.Player.SetMode(PlayerMode.QuestConversation);
+                //var targetEventPoint = EventPoint.GetEventPoint(_lastestQuest.TargetEventPoint);
+                //var dialogueActors = targetEventPoint?.GetComponentsInChildren<DialogueActor>();
+                //var targetActor = dialogueActors.FirstOrDefault(actor => actor.actorId.Equals(line.Actor, System.StringComparison.InvariantCultureIgnoreCase));
+                //if (targetActor != null)
+                //{
+                //    GameRunner.Instance.Core.PlayerMenu.GameObject = targetActor.gameObject;
+                //    GameRunner.Instance.Core.Player.SetMode(PlayerMode.QuestConversation);
 
-                    if (!string.IsNullOrEmpty(line.Original))
-                    {
-                        ChatBalloonManager.ShowChatBalloon(targetActor.transform, line.GetLocalisedText());
-                    }
-                    else
-                    {
-                        ChatBalloonManager.HideChatBalloon();
-                    }
-                }
-                else
-                {
-                    ChatBalloonManager.HideChatBalloon();
-                    Debug.Log($"npc actor {line.Actor} cannot found ({line.GetLocalisedText()})");
-                }
+                //    if (!string.IsNullOrEmpty(line.Original))
+                //    {
+                //        ChatBalloonManager.ShowChatBalloon(targetActor.transform, line.GetLocalisedText());
+                //    }
+                //    else
+                //    {
+                //        ChatBalloonManager.HideChatBalloon();
+                //    }
+                //}
+                //else
+                //{
+                //    ChatBalloonManager.HideChatBalloon();
+                //    Debug.Log($"npc actor {line.Actor} cannot found ({line.GetLocalisedText()})");
+                //}
+
+                ShowDialog(line.GetLocalisedText(), line.Actor);
 
 
                 _nextDialogueCallback = () =>
@@ -698,33 +625,52 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             //    Debug.Log($">>test_npc<< >>answer<< {answer.Original}");
             //}
 
-            playerChoiceDialogueController.ShowChoice(question.Answers, answer =>
+            //Debug.Log($"ExecuteQuestion");
+            //Debug.Log($"{question.Answers.Count}");
+            //foreach (var item in question.Answers)
+            //{
+            //    Debug.Log($"{item.ChildFlag.ToString()}");
+
+            //}
+
+            var dialog = question.GetLocalisedText();
+            if (!string.IsNullOrEmpty(dialog)) ShowDialog(dialog, question.Actor);
+
+            _nextDialogueCallback = () =>
             {
-                var childFlag = answer?.DialogChildFlag;
-                switch (childFlag)
+                playerChoiceDialogueController.ShowChoice(question.Answers, answer =>
                 {
-                    case DialogChildFlag.HasSubDialog:
-                        ExecuteSubDialog(answer.SubDialog);
-                        break;
-                    case DialogChildFlag.HasQuestion:
-                        ExecuteQuestion(answer.Question);
-                        break;
-                    case DialogChildFlag.HasCondition:
-                        ExecuteCondition(answer.Condition);
-                        break;
-                    case DialogChildFlag.End:
-                        CompleteQuest();
-                        break;
-                    case DialogChildFlag.Cancel:
-                        CancelQuest();
-                        break;
-                    default:
-                        break;
-                }
+                    //Debug.Log($"ExecuteQuestion got answer");
+                    var childFlag = answer?.DialogChildFlag;
+                    //Debug.Log($"ExecuteQuestion {childFlag}");
+                    switch (childFlag)
+                    {
+                        case DialogChildFlag.HasSubDialog:
+                            ExecuteSubDialog(answer.SubDialog);
+                            break;
+                        case DialogChildFlag.HasQuestion:
+                            ExecuteQuestion(answer.Question);
+                            break;
+                        case DialogChildFlag.HasCondition:
+                            ExecuteCondition(answer.Condition);
+                            break;
+                        case DialogChildFlag.End:
+                            CompleteQuest();
+                            break;
+                        case DialogChildFlag.Cancel:
+                            CancelQuest();
+                            break;
+                        default:
+                            break;
+                    }
 
-            });
+                });
 
-            ChatBalloonManager.HideChatBalloon();
+                //ChatBalloonManager.HideChatBalloon();
+                ChatBalloonManager.GrayBalloon();
+            };
+
+
 
         }
 

@@ -12,8 +12,11 @@ public class PlayerChoiceDialogueController : MonoBehaviour
 {
     [SerializeField] GameObject uiChoicePrefab;
     List<Button> buttons = new List<Button>();
+    RectTransform rect;
     private void Awake()
     {
+        rect = GetComponent<RectTransform>();
+
         Routine.playerChoiceDialogueController = this;
         RoutineManger.playerChoiceDialogueController = this;
 
@@ -51,6 +54,19 @@ public class PlayerChoiceDialogueController : MonoBehaviour
     }
     public void ShowChoice(ICollection<DialogAnswer> choices, Action<DialogAnswer> callback)
     {
+        //Debug.Log($"ShowChoice");
+
+        var canvasPosition = rect.anchoredPosition;
+
+        var currentChatBalloonPosiiton = NekoOdyssey.Scripts.GameRunner.Instance.Core.RoutineManger.ChatBalloonManager.CurrentBalloon.parent.transform.position;
+        //var player = NekoOdyssey.Scripts.GameRunner.Instance.Core.Player.Position;
+        //bool isMirror = Camera.main.WorldToScreenPoint(currentChatBalloonPosiiton).x > Camera.main.WorldToScreenPoint(player).x;
+        //rect.anchoredPosition = new Vector2(Mathf.Abs(canvasPosition.x) * (isMirror ? -1 : 1), canvasPosition.y);
+
+        rect.position = Camera.main.WorldToScreenPoint(currentChatBalloonPosiiton);
+        //rect.position = new Vector3(Screen.width/2 , rect.position.y , rect.position.z);
+
+
         SetVisible(true);
         for (int i = 0; i < choices.Count; i++)
         {
