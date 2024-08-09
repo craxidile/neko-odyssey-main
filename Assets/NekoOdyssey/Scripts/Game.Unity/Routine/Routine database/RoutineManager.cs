@@ -23,22 +23,72 @@ using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestConditionEntity.Mod
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogConditionCaseEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogLineEntity.Models;
+using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.RoutineConditionEntity.Models;
 
 namespace NekoOdyssey.Scripts.Game.Core.Routine
 {
     public class RoutineManger
     {
-        public List<NpcData> npcDatas = new List<NpcData>();
+        //public List<NpcData> npcDatas = new List<NpcData>();
+
+        class NpcData
+        {
+            public string npcCode;
+
+            public bool isAppearedInQuest, isAppearedInRoutine;
+            public NpcData(string npcCode = "newNpc")
+            {
+                this.npcCode = npcCode;
+                isAppearedInQuest = false;
+                isAppearedInRoutine = false;
+            }
+        }
+        List<NpcData> npcDatas = new();
+        NpcData GetNpcData(string npcCode)
+        {
+            foreach (var npc in npcDatas)
+            {
+                if (npc.npcCode.Equals(npcCode, System.StringComparison.InvariantCultureIgnoreCase))
+                {
+                    return npc;
+                }
+            }
+
+            var newNpc = new NpcData(npcCode);
+            npcDatas.Add(newNpc);
+
+            return newNpc;
+        }
+
+
+        enum DialogType { Quest, Routine }
+        class DialogueTemporaryData
+        {
+            public string eventCode;
+            public DialogType dialogType;
+            public EventPoint eventPoint;
+            public UnityAction nextDialogueCallback;
+
+            public DialogueTemporaryData(string eventCode, DialogType dialogType, EventPoint eventPoint)
+            {
+                this.eventCode = eventCode;
+                this.dialogType = dialogType;
+                this.eventPoint = eventPoint;
+            }
+        }
+        DialogueTemporaryData currentDialog;
+
 
         //public QuestEventDetail _lastestQuestEventDetail;
-        Quest _lastestQuest;
+        //Quest _lastestQuest;
 
-        UnityAction _nextDialogueCallback;
+        //UnityAction _nextDialogueCallback;
         //bool _withinDialogue = false;
 
 
         public DayNightLightingManager dayNightLightingManager;
-
+        public ChatBalloonManager ChatBalloonManager { get; set; }
+        public static PlayerChoiceDialogueController playerChoiceDialogueController { get; set; }
 
 
         public Subject<EventPoint> OnBeginEventPoint { get; } = new();
@@ -46,20 +96,19 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         public Subject<EventPoint> OnCancelEventPoint { get; } = new();
 
 
+
         public void Bind()
         {
             dayNightLightingManager = new DayNightLightingManager();
             ChatBalloonManager = new ChatBalloonManager();
 
+            AssetBundleUtils.OnReady(UpdateWorld);
         }
 
         public void Start()
         {
             ChatBalloonManager.Start();
-
             dayNightLightingManager.Start();
-
-            GameRunner.Instance.Core.RoutineManger.UpdateWorld();
         }
 
         public void Unbind()
@@ -68,26 +117,20 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
 
 
-        public ChatBalloonManager ChatBalloonManager { get; set; }
-
-        public static PlayerChoiceDialogueController playerChoiceDialogueController { get; set; }
-
-
 
         public void UpdateWorld()
         {
+            Debug.Log("UpdateWorld");
             UpdateQuestEvent();
-
             UpdateNpcRoutine();
-
         }
 
         void UpdateQuestEvent()
         {
-            foreach (var npcData in npcDatas) //reset story state
-            {
-                npcData.routineEnable = true;
-            }
+            //foreach (var npcData in npcDatas) //reset story state
+            //{
+            //    npcData.routineEnable = true;
+            //}
 
             var player = GameRunner.Instance.Core.Player;
             var allQuestGroups = GameRunner.Instance.Core.MasterData.NpcMasterData.QuestGroupsMasterData.QuestGroups;
@@ -126,21 +169,24 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                         targetEventPoint?.gameObject.SetActive(true);
 
 
-                        foreach (var relatedCharacter in quest.TargetActorList)
+                        foreach (var actor in quest.TargetActorList)
                         {
-                            var npcData = npcDatas.Find(npc => npc.npcName == relatedCharacter);
-                            //Debug.Log($"Get related npc {npcData.npcName} ({relatedCharacter})");
-                            if (npcData != null)
-                            {
-                                //show eventPoint
-                                npcData.routineEnable = false;
-                                npcData.HideAllRoutine();
+                            //var npcData = npcDatas.Find(npc => npc.npcName == actor);
+                            ////Debug.Log($"Get related npc {npcData.npcName} ({relatedCharacter})");
+                            //if (npcData != null)
+                            //{
+                            //    //show eventPoint
+                            //    npcData.routineEnable = false;
+                            //    npcData.HideAllRoutine();
 
 
-                                ////dialogue
-                                //var dialogueGroup = allQuestDialogueGroup[questEventDetail.questId];
-                                //npcData.dialogueGroup = dialogueGroup;
-                            }
+                            //    ////dialogue
+                            //    //var dialogueGroup = allQuestDialogueGroup[questEventDetail.questId];
+                            //    //npcData.dialogueGroup = dialogueGroup;
+                            //}
+
+                            var npcData = GetNpcData(actor);
+                            npcData.isAppearedInQuest = true;
                         }
 
 
@@ -153,9 +199,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                         {
                             eventPointInteractive.OnInteractive = () =>
                             {
-                                var activeQuest = quest;
-                                ConversationHandle(activeQuest);
-
+                                var dialogueTemporaryData = new DialogueTemporaryData(quest.Code, DialogType.Quest, targetEventPoint);
+                                ConversationHandle(quest.Dialog, dialogueTemporaryData);
                             };
                         }
 
@@ -178,8 +223,11 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                         {
                             foreach (var actor in quest.TargetActorList)
                             {
-                                var npcData = npcDatas.Find(npc => npc.npcName == actor);
-                                npcData.routineEnable = false;
+                                //var npcData = npcDatas.Find(npc => npc.npcName == actor);
+                                //npcData.routineEnable = false;
+
+                                var npcData = GetNpcData(actor);
+                                npcData.isAppearedInQuest = true;
                             }
                         }
 
@@ -206,6 +254,14 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             return true;
         }
         bool CheckDialogueCondition(ICollection<DialogConditionCase> conditionList)
+        {
+            foreach (var condition in conditionList)
+            {
+                if (!CheckCondition(condition.Type, condition.Code, condition.Operator, condition.Value)) return false;
+            }
+            return true;
+        }
+        bool CheckRoutineCondition(ICollection<RoutineCondition> conditionList)
         {
             foreach (var condition in conditionList)
             {
@@ -285,160 +341,41 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
 
 
-        void AddRoutineDialogue(EventPoint eventPoint, string dialogueGroupId)
-        {
-            var dialogueActors = eventPoint.GetComponentsInChildren<DialogueActor>();
-            var eventPointInteractive = eventPoint.GetComponent<EventPointInteractive>();
-            if (dialogueActors.Length == 0 || eventPointInteractive == null) return;
-
-            eventPointInteractive.OnInteractive = () =>
-            {
-                //var dialogueGroup = allQuestDialogueGroup[dialogueGroupId];
-                QuestDialogueGroup dialogueGroup = null;
-                var dialogueMessage = dialogueGroup.GetNextDialogue();
-
-                Debug.Log($"interactive event point");
-
-                if (dialogueMessage != null)
-                {
-                    Debug.Log($"npc Talk quest id : {dialogueGroupId} , text : {dialogueMessage.messageIndex}, {dialogueMessage.message}");
-
-                    if (dialogueMessage.messageIndex.Equals("choice"))
-                    {
-                        var choiceGroup = dialogueGroup.GetDialogueGroup(dialogueMessage.messageIndex);
-                        playerChoiceDialogueController.ShowChoice(choiceGroup, choice =>
-                        {
-                            var nextDialogue = dialogueGroup.GetNextDialogue(choice);
-
-                            //same as #else1
-                            if (nextDialogue != null)
-                            {
-                                dialogueMessage = nextDialogue;
-                                var targetActor = dialogueActors.FirstOrDefault(actor => actor.actorId == dialogueMessage.actor);
-                                if (targetActor != null)
-                                {
-                                    ChatBalloonManager.ShowChatBalloon(targetActor.transform, dialogueMessage.message);
-                                    //NekoOdyssey.Scripts.GameRunner.Instance.Core.Player.SetMode(NekoOdyssey.Scripts.Game.Unity.Game.Core.PlayerMode.Conversation);
-                                }
-                                else
-                                {
-                                    Debug.Log($"npc actor {dialogueMessage.actor} cannot found ({dialogueMessage.messageIndex}/{dialogueMessage.message})");
-                                }
-
-                                if (dialogueMessage.choiceTarget.ToLowerInvariant().Equals("cancel"))
-                                {
-                                    dialogueGroup.isCanceled = true;
-                                }
-                            }
-
-                            //Debug.Log($"Check index : {dialogueGroup._currentDialogueIndex}");
-                        });
-
-                        ChatBalloonManager.HideChatBalloon();
-                    }
-                    else
-                    {
-                        //#else1
-                        var targetActor = dialogueActors.FirstOrDefault(actor => actor.actorId == dialogueMessage.actor);
-                        if (targetActor != null)
-                        {
-                            ChatBalloonManager.ShowChatBalloon(targetActor.transform, dialogueMessage.message);
-                            GameRunner.Instance.Core.PlayerMenu.GameObject = targetActor.gameObject;
-                            GameRunner.Instance.Core.Player.SetMode(PlayerMode.QuestConversation);
-                        }
-                        else
-                        {
-                            Debug.Log($"npc actor {dialogueMessage.actor} cannot found ({dialogueMessage.messageIndex}/{dialogueMessage.message})");
-                        }
-                    }
-
-                    if (dialogueMessage.choiceTarget.ToLowerInvariant().Equals("cancel"))
-                    {
-                        dialogueGroup.isCanceled = true;
-                    }
-                }
-                else
-                {
-                    //complete talking
-                    //restore player control
-                    ChatBalloonManager.HideChatBalloon();
-                    GameRunner.Instance.Core.Player.SetMode(PlayerMode.Move);
-
-                    if (!dialogueGroup.isCanceled)
-                    {
-                        Debug.Log("Complete dialogue");
-
-                        //UpdateWorld();
-                    }
-                    else
-                    {
-                        Debug.Log("Cancel dialogue");
-                        dialogueGroup.isCanceled = false;
-                    }
-
-
-                }
-
-            };
-
-        }
-
-        void UpdateNpcRoutine()
-        {
-            foreach (var npcData in npcDatas) //do routine for other npcs
-            {
-                if (npcData.routineEnable)
-                {
-                    var enabledRoutine = npcData.UpdateRoutine();
-
-                    if (enabledRoutine != null)
-                    {
-                        if (!enabledRoutine.dialogueKey.Equals("-"))
-                        {
-                            //Debug.Log($"Add dialogue key : {enabledRoutine.dialogueKey}");
-                            AddRoutineDialogue(enabledRoutine.GetTargetEventPoint(), enabledRoutine.dialogueKey);
-                        }
-                        //Debug.Log($"add routine target = {enabledRoutine.targetEventPoint.name} , dialogue = {enabledRoutine.dialogueKey}");
-
-                    }
-                }
-            }
-        }
-
-
         //public void ConversationHandle(QuestEventDetail questEventDetail)
-        public void ConversationHandle(Quest quest)
+        void ConversationHandle(Dialog dialog, DialogueTemporaryData dialogueData)
         {
             Debug.Log("ConversationHandle 0");
             //if (_withinDialogue)
-            if (_lastestQuest != null)
+            if (currentDialog != null)
             {
                 Debug.Log($"ConversationHandle _nextDialogueCallback");
-                _nextDialogueCallback?.Invoke();
+                currentDialog.nextDialogueCallback?.Invoke();
             }
             else
             {
-                Debug.Log($"ConversationHandle 1 {quest.Code}");
+                Debug.Log($"ConversationHandle 1 {currentDialog.eventCode}");
                 //var targetEventPoint = EventPoint.GetEventPoint(quest.TargetEventPoint);
 
                 //var dialogueActors = targetEventPoint?.GetComponentsInChildren<DialogueActor>();
                 //var eventPointInteractive = targetEventPoint?.GetComponent<EventPointInteractive>();
 
 
-                _lastestQuest = quest;
+                //_lastestQuest = quest;
+                currentDialog = dialogueData;
 
                 //var dialogueGroup = allQuestDialogueGroup[quest.Code];
                 //var dialogue = quest.Dialog;
                 //var dialogueMessage = dialogue.GetNextDialogue();
-                if (quest.Dialog == null) return;
-                ExecuteDialog(quest.Dialog);
+                if (dialog == null) return;
+                ExecuteDialog(dialog);
 
             }
         }
 
         void ShowDialog(string dialog, string actor)
         {
-            var targetEventPoint = EventPoint.GetEventPoint(_lastestQuest.TargetEventPoint);
+            //var targetEventPoint = EventPoint.GetEventPoint(_lastestQuest.TargetEventPoint);
+            var targetEventPoint = currentDialog.eventPoint;
             var dialogueActors = targetEventPoint?.GetComponentsInChildren<DialogueActor>();
             var targetActor = dialogueActors.FirstOrDefault(dialogActor => dialogActor.actorId.Equals(actor, System.StringComparison.InvariantCultureIgnoreCase));
             if (targetActor != null)
@@ -533,7 +470,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                 ShowDialog(line.GetLocalisedText(), line.Actor);
 
 
-                _nextDialogueCallback = () =>
+                currentDialog.nextDialogueCallback = () =>
                 {
                     ExecuteSubDialog(subDialog, lineIndex + 1);
                 };
@@ -581,7 +518,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             var dialog = question.GetLocalisedText();
             if (!string.IsNullOrEmpty(dialog)) ShowDialog(dialog, question.Actor);
 
-            _nextDialogueCallback = () =>
+            currentDialog.nextDialogueCallback = () =>
             {
                 playerChoiceDialogueController.ShowChoice(question.Answers, answer =>
                 {
@@ -659,16 +596,19 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         {
             EndDialogue();
 
-            var targetEventPoint = EventPoint.GetEventPoint(_lastestQuest.TargetEventPoint);
-            targetEventPoint.gameObject.SetActive(false);
+            //var targetEventPoint = EventPoint.GetEventPoint(_lastestQuest.TargetEventPoint);
+            currentDialog.eventPoint.gameObject.SetActive(false);
 
             Debug.Log("Complete dialogue");
 
             //questEventManager.ownedQuestKey.Add(_lastestQuest.Code);
-            GameRunner.Instance.Core.Player.AddAchievedQuest(_lastestQuest.Code);
+            if (currentDialog.dialogType == DialogType.Quest)
+            {
+                GameRunner.Instance.Core.Player.AddAchievedQuest(currentDialog.eventCode);
+            }
 
             //_withinDialogue = false;
-            _lastestQuest = null;
+            currentDialog = null;
 
             //UpdateWorld();
         }
@@ -677,7 +617,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             EndDialogue();
 
             //_withinDialogue = false;
-            _lastestQuest = null;
+            currentDialog = null;
         }
 
         void EndDialogue()
@@ -689,6 +629,191 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             GameRunner.Instance.Core.Player.SetMode(PlayerMode.Move);
         }
 
+
+
+
+
+        void UpdateNpcRoutine()
+        {
+            //foreach (var npcData in npcDatas) //do routine for other npcs
+            //{
+            //    if (!npcData.isAppearedInQuest)
+            //    {
+            //        var enabledRoutine = npcData.UpdateRoutine();
+
+            //        if (enabledRoutine != null)
+            //        {
+            //            if (!enabledRoutine.dialogueKey.Equals("-"))
+            //            {
+            //                //Debug.Log($"Add dialogue key : {enabledRoutine.dialogueKey}");
+            //                AddRoutineDialogue(enabledRoutine.GetTargetEventPoint(), enabledRoutine.dialogueKey);
+            //            }
+            //            //Debug.Log($"add routine target = {enabledRoutine.targetEventPoint.name} , dialogue = {enabledRoutine.dialogueKey}");
+
+            //        }
+            //    }
+            //}
+
+            var player = GameRunner.Instance.Core.Player;
+            var routines = GameRunner.Instance.Core.MasterData.NpcMasterData.RoutinesMasterData.Routines;
+            foreach (var routine in routines)
+            {
+                Debug.Log($"Check routine : {routine.Code}");
+
+                //if (player.IsQuestComplete(questGroup.Code)) continue;
+
+                if (!CheckRoutineCondition(routine.Conditions)) continue;
+
+                bool routineEnable = true;
+                foreach (var actor in routine.TargetActorList)
+                {
+                    var npcData = GetNpcData(actor);
+                    if (npcData.isAppearedInQuest || npcData.isAppearedInRoutine)
+                    {
+                        routineEnable = false;
+                        break;
+                    }
+                }
+                if (!routineEnable) continue;
+
+                Debug.Log($"routine is enable");
+
+                var isInEventDay = routine.DayOfWeekExists(GameRunner.Instance.TimeRoutine.CurrentDay.ToDayOfWeek());
+
+                var startingTime = new TimeHrMin(routine.StartingHour, routine.StartingMinute);
+                var EndingTime = new TimeHrMin(routine.EndingHour, routine.EndingMinute);
+                var isInQuestTime = GameRunner.Instance.TimeRoutine.currentTime.inBetweenTime(startingTime, EndingTime);
+
+                var targetEventPoint = EventPoint.GetEventPoint(routine.TargetEventPoint);
+
+                if (isInEventDay && isInQuestTime)
+                {
+                    Debug.Log($"routine is in event time");
+
+                    foreach (var actor in routine.TargetActorList)
+                    {
+                        var npcData = GetNpcData(actor);
+                        npcData.isAppearedInRoutine = true;
+                    }
+
+                    if (targetEventPoint == null) continue;
+                    Debug.Log($"routine {routine.Code} got eventPoint");
+                    targetEventPoint.gameObject.SetActive(true);
+
+                    //talk to npc
+                    var dialogueActors = targetEventPoint.GetComponentsInChildren<DialogueActor>();
+                    var eventPointInteractive = targetEventPoint.GetComponent<EventPointInteractive>();
+                    if (dialogueActors != null && dialogueActors.Length > 0 && eventPointInteractive != null)
+                    {
+                        Debug.Log($"routine {routine.Code} ready for action");
+                        eventPointInteractive.OnInteractive = () =>
+                        {
+                            var dialogueTemporaryData = new DialogueTemporaryData(routine.Code, DialogType.Routine, targetEventPoint);
+                            ConversationHandle(routine.Dialog, dialogueTemporaryData);
+
+                        };
+                    }
+
+                }
+
+            }
+            //void AddRoutineDialogue(EventPoint eventPoint, string dialogueGroupId)
+            //{
+            //    var dialogueActors = eventPoint.GetComponentsInChildren<DialogueActor>();
+            //    var eventPointInteractive = eventPoint.GetComponent<EventPointInteractive>();
+            //    if (dialogueActors.Length == 0 || eventPointInteractive == null) return;
+
+            //    eventPointInteractive.OnInteractive = () =>
+            //    {
+            //        //var dialogueGroup = allQuestDialogueGroup[dialogueGroupId];
+            //        QuestDialogueGroup dialogueGroup = null;
+            //        var dialogueMessage = dialogueGroup.GetNextDialogue();
+
+            //        Debug.Log($"interactive event point");
+
+            //        if (dialogueMessage != null)
+            //        {
+            //            Debug.Log($"npc Talk quest id : {dialogueGroupId} , text : {dialogueMessage.messageIndex}, {dialogueMessage.message}");
+
+            //            if (dialogueMessage.messageIndex.Equals("choice"))
+            //            {
+            //                var choiceGroup = dialogueGroup.GetDialogueGroup(dialogueMessage.messageIndex);
+            //                playerChoiceDialogueController.ShowChoice(choiceGroup, choice =>
+            //                {
+            //                    var nextDialogue = dialogueGroup.GetNextDialogue(choice);
+
+            //                    //same as #else1
+            //                    if (nextDialogue != null)
+            //                    {
+            //                        dialogueMessage = nextDialogue;
+            //                        var targetActor = dialogueActors.FirstOrDefault(actor => actor.actorId == dialogueMessage.actor);
+            //                        if (targetActor != null)
+            //                        {
+            //                            ChatBalloonManager.ShowChatBalloon(targetActor.transform, dialogueMessage.message);
+            //                            //NekoOdyssey.Scripts.GameRunner.Instance.Core.Player.SetMode(NekoOdyssey.Scripts.Game.Unity.Game.Core.PlayerMode.Conversation);
+            //                        }
+            //                        else
+            //                        {
+            //                            Debug.Log($"npc actor {dialogueMessage.actor} cannot found ({dialogueMessage.messageIndex}/{dialogueMessage.message})");
+            //                        }
+
+            //                        if (dialogueMessage.choiceTarget.ToLowerInvariant().Equals("cancel"))
+            //                        {
+            //                            dialogueGroup.isCanceled = true;
+            //                        }
+            //                    }
+
+            //                    //Debug.Log($"Check index : {dialogueGroup._currentDialogueIndex}");
+            //                });
+
+            //                ChatBalloonManager.HideChatBalloon();
+            //            }
+            //            else
+            //            {
+            //                //#else1
+            //                var targetActor = dialogueActors.FirstOrDefault(actor => actor.actorId == dialogueMessage.actor);
+            //                if (targetActor != null)
+            //                {
+            //                    ChatBalloonManager.ShowChatBalloon(targetActor.transform, dialogueMessage.message);
+            //                    GameRunner.Instance.Core.PlayerMenu.GameObject = targetActor.gameObject;
+            //                    GameRunner.Instance.Core.Player.SetMode(PlayerMode.QuestConversation);
+            //                }
+            //                else
+            //                {
+            //                    Debug.Log($"npc actor {dialogueMessage.actor} cannot found ({dialogueMessage.messageIndex}/{dialogueMessage.message})");
+            //                }
+            //            }
+
+            //            if (dialogueMessage.choiceTarget.ToLowerInvariant().Equals("cancel"))
+            //            {
+            //                dialogueGroup.isCanceled = true;
+            //            }
+            //        }
+            //        else
+            //        {
+            //            //complete talking
+            //            //restore player control
+            //            ChatBalloonManager.HideChatBalloon();
+            //            GameRunner.Instance.Core.Player.SetMode(PlayerMode.Move);
+
+            //            if (!dialogueGroup.isCanceled)
+            //            {
+            //                Debug.Log("Complete dialogue");
+
+            //                //UpdateWorld();
+            //            }
+            //            else
+            //            {
+            //                Debug.Log("Cancel dialogue");
+            //                dialogueGroup.isCanceled = false;
+            //            }
+
+
+            //        }
+
+            //    };
+
+        }
 
     }
 }
