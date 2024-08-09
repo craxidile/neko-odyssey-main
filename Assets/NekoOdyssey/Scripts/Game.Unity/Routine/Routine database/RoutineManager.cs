@@ -29,14 +29,9 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
     public class RoutineManger
     {
         public List<NpcData> npcDatas = new List<NpcData>();
-        //public List<QuestEventDetail> allQuestEvents = new List<QuestEventDetail>();
-        //public Dictionary<string, QuestGroup> allQuestGroups = new Dictionary<string, QuestGroup>();
-        //public Dictionary<string, QuestDialogueGroup> allQuestDialogueGroup = new Dictionary<string, QuestDialogueGroup>();
-
 
         //public QuestEventDetail _lastestQuestEventDetail;
         Quest _lastestQuest;
-        //int _dialogueIndex = 0;
 
         UnityAction _nextDialogueCallback;
         //bool _withinDialogue = false;
@@ -53,11 +48,6 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
         public void Bind()
         {
-            //questEventManager = new QuestEventManager();
-            //BindQuestGroup();
-
-            //npcRoutineManager = new NpcRoutineManager();
-            //questDialogueManager = new QuestDialogueManager();
             dayNightLightingManager = new DayNightLightingManager();
             ChatBalloonManager = new ChatBalloonManager();
 
@@ -65,13 +55,11 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
         public void Start()
         {
-            //questEventManager.Start();
-            //npcRoutineManager.Start();
-            //questDialogueManager.Start();
             ChatBalloonManager.Start();
 
             dayNightLightingManager.Start();
 
+            GameRunner.Instance.Core.RoutineManger.UpdateWorld();
         }
 
         public void Unbind()
@@ -79,55 +67,12 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         }
 
 
-        //void BindQuestGroup()
-        //{
-        //    var questGroupsMasterData = GameRunner.Instance.Core.MasterData.NpcMasterData.QuestGroupsMasterData;
 
-        //    foreach (var questGroup in questGroupsMasterData.QuestGroups)
-        //    {
-        //        //Debug.Log($">>test_npc<<<color=red>========== Quest Group ==========</color>");
-        //        //Debug.Log($">>test_npc<< >>quest_group<< {questGroup.Code}");
-        //        foreach (var condition in questGroup.Conditions)
-        //        {
-        //            //Debug.Log(
-        //            //    $">>test_npc<< >>quest_group<< condition {condition.Type} {condition.Code} {condition.Operator} {condition.Value}");
-        //        }
-
-        //        foreach (var quest in questGroup.Quests)
-        //        {
-        //            //Debug.Log($">>test_npc<< >>quest<< {quest.Code} {string.Join(',', quest.TargetActorList)} {quest.TargetActorExists("player")} {string.Join(',', quest.ActiveDayOfWeekList)} {quest.DayOfWeekExists(DayOfWeek.Monday)}");
-        //            foreach (var condition in quest.Conditions)
-        //            {
-        //                Debug.Log(
-        //                    $">>test_npc<< >>quest<< condition {condition.Type} {condition.Code} {condition.Operator} {condition.Value}");
-        //            }
-
-        //            //Debug.Log($">>test_npc<< >>quest<< dialog_exists {quest.Dialog != null}");
-        //            if (quest.Dialog == null) continue;
-        //            ExecuteDialog(quest.Dialog);
-        //        }
-        //    }
-
-        //}
-
-
-
-
-
-
-        //public QuestEventManager questEventManager { get; set; }
-        //public NpcRoutineManager npcRoutineManager { get; set; }
-        //public QuestDialogueManager questDialogueManager { get; set; }
         public ChatBalloonManager ChatBalloonManager { get; set; }
 
         public static PlayerChoiceDialogueController playerChoiceDialogueController { get; set; }
 
 
-        //public QuestDialogueGroup GetDialogueGroup(string groupId)
-        //{
-        //    var dialogueGroup = allQuestDialogueGroup[groupId];
-        //    return dialogueGroup;
-        //}
 
         public void UpdateWorld()
         {
@@ -423,7 +368,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                     {
                         Debug.Log("Complete dialogue");
 
-                        UpdateWorld();
+                        //UpdateWorld();
                     }
                     else
                     {
@@ -725,7 +670,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             //_withinDialogue = false;
             _lastestQuest = null;
 
-            UpdateWorld();
+            //UpdateWorld();
         }
         public void CancelQuest()
         {
