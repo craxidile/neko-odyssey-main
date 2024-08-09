@@ -28,6 +28,7 @@ namespace NekoOdyssey.Scripts.Game.Core
         public global::Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu.PlayerMenu PlayerMenu { get; } = new();
         public PlayerMenuCandidateManager PlayerMenuCandidateManager { get; } = new();
         public Routine.Routine Routine { get; } = new(); // Linias Edit
+        public Routine.RoutineManger RoutineManger { get; } = new(); // Linias Edit
         public EndDay.EndDayController EndDay { get; } = new(); // Linias Edit
         public GameScene.GameScene GameScene { get; } = new();
         public SaveV001DbWriter SaveDbWriter { get; } = new();
@@ -56,7 +57,8 @@ namespace NekoOdyssey.Scripts.Game.Core
                 PlayerMenu.Bind();
                 PlayerMenuCandidateManager.Bind();
                 GameScene.Bind();
-                Routine.Bind();
+                //Routine.Bind();
+                RoutineManger.Bind();
                 EndDay.Bind();
             }
         }
@@ -77,7 +79,8 @@ namespace NekoOdyssey.Scripts.Game.Core
                 PlayerMenu.Start();
                 PlayerMenuCandidateManager.Start();
                 GameScene.Start();
-                Routine.Start();
+                //Routine.Start();
+                RoutineManger.Start();
                 EndDay.Start();
 
                 GameRunner.Instance.PlayerInputHandler.OnResetSaveTriggerred
@@ -105,7 +108,8 @@ namespace NekoOdyssey.Scripts.Game.Core
                 PlayerMenu.Unbind();
                 PlayerMenuCandidateManager.Unbind();
                 GameScene.Unbind();
-                Routine.Unbind();
+                //Routine.Unbind();
+                RoutineManger.Unbind();
                 EndDay.Unbind();
             }
         }

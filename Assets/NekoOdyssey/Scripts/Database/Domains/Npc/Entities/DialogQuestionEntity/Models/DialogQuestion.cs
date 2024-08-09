@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using NekoOdyssey.Scripts.Constants;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Commons;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogAnswerEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogConditionOptionEntity.Models;
@@ -41,5 +42,29 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogQuestionEntity
         
         [Ignore]
         public virtual ICollection<DialogAnswer> Answers { get; set; }
+
+
+        public string GetLocalisedText()
+        {
+            return Original; //bypass for now
+            //--------------------------------
+
+            var locale = GameRunner.Instance.Core.Settings.Locale;
+            switch (locale)
+            {
+                case Locale.Th:
+                    return TextTh;
+                case Locale.En:
+                    return TextEn;
+                case Locale.ZhCn:
+                    return TextZhCn;
+                case Locale.ZhTw:
+                    return TextZhTw;
+                case Locale.Ja:
+                    return TextJa;
+                default:
+                    return null;
+            }
+        }
     }
 }

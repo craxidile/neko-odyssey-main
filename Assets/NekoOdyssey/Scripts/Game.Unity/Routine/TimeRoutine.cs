@@ -4,6 +4,7 @@ using UniRx;
 using UnityEngine;
 using NekoOdyssey.Scripts.Constants;
 using NekoOdyssey.Scripts.Game.Core.GameScene;
+using DayOfWeek = NekoOdyssey.Scripts.Database.Commons.Models.DayOfWeek;
 
 public enum Day
 {
@@ -188,7 +189,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         // Start is called before the first frame update
         public void Start()
         {
-
+            GameRunner.Instance.Core.RoutineManger.UpdateWorld();
 
 
             //s_isTimeRunning = true;
@@ -225,8 +226,12 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
             //Debug.Log($"current time : {currentTimeText}");
 
-            GameRunner.Instance.Core.Routine.UpdateWorld();
-            GameRunner.Instance.Core.Routine.dayNightLightingManager.Update();
+            //GameRunner.Instance.Core.Routine.UpdateWorld();
+            //GameRunner.Instance.Core.Routine.dayNightLightingManager.Update();
+
+            //GameRunner.Instance.Core.RoutineManger.UpdateWorld();
+            GameRunner.Instance.Core.RoutineManger.dayNightLightingManager.Update();
+
             DayNightTimeActivator.UpdateActivator();
 
         }

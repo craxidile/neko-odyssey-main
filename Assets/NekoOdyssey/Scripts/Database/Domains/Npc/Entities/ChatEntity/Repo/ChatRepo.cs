@@ -26,6 +26,12 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.ChatEntity.Repo
                 .FirstOrDefault(c => c.Id == id);
         }
 
+        public Chat FindByCode(string code)
+        {
+            return _dbContext.Context.Table<Chat>()
+                .FirstOrDefault(c => c.Code == code);
+        }
+
         public ICollection<Chat> ListByChatGroupId(int chatGroupId)
         {
             return _dbContext.Context.Table<Chat>()

@@ -13,10 +13,24 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogConditionCaseE
         {
         }
 
+        public ICollection<DialogConditionCase> List()
+        {
+            return _dbContext.Context.Table<DialogConditionCase>()
+                .OrderBy(dcc => dcc.Id)
+                .ToList();
+        }
+
+        public DialogConditionCase FindById(int id)
+        {
+            return _dbContext.Context.Table<DialogConditionCase>()
+                .FirstOrDefault(dcc => dcc.Id == id);
+        }
+
         public ICollection<DialogConditionCase> ListByConditionId(int conditionId)
         {
             return _dbContext.Context.Table<DialogConditionCase>()
                 .Where(dcc => dcc.ConditionId == conditionId)
+                .OrderBy(dcc => dcc.Id)
                 .ToList();
         }
     }
