@@ -19,6 +19,7 @@ namespace NekoOdyssey.Scripts.Site.Core.Site
         public bool Ready { get; private set; }
 
         public Subject<Unit> OnReady { get; } = new();
+        public Subject<Unit> OnLoaded { get; } = new();
         public Subject<Database.Domains.Sites.Entities.SiteEntity.Models.Site> OnChangeSite { get; } = new();
 
         public void Bind()
@@ -47,7 +48,7 @@ namespace NekoOdyssey.Scripts.Site.Core.Site
         private void InitializeSite()
         {
             if (CurrentSite != null) return;
-             // SetSite("Intro", false);
+            // SetSite("Intro", false);
             // SetSite("GamePlayZone4_01", false);
             // SetSite("GamePlayZone4_02", false);
             // SetSite("GamePlayZone4_03", false);
@@ -59,6 +60,12 @@ namespace NekoOdyssey.Scripts.Site.Core.Site
             // SetSite("GamePlayZone7_01", false);
             SetSite("DemoTitle", false);
             // SetSite("NekoInside28BedroomFinal", false);
+        }
+
+        public void SetReady()
+        {
+            Ready = true;
+            OnReady.OnNext(default);
         }
 
         public void MoveToNextSite()

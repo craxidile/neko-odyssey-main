@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NekoOdyssey.Scripts.Constants;
+using NekoOdyssey.Scripts.Database.Commons.Models;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Commons;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogAnswerEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogConditionOptionEntity.Models;
@@ -39,6 +40,17 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogQuestionEntity
         public string TextZhCn { get; set; }
         public string TextZhTw { get; set; }
         public string TextJa { get; set; }
+        
+        [Ignore]
+        public LocalizedText LocalizedText => new()
+        {
+            Original = Original,
+            Th = TextTh,
+            En = TextEn,
+            ZhCn = TextZhCn,
+            ZhTw = TextZhTw,
+            Ja = TextJa,
+        };
         
         [Ignore]
         public virtual ICollection<DialogAnswer> Answers { get; set; }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using NekoOdyssey.Scripts.Database.Commons.Models;
 using NekoOdyssey.Scripts.Database.Domains.Items.Entities.ItemEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.Sites.Entities.SiteSceneEntity.Models;
 using SpatiumInteractive.Libraries.Unity.GRU.Base;
@@ -30,12 +31,34 @@ namespace NekoOdyssey.Scripts.Database.Domains.Items.Entities.ItemTypeEntity.Mod
         public string NameZhCn { get; set; }
         public string NameZhTw { get; set; }
         public string NameJa { get; set; }
+        
+        [Ignore]
+        public LocalizedText LocalizedName => new()
+        {
+            Original = NameEn,
+            Th = NameTh,
+            En = NameEn,
+            ZhCn = NameZhCn,
+            ZhTw = NameZhTw,
+            Ja = NameJa,
+        };
 
         public string DescriptionTh { get; set; }
         public string DescriptionEn { get; set; }
         public string DescriptionZhCn { get; set; }
         public string DescriptionZhTw { get; set; }
         public string DescriptionJa { get; set; }
+        
+        [Ignore]
+        public LocalizedText LocalizedDescription => new()
+        {
+            Original = DescriptionEn,
+            Th = DescriptionTh,
+            En = DescriptionEn,
+            ZhCn = DescriptionZhCn,
+            ZhTw = DescriptionZhTw,
+            Ja = DescriptionJa,
+        };
 
         public ItemType()
         {
