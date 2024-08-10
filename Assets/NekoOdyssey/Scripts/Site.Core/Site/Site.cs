@@ -16,7 +16,7 @@ namespace NekoOdyssey.Scripts.Site.Core.Site
         public Database.Domains.Sites.Entities.SiteEntity.Models.Site PreviousSite => _previousSite;
         public Database.Domains.Sites.Entities.SiteEntity.Models.Site CurrentSite => _currentSite;
 
-        public bool Ready { get; private set; }
+        public bool Ready { get; private set; } = false;
 
         public Subject<Unit> OnReady { get; } = new();
         public Subject<Unit> OnLoaded { get; } = new();
@@ -26,8 +26,8 @@ namespace NekoOdyssey.Scripts.Site.Core.Site
         {
             InitializeDatabase();
             InitializeSite();
-            Ready = true;
-            OnReady.OnNext(default);
+            // Ready = true;
+            // OnReady.OnNext(default);
         }
 
         public void Start()
