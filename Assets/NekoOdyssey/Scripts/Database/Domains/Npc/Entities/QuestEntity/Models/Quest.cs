@@ -23,7 +23,9 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestEntity.Models
         [ForeignKey(typeof(QuestGroup))]
         public int QuestGroupId { get; set; }
 
-        [NotNull] [Indexed] public string Code { get; set; }
+        [NotNull]
+        [Indexed]
+        public string Code { get; set; }
 
         public string TitleOriginal { get; set; }
         public string TitleTh { get; set; }
@@ -32,12 +34,34 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestEntity.Models
         public string TitleZhTw { get; set; }
         public string TitleJa { get; set; }
 
+        [Ignore]
+        public LocalizedText LocalizedTitle => new()
+        {
+            Original = TitleOriginal,
+            Th = TitleTh,
+            En = TitleEn,
+            ZhCn = TitleZhCn,
+            ZhTw = TitleZhTw,
+            Ja = TitleJa,
+        };
+
         public string DescriptionOriginal { get; set; }
         public string DescriptionTh { get; set; }
         public string DescriptionEn { get; set; }
         public string DescriptionZhCn { get; set; }
         public string DescriptionZhTw { get; set; }
         public string DescriptionJa { get; set; }
+
+        [Ignore]
+        public LocalizedText LocalizedDescription => new()
+        {
+            Original = DescriptionOriginal,
+            Th = DescriptionTh,
+            En = DescriptionEn,
+            ZhCn = DescriptionZhCn,
+            ZhTw = DescriptionZhTw,
+            Ja = DescriptionJa,
+        };
 
         [NotNull]
         public string TargetEventPoint { get; set; }
@@ -55,7 +79,7 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestEntity.Models
                 return actorsText.Split('|').ToList();
             }
         }
-        
+
         public bool TargetActorExists(string actor)
         {
             return TargetActors?.Contains($"|{actor}|") ?? false;
@@ -65,9 +89,12 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestEntity.Models
         public string ActiveDaysOfWeek { get; set; }
         [NotNull]
         public int StartingHour { get; set; }
-        [NotNull] public int StartingMinute { get; set; }
-        [NotNull] public int EndingHour { get; set; }
-        [NotNull] public int EndingMinute { get; set; }
+        [NotNull]
+        public int StartingMinute { get; set; }
+        [NotNull]
+        public int EndingHour { get; set; }
+        [NotNull]
+        public int EndingMinute { get; set; }
 
         [Ignore]
         public ICollection<string> ActiveDayOfWeekList
@@ -81,12 +108,12 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestEntity.Models
                 return daysText.Split('|').ToList();
             }
         }
-        
+
         public bool DayOfWeekExists(string dayOfWeek)
         {
             return ActiveDaysOfWeek?.Contains($"|{dayOfWeek}|") ?? false;
         }
-        
+
         public bool DayOfWeekExists(DayOfWeek dayOfWeek)
         {
             return ActiveDaysOfWeek?.Contains($"|{dayOfWeek.GetShortName()}|") ?? false;
@@ -107,7 +134,7 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestEntity.Models
 
         [Ignore]
         public virtual ICollection<QuestCondition> Conditions { get; set; }
-        
+
         [Ignore]
         public virtual ICollection<QuestReward> Rewards { get; set; }
     }

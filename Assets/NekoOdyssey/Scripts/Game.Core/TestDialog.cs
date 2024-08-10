@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NekoOdyssey.Scripts.Constants;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Commons;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.ChatGroupEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogAnswerEntity.Models;
@@ -159,7 +160,7 @@ namespace NekoOdyssey.Scripts.Game.Core
                 // }
 
                 Debug.Log(
-                    $">>test_npc<< >>line<< {line.Actor} {line.Original} <color=purple>{line.AnimatorParam} {line.AnimatorParamValue}</color> <color=green>{line.Photo}</color>");
+                    $">>test_npc<< >>line<< {line.Actor} {line.LocalizedText.ToLocalizedString(Locale.None)} <color=purple>{line.AnimatorParam} {line.AnimatorParamValue}</color> <color=green>{line.Photo}</color>");
             }
 
             var childFlag = subDialog.DialogChildFlag;
@@ -184,10 +185,10 @@ namespace NekoOdyssey.Scripts.Game.Core
 
         private void ExecuteQuestion(DialogQuestion question)
         {
-            Debug.Log($">>test_npc<< >>question<< {question.Original}");
+            Debug.Log($">>test_npc<< >>question<< {question.LocalizedText.ToLocalizedString(Locale.None)}");
             foreach (var answer in question.Answers)
             {
-                Debug.Log($">>test_npc<< >>answer<< {answer.Original}");
+                Debug.Log($">>test_npc<< >>answer<< {answer.LocalizedText.ToLocalizedString(Locale.None)}");
             }
 
             var selectedAnswer = (question.Answers as List<DialogAnswer>)?[0];
