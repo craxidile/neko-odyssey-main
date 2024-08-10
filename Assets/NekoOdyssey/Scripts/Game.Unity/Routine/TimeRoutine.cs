@@ -188,9 +188,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
         // Start is called before the first frame update
         public void Start()
-        {
-            GameRunner.Instance.Core.RoutineManger.UpdateWorld();
-
+        {          
 
             //s_isTimeRunning = true;
 
