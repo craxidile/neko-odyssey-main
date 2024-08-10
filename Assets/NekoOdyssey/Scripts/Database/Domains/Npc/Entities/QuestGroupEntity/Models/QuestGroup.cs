@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using NekoOdyssey.Scripts.Database.Commons.Models;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestGroupConditionEntity.Models;
 using SpatiumInteractive.Libraries.Unity.GRU.Base;
@@ -22,12 +23,34 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestGroupEntity.Mod
         public string TitleZhTw { get; set; }
         public string TitleJa { get; set; }
         
+        [Ignore]
+        public LocalizedText LocalizedTitle => new()
+        {
+            Original = TitleOriginal,
+            Th = TitleTh,
+            En = TitleEn,
+            ZhCn = TitleZhCn,
+            ZhTw = TitleZhTw,
+            Ja = TitleJa,
+        };
+        
         public string DescriptionOriginal { get; set; }
         public string DescriptionTh { get; set; }
         public string DescriptionEn { get; set; }
         public string DescriptionZhCn { get; set; }
         public string DescriptionZhTw { get; set; }
         public string DescriptionJa { get; set; }
+        
+       [Ignore]
+       public LocalizedText LocalizedDescription => new()
+       {
+           Original = DescriptionOriginal,
+           Th = DescriptionTh,
+           En = DescriptionEn,
+           ZhCn = DescriptionZhCn,
+           ZhTw = DescriptionZhTw,
+           Ja = DescriptionJa,
+       };
         
         [Ignore]
         public virtual ICollection<Quest> Quests { get; set; }

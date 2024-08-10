@@ -54,22 +54,14 @@ namespace NekoOdyssey.Scripts.Site.Unity.Transition
 
         private void Start()
         {
-            if (SiteRunner.Instance.Core.Site.Ready)
-            {
-                LoadAll();
-                return;
-            }
-
-            SiteRunner.Instance.Core.Site.OnReady
-                .Subscribe(_ => LoadAll())
-                .AddTo(this);
+            LoadAll();
         }
 
         private void InitializeScreen()
         {
             if (_screenInitialized) return;
             if (Application.isEditor) return;
-            var systemWidth = (float)Display.main.systemHeight;
+            var systemWidth = (float)Display.main.systemWidth;
             var systemHeight = (float)Display.main.systemHeight;
             var support16To10 = Math.Abs(systemWidth / systemHeight - 1.6f) < .0001f;
             Screen.SetResolution(1440, support16To10 ? 900 : 810, true);
@@ -242,6 +234,7 @@ namespace NekoOdyssey.Scripts.Site.Unity.Transition
             // }
 
             isSetActiveScene = true;
+            SiteRunner.Instance.Core.Site.SetReady();
             yield break;
         }
     }
