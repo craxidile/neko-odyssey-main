@@ -353,5 +353,13 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
                 return repo.FindByQuestCode(questCode) != null;
             }
         }
+
+        public void SaveSite(string siteName)
+        {
+            GameRunner.Instance.Core.SaveDbWriter.Add(dbContext =>
+            {
+               var repo = new PlayerSite 
+            });
+        }
     }
 }
