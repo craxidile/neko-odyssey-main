@@ -19,7 +19,6 @@ namespace NekoOdyssey.Scripts.Site.Core.Site
         public bool Ready { get; private set; } = false;
 
         public Subject<Unit> OnReady { get; } = new();
-        public Subject<Unit> OnLoaded { get; } = new();
         public Subject<Database.Domains.Sites.Entities.SiteEntity.Models.Site> OnChangeSite { get; } = new();
 
         public void Bind()
