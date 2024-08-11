@@ -26,15 +26,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Lights.SkyBox
 
         public void Start()
         {
-            if (SiteRunner.Instance.Core.Site.Ready)
-            {
-                SetupLights();
-                return;
-            }
-
-            SiteRunner.Instance.Core.Site.OnReady
-                .Subscribe(_ => SetupLights())
-                .AddTo(this);
+            SetupLights();
         }
 
         private void SetupLights()

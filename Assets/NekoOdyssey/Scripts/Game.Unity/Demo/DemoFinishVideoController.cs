@@ -12,7 +12,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.Demo
         {
             DOVirtual.DelayedCall(65f, () =>
             {
-                SceneManager.LoadSceneAsync("SceneLoader");
+                //SceneManager.LoadSceneAsync("SceneLoader");
+               SiteRunner.Instance.Core.Site.SetSite("GamePlayZone3_02", false);
             });
         }
     }

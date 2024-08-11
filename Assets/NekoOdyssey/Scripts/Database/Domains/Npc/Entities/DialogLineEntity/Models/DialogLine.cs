@@ -1,5 +1,6 @@
 ﻿using System;
 using NekoOdyssey.Scripts.Constants;
+using NekoOdyssey.Scripts.Database.Commons.Models;
 using SpatiumInteractive.Libraries.Unity.GRU.Base;
 using SpatiumInteractive.Libraries.Unity.GRU.Contracts;
 using SQLite4Unity3d;
@@ -22,11 +23,22 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogLineEntity.Mod
         public string TextZhCn { get; set; }
         public string TextZhTw { get; set; }
         public string TextJa { get; set; }
-
+        
+        [Ignore]
+        public LocalizedText LocalizedText => new()
+        {
+            Original = Original,
+            Th = TextTh,
+            En = TextEn,
+            ZhCn = TextZhCn,
+            ZhTw = TextZhTw,
+            Ja = TextJa,
+        };
+        
         public string AnimatorParam { get; set; }
         public string AnimatorParamValue { get; set; }
         public int? AnimatorDelay { get; set; }
-
+        
         public string Photo { get; set; }
 
         public string GetLocalisedText()
