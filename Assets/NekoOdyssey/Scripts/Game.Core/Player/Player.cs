@@ -9,6 +9,7 @@ using NekoOdyssey.Scripts.Database.Domains.SaveV001.PlayerPropertiesEntity.Model
 using NekoOdyssey.Scripts.Database.Domains.SaveV001.PlayerPropertiesEntity.Repo;
 using NekoOdyssey.Scripts.Database.Domains.SaveV001.PlayerQuestEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.SaveV001.PlayerQuestEntity.Repo;
+using NekoOdyssey.Scripts.Database.Domains.SaveV001.PlayerSiteEntity.Repo;
 using NekoOdyssey.Scripts.Game.Core.Player.Bag;
 using NekoOdyssey.Scripts.Game.Core.Player.Capture;
 using NekoOdyssey.Scripts.Game.Core.Player.Conversation;
@@ -358,7 +359,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
         {
             GameRunner.Instance.Core.SaveDbWriter.Add(dbContext =>
             {
-               var repo = new PlayerSite 
+                var repo = new PlayerSiteV001Repo(dbContext);
             });
         }
     }
