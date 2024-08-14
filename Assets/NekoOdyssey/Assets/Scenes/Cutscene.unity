@@ -3018,7 +3018,7 @@ MonoBehaviour:
   director: {fileID: 0}
   canvasController: {fileID: 949533038}
   endBubble: 0
-  language: 1
+  language: 0
   useCSV: 0
   DialogueAsset: {fileID: 4900000, guid: 3ee4f69fe5cfedf468ee543c7424154d, type: 3}
 --- !u!320 &455220797
@@ -6055,50 +6055,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 8889646181857751449, guid: c72dce06505800d4ea0ae409dfaea0a7, type: 3}
   m_PrefabInstance: {fileID: 137202407}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &981089073
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 981089075}
-  - component: {fileID: 981089074}
-  m_Layer: 0
-  m_Name: Runner
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &981089074
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 981089073}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a92684a316654f71a4ba52110ed1fde9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &981089075
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 981089073}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 459.22833, y: 621.2648, z: -3.9832745}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &986656867
 GameObject:
   m_ObjectHideFlags: 0
@@ -6963,7 +6919,7 @@ MonoBehaviour:
   director: {fileID: 1070239354}
   canvasController: {fileID: 1373956152}
   endBubble: 0
-  language: 1
+  language: 0
   useCSV: 0
   DialogueAsset: {fileID: 4900000, guid: 71e3827838da3dc418e7fca12803a184, type: 3}
 --- !u!114 &1070239357
@@ -7153,7 +7109,7 @@ MonoBehaviour:
   director: {fileID: 0}
   canvasController: {fileID: 1668572763}
   endBubble: 0
-  language: 1
+  language: 0
   useCSV: 0
   DialogueAsset: {fileID: 4900000, guid: 3ee4f69fe5cfedf468ee543c7424154d, type: 3}
 --- !u!114 &1101709103
@@ -11841,32 +11797,19 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2022812329}
-  - component: {fileID: 2022812328}
-  - component: {fileID: 2022812327}
-  - component: {fileID: 2022812326}
-  - component: {fileID: 2022812325}
   - component: {fileID: 2022812324}
   - component: {fileID: 2022812323}
-  - component: {fileID: 2022812322}
+  - component: {fileID: 2022812325}
+  - component: {fileID: 2022812327}
+  - component: {fileID: 2022812326}
+  - component: {fileID: 2022812328}
   m_Layer: 0
-  m_Name: MainMenuRunner
+  m_Name: CutsceneRunner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2022812322
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2022812321}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3cd52f69ddfb3df43a4755602ca9c88c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &2022812323
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12645,7 +12588,6 @@ Camera:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 981089075}
   - {fileID: 2022812329}
   - {fileID: 1101709100}
   - {fileID: 455220798}
