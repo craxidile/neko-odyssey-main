@@ -11,12 +11,17 @@ using DialogAnswer = NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogAns
 public class PlayerChoiceDialogueController : MonoBehaviour
 {
     [SerializeField] GameObject uiChoicePrefab;
+    [SerializeField] Transform uiTail;
+    [SerializeField] CanvasGroup canvasGroup;
+    [SerializeField] Transform playerDialogueActor;
+
     List<Button> buttons = new List<Button>();
-    RectTransform rect;
+
+    //RectTransform _rect;
+    //Vector3 _localScale;
+
     private void Awake()
     {
-        rect = GetComponent<RectTransform>();
-
         Routine.playerChoiceDialogueController = this;
         RoutineManger.playerChoiceDialogueController = this;
 
@@ -25,11 +30,16 @@ public class PlayerChoiceDialogueController : MonoBehaviour
             uiChoicePrefab.GetComponent<Button>()
         };
 
+        //_rect = GetComponent<RectTransform>();
+        //_localScale = _rect.localScale;
+    }
+    private void Start()
+    {
         SetVisible(false);
     }
 
 
-    public void ShowChoice(QuestDialogue[] questDialogues, Action<QuestDialogue> callback)
+    public void ShowChoice(QuestDialogue[] questDialogues, Action<QuestDialogue> callback) //call by Routine (CSV version)
     {
         SetVisible(true);
         for (int i = 0; i < questDialogues.Length; i++)
@@ -52,19 +62,25 @@ public class PlayerChoiceDialogueController : MonoBehaviour
             });
         }
     }
-    public void ShowChoice(ICollection<DialogAnswer> choices, Action<DialogAnswer> callback)
+    public void ShowChoice(ICollection<DialogAnswer> choices, Action<DialogAnswer> callback) //call by RoutineManager (CMS version)
     {
-        //Debug.Log($"ShowChoice");
+        var currentChatBalloon = NekoOdyssey.Scripts.GameRunner.Instance.Core.RoutineManger.ChatBalloonManager.CurrentBalloon;
+        var player = NekoOdyssey.Scripts.GameRunner.Instance.Core.Player.Position;
+        bool isMirror = Camera.main.WorldToScreenPoint(currentChatBalloon.parent.transform.position).x > Camera.main.WorldToScreenPoint(player).x;
 
-        var canvasPosition = rect.anchoredPosition;
+        int isMirrorMuliplier = isMirror ? -1 : 1;
+        var newPosition = transform.localPosition;
+        newPosition.x = Mathf.Abs(newPosition.x) * isMirrorMuliplier;
+        transform.localPosition = newPosition;
 
-        var currentChatBalloonPosiiton = NekoOdyssey.Scripts.GameRunner.Instance.Core.RoutineManger.ChatBalloonManager.CurrentBalloon.parent.transform.position;
-        //var player = NekoOdyssey.Scripts.GameRunner.Instance.Core.Player.Position;
-        //bool isMirror = Camera.main.WorldToScreenPoint(currentChatBalloonPosiiton).x > Camera.main.WorldToScreenPoint(player).x;
-        //rect.anchoredPosition = new Vector2(Mathf.Abs(canvasPosition.x) * (isMirror ? -1 : 1), canvasPosition.y);
+        var tailScale = uiTail.localScale;
+        tailScale.x = Mathf.Abs(tailScale.x) * isMirrorMuliplier;
+        uiTail.localScale = tailScale;
 
-        rect.position = Camera.main.WorldToScreenPoint(currentChatBalloonPosiiton);
-        //rect.position = new Vector3(Screen.width/2 , rect.position.y , rect.position.z);
+        var npcBalloonScale = currentChatBalloon.parent.transform.localScale;
+        playerDialogueActor.localScale = npcBalloonScale;
+
+        //LayoutRebuilder.ForceRebuildLayoutImmediate(_rect);
 
 
         SetVisible(true);
@@ -100,9 +116,19 @@ public class PlayerChoiceDialogueController : MonoBehaviour
 
     void SetVisible(bool trigger)
     {
-        foreach (var button in buttons)
+        //foreach (var button in buttons)
+        //{
+        //    button.gameObject.SetActive(trigger);
+        //}
+
+        if (trigger)
         {
-            button.gameObject.SetActive(trigger);
+            canvasGroup.LerpAlpha(1, 0.3f);
+
+        }
+        else
+        {
+            canvasGroup.LerpAlpha(0, 0.3f);
         }
     }
 }

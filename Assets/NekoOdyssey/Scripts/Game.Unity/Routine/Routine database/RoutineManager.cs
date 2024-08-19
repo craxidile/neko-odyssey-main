@@ -417,9 +417,9 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                 //     a.SetTrigger(line.AnimatorParam);
                 // }
                 //line.LocalizedText.ToLocalizedString(GameRunner.Instance.Core.Settings.Locale);
-                Debug.Log($">>test_npc<< >>line<< {line.Actor} {line.GetLocalisedText()} <color=purple>{line.AnimatorParam} {line.AnimatorParamValue}</color> <color=green>{line.Photo}</color>");
+                Debug.Log($">>test_npc<< >>line<< {line.Actor} {line.LocalizedText.ToLocalizedString(GameRunner.Instance.Core.Settings.Locale)} <color=purple>{line.AnimatorParam} {line.AnimatorParamValue}</color> <color=green>{line.Photo}</color>");
 
-                ShowDialog(line.GetLocalisedText(), line.Actor);
+                ShowDialog(line.LocalizedText.ToLocalizedString(GameRunner.Instance.Core.Settings.Locale), line.Actor);
 
 
                 _currentDialog.nextDialogueCallback = () =>
@@ -457,7 +457,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
         private void ExecuteQuestion(DialogQuestion question)
         {
-            var dialog = question.GetLocalisedText();
+            var dialog = question.LocalizedText.ToLocalizedString(GameRunner.Instance.Core.Settings.Locale);
             if (!string.IsNullOrEmpty(dialog)) ShowDialog(dialog, question.Actor);
 
             _currentDialog.nextDialogueCallback = () =>
