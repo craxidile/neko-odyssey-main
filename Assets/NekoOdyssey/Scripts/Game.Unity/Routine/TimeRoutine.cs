@@ -188,7 +188,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
         // Start is called before the first frame update
         public void Start()
-        {          
+        {
 
             //s_isTimeRunning = true;
 
@@ -345,9 +345,14 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
             GameDayTotal = timeScriptable.currentDayCount;
 
+            var newTime = new TimeHrMin(timeScriptable.dayMinute / 60, timeScriptable.dayMinute % 60);
+            currentTime = newTime;
+
             //day = currentDay;
 
             //s_hungryOverTimeMultiplier = hungryOverTimeMultiplier;
+
+            GameRunner.Instance.Core.RoutineManger.ForceUpdateWorld();
         }
 
         //private void OnDrawGizmos()

@@ -38,12 +38,17 @@ namespace NekoOdyssey.Scripts.Game.Unity.Lights.SkyBox
             if (lightFacing == FacingDirection.None) return;
 
             var activeLight = _lightMap[lightFacing];
-            if (!activeLight) return;
-            
+            if (activeLight == null) return;
+
             activeLight.SetActive(true);
             var otherLights = _lightMap.Values.Where(l => l != activeLight);
             foreach (var light in otherLights)
-                light.SetActive(false);
+            {
+                if (light != default)
+                {
+                    light.SetActive(false);
+                }
+            }
         }
     }
 }
