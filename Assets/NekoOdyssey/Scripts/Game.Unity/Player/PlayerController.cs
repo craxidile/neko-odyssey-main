@@ -117,11 +117,11 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
                 playerRotation.y = cameraRotationY;
                 _movementController.ForceSetRotation(playerRotation);
 
-                var cameraRotation = GameRunner.Instance.cameras.mainCamera.transform.eulerAngles;
+                var cameraRotation = GameRunner.Instance.cameras.mainVirtualCamera.transform.eulerAngles;
                 cameraRotation.y = cameraRotationY;
-                GameRunner.Instance.cameras.mainCamera.transform.eulerAngles = cameraRotation;
+                GameRunner.Instance.cameras.mainVirtualCamera.transform.eulerAngles = cameraRotation;
 
-                var virtualCamera = GameRunner.Instance.cameras.mainCamera.GetComponent<CinemachineVirtualCamera>();
+                var virtualCamera = GameRunner.Instance.cameras.mainVirtualCamera;
                 var transposer = virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
                 transposer.m_FollowOffset = new Vector3(cameraOffsetX, 0, cameraOffsetZ);
             }

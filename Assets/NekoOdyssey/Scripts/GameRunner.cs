@@ -138,16 +138,16 @@ namespace NekoOdyssey.Scripts
                 boundary = LoadCameraBoundaryFromSite(currentSite);
             }
 
-            if (boundary != null && Camera.main != null)
+            if (boundary != null && cameras.mainVirtualCamera != null)
             {
-                var confiner = Camera.main.GetComponent<CinemachineConfiner>();
+                var confiner = cameras.mainVirtualCamera.GetComponent<CinemachineConfiner>();
                 confiner.m_BoundingVolume = boundary.GetComponent<BoxCollider>();
             }
 
             var cameraAnchor = FindAnyObjectByType<CameraAnchor>();
-            if (cameraAnchor != null && Camera.main != null)
+            if (cameraAnchor != null && cameras.mainVirtualCamera != null)
             {
-                Camera.main.transform.position = cameraAnchor.transform.position;
+                cameras.mainVirtualCamera.transform.position = cameraAnchor.transform.position;
             }
         }
     }
