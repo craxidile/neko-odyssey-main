@@ -24,11 +24,14 @@ using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogConditionCaseEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogLineEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.RoutineConditionEntity.Models;
+using NekoOdyssey.Scripts.Game.Unity.Player;
 
 namespace NekoOdyssey.Scripts.Game.Core.Routine
 {
     public class RoutineManger
     {
+        float _enabledTime;
+
         class NpcData
         {
             public string npcCode;
@@ -96,6 +99,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             dayNightLightingManager = new DayNightLightingManager();
             ChatBalloonManager = new ChatBalloonManager();
 
+            _enabledTime = Time.time;
             AssetBundleUtils.OnReady(UpdateWorld);
 
             //SceneRunner.Instance.Scene.OnReady
@@ -170,6 +174,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                         {
                             eventPointInteractive.OnInteractive = () =>
                             {
+                                if (_enabledTime > Time.time) return;
+
                                 var dialogueTemporaryData = new DialogueTemporaryData(quest.Code, DialogType.Quest, targetEventPoint);
                                 dialogueTemporaryData.quest = quest;
                                 ConversationHandle(quest.Dialog, dialogueTemporaryData);
@@ -400,6 +406,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                 // {
                 //     a.SetTrigger(line.AnimatorParam);
                 // }
+                SetAnimator(line);
+
                 //line.LocalizedText.ToLocalizedString(GameRunner.Instance.Core.Settings.Locale);
                 Debug.Log($">>test_npc<< >>line<< {line.Actor} {line.LocalizedText.ToLocalizedString(GameRunner.Instance.Core.Settings.Locale)} <color=purple>{line.AnimatorParam} {line.AnimatorParamValue}</color> <color=green>{line.Photo}</color>");
 
@@ -516,6 +524,46 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                 default:
                     return;
             }
+        }
+
+        void SetAnimator(DialogLine line)
+        {
+            if (string.IsNullOrEmpty(line.AnimatorParam)) return;
+
+            var animationName = line.AnimatorParam;
+
+            Debug.Log($"SetAnimator {line.AnimatorParam} {line.AnimatorParamValue} {line.AnimatorDelay}");
+            Debug.Log($"SetAnimator {line.AnimatorDelay == null}");
+            if (line.Actor == "player")
+            {
+                var playerController = GameRunner.Instance.Core.Player.GameObject.GetComponent<PlayerController>();
+
+                playerController.Animator.runtimeAnimatorController = GameRunner.Instance.CsvHolder.mikiDialogueAnimator;
+                playerController.Animator.CrossFadeInFixedTime(animationName, 0);
+
+                _enabledTime = Time.time + 1f;
+
+                DG.Tweening.DOVirtual.DelayedCall(0.1f, () =>
+                {
+                    if (line.AnimatorDelay == null)
+                    {
+                        var animationLength = playerController.Animator.GetCurrentAnimatorStateInfo(0).length;
+                        var delayDuration = Mathf.Max(animationLength - 0.1f, 0.1f);
+
+                        Debug.Log($"delay {delayDuration}");
+                        _enabledTime = Mathf.Max(_enabledTime, Time.time + delayDuration);
+
+                        DG.Tweening.DOVirtual.DelayedCall(delayDuration, () =>
+                        {
+                            _enabledTime = Time.time;
+                            playerController.ResetDialogueAnimator();
+                            _currentDialog.nextDialogueCallback?.Invoke();
+                        });
+                    }
+                });
+            }
+
+
         }
 
         public void CompleteQuest()
@@ -646,6 +694,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                         Debug.Log($"routine {routine.Code} ready for action");
                         eventPointInteractive.OnInteractive = () =>
                         {
+                            if (_enabledTime > Time.time) return;
+
                             var dialogueTemporaryData = new DialogueTemporaryData(routine.Code, DialogType.Routine, targetEventPoint);
                             ConversationHandle(routine.Dialog, dialogueTemporaryData);
 
