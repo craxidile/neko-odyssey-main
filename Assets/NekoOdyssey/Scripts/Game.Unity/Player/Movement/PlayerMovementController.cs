@@ -1,6 +1,8 @@
-﻿using NekoOdyssey.Scripts.Game.Unity.Game.Core;
+﻿using Assets.NekoOdyssey.Scripts.Audio;
+using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 using UniRx;
 using UnityEngine;
+using FMOD.Studio;
 
 namespace NekoOdyssey.Scripts.Game.Unity.Player.Movement
 {
@@ -23,6 +25,9 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Movement
         private bool _stopMove;
         private bool _isTurnAround;
         private float? _currentSpeed;
+        
+        //audio
+        private EventInstance playerFootSteps;
 
         private CharacterController _characterController;
         private bool Running => GameRunner.Instance.Core.Player.Running;
@@ -36,7 +41,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Movement
             _animator.SetLayerWeight(_animator.GetLayerIndex($"Bag"), 0f);
             _animator.SetLayerWeight(_animator.GetLayerIndex($"Capture"), 0f);
         }
-
+        
         private void Awake()
         {
             var playerController = GameRunner.Instance.Core.Player.GameObject.GetComponent<PlayerController>();
@@ -67,6 +72,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Movement
         {
             GameRunner.Instance.Core.Player.OnMove.Subscribe(input => { _moveInput = input; });
             GameRunner.Instance.Core.Player.OnChangeMode.Subscribe(SetActive);
+            //FMOD add by Ping
+            playerFootSteps = AudioManager.instance.CreateInstance(FMODEvents.instance.playerFootSteps);
         }
 
         private void Update()
@@ -196,6 +203,26 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Movement
 
                     break;
                 }
+            }
+        }
+
+        private void UpdateSound()
+        {
+            //Start footsteps event if the player has an x or y movement
+            if (_moveInput.x != 0 || _moveInput.y != 0)
+            {
+                //get the playback state
+                PLAYBACK_STATE playbackState;
+                playerFootSteps.getPlaybackState(out playbackState);
+                if (playbackState.Equals(PLAYBACK_STATE.STOPPED))
+                {
+                    playerFootSteps.start();
+                }
+            }
+            //Otherwise, stop the footsteps event
+            else
+            {
+                playerFootSteps.stop(STOP_MODE.ALLOWFADEOUT);
             }
         }
 
