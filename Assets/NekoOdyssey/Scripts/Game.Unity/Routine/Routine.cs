@@ -79,8 +79,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             dayNightLightingManager.Start();
 
 
-            var sss = GameRunner.Instance.Core.Player.Bag.CheckBagItem("AAA");
-            Debug.Log($"Check bag item : {sss}");
+            //var sss = GameRunner.Instance.Core.Player.Bag.CheckBagItem("AAA");
+            //Debug.Log($"Check bag item : {sss}");
         }
 
         public void Unbind()

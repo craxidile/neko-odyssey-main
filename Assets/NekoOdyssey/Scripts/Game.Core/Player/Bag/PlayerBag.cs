@@ -138,14 +138,19 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
             DOVirtual.DelayedCall(SelectBagItemDelay, () => SelectBagItem(FilteredBagItems.FirstOrDefault()));
         }
 
-        public void AddBagItem(Item item)
+        public void AddBagItem(Item item, int itemQty = 1)
         {
-            var bagItem = new BagItemV001(item);
-            BagItems.Add(bagItem);
             using (var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = false }))
             {
                 var bagItemRepo = new BagItemV001Repo(dbContext);
-                bagItemRepo.Add(bagItem);
+
+                for (int i = 0; i < itemQty; i++)
+                {
+                    var bagItem = new BagItemV001(item);
+                    BagItems.Add(bagItem);
+                    bagItemRepo.Add(bagItem);
+                }
+
             }
         }
         public int CheckBagItem(string itemCode)
