@@ -23,15 +23,18 @@ namespace NekoOdyssey.Scripts.Game.Core
             const string questGroupCode = "Q005";
             const string chatGroupCode = "npc41";
             const string routineCode = "Npc01DrinkTea";
+            const string dialogCode = "CutsceneQ005";
             var questGroupsMasterData = GameRunner.Instance.Core.MasterData.NpcMasterData.QuestGroupsMasterData;
             var chatGroupsMasterData = GameRunner.Instance.Core.MasterData.NpcMasterData.ChatGroupsMasterData;
             var routinesMasterData = GameRunner.Instance.Core.MasterData.NpcMasterData.RoutinesMasterData;
+            var dialogMasterData = GameRunner.Instance.Core.MasterData.NpcMasterData.DialogsMasterData;
             
             if (questGroupsMasterData.Ready)
             {
                 ExecuteQuestGroup(questGroupsMasterData.QuestGroups.FirstOrDefault(qg => qg.Code == questGroupCode));
                 ExecuteChatGroup(chatGroupsMasterData.ChatGroups.FirstOrDefault(cg => cg.Code == chatGroupCode));
-                ExecuteRoutine(routinesMasterData.Routines.FirstOrDefault(r => r.Code == routineCode));
+                ExecuteRoutine(routinesMasterData.Routines.FirstOrDefault(r => r.Code == routineCode)); 
+                ExecuteDialog(dialogMasterData.Dialogs.FirstOrDefault(d => d.Code == dialogCode));
             }
             else
             {
@@ -45,6 +48,7 @@ namespace NekoOdyssey.Scripts.Game.Core
                             chatGroupsMasterData.ChatGroups.FirstOrDefault(cg => cg.Code == chatGroupCode)
                         );
                         ExecuteRoutine(routinesMasterData.Routines.FirstOrDefault(r => r.Code == routineCode));
+                        ExecuteDialog(dialogMasterData.Dialogs.FirstOrDefault(d => d.Code == dialogCode));
                     })
                     .AddTo(GameRunner.Instance);
             }
