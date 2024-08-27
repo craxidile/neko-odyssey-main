@@ -1,4 +1,5 @@
 ﻿using System;
+using NekoOdyssey.Scripts.Database.Commons.Models;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Commons;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogConditionEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogEntity.Models;
@@ -25,6 +26,17 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogAnswerEntity.M
         public string TextZhCn { get; set; }
         public string TextZhTw { get; set; }
         public string TextJa { get; set; }
+        
+        [Ignore]
+        public LocalizedText LocalizedText => new()
+        {
+            Original = Original,
+            Th = TextTh,
+            En = TextEn,
+            ZhCn = TextZhCn,
+            ZhTw = TextZhTw,
+            Ja = TextJa,
+        };
         
         public string AnimatorParam { get; set; }
         public string AnimatorParamValue { get; set; }

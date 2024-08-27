@@ -99,12 +99,12 @@ public class EventPointInteractive : MonoBehaviour
     }
     private void CheckInput()
     {
-        var playerMode = GameRunner.Instance.Core.Player.Mode;
-        if (
-            playerMode != PlayerMode.Move &&
-            playerMode != PlayerMode.Conversation &&
-            playerMode != PlayerMode.QuestConversation
-        ) return;
+        //var playerMode = GameRunner.Instance.Core.Player.Mode;
+        //if (
+        //    playerMode != PlayerMode.Move &&
+        //    playerMode != PlayerMode.Conversation &&
+        //    playerMode != PlayerMode.QuestConversation
+        //) return;
         
         if (Time.time < _delayTime) return;
 

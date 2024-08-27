@@ -16,17 +16,18 @@ namespace NekoOdyssey.Scripts.Site.Core.Site
         public Database.Domains.Sites.Entities.SiteEntity.Models.Site PreviousSite => _previousSite;
         public Database.Domains.Sites.Entities.SiteEntity.Models.Site CurrentSite => _currentSite;
 
-        public bool Ready { get; private set; }
+        public bool Ready { get; private set; } = false;
 
         public Subject<Unit> OnReady { get; } = new();
+        public Subject<Unit> OnLoaded { get; } = new();
         public Subject<Database.Domains.Sites.Entities.SiteEntity.Models.Site> OnChangeSite { get; } = new();
 
         public void Bind()
         {
             InitializeDatabase();
             InitializeSite();
-            Ready = true;
-            OnReady.OnNext(default);
+            // Ready = true;
+            // OnReady.OnNext(default);
         }
 
         public void Start()
@@ -47,18 +48,24 @@ namespace NekoOdyssey.Scripts.Site.Core.Site
         private void InitializeSite()
         {
             if (CurrentSite != null) return;
-             // SetSite("Intro", false);
+            // SetSite("Intro", false);
             // SetSite("GamePlayZone4_01", false);
             // SetSite("GamePlayZone4_02", false);
             // SetSite("GamePlayZone4_03", false);
             //SetSite("GamePlayZone5_02", false);
             // SetSite("GamePlayZone6_01", false);
-            // SetSite("GamePlayZone6_02", false);
+            SetSite("GamePlayZone6_02", false);
             // SetSite("GamePlayZone3_01", false);
             // SetSite("GamePlayZone3_02", false);
             // SetSite("GamePlayZone7_01", false);
-            SetSite("DemoTitle", false);
+            //SetSite("DemoTitle", false);
             // SetSite("NekoInside28BedroomFinal", false);
+        }
+
+        public void SetReady()
+        {
+            Ready = true;
+            OnReady.OnNext(default);
         }
 
         public void MoveToNextSite()

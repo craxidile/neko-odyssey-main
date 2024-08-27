@@ -13,7 +13,7 @@ public class ChatBalloonManager
     //public static ChatBalloonManager instance { get; private set; }
 
 
-    class ChatBalloonData
+    public class ChatBalloonData
     {
         public Transform parent;
         public GameObject chatBalloonObject;
@@ -24,6 +24,11 @@ public class ChatBalloonManager
     }
     List<ChatBalloonData> chatBalloonDatas = new List<ChatBalloonData>();
     ChatBalloonData _lastestBalloon;
+    public ChatBalloonData CurrentBalloon
+    {
+        get { return _lastestBalloon; }
+    }
+
 
 
     //private void Awake()
@@ -31,7 +36,7 @@ public class ChatBalloonManager
     //    //instance = this;
     //}
     // Start is called before the first frame update
-   public void Start()
+    public void Start()
     {
 
     }
@@ -54,6 +59,8 @@ public class ChatBalloonManager
             newBalloonData.chatBalloon.SetText(message);
             newBalloonData.message = message;
             newBalloonData.startTime = Time.time;
+
+            newBalloonData.chatBalloon.dialogImageFrame.color = Color.white;
         }
         else
         {
@@ -107,10 +114,18 @@ public class ChatBalloonManager
         //var layoutGroup = newBalloonData.chatBalloonObject.GetComponentInChildren<UnityEngine.UI.LayoutGroup>();
         //layoutGroup.enabled = false;
         //layoutGroup.enabled = true;
+
+        var balloonPosition = newBalloonData.chatBalloonObject.transform.position;
+        Debug.Log($"WorldToScreenPoint {Camera.main.WorldToScreenPoint(balloonPosition)}");
+        Debug.Log($"WorldToScreenPoint {Screen.width} - {Screen.width/2}");
+
+        //newBalloonData.chatBalloonObject.transform.position = new Vector3( Screen.width / 2 , balloonPosition.y)
     }
 
     public void HideChatBalloon()
     {
+        if (_lastestBalloon == null) return;
+
         chatBalloonDatas.Remove(_lastestBalloon);
 
         var targetObject = _lastestBalloon;
@@ -122,7 +137,15 @@ public class ChatBalloonManager
         targetObject.chatBalloon.SetOpened(false);
 
         //DOVirtual.DelayedCall(1, () => { Destroy(targetObject.chatBalloon.gameObject); });
-        DOVirtual.DelayedCall(0, () => { GameObject.Destroy(targetObject.chatBalloon.gameObject); });
+        //DOVirtual.DelayedCall(0, () => { GameObject.Destroy(targetObject.chatBalloon.gameObject); });
+        GameObject.Destroy(targetObject.chatBalloon.gameObject);
 
+    }
+
+    public void GrayBalloon()
+    {
+        if (_lastestBalloon == null) return;
+
+        _lastestBalloon.chatBalloon.dialogImageFrame.color = Color.gray;
     }
 }

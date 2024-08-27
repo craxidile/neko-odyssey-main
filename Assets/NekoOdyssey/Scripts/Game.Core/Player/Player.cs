@@ -13,6 +13,7 @@ using NekoOdyssey.Scripts.Game.Core.Player.Bag;
 using NekoOdyssey.Scripts.Game.Core.Player.Capture;
 using NekoOdyssey.Scripts.Game.Core.Player.Conversation;
 using NekoOdyssey.Scripts.Game.Core.Player.ItemObain;
+using NekoOdyssey.Scripts.Game.Core.Player.ConfirmationPanel;
 using NekoOdyssey.Scripts.Game.Core.Player.Petting;
 using NekoOdyssey.Scripts.Game.Core.Player.Phone;
 using NekoOdyssey.Scripts.Game.Core.Player.Phone.Apps;
@@ -41,6 +42,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
         public PlayerConversation Conversation { get; } = new();
         public PlayerStamina Stamina { get; } = new(); // linias added
         public PlayerItemObtainPopUp ItemObtainPopUp { get; } = new();
+        public PlayerConfirmationPanel ConfirmationPanel { get; } = new();
 
         // public int Stamina { get; private set; }
         public int PocketMoney { get; private set; }
@@ -64,7 +66,6 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
         public Subject<bool> OnRun { get; } = new();
         public Subject<Vector2> OnMove { get; } = new();
         public Subject<Vector3> OnChangePosition { get; } = new();
-        public Subject<int> OnChangeStamina { get; } = new();
         public Subject<int> OnChangePocketMoney { get; } = new();
         public Subject<int> OnChangeLikeCount { get; } = new();
         public Subject<int> OnChangeFollowerCount { get; } = new();
@@ -78,6 +79,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
             Conversation.Bind();
             Stamina.Bind();
             ItemObtainPopUp.Bind();
+            ConfirmationPanel.Bind();
         }
 
         public void Start()
@@ -112,6 +114,10 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
                 .Subscribe(_ => SavePlayerProperties())
                 .AddTo(GameRunner.Instance);
 
+            OnChangePocketMoney
+                .Subscribe(_ => SavePlayerProperties())
+                .AddTo(GameRunner.Instance);
+
             if (GameRunner.Instance.Core.SaveReady)
                 HandleGameSaveReady(default);
             else
@@ -120,6 +126,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
                     .AddTo(GameRunner.Instance);
 
             ItemObtainPopUp.Start();
+            ConfirmationPanel.Start();
         }
 
         public void Unbind()
@@ -130,6 +137,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
             Conversation.Unbind();
             Stamina.Unbind();
             ItemObtainPopUp.Unbind();
+            ConfirmationPanel.Unbind();
         }
 
         private PlayerPropertiesV001 LoadPlayerProperties()
@@ -141,6 +149,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
                 playerProperties = playerPropertiesRepo.Load();
                 //AddStamina(playerProperties.Stamina);
                 Stamina.SetStamina(playerProperties.Stamina);
+                PocketMoney = playerProperties.PocketMoney;
                 UpdateFollowerCount(playerProperties.LikeCount);
                 DemoFinished = playerProperties.DemoFinished;
             }
@@ -157,6 +166,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
                 playerProperties.Stamina = Stamina.Stamina;
                 playerProperties.LikeCount = LikeCount;
                 playerProperties.FollowerCount = FollowerCount;
+                playerProperties.PocketMoney = PocketMoney;
                 playerPropertiesRepo.Update(playerProperties);
             });
         }
@@ -352,6 +362,17 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
                 var repo = new PlayerQuestV001Repo(dbContext);
                 return repo.FindByQuestCode(questCode) != null;
             }
+        }
+
+        public void AddPocketMoney(int money)
+        {
+            PocketMoney += money;
+            OnChangePocketMoney.OnNext(PocketMoney);
+        }
+        public void UsePocketMoney(int money)
+        {
+            PocketMoney -= money;
+            OnChangePocketMoney.OnNext(PocketMoney);
         }
     }
 }
