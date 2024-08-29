@@ -7,6 +7,9 @@ namespace NekoOdyssey.Scripts.Database.Domains.SaveV001.DailySummaryEntity.Model
     public class DailySummaryV001 : EntityBase<int>, IAggregateRoot
     {
         [NotNull]
+        public int DayCount { get; set; }
+        
+        [NotNull]
         public int LikeCount { get; set; }
         
         [NotNull]
