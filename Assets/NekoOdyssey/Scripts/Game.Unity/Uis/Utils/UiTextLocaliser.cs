@@ -57,7 +57,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.Utils
             if (_prevLocale == locale) return;
             _prevLocale = locale;
             Debug.Log($">>locale<< change {locale}");
-            _text.text = GameRunner.Instance.Core.Uis.Localisation.Translate(_originalText, locale);
+            _text.text = GameRunner.Instance.Core.Uis.Localisation.Translate(_originalText, locale) ?? _originalText;
             Debug.Log($">>locale<< text {GameRunner.Instance.Core.Uis.Localisation.Translate(_originalText, locale)}");
 
             int fontSize = _baseFontSize == 0 ? _text.fontSize : _baseFontSize;
