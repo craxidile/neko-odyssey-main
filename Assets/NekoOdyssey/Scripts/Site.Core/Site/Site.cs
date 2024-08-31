@@ -92,6 +92,7 @@ namespace NekoOdyssey.Scripts.Site.Core.Site
 
         public void SetSite(string siteName, bool reload = true)
         {
+            Debug.Log($"<color=purple>>>set_site<< {siteName} {reload}</color> {(new System.Diagnostics.StackTrace()).GetFrame(1).GetMethod().Name}");
             _previousSite = CurrentSite;
             Database.Domains.Sites.Entities.SiteEntity.Models.Site site;
             using (var siteDbContext = new SitesDbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = true }))
