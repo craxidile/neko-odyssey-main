@@ -73,6 +73,7 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
         public void SetMenuLevel(int level)
         {
             var playerMode = GameRunner.Instance.Core.Player.Mode;
+            Debug.Log($"<color=yellow>>>player_mode<< {playerMode} {(new System.Diagnostics.StackTrace()).GetFrame(1).GetMethod().Name}</color>");
             if (playerMode != PlayerMode.Move && playerMode != PlayerMode.Submenu) return;
             GameRunner.Instance.Core.Player.SetMode(level == 0 ? PlayerMode.Move : PlayerMode.Submenu);
             MenuLevel = level;

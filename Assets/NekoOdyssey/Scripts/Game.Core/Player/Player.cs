@@ -280,7 +280,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
                 Debug.Log($">>load_final<<");
 
                 //GameRunner.Instance.Core.SaveDbWriter.Add(dbContext =>
-                //{
+                //{/
                 //    var repo = new PlayerPropertiesV001Repo(dbContext);
                 //    var properties = repo.Load();
                 //    properties.DemoFinished = true;
