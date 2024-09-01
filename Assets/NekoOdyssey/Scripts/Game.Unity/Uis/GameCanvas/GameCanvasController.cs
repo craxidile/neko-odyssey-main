@@ -134,7 +134,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
             var demoFinished = GameRunner.Instance.Core.Player.DemoFinished;
             Debug.Log($">>finished<< {demoFinished}");
 
-            var followerReach = GameRunner.Instance.Core.Player.FollowerCount >= 150;
+            var followerReach = GameRunner.Instance.Core.Player.FollowerCount >= 100;
 
             activeMissionText.gameObject.SetActive(!demoFinished && !followerReach);
             finishedMissionText.gameObject.SetActive(!demoFinished && followerReach);
