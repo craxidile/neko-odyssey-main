@@ -6,14 +6,19 @@ namespace NekoOdyssey.Scripts.Database.Domains.SaveV001.GameSettingsEntity.Model
 {
     public class GameSettingsV001 : EntityBase<int>, IAggregateRoot
     {
-        [NotNull] public string Locale { get; set; }
+        [NotNull]
+        public string Locale { get; set; }
         
-        [NotNull] public float MasterVolume { get; set; }
+        [NotNull]
+        public float MasterVolume { get; set; }
         
-        [NotNull] public float BgmVolume { get; set; }
+        [NotNull]
+        public float BgmVolume { get; set; }
         
-        [NotNull] public float EffectVolume { get; set; }
+        [NotNull]
+        public float EffectVolume { get; set; }
         
-        [NotNull] public int WindowMode { get; set; }
+        [NotNull]
+        public int WindowMode { get; set; }
     }
 }

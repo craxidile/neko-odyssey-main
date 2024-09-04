@@ -33,6 +33,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Petting
             // GameRunner.Instance.Core.PlayerMenu.SetCurrentSiteActive();
             GameRunner.Instance.Core.PlayerMenu.SetCurrentSiteNameActive();
             GameRunner.Instance.Core.Player.SetMode(PlayerMode.Move);
+            GameRunner.Instance.Core.PlayerMenu.SetMenuLevel(0);
+            Debug.Log($"<color=red>>>player_mode<< move</color>");
         }
     }
 }

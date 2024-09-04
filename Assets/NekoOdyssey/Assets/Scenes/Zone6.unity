@@ -908,11 +908,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7555398458256682202, guid: 855ffa8897f2ee24ca6b07dbbf890967, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.246
+      value: 0.091
       objectReference: {fileID: 0}
     - target: {fileID: 7555398458256682202, guid: 855ffa8897f2ee24ca6b07dbbf890967, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0.39
+      objectReference: {fileID: 0}
+    - target: {fileID: 7555398458256682202, guid: 855ffa8897f2ee24ca6b07dbbf890967, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.004
       objectReference: {fileID: 0}
     - target: {fileID: 8013592659297664948, guid: 855ffa8897f2ee24ca6b07dbbf890967, type: 3}
       propertyPath: m_Radius
@@ -1039,6 +1043,7 @@ Transform:
   - {fileID: 1538420737}
   - {fileID: 347972790}
   - {fileID: 762987596}
+  - {fileID: 1138040872}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &288682001
@@ -1752,7 +1757,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a4ec80f51c543b185cea23812e7ebe0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  availableActions: 11000000
+  availableActions: 0b000000
   site: 0
   siteName: GamePlayZone7_01
   activeAtSiteName: 
@@ -3838,7 +3843,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!108 &689344512
 Light:
   m_ObjectHideFlags: 0
@@ -4471,7 +4476,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!108 &775462861
 Light:
   m_ObjectHideFlags: 0
@@ -6871,6 +6876,77 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2478072597170120029, guid: 3407a388d7a86584da53b3f742813971, type: 3}
   m_PrefabInstance: {fileID: 384840544}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1138040871
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1138040872}
+  - component: {fileID: 1138040874}
+  - component: {fileID: 1138040873}
+  m_Layer: 0
+  m_Name: GoToZone3BAction
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1138040872
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1138040871}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: -3.99, y: -0.23699999, z: -3.65}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 268794520}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!114 &1138040873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1138040871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a4ec80f51c543b185cea23812e7ebe0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  availableActions: 0c000000
+  site: 1
+  siteName: GamePlayZone3B_02
+  activeAtSiteName: 
+  autoActive: 1
+--- !u!65 &1138040874
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1138040871}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8100109, y: 1, z: 1.8065758}
+  m_Center: {x: -1.007102, y: 0, z: 0.0035648346}
 --- !u!1001 &1139991228
 PrefabInstance:
   m_ObjectHideFlags: 0
