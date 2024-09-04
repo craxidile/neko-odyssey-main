@@ -9,6 +9,8 @@ using NekoOdyssey.Scripts.Database.Domains.SaveV001.PlayerPropertiesEntity.Model
 using NekoOdyssey.Scripts.Database.Domains.SaveV001.PlayerPropertiesEntity.Repo;
 using NekoOdyssey.Scripts.Database.Domains.SaveV001.PlayerQuestEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.SaveV001.PlayerQuestEntity.Repo;
+using NekoOdyssey.Scripts.Database.Domains.SaveV001.PlayerSiteEntity.Models;
+using NekoOdyssey.Scripts.Database.Domains.SaveV001.PlayerSiteEntity.Repo;
 using NekoOdyssey.Scripts.Game.Core.Player.Bag;
 using NekoOdyssey.Scripts.Game.Core.Player.Capture;
 using NekoOdyssey.Scripts.Game.Core.Player.Conversation;
@@ -281,7 +283,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
             OnChangeFollowerCount.OnNext(FollowerCount);
             // SavePlayerProperties();
             Debug.Log($">>follower_count<< {FollowerCount}");
-            if (!_finalSceneLoaded && !DemoFinished && FollowerCount >= 200)
+            if (!_finalSceneLoaded && !DemoFinished && FollowerCount >= 100)
             {
                 _finalSceneLoaded = true;
                 Debug.Log($">>load_final<<");
@@ -369,10 +371,44 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
             PocketMoney += money;
             OnChangePocketMoney.OnNext(PocketMoney);
         }
+        
         public void UsePocketMoney(int money)
         {
             PocketMoney -= money;
             OnChangePocketMoney.OnNext(PocketMoney);
+        }
+        
+        public void MarkSiteAsVisited(string siteName)
+        {
+            var now = DateTime.Now;
+            GameRunner.Instance.Core.SaveDbWriter.Add(dbContext =>
+            {
+                var repo = new PlayerSiteV001Repo(dbContext);
+                var playerSite = repo.FindBySiteCode(siteName);
+                if (playerSite != null)
+                {
+                    playerSite.LastVisit = now;
+                    repo.Update(playerSite);
+                }
+                else
+                {
+                    repo.Add(new PlayerSiteV001()
+                    {
+                        SiteCode = siteName,
+                        LastVisit = now,
+                    });
+                }
+            });
+        }
+
+        public bool IsSiteVisited(string siteName)
+        {
+            using (var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = true }))
+            {
+                var repo = new PlayerSiteV001Repo(dbContext);
+                var playerSite = repo.FindBySiteCode(siteName);
+                return playerSite != null;
+            }
         }
     }
 }

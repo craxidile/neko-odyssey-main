@@ -30,22 +30,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Uis.Localisation
             {
                 var repo = new LocalisationRepo(dbContext);
                 var localisation = repo.FindByOriginal(original);
-                if (localisation == null) return null;
-                switch (locale)
-                {
-                    case Locale.Th:
-                        return localisation.TextTh;
-                    case Locale.En:
-                        return localisation.TextEn;
-                    case Locale.ZhCn:
-                        return localisation.TextZhCn;
-                    case Locale.ZhTw:
-                        return localisation.TextZhTw;
-                    case Locale.Ja:
-                        return localisation.TextJa;
-                    default:
-                        return null;
-                }
+                return localisation?.LocalizedText?.ToLocalizedString(locale);
             }
         }
     }

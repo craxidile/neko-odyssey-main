@@ -29,6 +29,7 @@ namespace NekoOdyssey.Scripts.Site.Unity.Transition
             $"camera_boundaries",
         };
 
+        private string _currentSiteName;
         private List<AsyncOperation> _asyncOperationList = new();
         private List<string> _scenesToPreload = new();
         private List<string> _scenesToLoad = new();
@@ -86,6 +87,7 @@ namespace NekoOdyssey.Scripts.Site.Unity.Transition
             _ready = true;
             var currentSite = SiteRunner.Instance.Core.Site.CurrentSite;
             var scenes = currentSite.Scenes.OrderBy(s => s.Id).Select(s => s.Name).ToList();
+            _currentSiteName = currentSite.Name;
             _scenesToPreload.AddRange(scenes);
             _scenesToLoad.AddRange(scenes);
             LogLine($">>load_all<< start");
@@ -235,7 +237,17 @@ namespace NekoOdyssey.Scripts.Site.Unity.Transition
 
             isSetActiveScene = true;
             SiteRunner.Instance.Core.Site.SetReady();
+            MarkSiteAsVisited();
             yield break;
+        }
+
+        private void MarkSiteAsVisited()
+        {
+            if (_currentSiteName == null) return;
+            var gameRunner = GameRunner.Instance;
+            if (!gameRunner) return;
+            gameRunner.Core.Player.MarkSiteAsVisited(_currentSiteName);
+                
         }
     }
 }

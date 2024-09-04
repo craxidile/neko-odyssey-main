@@ -8,8 +8,12 @@ namespace NekoOdyssey.Scripts.Database.Domains.SaveV001.PlayerSiteEntity.Models
     [Serializable]
     public class PlayerSiteV001 : EntityBase<int>, IAggregateRoot
     {
-        [NotNull] [Unique] public string SiteCode { get; set; }
+        [NotNull]
+        [Unique]
+        public string SiteCode { get; set; }
         
-        [NotNull] [Indexed] public DateTime LastVisit { get; set; }
+        [NotNull]
+        [Indexed]
+        public DateTime LastVisit { get; set; }
     }
 }
