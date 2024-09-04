@@ -1,3 +1,4 @@
+using NekoOdyssey.Scripts;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,7 +10,18 @@ public class EventPoint_AutoTrigger : MonoBehaviour
 
     public UnityAction OnTrigger { get; set; }
 
+    bool isAvaliable = true;
 
+    private void Update()
+    {
+        var distance = Vector3.Distance(GameRunner.Instance.Core.Player.GameObject.transform.position, transform.position);
+        if (distance <= triggerDistance && isAvaliable)
+        {
+            isAvaliable = false;
+
+            GetComponent<EventPointInteractive>().Interactive();
+        }
+    }
 
 
     private void OnDrawGizmosSelected()

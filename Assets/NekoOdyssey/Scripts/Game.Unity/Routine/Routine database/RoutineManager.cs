@@ -172,12 +172,13 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                         var eventPointInteractive = targetEventPoint?.GetComponent<EventPointInteractive>();
                         if (dialogueActors != null && dialogueActors.Length > 0 && eventPointInteractive != null)
                         {
-                            eventPointInteractive.OnInteractive = () =>
+                            eventPointInteractive.OnInteractive += () =>
                             {
                                 if (_enabledTime > Time.time) return;
 
                                 var dialogueTemporaryData = new DialogueTemporaryData(quest.Code, DialogType.Quest, targetEventPoint);
                                 dialogueTemporaryData.quest = quest;
+                                OnBeginEventPoint.OnNext(targetEventPoint);
                                 ConversationHandle(quest.Dialog, dialogueTemporaryData);
                             };
                         }
@@ -584,6 +585,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                 _tempCompletedDialogue.Add(_currentDialog);
             }
 
+            OnCompleteEventPoint.OnNext(_currentDialog.eventPoint);
             _currentDialog = null;
 
             //UpdateWorld();
@@ -592,6 +594,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         {
             EndDialogue();
 
+            OnCancelEventPoint.OnNext(_currentDialog.eventPoint);
             _currentDialog = null;
         }
 
@@ -692,7 +695,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                     if (dialogueActors != null && dialogueActors.Length > 0 && eventPointInteractive != null)
                     {
                         Debug.Log($"routine {routine.Code} ready for action");
-                        eventPointInteractive.OnInteractive = () =>
+                        eventPointInteractive.OnInteractive += () =>
                         {
                             if (_enabledTime > Time.time) return;
 
