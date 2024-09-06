@@ -25,6 +25,7 @@ public class DialogueData
 public class DialogueManager : MonoBehaviour
 {
     public static DialogueManager instance;
+    public string dialogCode;
     [HideInInspector] public PlayableDirector director;
     [HideInInspector] public DialogCanvasController canvasController;
     [HideInInspector] public bool endBubble;
@@ -114,7 +115,6 @@ public class DialogueManager : MonoBehaviour
     public void LoadDialogueCMS()
     {
         Debug.Log("PPP1");
-        const string dialogCode = "CutsceneQ005";
         var questGroupsMasterData = GameRunner.Instance.Core.MasterData.NpcMasterData.QuestGroupsMasterData;
         var dialogMasterData = GameRunner.Instance.Core.MasterData.NpcMasterData.DialogsMasterData;
         Debug.Log("PPP2");
