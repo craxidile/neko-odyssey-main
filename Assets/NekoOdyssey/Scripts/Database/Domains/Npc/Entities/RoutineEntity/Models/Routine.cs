@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using NekoOdyssey.Scripts.Database.Commons.Models;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.RoutineConditionEntity.Models;
+using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.RoutineRewardEntity.Models;
 using SpatiumInteractive.Libraries.Unity.GRU.Base;
 using SpatiumInteractive.Libraries.Unity.GRU.Contracts;
 using SQLite4Unity3d;
@@ -73,5 +74,8 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.RoutineEntity.Models
         
         [Ignore]
         public virtual ICollection<RoutineCondition> Conditions { get; set; }
+        
+        [Ignore]
+        public virtual ICollection<RoutineReward> Rewards { get; set; }
     }
 }
