@@ -44,4 +44,12 @@ public class EventPoint : MonoBehaviour
         }
 
     }
+
+    public static void HideAllEventPoint()
+    {
+        foreach (var eventPoint in AllEventPoint.Values)
+        {
+            eventPoint.gameObject.SetActive(false);
+        }
+    }
 }
