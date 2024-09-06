@@ -28,6 +28,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Capture
 
             GameRunner.Instance.Core.PlayerMenu.SetCurrentSiteNameActive();
             GameRunner.Instance.Core.Player.SetMode(PlayerMode.Move);
+            GameRunner.Instance.Core.PlayerMenu.SetMenuLevel(0);
         }
     }
 }

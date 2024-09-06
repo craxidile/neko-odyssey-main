@@ -19,7 +19,6 @@ namespace NekoOdyssey.Scripts.Site.Core.Site
         public bool Ready { get; private set; } = false;
 
         public Subject<Unit> OnReady { get; } = new();
-        public Subject<Unit> OnLoaded { get; } = new();
         public Subject<Database.Domains.Sites.Entities.SiteEntity.Models.Site> OnChangeSite { get; } = new();
 
         public void Bind()
@@ -54,11 +53,11 @@ namespace NekoOdyssey.Scripts.Site.Core.Site
             // SetSite("GamePlayZone4_03", false);
             //SetSite("GamePlayZone5_02", false);
             // SetSite("GamePlayZone6_01", false);
-            SetSite("GamePlayZone6_02", false);
+            // SetSite("GamePlayZone6_02", false);
             // SetSite("GamePlayZone3_01", false);
             // SetSite("GamePlayZone3_02", false);
             // SetSite("GamePlayZone7_01", false);
-            //SetSite("DemoTitle", false);
+            SetSite("DemoTitle", false);
             // SetSite("NekoInside28BedroomFinal", false);
         }
 
@@ -93,6 +92,7 @@ namespace NekoOdyssey.Scripts.Site.Core.Site
 
         public void SetSite(string siteName, bool reload = true)
         {
+            Debug.Log($"<color=purple>>>set_site<< {siteName} {reload}</color> {(new System.Diagnostics.StackTrace()).GetFrame(1).GetMethod().Name}");
             _previousSite = CurrentSite;
             Database.Domains.Sites.Entities.SiteEntity.Models.Site site;
             using (var siteDbContext = new SitesDbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = true }))

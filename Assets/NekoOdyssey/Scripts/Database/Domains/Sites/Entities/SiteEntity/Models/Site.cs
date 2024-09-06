@@ -90,7 +90,7 @@ namespace NekoOdyssey.Scripts.Database.Domains.Sites.Entities.SiteEntity.Models
             builder.Append($"\n\tnext_site_id: {NextSiteId}");
             builder.Append($"\n\tnext_site_name: {NextSiteName}");
 
-            if (Scenes.Count != 0)
+            if (Scenes != null && Scenes.Count != 0)
             {
                 builder.Append("\n\tscenes:");
                 foreach (var scene in Scenes)

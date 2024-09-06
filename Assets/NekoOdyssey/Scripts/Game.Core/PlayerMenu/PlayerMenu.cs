@@ -12,7 +12,7 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
 {
     public class PlayerMenu
     {
-        private readonly List<PlayerMenuAction> ActionsToStopPlayer = new()
+        private readonly List<PlayerMenuAction> _actionsToStopPlayer = new()
         {
             PlayerMenuAction.Enter,
             PlayerMenuAction.Exit,
@@ -72,6 +72,9 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
 
         public void SetMenuLevel(int level)
         {
+            var playerMode = GameRunner.Instance.Core.Player.Mode;
+            Debug.Log($"<color=yellow>>>player_mode<< {playerMode} {(new System.Diagnostics.StackTrace()).GetFrame(1).GetMethod().Name}</color>");
+            if (playerMode != PlayerMode.Move && playerMode != PlayerMode.Submenu) return;
             GameRunner.Instance.Core.Player.SetMode(level == 0 ? PlayerMode.Move : PlayerMode.Submenu);
             MenuLevel = level;
             OnChangeMenuLevel.OnNext(MenuLevel);
@@ -168,7 +171,7 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
             if (menuLevel > 0 || (menuLevel == 0 && actionsLength == 1))
                 // OnChangeSiteActive.OnNext(Tuple.Create(Site, false));
                 OnChangeSiteNameActive.OnNext(Tuple.Create(SiteName, false));
-            if (ActionsToStopPlayer.Contains(_currentAction))
+            if (_actionsToStopPlayer.Contains(_currentAction))
                 GameRunner.Instance.Core.Player.SetMode(PlayerMode.Stop);
         }
 

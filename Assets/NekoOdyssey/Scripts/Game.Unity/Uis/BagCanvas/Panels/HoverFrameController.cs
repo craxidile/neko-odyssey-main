@@ -37,6 +37,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Panels
         {
             if (bagItem == null) return;
             nameText.text = GameRunner.Instance.Core.MasterData.ItemsMasterData.GetLocalisedItemName(bagItem.Item);
+            LayoutRebuilder.ForceRebuildLayoutImmediate(nameText.rectTransform);
         }
     }
 }
