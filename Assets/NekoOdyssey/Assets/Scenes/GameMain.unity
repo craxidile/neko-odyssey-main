@@ -1035,7 +1035,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1258398786991307764, guid: 45009025db417aa41acfd213ddfd4d8c, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 62.5
+      value: 60.610687
       objectReference: {fileID: 0}
     - target: {fileID: 1558814290901990860, guid: 45009025db417aa41acfd213ddfd4d8c, type: 3}
       propertyPath: m_SizeDelta.x
@@ -1187,7 +1187,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5594005825740260803, guid: 45009025db417aa41acfd213ddfd4d8c, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 62.5
+      value: 60.610687
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2970,6 +2970,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 773542276}
   m_CullTransparentMesh: 1
+--- !u!1 &783045906
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 783045908}
+  - component: {fileID: 783045907}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &783045907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 783045906}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3f8b6afeb965094785ec50630043af0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &783045908
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 783045906}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1239531997}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &793273822
 GameObject:
   m_ObjectHideFlags: 0
@@ -4155,7 +4200,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 996425457}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0.92387956, z: 0, w: 0.38268343}
   m_LocalPosition: {x: 19.72875, y: -0.604, z: -17.79}
   m_LocalScale: {x: 8, y: 0.1, z: 0.10000003}
   m_ConstrainProportionsScale: 0
@@ -4163,7 +4208,7 @@ Transform:
   - {fileID: 1955535361}
   - {fileID: 1000919661}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 135, z: 0}
 --- !u!114 &996425464
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5467,6 +5512,64 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   photoTransform: {fileID: 84991748}
+--- !u!1 &1239531996
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1239531997}
+  - component: {fileID: 1239531998}
+  m_Layer: 0
+  m_Name: FmodEvents
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &1239531997
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1239531996}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 783045908}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1239531998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1239531996}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f63971f387e34d24f805ed46b8eb9a30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <playerFootSteps>k__BackingField:
+    Guid:
+      Data1: 1588635748
+      Data2: 1156056095
+      Data3: -735710020
+      Data4: -711934308
+    Path: event:/playerFootSteps
+  <ambience>k__BackingField:
+    Guid:
+      Data1: -328978544
+      Data2: 1112407612
+      Data3: -57602165
+      Data4: 573432142
+    Path: event:/SeaAndBird
 --- !u!1 &1252195857
 GameObject:
   m_ObjectHideFlags: 0
@@ -12640,7 +12743,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6742702976185686552, guid: a505943f84992894dbe9727e929d8d24, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 188.83928
+      value: 182.7481
       objectReference: {fileID: 0}
     - target: {fileID: 6742702976185686552, guid: a505943f84992894dbe9727e929d8d24, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -15146,7 +15249,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 30.535713, y: 0}
+  m_AnchoredPosition: {x: 28.854963, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &3510233137227541182
@@ -16340,7 +16443,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 504.617, y: 0}
+  m_AnchoredPosition: {x: 509.555, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4049868629284210433
@@ -25010,7 +25113,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 136.1607, y: 0}
+  m_AnchoredPosition: {x: 129.54199, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &8231590873080717134
@@ -27179,5 +27282,6 @@ SceneRoots:
   - {fileID: 159422581}
   - {fileID: 1407048049}
   - {fileID: 7580008626062786221}
+  - {fileID: 783045908}
   - {fileID: 1473139973}
   - {fileID: 118149950}
