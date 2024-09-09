@@ -246,6 +246,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
 
         public void SetMode(PlayerMode mode)
         {
+            Debug.Log($"<color=green>>>change_mode<< {mode} {(new System.Diagnostics.StackTrace()).GetFrame(1).GetMethod().Name}</color>");
             PreviousMode = Mode;
             Mode = mode;
             OnChangeMode.OnNext(Mode);
@@ -289,7 +290,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
                 Debug.Log($">>load_final<<");
 
                 //GameRunner.Instance.Core.SaveDbWriter.Add(dbContext =>
-                //{
+                //{/
                 //    var repo = new PlayerPropertiesV001Repo(dbContext);
                 //    var properties = repo.Load();
                 //    properties.DemoFinished = true;

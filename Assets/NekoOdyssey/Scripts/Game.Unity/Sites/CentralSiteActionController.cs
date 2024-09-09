@@ -3,6 +3,7 @@ using DG.Tweening;
 using NekoOdyssey.Scripts.Game.Core;
 using UniRx;
 using NekoOdyssey.Scripts.Game.Core.PlayerMenu;
+using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 using UnityEngine;
 
 namespace NekoOdyssey.Scripts.Game.Unity.Sites
@@ -13,7 +14,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Sites
         private const float ExitDelay = 2f;
 
         private static Vector3? _previousPosition;
-
+        
         private void Start()
         {
             GameRunner.Instance.Core.PlayerMenu.OnCommitAction
@@ -47,6 +48,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Sites
             }
 
             GameRunner.Instance.Core.GameScene.CloseScene();
+            var siteName = GameRunner.Instance.Core.PlayerMenu.SiteName;
             DOVirtual.DelayedCall(ExitDelay, () =>
             {
                 if (
@@ -54,7 +56,10 @@ namespace NekoOdyssey.Scripts.Game.Unity.Sites
                     action != PlayerMenuAction.LeftExit &&
                     action != PlayerMenuAction.RightExit
                 )
-                    SiteRunner.Instance.Core.Site.SetSite(GameRunner.Instance.Core.PlayerMenu.SiteName);
+                {
+                    Debug.Log($"<color=purple>>>set_site<<</color> from_menu {siteName}");
+                    SiteRunner.Instance.Core.Site.SetSite(siteName);
+                }
                 else
                 {
                     SiteRunner.Instance.Core.Site.MoveToPreviousSite(_previousPosition);
