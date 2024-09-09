@@ -1,5 +1,32 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-7293809748424461978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/UI/Cancel
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/UI/Cancel
+  Guid:
+    Data1: -1250935716
+    Data2: 1203512308
+    Data3: -1892943438
+    Data4: -1517196009
+  Banks:
+  - {fileID: 1494522112648732333}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 656
 --- !u!114 &-6752060334863094800
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15,38 +42,11 @@ MonoBehaviour:
   Path: ../../Documents/FMOD Studio/NekoOdyssey/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638613914949449822
+  lastModified: 638614164258755984
   FileSizes:
   - Name: Desktop
     Value: 1036
   Exists: 1
---- !u!114 &-6522860131873310046
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/BGM Noon
-  m_EditorClassIdentifier: 
-  Path: event:/BGM Noon
-  Guid:
-    Data1: -1242233743
-    Data2: 1117943739
-    Data3: -241479747
-    Data4: -535498349
-  Banks:
-  - {fileID: -1309520490331670653}
-  IsStream: 1
-  Is3D: 0
-  IsOneShot: 0
-  Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
-  Length: 85333
 --- !u!114 &-6261329734619887967
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62,11 +62,38 @@ MonoBehaviour:
   Path: ../../Documents/FMOD Studio/NekoOdyssey/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638613914949479742
+  lastModified: 638614164258795903
   FileSizes:
   - Name: Desktop
-    Value: 976
+    Value: 1238
   Exists: 1
+--- !u!114 &-3980045576858783259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Ambience/SeaAndBird
+  m_EditorClassIdentifier: 
+  Path: event:/Ambience/SeaAndBird
+  Guid:
+    Data1: -328978544
+    Data2: 1112407612
+    Data3: -57602165
+    Data4: 573432142
+  Banks:
+  - {fileID: -166594779463311778}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 31935
 --- !u!114 &-1309520490331670653
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -81,39 +108,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Path: ../../Documents/FMOD Studio/NekoOdyssey/Build/Desktop/BGM.bank
   Name: BGM
-  StudioPath: bank:/BGM
-  lastModified: 638613914973094336
+  StudioPath: bank:/BGM/BGM
+  lastModified: 638614165519570687
   FileSizes:
   - Name: Desktop
-    Value: 1224576
+    Value: 4636256
   Exists: 1
---- !u!114 &-1239569598924927850
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/playerFootSteps
-  m_EditorClassIdentifier: 
-  Path: event:/playerFootSteps
-  Guid:
-    Data1: 1588635748
-    Data2: 1156056095
-    Data3: -735710020
-    Data4: -711934308
-  Banks:
-  - {fileID: 1743454280761521449}
-  IsStream: 0
-  Is3D: 0
-  IsOneShot: 0
-  Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
-  Length: 400
 --- !u!114 &-166594779463311778
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -128,8 +128,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Path: ../../Documents/FMOD Studio/NekoOdyssey/Build/Desktop/Ambience.bank
   Name: Ambience
-  StudioPath: bank:/Ambience
-  lastModified: 638613905760778654
+  StudioPath: bank:/Ambience/Ambience
+  lastModified: 638614124267038243
   FileSizes:
   - Name: Desktop
     Value: 396512
@@ -152,17 +152,68 @@ MonoBehaviour:
   - {fileID: -6752060334863094800}
   - {fileID: 1743454280761521449}
   - {fileID: -1309520490331670653}
+  - {fileID: 1494522112648732333}
   EditorEvents:
-  - {fileID: 3782305834197488711}
-  - {fileID: -1239569598924927850}
-  - {fileID: -6522860131873310046}
+  - {fileID: -3980045576858783259}
+  - {fileID: 5329372264601099073}
+  - {fileID: 8659153003226023352}
+  - {fileID: 39209510201174205}
+  - {fileID: -7293809748424461978}
+  - {fileID: 1981406051696443157}
   EditorParameters: []
   MasterBanks:
   - {fileID: -6752060334863094800}
   StringsBanks:
   - {fileID: -6261329734619887967}
-  cacheTime: 638613914973094336
+  cacheTime: 638614165519570687
   cacheVersion: 131619
+--- !u!114 &39209510201174205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/UI/Confirm
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/UI/Confirm
+  Guid:
+    Data1: -1716511688
+    Data2: 1300731939
+    Data3: -1936051024
+    Data4: -720325370
+  Banks:
+  - {fileID: 1494522112648732333}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 1105
+--- !u!114 &1494522112648732333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/UI.bank
+  m_EditorClassIdentifier: 
+  Path: ../../Documents/FMOD Studio/NekoOdyssey/Build/Desktop/UI.bank
+  Name: UI
+  StudioPath: bank:/SFX/UI/UI
+  lastModified: 638614124267527004
+  FileSizes:
+  - Name: Desktop
+    Value: 12384
+  Exists: 1
 --- !u!114 &1743454280761521449
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -177,13 +228,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Path: ../../Documents/FMOD Studio/NekoOdyssey/Build/Desktop/SFX.bank
   Name: SFX
-  StudioPath: bank:/SFX
-  lastModified: 638613913840853403
+  StudioPath: bank:/SFX/SFX
+  lastModified: 638614124266496729
   FileSizes:
   - Name: Desktop
-    Value: 9472
+    Value: 17280
   Exists: 1
---- !u!114 &3782305834197488711
+--- !u!114 &1981406051696443157
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -193,20 +244,99 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/SeaAndBird
+  m_Name: event:/BGM/BGM
   m_EditorClassIdentifier: 
-  Path: event:/SeaAndBird
+  Path: event:/BGM/BGM
   Guid:
-    Data1: -328978544
-    Data2: 1112407612
-    Data3: -57602165
-    Data4: 573432142
+    Data1: -1242233743
+    Data2: 1117943739
+    Data3: -241479747
+    Data4: -535498349
   Banks:
-  - {fileID: -166594779463311778}
+  - {fileID: -1309520490331670653}
   IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters:
+  - {fileID: 5575960419070143616}
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 352282
+--- !u!114 &5329372264601099073
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Shutter
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Shutter
+  Guid:
+    Data1: -1742456480
+    Data2: 1243583263
+    Data3: -936276318
+    Data4: -450340658
+  Banks:
+  - {fileID: 1743454280761521449}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 296
+--- !u!114 &5575960419070143616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/BGM/Noon
+  m_EditorClassIdentifier: 
+  Name: Noon
+  StudioPath: 
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 339252317
+    data2: 1073142300
+  Type: 0
+  IsGlobal: 0
+  Labels: []
+  Exists: 1
+--- !u!114 &8659153003226023352
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/playerFootSteps
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/playerFootSteps
+  Guid:
+    Data1: 1588635748
+    Data2: 1156056095
+    Data3: -735710020
+    Data4: -711934308
+  Banks:
+  - {fileID: 1743454280761521449}
+  IsStream: 0
   Is3D: 0
   IsOneShot: 0
   Parameters: []
   MinDistance: 1
   MaxDistance: 20
-  Length: 31935
+  Length: 400
