@@ -580,16 +580,6 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
             }
 
-
-            if (questEventDetail.GetTargetEventPoint().TryGetComponent(out EventPoint_AutoComplete eventPointAutoComplete))
-            {
-                DG.Tweening.DOVirtual.DelayedCall(eventPointAutoComplete.CompleteDelay, () =>
-                {
-                    Debug.Log("Complete dialogue");
-                    questEventDetail.GetTargetEventPoint()?.gameObject.SetActive(false);
-                    CompleteQuestStep();
-                });
-            }
         }
 
         public void CompleteQuestStep()

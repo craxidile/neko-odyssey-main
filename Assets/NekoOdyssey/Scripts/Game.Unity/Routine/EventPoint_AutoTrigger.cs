@@ -2,13 +2,11 @@ using NekoOdyssey.Scripts;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
+[RequireComponent(typeof(EventPointInteractive))]
 public class EventPoint_AutoTrigger : MonoBehaviour
 {
     [SerializeField] float triggerDistance = 1f;
-
-    public UnityAction OnTrigger { get; set; }
 
     bool isAvaliable = true;
 
