@@ -100,15 +100,27 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             ChatBalloonManager = new ChatBalloonManager();
 
             _enabledTime = Time.time;
-            AssetBundleUtils.OnReady(UpdateWorld);
 
-            //SceneRunner.Instance.Scene.OnReady
+
+            if (SiteRunner.Instance.Core.Site.Ready)
+            {
+                UpdateWorld();
+            }
+            else
+            {
+                SiteRunner.Instance.Core.Site.OnReady.Subscribe(_ =>
+                {
+                    UpdateWorld();
+                }).AddTo(SiteRunner.Instance);
+            }
         }
 
         public void Start()
         {
             ChatBalloonManager.Start();
             dayNightLightingManager.Start();
+
+            SetUpCaptureQuest();
         }
 
         public void Unbind()
@@ -157,30 +169,33 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
                     if (isInQuestDay && isInQuestTime)
                     {
-                        targetEventPoint?.gameObject.SetActive(true);
-
-
                         foreach (var actor in quest.TargetActorList)
                         {
                             var npcData = GetNpcData(actor);
                             npcData.isAppearedInQuest = true;
                         }
 
-
-                        //talk to npc
-                        var dialogueActors = targetEventPoint?.GetComponentsInChildren<DialogueActor>();
-                        var eventPointInteractive = targetEventPoint?.GetComponent<EventPointInteractive>();
-                        if (dialogueActors != null && dialogueActors.Length > 0 && eventPointInteractive != null)
+                        if (targetEventPoint != null)
                         {
-                            eventPointInteractive.OnInteractive += () =>
-                            {
-                                if (_enabledTime > Time.time) return;
+                            targetEventPoint.gameObject.SetActive(true);
+                            targetEventPoint.eventPointType = EventPoint.EventPointType.Quest;
+                            targetEventPoint.ReferenceEventCode = quest.Code;
 
-                                var dialogueTemporaryData = new DialogueTemporaryData(quest.Code, DialogType.Quest, targetEventPoint);
-                                dialogueTemporaryData.quest = quest;
-                                OnBeginEventPoint.OnNext(targetEventPoint);
-                                ConversationHandle(quest.Dialog, dialogueTemporaryData);
-                            };
+                            //talk to npc
+                            var dialogueActors = targetEventPoint.GetComponentsInChildren<DialogueActor>();
+                            var eventPointInteractive = targetEventPoint.GetComponent<EventPointInteractive>();
+                            if (dialogueActors != null && dialogueActors.Length > 0 && eventPointInteractive != null)
+                            {
+                                eventPointInteractive.OnInteractive += () =>
+                                {
+                                    if (_enabledTime > Time.time) return;
+
+                                    var dialogueTemporaryData = new DialogueTemporaryData(quest.Code, DialogType.Quest, targetEventPoint);
+                                    dialogueTemporaryData.quest = quest;
+                                    OnBeginEventPoint.OnNext(targetEventPoint);
+                                    ConversationHandle(quest.Dialog, dialogueTemporaryData);
+                                };
+                            }
                         }
 
                     }
@@ -575,14 +590,14 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
             if (_currentDialog.dialogType == DialogType.Quest)
             {
+                //_currentDialog.eventPoint.gameObject.SetActive(false);
+                GameRunner.Instance.Core.Player.AddAchievedQuest(_currentDialog.eventCode);
+                _tempCompletedDialogue.Add(_currentDialog);
+
                 if (!GameRunner.Instance.Core.Player.IsQuestComplete(_currentDialog.eventCode)) //check for one time reward
                 {
                     GiveRewards(_currentDialog.quest);
                 }
-
-                //_currentDialog.eventPoint.gameObject.SetActive(false);
-                GameRunner.Instance.Core.Player.AddAchievedQuest(_currentDialog.eventCode);
-                _tempCompletedDialogue.Add(_currentDialog);
             }
 
             OnCompleteEventPoint.OnNext(_currentDialog.eventPoint);
@@ -614,9 +629,19 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             {
                 if (reward.Type == "Quest Key")
                 {
-                    GameRunner.Instance.Core.Player.AddAchievedQuest(reward.Code);
+                    if (reward.Code.ToLower().Equals("next"))
+                    {
+                        DG.Tweening.DOVirtual.DelayedCall(0.3f, () =>
+                        {
+                            UpdateQuestEvent_RelatedQuestCode(quest.Code);
+                        });
+                    }
+                    else
+                    {
+                        GameRunner.Instance.Core.Player.AddAchievedQuest(reward.Code);
+                    }
                 }
-                if (reward.Type == "Item")
+                else if (reward.Type == "Item")
                 {
                     var masterItems = GameRunner.Instance.Core.MasterData.ItemsMasterData.Items.ToList();
                     var item = masterItems.FirstOrDefault(i => i.Code == reward.Code);
@@ -625,13 +650,22 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                     GameRunner.Instance.Core.Player.Bag.AddBagItem(item, itemQty);
                     GameRunner.Instance.Core.Player.ItemObtainPopUp.ShowPopUp(item, itemQty);
                 }
-                if (reward.Type == "Money")
+                else if (reward.Type == "Money")
                 {
                     GameRunner.Instance.Core.Player.AddPocketMoney(reward.Value);
                 }
-                if (reward.Type == "Stamina")
+                else if (reward.Type == "Stamina")
                 {
                     GameRunner.Instance.Core.Player.Stamina.AddStamina(reward.Value);
+                }
+                else if (reward.Type == "Site")
+                {
+                    GameRunner.Instance.Core.Player.SetMode(PlayerMode.Stop);
+                    GameRunner.Instance.Core.GameScene.CloseScene();
+                    GameRunner.Instance.Core.GameScene.OnChangeSceneFinish.Subscribe(_ =>
+                    {
+                        SiteRunner.Instance.Core.Site.SetSite(reward.Code);
+                    });
                 }
             }
         }
@@ -688,6 +722,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                     if (targetEventPoint == null) continue;
                     Debug.Log($"routine {routine.Code} got eventPoint");
                     targetEventPoint.gameObject.SetActive(true);
+                    targetEventPoint.eventPointType = EventPoint.EventPointType.Routine;
+                    targetEventPoint.ReferenceEventCode = routine.Code;
 
                     //talk to npc
                     var dialogueActors = targetEventPoint.GetComponentsInChildren<DialogueActor>();
@@ -709,6 +745,147 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
             }
 
+        }
+
+        void SetUpCaptureQuest()
+        {
+            //GameRunner.Instance.Core.Player.Capture.OnCaptureBegin.Subscribe(_ =>
+            //{
+            //    var eventPoint = GameRunner.Instance.Core.PlayerMenu.GameObject.GetComponentInParent<EventPoint>();
+            //    if (eventPoint == null) return;
+            //    if (eventPoint.eventPointType != EventPoint.EventPointType.Quest) return;
+
+            //    Debug.Log("PlayerCapture begin");
+
+            //    if (!string.IsNullOrEmpty(eventPoint.ReferenceEventCode))
+            //    {
+            //        Debug.Log($"PlayerCapture AddAchievedQuest {eventPoint.ReferenceEventCode}");
+            //        GameRunner.Instance.Core.Player.AddAchievedQuest(eventPoint.ReferenceEventCode);
+            //    }
+            //});
+
+            GameRunner.Instance.Core.Player.Capture.OnCaptureFinish.Subscribe(_ =>
+            {
+                var eventPoint = GameRunner.Instance.Core.PlayerMenu.GameObject.GetComponentInParent<EventPoint>();
+                if (eventPoint == null) return;
+                if (eventPoint.eventPointType != EventPoint.EventPointType.Quest) return;
+
+                Debug.Log("PlayerCapture Finish");
+
+                if (!string.IsNullOrEmpty(eventPoint.ReferenceEventCode))
+                {
+                    Debug.Log($"PlayerCapture AddAchievedQuest {eventPoint.ReferenceEventCode}");
+                    GameRunner.Instance.Core.Player.AddAchievedQuest(eventPoint.ReferenceEventCode);
+
+                    var allQuestGroups = GameRunner.Instance.Core.MasterData.NpcMasterData.QuestGroupsMasterData.QuestGroups;
+                    foreach (var questGroup in allQuestGroups)
+                    {
+                        foreach (var quest in questGroup.Quests)
+                        {
+                            if (quest.Code.Equals(eventPoint.ReferenceEventCode, System.StringComparison.InvariantCultureIgnoreCase))
+                            {
+                                Debug.Log("PlayerCapture GiveRewards");
+                                GiveRewards(quest);
+                            }
+                        }
+                    }
+                }
+            });
+
+
+
+        }
+
+        //update quests that required questCode as condition 
+        //used for immediately update quest on the same site
+        public void UpdateQuestEvent_RelatedQuestCode(string questCode)
+        {
+            Debug.Log($"UpdateQuestEvent_RelatedQuestCode {questCode}");
+            var player = GameRunner.Instance.Core.Player;
+            var allQuestGroups = GameRunner.Instance.Core.MasterData.NpcMasterData.QuestGroupsMasterData.QuestGroups;
+            foreach (var questGroup in allQuestGroups)
+            {
+                if (player.IsQuestComplete(questGroup.Code)) continue;
+                if (!CheckQuestGroupCondition(questGroup.Conditions)) continue;
+
+                foreach (var quest in questGroup.Quests)
+                {
+                    Debug.Log($"UpdateQuestEvent_RelatedQuestCode 1");
+                    bool checkThisQuest = false;
+                    foreach (var condition in quest.Conditions)
+                    {
+                        if (condition.Type == "Quest Key" || condition.Type == "Quest Group Key")
+                        {
+                            if (condition.Code.Equals(questCode, System.StringComparison.InvariantCultureIgnoreCase))
+                            {
+                                checkThisQuest = true;
+                            }
+                        }
+                    }
+                    if (!checkThisQuest) continue; //only check quests that required this questCode as condition
+                    Debug.Log($"UpdateQuestEvent_RelatedQuestCode 2");
+                    if (player.IsQuestComplete(quest.Code)) continue;
+                    Debug.Log($"UpdateQuestEvent_RelatedQuestCode 3");
+                    if (!CheckQuestCondition(quest.Conditions)) continue;
+                    Debug.Log($"UpdateQuestEvent_RelatedQuestCode 4");
+                    var isInQuestDay = quest.DayOfWeekExists(GameRunner.Instance.TimeRoutine.CurrentDay.ToDayOfWeek());
+
+                    var startingTime = new TimeHrMin(quest.StartingHour, quest.StartingMinute);
+                    var EndingTime = new TimeHrMin(quest.EndingHour, quest.EndingMinute);
+                    var isInQuestTime = GameRunner.Instance.TimeRoutine.currentTime.inBetweenTime(startingTime, EndingTime);
+
+                    var targetEventPoint = EventPoint.GetEventPoint(quest.TargetEventPoint);
+
+                    if (isInQuestDay && isInQuestTime)
+                    {
+                        Debug.Log($"UpdateQuestEvent_RelatedQuestCode 5");
+                        foreach (var actor in quest.TargetActorList)
+                        {
+                            var npcData = GetNpcData(actor);
+                            npcData.isAppearedInQuest = true;
+                        }
+
+                        if (targetEventPoint != null)
+                        {
+                            targetEventPoint.gameObject.SetActive(true);
+                            targetEventPoint.eventPointType = EventPoint.EventPointType.Quest;
+                            targetEventPoint.ReferenceEventCode = quest.Code;
+
+                            //talk to npc
+                            var dialogueActors = targetEventPoint.GetComponentsInChildren<DialogueActor>();
+                            var eventPointInteractive = targetEventPoint.GetComponent<EventPointInteractive>();
+                            if (dialogueActors != null && dialogueActors.Length > 0 && eventPointInteractive != null)
+                            {
+                                eventPointInteractive.OnInteractive += () =>
+                                {
+                                    if (_enabledTime > Time.time) return;
+
+                                    var dialogueTemporaryData = new DialogueTemporaryData(quest.Code, DialogType.Quest, targetEventPoint);
+                                    dialogueTemporaryData.quest = quest;
+                                    OnBeginEventPoint.OnNext(targetEventPoint);
+                                    ConversationHandle(quest.Dialog, dialogueTemporaryData);
+                                };
+                            }
+                        }
+
+                    }
+                    else //outside event time
+                    {
+                        //targetEventPoint?.gameObject.SetActive(false);
+
+                        if (quest.DisableRoutine)
+                        {
+                            foreach (var actor in quest.TargetActorList)
+                            {
+                                var npcData = GetNpcData(actor);
+                                npcData.isAppearedInQuest = true;
+                            }
+                        }
+
+                    }
+
+                }
+            }
         }
 
     }
