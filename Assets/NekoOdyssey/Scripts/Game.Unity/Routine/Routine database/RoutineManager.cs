@@ -422,7 +422,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                 // {
                 //     a.SetTrigger(line.AnimatorParam);
                 // }
-                SetAnimator(line);
+
 
                 //line.LocalizedText.ToLocalizedString(GameRunner.Instance.Core.Settings.Locale);
                 Debug.Log($">>test_npc<< >>line<< {line.Actor} {line.LocalizedText.ToLocalizedString(GameRunner.Instance.Core.Settings.Locale)} <color=purple>{line.AnimatorParam} {line.AnimatorParamValue}</color> <color=green>{line.Photo}</color>");
@@ -434,6 +434,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                 {
                     ExecuteSubDialog(subDialog, lineIndex + 1);
                 };
+                SetAnimator(line);
             }
             else
             {
@@ -546,38 +547,97 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         {
             if (string.IsNullOrEmpty(line.AnimatorParam)) return;
 
-            var animationName = line.AnimatorParam;
+            var animationName = line.AnimatorParam.ToLower();
 
             Debug.Log($"SetAnimator {line.AnimatorParam} {line.AnimatorParamValue} {line.AnimatorDelay}");
-            Debug.Log($"SetAnimator {line.AnimatorDelay == null}");
+            //Debug.Log($"SetAnimator {line.AnimatorDelay == null}");
+
+            Debug.Log($"Check Animator Asset : {GameRunner.Instance.AssetMap.ContainsKey(animationName)}");
+            Debug.Log($"Check Animator Asset : {GameRunner.Instance.AssetMap[animationName] is RuntimeAnimatorController}");
+
+            RuntimeAnimatorController targetAnimator = null;
+            if (GameRunner.Instance.AssetMap.ContainsKey(animationName) && GameRunner.Instance.AssetMap[animationName] is RuntimeAnimatorController)
+            {
+                targetAnimator = GameRunner.Instance.AssetMap[animationName] as RuntimeAnimatorController;
+            }
+            else
+                return;
+
+
             if (line.Actor == "player")
             {
                 var playerController = GameRunner.Instance.Core.Player.GameObject.GetComponent<PlayerController>();
 
-                playerController.Animator.runtimeAnimatorController = GameRunner.Instance.CsvHolder.mikiDialogueAnimator;
-                playerController.Animator.CrossFadeInFixedTime(animationName, 0);
+                playerController.Animator.runtimeAnimatorController = targetAnimator;
+                //playerController.Animator.runtimeAnimatorController = GameRunner.Instance.CsvHolder.mikiDialogueAnimator;
+                //playerController.Animator.CrossFadeInFixedTime(animationName, 0);
 
-                _enabledTime = Time.time + 1f;
+                _currentDialog.nextDialogueCallback += () =>
+                {
+                    if (line.AnimatorParamValue == "trigger")
+                    {
+                        playerController.ResetDialogueAnimator();
+                    }
+                };
 
+
+                _enabledTime = Time.time + 0.2f;
+
+                //wait for animator set the new one
                 DG.Tweening.DOVirtual.DelayedCall(0.1f, () =>
                 {
-                    if (line.AnimatorDelay == null)
+                    var animationLength = playerController.Animator.GetCurrentAnimatorStateInfo(0).length;
+                    var delayDuration = Mathf.Max(animationLength, 0.1f);
+                    if (line.AnimatorDelay != null)
                     {
-                        var animationLength = playerController.Animator.GetCurrentAnimatorStateInfo(0).length;
-                        var delayDuration = Mathf.Max(animationLength - 0.1f, 0.1f);
+                        delayDuration = line.AnimatorDelay.Value;
+                    }
 
-                        Debug.Log($"delay {delayDuration}");
-                        _enabledTime = Mathf.Max(_enabledTime, Time.time + delayDuration);
+                    Debug.Log($"delay {delayDuration}");
+                    _enabledTime = Mathf.Max(_enabledTime, Time.time + delayDuration - 0.1f);
 
+                    if (string.IsNullOrEmpty(line.Original))
+                    {
                         DG.Tweening.DOVirtual.DelayedCall(delayDuration, () =>
                         {
                             _enabledTime = Time.time;
-                            playerController.ResetDialogueAnimator();
                             _currentDialog.nextDialogueCallback?.Invoke();
+
                         });
                     }
+
+
+
                 });
             }
+            //else
+            //{
+            //    var npcData = GetNpcData(line.Actor);
+
+
+            //    var targetEventPoint = _currentDialog.eventPoint;
+            //    var dialogueActors = targetEventPoint?.GetComponentsInChildren<DialogueActor>();
+            //    var targetActor = dialogueActors.FirstOrDefault(dialogActor => dialogActor.actorId.Equals(actor, System.StringComparison.InvariantCultureIgnoreCase));
+            //    if (targetActor != null)
+            //    {
+            //        GameRunner.Instance.Core.PlayerMenu.GameObject = targetActor.gameObject;
+            //        GameRunner.Instance.Core.Player.SetMode(PlayerMode.QuestConversation);
+
+            //        if (!string.IsNullOrEmpty(dialog))
+            //        {
+            //            ChatBalloonManager.ShowChatBalloon(targetActor.transform, dialog);
+            //        }
+            //        else
+            //        {
+            //            ChatBalloonManager.HideChatBalloon();
+            //        }
+            //    }
+            //    else
+            //    {
+            //        ChatBalloonManager.HideChatBalloon();
+            //        Debug.Log($"npc actor {actor} cannot found ({dialog})");
+            //    }
+            //}
 
 
         }
@@ -800,6 +860,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         //used for immediately update quest on the same site
         public void UpdateQuestEvent_RelatedQuestCode(string questCode)
         {
+            _currentDialog.eventPoint.gameObject.SetActive(false);
+
             Debug.Log($"UpdateQuestEvent_RelatedQuestCode {questCode}");
             var player = GameRunner.Instance.Core.Player;
             var allQuestGroups = GameRunner.Instance.Core.MasterData.NpcMasterData.QuestGroupsMasterData.QuestGroups;
