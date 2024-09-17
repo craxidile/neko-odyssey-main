@@ -27,6 +27,7 @@ namespace NekoOdyssey.Scripts.Site.Unity.Transition
             $"scriptableobject",
             $"items",
             $"camera_boundaries",
+            $"dialogue_animators",
         };
 
         private string _currentSiteName;
