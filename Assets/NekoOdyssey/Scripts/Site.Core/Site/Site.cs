@@ -90,7 +90,7 @@ namespace NekoOdyssey.Scripts.Site.Core.Site
             OnChangeSite.OnNext(CurrentSite);
         }
 
-        public void SetSite(string siteName, bool reload = true)
+        public void SetSite(string siteName, bool reload = true, int? siteValue = null)
         {
             Debug.Log($"<color=purple>>>set_site<< {siteName} {reload}</color> {(new System.Diagnostics.StackTrace()).GetFrame(1).GetMethod().Name}");
             _previousSite = CurrentSite;
