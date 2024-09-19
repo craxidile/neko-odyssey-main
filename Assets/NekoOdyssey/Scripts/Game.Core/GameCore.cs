@@ -3,6 +3,7 @@ using NekoOdyssey.Scripts.Database.Domains;
 using NekoOdyssey.Scripts.Database.Domains.SaveV001;
 using NekoOdyssey.Scripts.Game.Core.Ais;
 using NekoOdyssey.Scripts.Game.Core.Areas;
+using NekoOdyssey.Scripts.Game.Core.Audios;
 using NekoOdyssey.Scripts.Game.Core.Cat;
 using NekoOdyssey.Scripts.Game.Core.Settings;
 using NekoOdyssey.Scripts.Game.Core.Simulators;
@@ -21,6 +22,7 @@ namespace NekoOdyssey.Scripts.Game.Core
         public Metadata.Metadata Metadata { get; } = new();
         public MasterData.MasterData MasterData { get; } = new();
         public CatCollection Cats { get; } = new();
+        public GameAudios Audios { get; } = new();
         public GameAis Ais { get; } = new();
         public GameUis Uis { get; } = new();
         public GameSimulators Simulators { get; } = new();
@@ -42,6 +44,7 @@ namespace NekoOdyssey.Scripts.Game.Core
             Mode = mode;
             InitializeSaveDatabase();
 
+            Audios.Bind();
             Settings.Bind();
             Metadata.Bind();
             MasterData.Bind();
@@ -63,6 +66,7 @@ namespace NekoOdyssey.Scripts.Game.Core
 
         public void Start()
         {
+            Audios.Start();
             Settings.Start();
             Metadata.Start();
             MasterData.Start();
@@ -91,6 +95,7 @@ namespace NekoOdyssey.Scripts.Game.Core
 
         public void Unbind()
         {
+            Audios.Unbind();
             Settings.Unbind();
             Metadata.Unbind();
             MasterData.Unbind();

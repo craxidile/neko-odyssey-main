@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using FMODUnity;
+using UniRx;
 using UnityEngine;
 using UnityEngine.Serialization;
-using EventHandler = System.EventHandler;
 
-namespace NekoOdyssey.Scripts.Game.Unity.Audio
+namespace NekoOdyssey.Scripts.Game.Unity.Audios
 {
     // [AddComponentMenu("FMOD Studio/FMOD Studio Event Emitter")]
     public class NekoAudioEventEmitter : FMODUnity.EventHandler
@@ -40,7 +39,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Audio
         private bool isOneshot = false;
         private List<ParamRef> cachedParams = new List<ParamRef>();
 
-        private static List<NekoAudioEventEmitter> activeEmitters = new ();
+        private static List<NekoAudioEventEmitter> activeEmitters = new();
 
         private const string SnapshotString = "snapshot";
 
@@ -118,6 +117,24 @@ namespace NekoOdyssey.Scripts.Game.Unity.Audio
 
         protected override void Start()
         {
+            if (GameRunner.Instance != null)
+            {
+                GameRunner.Instance.Core.Audios.ActiveAudio
+                    .Subscribe(gameObjectName =>
+                    {
+                        if (target.name != gameObjectName) return;
+                        target.gameObject.SetActive(true);
+                    })
+                    .AddTo(this);
+                GameRunner.Instance.Core.Audios.InactiveAudio
+                    .Subscribe(gameObjectName =>
+                    {
+                        if (target.name != gameObjectName) return;
+                        target.gameObject.SetActive(false);
+                    })
+                    .AddTo(this);
+            }
+
             RuntimeUtils.EnforceLibraryOrder();
             if (Preload)
             {
