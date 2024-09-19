@@ -552,92 +552,92 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             Debug.Log($"SetAnimator {line.AnimatorParam} {line.AnimatorParamValue} {line.AnimatorDelay}");
             //Debug.Log($"SetAnimator {line.AnimatorDelay == null}");
 
-            Debug.Log($"Check Animator Asset : {GameRunner.Instance.AssetMap.ContainsKey(animationName)}");
-            Debug.Log($"Check Animator Asset : {GameRunner.Instance.AssetMap[animationName] is RuntimeAnimatorController}");
+            //Debug.Log($"Check Animator Asset : {GameRunner.Instance.AssetMap.ContainsKey(animationName)}");
+            //Debug.Log($"Check Animator Asset : {GameRunner.Instance.AssetMap[animationName] is RuntimeAnimatorController}");
 
-            RuntimeAnimatorController targetAnimator = null;
+
+            RuntimeAnimatorController targetRuntimeAnimator = null;
             if (GameRunner.Instance.AssetMap.ContainsKey(animationName) && GameRunner.Instance.AssetMap[animationName] is RuntimeAnimatorController)
             {
-                targetAnimator = GameRunner.Instance.AssetMap[animationName] as RuntimeAnimatorController;
+                targetRuntimeAnimator = GameRunner.Instance.AssetMap[animationName] as RuntimeAnimatorController;
             }
             else
                 return;
 
 
+
+
+            Animator targetCharacterAnimator = null;
             if (line.Actor == "player")
             {
-                var playerController = GameRunner.Instance.Core.Player.GameObject.GetComponent<PlayerController>();
+                targetCharacterAnimator = GameRunner.Instance.Core.Player.GameObject.GetComponent<PlayerController>().Animator;
+            }
+            else
+            {
+                var actors = _currentDialog.eventPoint.GetComponentsInChildren<DialogueActor>();
+                foreach (var actor in actors)
+                {
+                    if (actor.actorId.Equals(line.Actor, System.StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        targetCharacterAnimator = actor.animtor;
+                    }
+                }
+            }
 
-                playerController.Animator.runtimeAnimatorController = targetAnimator;
-                //playerController.Animator.runtimeAnimatorController = GameRunner.Instance.CsvHolder.mikiDialogueAnimator;
-                //playerController.Animator.CrossFadeInFixedTime(animationName, 0);
+            //character animator cannot be found
+            if (targetCharacterAnimator == null)
+            {
+                Debug.Log("SetAnimator targetCharacterAnimator is Null");
 
+                //if empty line go next line
+                if (string.IsNullOrEmpty(line.Original))
+                {
+                    _enabledTime = Time.time;
+                    _currentDialog.nextDialogueCallback?.Invoke();
+                }
+                return;
+            }
+
+            var previousRuntimeAnimatorController = targetCharacterAnimator.runtimeAnimatorController;
+
+            targetCharacterAnimator.runtimeAnimatorController = targetRuntimeAnimator;
+
+            if (line.AnimatorParamValue == "trigger")
+            {
                 _currentDialog.nextDialogueCallback += () =>
                 {
-                    if (line.AnimatorParamValue == "trigger")
-                    {
-                        playerController.ResetDialogueAnimator();
-                    }
+                    targetCharacterAnimator.runtimeAnimatorController = previousRuntimeAnimatorController;
                 };
-
-
-                _enabledTime = Time.time + 0.2f;
-
-                //wait for animator set the new one
-                DG.Tweening.DOVirtual.DelayedCall(0.1f, () =>
-                {
-                    var animationLength = playerController.Animator.GetCurrentAnimatorStateInfo(0).length;
-                    var delayDuration = Mathf.Max(animationLength, 0.1f);
-                    if (line.AnimatorDelay != null)
-                    {
-                        delayDuration = line.AnimatorDelay.Value;
-                    }
-
-                    Debug.Log($"delay {delayDuration}");
-                    _enabledTime = Mathf.Max(_enabledTime, Time.time + delayDuration - 0.1f);
-
-                    if (string.IsNullOrEmpty(line.Original))
-                    {
-                        DG.Tweening.DOVirtual.DelayedCall(delayDuration, () =>
-                        {
-                            _enabledTime = Time.time;
-                            _currentDialog.nextDialogueCallback?.Invoke();
-
-                        });
-                    }
-
-
-
-                });
             }
-            //else
-            //{
-            //    var npcData = GetNpcData(line.Actor);
+
+            _enabledTime = Time.time + 0.2f;
+
+            //wait for animator set the new one
+            DG.Tweening.DOVirtual.DelayedCall(0.1f, () =>
+            {
+                var animationLength = targetCharacterAnimator.GetCurrentAnimatorStateInfo(0).length;
+                var delayDuration = Mathf.Max(animationLength, 0.1f);
+                if (line.AnimatorDelay != null)
+                {
+                    delayDuration = line.AnimatorDelay.Value;
+                }
+
+                Debug.Log($"delay {delayDuration}");
+                _enabledTime = Mathf.Max(_enabledTime, Time.time + delayDuration - 0.1f);
+
+                if (string.IsNullOrEmpty(line.Original))
+                {
+                    DG.Tweening.DOVirtual.DelayedCall(delayDuration, () =>
+                    {
+                        _enabledTime = Time.time;
+                        _currentDialog.nextDialogueCallback?.Invoke();
+
+                    });
+                }
 
 
-            //    var targetEventPoint = _currentDialog.eventPoint;
-            //    var dialogueActors = targetEventPoint?.GetComponentsInChildren<DialogueActor>();
-            //    var targetActor = dialogueActors.FirstOrDefault(dialogActor => dialogActor.actorId.Equals(actor, System.StringComparison.InvariantCultureIgnoreCase));
-            //    if (targetActor != null)
-            //    {
-            //        GameRunner.Instance.Core.PlayerMenu.GameObject = targetActor.gameObject;
-            //        GameRunner.Instance.Core.Player.SetMode(PlayerMode.QuestConversation);
 
-            //        if (!string.IsNullOrEmpty(dialog))
-            //        {
-            //            ChatBalloonManager.ShowChatBalloon(targetActor.transform, dialog);
-            //        }
-            //        else
-            //        {
-            //            ChatBalloonManager.HideChatBalloon();
-            //        }
-            //    }
-            //    else
-            //    {
-            //        ChatBalloonManager.HideChatBalloon();
-            //        Debug.Log($"npc actor {actor} cannot found ({dialog})");
-            //    }
-            //}
+            });
 
 
         }
