@@ -7,6 +7,7 @@ using NekoOdyssey.Scripts.Constants;
 using NekoOdyssey.Scripts.Game.Core;
 using NekoOdyssey.Scripts.Game.Core.Routine;
 using NekoOdyssey.Scripts.Game.Unity.AssetBundles;
+using NekoOdyssey.Scripts.Game.Unity.Audios.PlayMenu;
 using NekoOdyssey.Scripts.Game.Unity.Cameras;
 using NekoOdyssey.Scripts.Game.Unity.Capture;
 using NekoOdyssey.Scripts.Game.Unity.Conversations;
@@ -63,6 +64,7 @@ namespace NekoOdyssey.Scripts
                 gameObject.AddComponent<CentralConversationActionHandler>();
                 gameObject.AddComponent<CentralPlayerPettingHandler>();
                 gameObject.AddComponent<CentralSkipTimeActionHandler>();
+                gameObject.AddComponent<CentralPlayerMenuAudioSwitch>();
                 TimeRoutine = gameObject.AddComponent<TimeRoutine>();
             }
 
