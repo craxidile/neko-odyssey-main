@@ -19,7 +19,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Audios.PlayerAnimator
         public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             if (!_eligibleStates.Contains(stateInfo.shortNameHash)) return;
-            DOVirtual.DelayedCall(1f, () => GameRunner.Instance.Core.Audios.ActiveAudio.OnNext("SFX_Capture"));
+            GameRunner.Instance.Core.Audios.ActiveAudio.OnNext("SFX_Capture");
             DOVirtual.DelayedCall(3f, () => GameRunner.Instance.Core.Audios.InactiveAudio.OnNext("SFX_Capture"));
         }
     }
