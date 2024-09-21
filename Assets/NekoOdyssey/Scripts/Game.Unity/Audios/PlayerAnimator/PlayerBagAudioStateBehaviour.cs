@@ -11,8 +11,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Audios.PlayerAnimator
         {
             if (stateInfo.shortNameHash == EatState)
             {
-                GameRunner.Instance.Core.Audios.ActiveAudio.OnNext("SFX_Eat");
-                DOVirtual.DelayedCall(3f, () => GameRunner.Instance.Core.Audios.InactiveAudio.OnNext("SFX_Eat"));
+                GameRunner.Instance.Core.Audios.AudioToClone.OnNext(("SFX_Eat", 3f));
             }
         }
     }
