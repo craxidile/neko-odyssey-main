@@ -11,7 +11,7 @@ public class EventPoint_Cutscene : MonoBehaviour
 {
     public string siteName = "";
 
-    private void Awake()
+    private void Start()
     {
         GetComponent<EventPointInteractive>().OnInteractive += () =>
         {

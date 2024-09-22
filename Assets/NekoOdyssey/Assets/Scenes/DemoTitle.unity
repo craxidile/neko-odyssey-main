@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.17883006, g: 0.22392084, b: 0.30580437, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1200,6 +1200,9 @@ GameObject:
   - component: {fileID: 242938927}
   - component: {fileID: 242938926}
   - component: {fileID: 242938929}
+  - component: {fileID: 242938930}
+  - component: {fileID: 242938931}
+  - component: {fileID: 242938932}
   m_Layer: 5
   m_Name: Start Button
   m_TagString: Untagged
@@ -1333,13 +1336,87 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 242938924}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0e6fd0ff0243be44898a7f193f02e41f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   onHoverSound: 3
   onClickSound: 1
+--- !u!114 &242938930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 242938924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca1906d9e3360df4d83c5a7a7b14e47d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &242938931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 242938924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 463912294
+      Data2: 1264324487
+      Data3: -331316044
+      Data4: 612781042
+    Path: event:/SFX/UI/Select
+  Event: 
+  PlayEvent: 17
+  StopEvent: 18
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
+--- !u!114 &242938932
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 242938924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -1716511688
+      Data2: 1300731939
+      Data3: -1936051024
+      Data4: -720325370
+    Path: event:/SFX/UI/Confirm
+  Event: 
+  PlayEvent: 19
+  StopEvent: 2
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1 &244260232
 GameObject:
   m_ObjectHideFlags: 0
@@ -1758,7 +1835,8 @@ MonoBehaviour:
   m_text: Are you sure you want to apply these changes?
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c4b04a670fb2bd645916ce69d1e83274, type: 2}
-  m_sharedMaterial: {fileID: 6663288020253818289, guid: c4b04a670fb2bd645916ce69d1e83274, type: 2}
+  m_sharedMaterial: {fileID: 6663288020253818289, guid: c4b04a670fb2bd645916ce69d1e83274,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1905,7 +1983,8 @@ MonoBehaviour:
   m_text: Full Screen
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c4b04a670fb2bd645916ce69d1e83274, type: 2}
-  m_sharedMaterial: {fileID: 6663288020253818289, guid: c4b04a670fb2bd645916ce69d1e83274, type: 2}
+  m_sharedMaterial: {fileID: 6663288020253818289, guid: c4b04a670fb2bd645916ce69d1e83274,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2652,7 +2731,8 @@ MonoBehaviour:
   m_text: Windows Mode
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c4b04a670fb2bd645916ce69d1e83274, type: 2}
-  m_sharedMaterial: {fileID: 6663288020253818289, guid: c4b04a670fb2bd645916ce69d1e83274, type: 2}
+  m_sharedMaterial: {fileID: 6663288020253818289, guid: c4b04a670fb2bd645916ce69d1e83274,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3534,6 +3614,8 @@ GameObject:
   - component: {fileID: 702919499}
   - component: {fileID: 702919498}
   - component: {fileID: 702919501}
+  - component: {fileID: 702919503}
+  - component: {fileID: 702919502}
   m_Layer: 5
   m_Name: Setting Button
   m_TagString: Untagged
@@ -3667,13 +3749,75 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 702919496}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0e6fd0ff0243be44898a7f193f02e41f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   onHoverSound: 3
   onClickSound: 1
+--- !u!114 &702919502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 702919496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -1716511688
+      Data2: 1300731939
+      Data3: -1936051024
+      Data4: -720325370
+    Path: event:/SFX/UI/Confirm
+  Event: 
+  PlayEvent: 19
+  StopEvent: 2
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
+--- !u!114 &702919503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 702919496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 463912294
+      Data2: 1264324487
+      Data3: -331316044
+      Data4: 612781042
+    Path: event:/SFX/UI/Select
+  Event: 
+  PlayEvent: 17
+  StopEvent: 18
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1 &751696524
 GameObject:
   m_ObjectHideFlags: 0
@@ -4004,7 +4148,8 @@ MonoBehaviour:
   m_text: Reset
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c4b04a670fb2bd645916ce69d1e83274, type: 2}
-  m_sharedMaterial: {fileID: 6663288020253818289, guid: c4b04a670fb2bd645916ce69d1e83274, type: 2}
+  m_sharedMaterial: {fileID: 6663288020253818289, guid: c4b04a670fb2bd645916ce69d1e83274,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4756,6 +4901,7 @@ GameObject:
   - component: {fileID: 928381527}
   - component: {fileID: 928381526}
   - component: {fileID: 928381525}
+  - component: {fileID: 928381528}
   m_Layer: 0
   m_Name: Miki HD Idle
   m_TagString: Untagged
@@ -4852,6 +4998,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -18, y: 135, z: 0}
+--- !u!114 &928381528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 928381524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -328978544
+      Data2: 1112407612
+      Data3: -57602165
+      Data4: 573432142
+    Path: event:/SeaAndBird
+  Event: 
+  PlayEvent: 1
+  StopEvent: 2
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1 &957617523
 GameObject:
   m_ObjectHideFlags: 0
@@ -5650,7 +5827,8 @@ MonoBehaviour:
 '
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c4b04a670fb2bd645916ce69d1e83274, type: 2}
-  m_sharedMaterial: {fileID: 6663288020253818289, guid: c4b04a670fb2bd645916ce69d1e83274, type: 2}
+  m_sharedMaterial: {fileID: 6663288020253818289, guid: c4b04a670fb2bd645916ce69d1e83274,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -6197,7 +6375,8 @@ MonoBehaviour:
   m_text: Sound Effect
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c4b04a670fb2bd645916ce69d1e83274, type: 2}
-  m_sharedMaterial: {fileID: 6663288020253818289, guid: c4b04a670fb2bd645916ce69d1e83274, type: 2}
+  m_sharedMaterial: {fileID: 6663288020253818289, guid: c4b04a670fb2bd645916ce69d1e83274,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -6493,7 +6672,8 @@ MonoBehaviour:
   m_text: Resolution
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c4b04a670fb2bd645916ce69d1e83274, type: 2}
-  m_sharedMaterial: {fileID: 6663288020253818289, guid: c4b04a670fb2bd645916ce69d1e83274, type: 2}
+  m_sharedMaterial: {fileID: 6663288020253818289, guid: c4b04a670fb2bd645916ce69d1e83274,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -7080,7 +7260,8 @@ MonoBehaviour:
   m_text: Cancel
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c4b04a670fb2bd645916ce69d1e83274, type: 2}
-  m_sharedMaterial: {fileID: 6663288020253818289, guid: c4b04a670fb2bd645916ce69d1e83274, type: 2}
+  m_sharedMaterial: {fileID: 6663288020253818289, guid: c4b04a670fb2bd645916ce69d1e83274,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -7343,7 +7524,8 @@ MonoBehaviour:
   m_text: Language
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c4b04a670fb2bd645916ce69d1e83274, type: 2}
-  m_sharedMaterial: {fileID: 6663288020253818289, guid: c4b04a670fb2bd645916ce69d1e83274, type: 2}
+  m_sharedMaterial: {fileID: 6663288020253818289, guid: c4b04a670fb2bd645916ce69d1e83274,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -7490,7 +7672,8 @@ MonoBehaviour:
   m_text: BGM
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c4b04a670fb2bd645916ce69d1e83274, type: 2}
-  m_sharedMaterial: {fileID: 6663288020253818289, guid: c4b04a670fb2bd645916ce69d1e83274, type: 2}
+  m_sharedMaterial: {fileID: 6663288020253818289, guid: c4b04a670fb2bd645916ce69d1e83274,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -7637,7 +7820,8 @@ MonoBehaviour:
   m_text: 1920x1080
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c4b04a670fb2bd645916ce69d1e83274, type: 2}
-  m_sharedMaterial: {fileID: 6663288020253818289, guid: c4b04a670fb2bd645916ce69d1e83274, type: 2}
+  m_sharedMaterial: {fileID: 6663288020253818289, guid: c4b04a670fb2bd645916ce69d1e83274,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -7757,17 +7941,28 @@ MonoBehaviour:
   m_MoveRepeatDelay: 0.5
   m_MoveRepeatRate: 0.1
   m_XRTrackingOrigin: {fileID: 0}
-  m_ActionsAsset: {fileID: -944628639613478452, guid: 04a6262d09c0a1f4bb6421a699f5b8d7, type: 3}
-  m_PointAction: {fileID: -1773966924860232565, guid: 04a6262d09c0a1f4bb6421a699f5b8d7, type: 3}
-  m_MoveAction: {fileID: 3710738434707379630, guid: 04a6262d09c0a1f4bb6421a699f5b8d7, type: 3}
-  m_SubmitAction: {fileID: 3159921303048280705, guid: 04a6262d09c0a1f4bb6421a699f5b8d7, type: 3}
-  m_CancelAction: {fileID: -8465714657166010495, guid: 04a6262d09c0a1f4bb6421a699f5b8d7, type: 3}
-  m_LeftClickAction: {fileID: 4908949857739077107, guid: 04a6262d09c0a1f4bb6421a699f5b8d7, type: 3}
-  m_MiddleClickAction: {fileID: 3279352641294131588, guid: 04a6262d09c0a1f4bb6421a699f5b8d7, type: 3}
-  m_RightClickAction: {fileID: 3837173908680883260, guid: 04a6262d09c0a1f4bb6421a699f5b8d7, type: 3}
-  m_ScrollWheelAction: {fileID: 4502412055082496612, guid: 04a6262d09c0a1f4bb6421a699f5b8d7, type: 3}
-  m_TrackedDevicePositionAction: {fileID: 1666437117533697952, guid: 04a6262d09c0a1f4bb6421a699f5b8d7, type: 3}
-  m_TrackedDeviceOrientationAction: {fileID: -2823752934012657550, guid: 04a6262d09c0a1f4bb6421a699f5b8d7, type: 3}
+  m_ActionsAsset: {fileID: -944628639613478452, guid: 04a6262d09c0a1f4bb6421a699f5b8d7,
+    type: 3}
+  m_PointAction: {fileID: -1773966924860232565, guid: 04a6262d09c0a1f4bb6421a699f5b8d7,
+    type: 3}
+  m_MoveAction: {fileID: 3710738434707379630, guid: 04a6262d09c0a1f4bb6421a699f5b8d7,
+    type: 3}
+  m_SubmitAction: {fileID: 3159921303048280705, guid: 04a6262d09c0a1f4bb6421a699f5b8d7,
+    type: 3}
+  m_CancelAction: {fileID: -8465714657166010495, guid: 04a6262d09c0a1f4bb6421a699f5b8d7,
+    type: 3}
+  m_LeftClickAction: {fileID: 4908949857739077107, guid: 04a6262d09c0a1f4bb6421a699f5b8d7,
+    type: 3}
+  m_MiddleClickAction: {fileID: 3279352641294131588, guid: 04a6262d09c0a1f4bb6421a699f5b8d7,
+    type: 3}
+  m_RightClickAction: {fileID: 3837173908680883260, guid: 04a6262d09c0a1f4bb6421a699f5b8d7,
+    type: 3}
+  m_ScrollWheelAction: {fileID: 4502412055082496612, guid: 04a6262d09c0a1f4bb6421a699f5b8d7,
+    type: 3}
+  m_TrackedDevicePositionAction: {fileID: 1666437117533697952, guid: 04a6262d09c0a1f4bb6421a699f5b8d7,
+    type: 3}
+  m_TrackedDeviceOrientationAction: {fileID: -2823752934012657550, guid: 04a6262d09c0a1f4bb6421a699f5b8d7,
+    type: 3}
   m_DeselectOnBackgroundClick: 1
   m_PointerBehavior: 0
   m_CursorLockBehavior: 0
@@ -7981,7 +8176,8 @@ AudioSource:
   m_GameObject: {fileID: 1374298765}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 2789835092731635552, guid: 78cd779776794864f8ab9da505ef2391, type: 2}
+  OutputAudioMixerGroup: {fileID: 2789835092731635552, guid: 78cd779776794864f8ab9da505ef2391,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
@@ -9187,7 +9383,8 @@ MonoBehaviour:
   m_text: Confirm Game Settings
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c4b04a670fb2bd645916ce69d1e83274, type: 2}
-  m_sharedMaterial: {fileID: 6663288020253818289, guid: c4b04a670fb2bd645916ce69d1e83274, type: 2}
+  m_sharedMaterial: {fileID: 6663288020253818289, guid: c4b04a670fb2bd645916ce69d1e83274,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -9334,7 +9531,8 @@ MonoBehaviour:
   m_text: Apply
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c4b04a670fb2bd645916ce69d1e83274, type: 2}
-  m_sharedMaterial: {fileID: 6663288020253818289, guid: c4b04a670fb2bd645916ce69d1e83274, type: 2}
+  m_sharedMaterial: {fileID: 6663288020253818289, guid: c4b04a670fb2bd645916ce69d1e83274,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -9461,7 +9659,8 @@ AudioSource:
   m_GameObject: {fileID: 1597287687}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 1741051673959796174, guid: 78cd779776794864f8ab9da505ef2391, type: 2}
+  OutputAudioMixerGroup: {fileID: 1741051673959796174, guid: 78cd779776794864f8ab9da505ef2391,
+    type: 2}
   m_audioClip: {fileID: 8300000, guid: 4a50e3ef52c3ac248bcd566fcb0166f1, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
@@ -11227,7 +11426,8 @@ MonoBehaviour:
   m_text: Master Volume
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c4b04a670fb2bd645916ce69d1e83274, type: 2}
-  m_sharedMaterial: {fileID: 6663288020253818289, guid: c4b04a670fb2bd645916ce69d1e83274, type: 2}
+  m_sharedMaterial: {fileID: 6663288020253818289, guid: c4b04a670fb2bd645916ce69d1e83274,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -12295,7 +12495,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &2071825597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12764,6 +12964,8 @@ GameObject:
   - component: {fileID: 2135849023}
   - component: {fileID: 2135849022}
   - component: {fileID: 2135849025}
+  - component: {fileID: 2135849027}
+  - component: {fileID: 2135849026}
   m_Layer: 5
   m_Name: Quit Button
   m_TagString: Untagged
@@ -12897,13 +13099,75 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2135849020}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0e6fd0ff0243be44898a7f193f02e41f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   onHoverSound: 3
   onClickSound: 1
+--- !u!114 &2135849026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2135849020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -1716511688
+      Data2: 1300731939
+      Data3: -1936051024
+      Data4: -720325370
+    Path: event:/SFX/UI/Confirm
+  Event: 
+  PlayEvent: 19
+  StopEvent: 2
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
+--- !u!114 &2135849027
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2135849020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 463912294
+      Data2: 1264324487
+      Data3: -331316044
+      Data4: 612781042
+    Path: event:/SFX/UI/Select
+  Event: 
+  PlayEvent: 17
+  StopEvent: 18
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1 &2139004367
 GameObject:
   m_ObjectHideFlags: 0
@@ -12930,7 +13194,8 @@ AudioSource:
   m_GameObject: {fileID: 2139004367}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 2789835092731635552, guid: 78cd779776794864f8ab9da505ef2391, type: 2}
+  OutputAudioMixerGroup: {fileID: 2789835092731635552, guid: 78cd779776794864f8ab9da505ef2391,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1

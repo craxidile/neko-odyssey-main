@@ -21,5 +21,4 @@ public class CSVHolderScriptable : ScriptableObject
 
     [Space]
     public bool playFinishDemoVideo;
-    public RuntimeAnimatorController mikiDialogueAnimator;
 }

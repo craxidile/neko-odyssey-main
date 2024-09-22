@@ -21,6 +21,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.AssetBundles
             $"scriptableobject",
             $"items",
             $"camera_boundaries",
+            $"dialogue_animators",
         };
 
         private int _loadedAssetCount;
