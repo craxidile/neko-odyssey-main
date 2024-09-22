@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.UI;
 
 public class SubtitleTrackMixer : PlayableBehaviour
 {
     public override void ProcessFrame(Playable playable, FrameData info, object playerData)
     {
-        var text = playerData as TextMeshProUGUI;
+        var text = playerData as Text;
         string currentText = "";
         float currentAlpha = 0f;
 
@@ -30,6 +31,6 @@ public class SubtitleTrackMixer : PlayableBehaviour
         }
 
         text.text = currentText;
-        text.alpha = currentAlpha;
+        //text.color.a = currentAlpha;
     }
 }

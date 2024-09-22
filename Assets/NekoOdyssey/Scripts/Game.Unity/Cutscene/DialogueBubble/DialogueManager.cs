@@ -31,7 +31,6 @@ public class DialogueManager : MonoBehaviour
     [HideInInspector] public bool endBubble;
     //languege
     int languageColumnIndex = 1;
-    int languageCMSIndex = 0;
     public languageType language = languageType.EN;
     public static languageType globalLanguage = LanguageManager.globalLanguage;
 
@@ -114,19 +113,15 @@ public class DialogueManager : MonoBehaviour
     }
     public void LoadDialogueCMS()
     {
-        Debug.Log("PPP1");
         var questGroupsMasterData = GameRunner.Instance.Core.MasterData.NpcMasterData.QuestGroupsMasterData;
         var dialogMasterData = GameRunner.Instance.Core.MasterData.NpcMasterData.DialogsMasterData;
-        Debug.Log("PPP2");
         if (questGroupsMasterData.Ready)
         {
-            Debug.Log("PPP3.1");
             ExecuteDialog(dialogMasterData.Dialogs.FirstOrDefault(d => d.Code == dialogCode));
 
         }
         else
         {
-            Debug.Log("PPP3.2");
             questGroupsMasterData.OnReady
                 .Subscribe(_ =>
                 {
@@ -151,13 +146,11 @@ public class DialogueManager : MonoBehaviour
 
     private void ExecuteSubDialog(SubDialog subDialog)
     {
-        Debug.Log("PPP4");
         Debug.Log($">>sub_dialog<< {subDialog.Id}");
 
         var indexArray = 1;
         foreach (var line in subDialog.Lines)
         {
-            Debug.Log("PPP5.1");
             DialogueData newDialogueData = new DialogueData();
 
             Debug.Log($">>dialog_npc_cutscene<< >>line<< {line.Actor} {line.LocalizedText.ToLocalizedString(GameRunner.Instance.Core.Settings.Locale)}");
@@ -165,7 +158,6 @@ public class DialogueManager : MonoBehaviour
 
             if (!AllDialogueData.ContainsKey(indexArray.ToString("D3")))
             {
-                Debug.Log("PPP5.2");
                 AllDialogueData.Add(indexArray.ToString("D3"), newDialogueData);
             }
             indexArray++;
