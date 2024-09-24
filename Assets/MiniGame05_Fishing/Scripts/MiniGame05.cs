@@ -191,7 +191,7 @@ namespace MiniGame05_Fishing.Scripts
                     yield return new WaitForSeconds(1.583f);
                     clear.SetActive(true);
                     var reward = MiniGame05RewardManager.Instance;
-                    reward.RandomReward(difficult - 1);
+                    reward.RandomReward(difficult);
                     break;
                 }
 
