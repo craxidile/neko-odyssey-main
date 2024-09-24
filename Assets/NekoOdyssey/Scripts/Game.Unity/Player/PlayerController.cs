@@ -19,14 +19,14 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
 {
     public class PlayerController : MonoBehaviour
     {
-//Start here
+        //Start here
         //public static Vector3 MainPlayerAnchor = new(75, -1.6f, -9.5f); 
 
-//Next
+        //Next
         // public static Vector3 MainPlayerAnchor = new(60, -1.6f, -11f);       
 
 
-//BackUp Location
+        //BackUp Location
         public static Vector3 MainPlayerAnchor = new(25, -1.662279f, -25.688f);
 
         // public static Vector3 MainPlayerAnchor = new(28, -1.662279f, -41.5f);
@@ -38,11 +38,15 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
         private PlayerConversationController _conversationController;
         private PlayerPettingController _pettingController;
 
+        private Animator _animator;
+        public Animator Animator => _animator;
+        private RuntimeAnimatorController _baseRuntimeAnimator;
+
         public GameObject phoneCameraAnchor;
         public GameObject bagCameraAnchor;
         public GameObject catPhotoContainer;
 
-        [Space] [Header("Movement Speed")] public float moveSpeed = 1.5f;
+        [Space][Header("Movement Speed")] public float moveSpeed = 1.5f;
         public float boostMultiplier = 1.5f;
         public float gravity = -9.81f;
         public float gravityMultiplier = 1f; // 3.0f;
@@ -58,6 +62,9 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
             _conversationController = gameObject.AddComponent<PlayerConversationController>();
             _pettingController = gameObject.AddComponent<PlayerPettingController>();
             gameObject.AddComponent<PlayerEndDayController>();
+
+            _animator = GetComponent<Animator>() ?? GetComponentInChildren<Animator>();
+            _baseRuntimeAnimator = _animator.runtimeAnimatorController;
 
             InitializePosition();
         }
@@ -117,11 +124,11 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
                 playerRotation.y = cameraRotationY;
                 _movementController.ForceSetRotation(playerRotation);
 
-                var cameraRotation = GameRunner.Instance.cameras.mainCamera.transform.eulerAngles;
+                var cameraRotation = GameRunner.Instance.cameras.mainVirtualCamera.transform.eulerAngles;
                 cameraRotation.y = cameraRotationY;
-                GameRunner.Instance.cameras.mainCamera.transform.eulerAngles = cameraRotation;
+                GameRunner.Instance.cameras.mainVirtualCamera.transform.eulerAngles = cameraRotation;
 
-                var virtualCamera = GameRunner.Instance.cameras.mainCamera.GetComponent<CinemachineVirtualCamera>();
+                var virtualCamera = GameRunner.Instance.cameras.mainVirtualCamera;
                 var transposer = virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
                 transposer.m_FollowOffset = new Vector3(cameraOffsetX, 0, cameraOffsetZ);
             }
@@ -146,6 +153,12 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
         private void ResetTurnAround()
         {
             _movementController.ResetTurnAround();
+        }
+
+
+        public void ResetDialogueAnimator()
+        {
+            _animator.runtimeAnimatorController = _baseRuntimeAnimator;
         }
     }
 }

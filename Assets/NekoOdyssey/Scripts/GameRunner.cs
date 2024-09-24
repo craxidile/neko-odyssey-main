@@ -91,14 +91,14 @@ namespace NekoOdyssey.Scripts
         {
             Core.Unbind();
         }
-
+        
         public void SetReady(bool ready)
         {
             Ready = ready;
             OnReady.OnNext(ready);
         }
 
-        IEnumerator IUpdate()
+        private IEnumerator IUpdate()
         {
             OnUpdate.OnNext(UniRx.Unit.Default);
             yield return null;
@@ -133,6 +133,13 @@ namespace NekoOdyssey.Scripts
 
         private void InitializePositions()
         {
+            var cameraActive = SiteRunner.Instance.Core.Site.CurrentSite.CameraActive;
+            if (!cameraActive)
+            {
+                Camera.main?.gameObject.SetActive(false);
+                return;
+            }
+                
             var boundary = FindAnyObjectByType<CameraBoundary>()?.gameObject;
             if (boundary == null)
             {
@@ -140,16 +147,16 @@ namespace NekoOdyssey.Scripts
                 boundary = LoadCameraBoundaryFromSite(currentSite);
             }
 
-            if (boundary != null && Camera.main != null)
+            if (boundary != null && cameras.mainVirtualCamera != null)
             {
-                var confiner = Camera.main.GetComponent<CinemachineConfiner>();
+                var confiner = cameras.mainVirtualCamera.GetComponent<CinemachineConfiner>();
                 confiner.m_BoundingVolume = boundary.GetComponent<BoxCollider>();
             }
 
             var cameraAnchor = FindAnyObjectByType<CameraAnchor>();
-            if (cameraAnchor != null && Camera.main != null)
+            if (cameraAnchor != null && cameras.mainVirtualCamera != null)
             {
-                Camera.main.transform.position = cameraAnchor.transform.position;
+                cameras.mainVirtualCamera.transform.position = cameraAnchor.transform.position;
             }
         }
     }

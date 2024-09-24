@@ -29,7 +29,7 @@ public class TimeScriptable : ScriptableObject
     //public List<DayNightDataProfile_Scriptable> dayNightDataProfiles;
 
 
-    public Subject<Unit> OnValidated = new();
+    public Subject<Unit> OnValidated { get; set; } = new();
     private void OnValidate()
     {
         Debug.Log("ScriptableObject validate");

@@ -12,10 +12,10 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 {
     public class Routine
     {
-        public List<NpcData> npcDatas = new List<NpcData>();
-        public List<QuestEventDetail> allQuestEvents = new List<QuestEventDetail>();
-        public Dictionary<string, QuestGroup> allQuestGroups = new Dictionary<string, QuestGroup>();
-        public Dictionary<string, QuestDialogueGroup> allQuestDialogueGroup = new Dictionary<string, QuestDialogueGroup>();
+        public List<NpcData> npcDatas { get; set; } = new List<NpcData>();
+        public List<QuestEventDetail> allQuestEvents { get; set; } = new List<QuestEventDetail>();
+        public Dictionary<string, QuestGroup> allQuestGroups { get; set; } = new Dictionary<string, QuestGroup>();
+        public Dictionary<string, QuestDialogueGroup> allQuestDialogueGroup { get; set; } = new Dictionary<string, QuestDialogueGroup>();
         //public static List<EventDetail> allNpcEvents = new List<EventDetail>();
 
 
@@ -78,6 +78,9 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
             dayNightLightingManager.Start();
 
+
+            //var sss = GameRunner.Instance.Core.Player.Bag.CheckBagItem("AAA");
+            //Debug.Log($"Check bag item : {sss}");
         }
 
         public void Unbind()
@@ -577,16 +580,6 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
             }
 
-
-            if (questEventDetail.GetTargetEventPoint().TryGetComponent(out EventPoint_AutoComplete eventPointAutoComplete))
-            {
-                DG.Tweening.DOVirtual.DelayedCall(eventPointAutoComplete.CompleteDelay, () =>
-                {
-                    Debug.Log("Complete dialogue");
-                    questEventDetail.GetTargetEventPoint()?.gameObject.SetActive(false);
-                    CompleteQuestStep();
-                });
-            }
         }
 
         public void CompleteQuestStep()

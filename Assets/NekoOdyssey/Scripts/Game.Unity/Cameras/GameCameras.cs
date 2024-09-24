@@ -1,4 +1,5 @@
 using UnityEngine;
+using Cinemachine;
 
 namespace NekoOdyssey.Scripts.Game.Unity.Cameras
 {
@@ -7,5 +8,6 @@ namespace NekoOdyssey.Scripts.Game.Unity.Cameras
     {
         public Camera mainCamera;
         public Camera playerCamera;
+        public CinemachineVirtualCamera mainVirtualCamera;
     }
 }

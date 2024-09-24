@@ -67,7 +67,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
         public void Unbind()
         {
         }
-        
+
         private void InitializeItems()
         {
             SetDefaultItemType();
@@ -94,7 +94,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
             var index = itemTypes.IndexOf(CurrentItemType);
             SetItemType(itemTypes[Math.Max(0, index - 1)]);
         }
-        
+
         private void HandleNextTab()
         {
             if (GameRunner.Instance.Core.Player.Mode != PlayerMode.OpenBag) return;
@@ -138,15 +138,26 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
             DOVirtual.DelayedCall(SelectBagItemDelay, () => SelectBagItem(FilteredBagItems.FirstOrDefault()));
         }
 
-        public void AddBagItem(Item item)
+        public void AddBagItem(Item item, int itemQty = 1)
         {
-            var bagItem = new BagItemV001(item);
-            BagItems.Add(bagItem);
             using (var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = false }))
             {
                 var bagItemRepo = new BagItemV001Repo(dbContext);
-                bagItemRepo.Add(bagItem);
+
+                for (int i = 0; i < itemQty; i++)
+                {
+                    var bagItem = new BagItemV001(item);
+                    BagItems.Add(bagItem);
+                    bagItemRepo.Add(bagItem);
+                }
+
             }
+        }
+        public int CheckBagItem(string itemCode)
+        {
+            var filteredBagItem = BagItems.Where(bagItem => bagItem.ItemCode == itemCode);
+
+            return filteredBagItem.Count();
         }
 
         public void SelectBagItem(BagItemV001 bagItem)
@@ -166,7 +177,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
                 OnSearchBag.OnNext(default);
 
             // GameRunner.Instance.Core.Player.AddStamina(CurrentBagItem.Item.Stamina);
-            
+
             OnUseBagItem.OnNext(CurrentBagItem);
 
             var index = FilteredBagItems.IndexOf(CurrentBagItem);
