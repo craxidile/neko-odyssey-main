@@ -181,6 +181,8 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
 
         private void SlideAction(Vector2 movement)
         {
+            var mode = GameRunner.Instance.Core.Player.Mode;
+            if (mode != PlayerMode.Submenu || !_active || _actions.Length == 0) return;
             var x = movement.x;
             switch (x)
             {
