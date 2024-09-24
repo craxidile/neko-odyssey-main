@@ -27,6 +27,7 @@ namespace NekoOdyssey.Scripts.Site.Unity.Transition
             $"scriptableobject",
             $"items",
             $"camera_boundaries",
+            $"dialogue_animators",
         };
 
         private string _currentSiteName;
@@ -169,17 +170,21 @@ namespace NekoOdyssey.Scripts.Site.Unity.Transition
             _scenesToPreload.RemoveAt(0);
 
             var asyncOperation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
-            asyncOperation.allowSceneActivation = false;
-            _asyncOperationList.Add(asyncOperation);
-            while (asyncOperation.progress < 0.9f)
+            if (asyncOperation != null)
             {
-                LogLine($">>preload_scene_async<< progress_start {sceneName} {asyncOperation.progress}");
+                asyncOperation.allowSceneActivation = false;
+                _asyncOperationList.Add(asyncOperation);
+                while (asyncOperation.progress < 0.9f)
+                {
+                    LogLine($">>preload_scene_async<< progress_start {sceneName} {asyncOperation.progress}");
+                    // Debug.Log($">>load_scene<< progress {sceneName} {asyncOperation.progress}");
+                    yield return null;
+                }
+
+                LogLine($">>preload_scene_async<< progress_done {sceneName} {asyncOperation.progress}");
                 // Debug.Log($">>load_scene<< progress {sceneName} {asyncOperation.progress}");
-                yield return null;
             }
 
-            LogLine($">>preload_scene_async<< progress_done {sceneName} {asyncOperation.progress}");
-            // Debug.Log($">>load_scene<< progress {sceneName} {asyncOperation.progress}");
             StartCoroutine(PreloadSceneAsync());
         }
 

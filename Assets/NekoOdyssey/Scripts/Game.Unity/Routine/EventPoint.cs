@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class EventPoint : MonoBehaviour
 {
-    //public enum EventPointType { Npc, Area, Other }
-    //public EventPointType eventType { get; set; }
+    public enum EventPointType { Quest, Routine }
+    public EventPointType eventPointType { get; set; }
+    public string ReferenceEventCode { get; set; } = "";
 
     static Dictionary<string, EventPoint> AllEventPoint = new Dictionary<string, EventPoint>();
 
@@ -43,5 +44,13 @@ public class EventPoint : MonoBehaviour
             return null;
         }
 
+    }
+
+    public static void HideAllEventPoint()
+    {
+        foreach (var eventPoint in AllEventPoint.Values)
+        {
+            eventPoint.gameObject.SetActive(false);
+        }
     }
 }

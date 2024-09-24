@@ -44,13 +44,19 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.ItemObain
 
 
 
-        public void ShowPopUp(string itemCode)
+        public void ShowPopUp(string itemCode, int itemQty = 1)
         {
             var masterItems = GameRunner.Instance.Core.MasterData.ItemsMasterData.Items.ToList();
 
             var item = masterItems.FirstOrDefault(i => i.Code == itemCode);
 
-            var popUpDetail = new ItemObtainPopUpDetail(item , 1);
+            var popUpDetail = new ItemObtainPopUpDetail(item, itemQty);
+
+            OnShowPopUp.OnNext(popUpDetail);
+        }
+        public void ShowPopUp(Item item, int itemQty = 1)
+        {
+            var popUpDetail = new ItemObtainPopUpDetail(item, itemQty);
 
             OnShowPopUp.OnNext(popUpDetail);
         }

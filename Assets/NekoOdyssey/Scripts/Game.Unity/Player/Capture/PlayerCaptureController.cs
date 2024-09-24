@@ -118,6 +118,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Capture
                 rectTransform.DOScale(5f, 0);
                 rectTransform.DOScale(1f, 1f).SetEase(Ease.InSine);
                 canvasGroup.DOFade(1, 1f);
+
+                GameRunner.Instance.Core.Player.Capture.Begin();
             });
             DOVirtual.DelayedCall(6f, () =>
             {
