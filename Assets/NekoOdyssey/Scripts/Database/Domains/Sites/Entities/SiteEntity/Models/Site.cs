@@ -48,6 +48,7 @@ namespace NekoOdyssey.Scripts.Database.Domains.Sites.Entities.SiteEntity.Models
             }
         }
         
+        public bool CameraActive { get; set; }
         public string CameraBoundary { get; set; }
 
         [ForeignKey(typeof(Site))] [Indexed] public int? NextSiteId { get; set; }
