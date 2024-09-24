@@ -146,6 +146,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.GameCanvas
         private void UpdateGamepadButtons()
         {
             var gamepad = Gamepad.current;
+            Debug.Log($">>gamepad<< {gamepad}");
             if (gamepad == null)
             {
                 keyboardPhoneKey.gameObject.SetActive(true);
