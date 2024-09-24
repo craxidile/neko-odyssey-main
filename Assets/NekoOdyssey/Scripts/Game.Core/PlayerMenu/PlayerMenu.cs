@@ -141,6 +141,10 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
             GameRunner.Instance.PlayerInputHandler.OnPrevMenuTriggerred
                 .Subscribe(_ => { SelectNextAction(); })
                 .AddTo(GameRunner.Instance);
+            // Slide Action
+            GameRunner.Instance.PlayerInputHandler.OnSlideAction
+                .Subscribe(SlideAction)
+                .AddTo(GameRunner.Instance);
         }
 
         public void Unbind()
@@ -173,6 +177,20 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
                 OnChangeSiteNameActive.OnNext(Tuple.Create(SiteName, false));
             if (_actionsToStopPlayer.Contains(_currentAction))
                 GameRunner.Instance.Core.Player.SetMode(PlayerMode.Stop);
+        }
+
+        private void SlideAction(Vector2 movement)
+        {
+            var x = movement.x;
+            switch (x)
+            {
+                case > 0:
+                    SelectPreviousAction();
+                    break;
+                case < 0:
+                    SelectNextAction();
+                    break;
+            }
         }
 
         private void SelectPreviousAction()
