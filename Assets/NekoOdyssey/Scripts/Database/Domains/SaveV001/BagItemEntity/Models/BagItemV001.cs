@@ -24,12 +24,14 @@ namespace NekoOdyssey.Scripts.Database.Domains.SaveV001.BagItemEntity.Models
         public BagItemV001(string itemCode)
         {
             ItemCode = itemCode;
+            ReceivedAt = DateTime.Now;
         }
 
         public BagItemV001(Item item)
         {
             ItemCode = item.Code;
             Item = item;
+            ReceivedAt = DateTime.Now;
         }
 
         public bool Equals(BagItemV001 other)

@@ -7,6 +7,7 @@ using NekoOdyssey.Scripts.Constants;
 using NekoOdyssey.Scripts.Game.Core;
 using NekoOdyssey.Scripts.Game.Core.Routine;
 using NekoOdyssey.Scripts.Game.Unity.AssetBundles;
+using NekoOdyssey.Scripts.Game.Unity.Audios.PlayMenu;
 using NekoOdyssey.Scripts.Game.Unity.Cameras;
 using NekoOdyssey.Scripts.Game.Unity.Capture;
 using NekoOdyssey.Scripts.Game.Unity.Conversations;
@@ -63,6 +64,7 @@ namespace NekoOdyssey.Scripts
                 gameObject.AddComponent<CentralConversationActionHandler>();
                 gameObject.AddComponent<CentralPlayerPettingHandler>();
                 gameObject.AddComponent<CentralSkipTimeActionHandler>();
+                gameObject.AddComponent<CentralPlayerMenuAudioSwitch>();
                 TimeRoutine = gameObject.AddComponent<TimeRoutine>();
             }
 
@@ -89,14 +91,14 @@ namespace NekoOdyssey.Scripts
         {
             Core.Unbind();
         }
-
+        
         public void SetReady(bool ready)
         {
             Ready = ready;
             OnReady.OnNext(ready);
         }
 
-        IEnumerator IUpdate()
+        private IEnumerator IUpdate()
         {
             OnUpdate.OnNext(UniRx.Unit.Default);
             yield return null;
@@ -131,6 +133,13 @@ namespace NekoOdyssey.Scripts
 
         private void InitializePositions()
         {
+            var cameraActive = SiteRunner.Instance.Core.Site.CurrentSite.CameraActive;
+            if (!cameraActive)
+            {
+                Camera.main?.gameObject.SetActive(false);
+                return;
+            }
+                
             var boundary = FindAnyObjectByType<CameraBoundary>()?.gameObject;
             if (boundary == null)
             {
