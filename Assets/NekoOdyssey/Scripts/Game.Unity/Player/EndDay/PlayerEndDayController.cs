@@ -35,15 +35,12 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.EndDay
             GameRunner.Instance.Core.Player.OnChangeMode
                 .Subscribe(CheckPlayerMode)
                 .AddTo(this);
-
             GameRunner.Instance.Core.EndDay.OnStaminaOutFinish
                 .Subscribe(HandleEndDayFinish_StaminaOut)
                 .AddTo(this);
             GameRunner.Instance.Core.EndDay.OnTimeOutFinish
                .Subscribe(HandleEndDayFinish_TimeOut)
                .AddTo(this);
-
-
         }
 
         void CheckEndDayStaminaOut(int stamina)
@@ -93,8 +90,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.EndDay
         {
             _animator.SetLayerWeight(_animator.GetLayerIndex($"EndDay"), 1f);
             _animator.SetInteger("EndDayState", 1);
-
-            SoundEffectController.Instance.hungry.Play();
+            // SoundEffectController.Instance.hungry.Play();
         }
 
         void HandleEndDayFinish_StaminaOut(Unit _)
