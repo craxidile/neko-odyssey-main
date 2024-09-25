@@ -17,7 +17,11 @@ using UnityEngine.Playables;
 using UniRx;
 using DayOfWeek = NekoOdyssey.Scripts.Database.Commons.Models.DayOfWeek;
 using NekoOdyssey.Scripts;
-
+public enum DatabaseSubtitleType
+{
+    CMS,
+    CSV,
+}
 public class SubtitleData
 {
     public string SubtitleSentance;
@@ -26,20 +30,18 @@ public class SubtitleData
 public class SubtitleManager : MonoBehaviour
 {
     public static SubtitleManager instance;
-    public string dialogCode;
+    [Header ("Type of data")]
+    public DatabaseSubtitleType data = DatabaseSubtitleType.CMS;
+
+    [Header ("CMS")]
+    public string npcDialogCode;
     //languege 
-    int languageColumnIndex = 1;
-    public languageType language = languageType.EN;
-    public static languageType globalLanguage = LanguageManager.globalLanguage;
 
-    public void UpdateGlobalLanguage()
-    {
-        Debug.Log($"ChangeLanguage : {language} to {globalLanguage}");
-        language = globalLanguage;
-    }
-
-    public bool useCSV = true;
+    [Header("CSV")]
     [SerializeField] TextAsset SubtitleAsset;
+    public languageType language = languageType.EN;
+    int languageColumnIndex = 1;
+
 
     static Dictionary<string, SubtitleData> AllSubtitleData = new Dictionary<string, SubtitleData>();
 
@@ -48,23 +50,26 @@ public class SubtitleManager : MonoBehaviour
         return AllSubtitleData[lineIndexID];
     }
 
-    private void Awake()
-    {
-        UpdateGlobalLanguage();
-    }
     private void Start()
     {
-        if (useCSV)
+        if (data == DatabaseSubtitleType.CSV)
         {
             LoadSubtitleCSV();
         }
-        else
+        else if (data == DatabaseSubtitleType.CMS) 
         {
-            new SubtitleManager().LoadSubtitleCMS();
+            if (!string.IsNullOrEmpty(npcDialogCode))
+            {
+                new SubtitleManager().LoadSubtitleCMS(npcDialogCode);
+            }
+            else
+            {
+                Debug.LogWarning($">>npc_dialog_code<< Not Found ");
+            }
         }
     }
 
-    public void LoadSubtitleCMS()
+    public void LoadSubtitleCMS(string dialogCode)
     {
         var questGroupsMasterData = GameRunner.Instance.Core.MasterData.NpcMasterData.QuestGroupsMasterData;
         var dialogMasterData = GameRunner.Instance.Core.MasterData.NpcMasterData.DialogsMasterData;
@@ -109,7 +114,7 @@ public class SubtitleManager : MonoBehaviour
     }
     private void ExecuteDialog(Dialog dialog)
     {
-        Debug.Log($">>test_npc<< >>dialog<< {dialog.Code}");
+        //Debug.Log($">>test_npc<< >>dialog<< {dialog.Code}");
 
         IDialogNextEntity next;
         next = dialog.NextEntity;
@@ -123,7 +128,6 @@ public class SubtitleManager : MonoBehaviour
     {
         Debug.Log($">>sub_dialog<< {subDialog.Id}");
 
-        var indexArray = 1;
         foreach (var line in subDialog.Lines)
         {
             SubtitleData newSubtitleData = new SubtitleData();
@@ -131,11 +135,10 @@ public class SubtitleManager : MonoBehaviour
             Debug.Log($">>dialog_npc_cutscene<< >>line<< {line.Actor} {line.LocalizedText.ToLocalizedString(GameRunner.Instance.Core.Settings.Locale)}");
             newSubtitleData.SubtitleSentance = line.LocalizedText.ToLocalizedString(GameRunner.Instance.Core.Settings.Locale);
 
-            if (!AllSubtitleData.ContainsKey(indexArray.ToString("D3")))
+            if (!AllSubtitleData.ContainsKey(line.LocalizedText.Original))
             {
-                AllSubtitleData.Add(indexArray.ToString("D3"), newSubtitleData);
+                AllSubtitleData.Add(line.LocalizedText.Original, newSubtitleData);
             }
-            indexArray++;
         }
 
         var childFlag = subDialog.DialogChildFlag;
@@ -174,5 +177,4 @@ public class SubtitleManager : MonoBehaviour
             }
         }
     }
-
 }

@@ -17,6 +17,11 @@ using UnityEngine.Playables;
 using UniRx;
 using DayOfWeek = NekoOdyssey.Scripts.Database.Commons.Models.DayOfWeek;
 using NekoOdyssey.Scripts;
+public enum DatabaseDialogueType
+{
+    CMS,
+    CSV,
+}
 public class DialogueData
 {
     public string DialogueSentance;
@@ -25,31 +30,30 @@ public class DialogueData
 public class DialogueManager : MonoBehaviour
 {
     public static DialogueManager instance;
-    public string dialogCode;
+    [Header("Type of data")]
+    public DatabaseDialogueType data = DatabaseDialogueType.CMS;
+
+    [Header("CMS")]
+    public string npcDialogCode;
+
+    [Header("CSV")]
+    [SerializeField] TextAsset DialogueAsset;
+    int languageColumnIndex = 1;
+    public languageType language = languageType.EN;
+
     [HideInInspector] public PlayableDirector director;
     [HideInInspector] public DialogCanvasController canvasController;
     [HideInInspector] public bool endBubble;
     //languege
-    int languageColumnIndex = 1;
-    public languageType language = languageType.EN;
-    public static languageType globalLanguage = LanguageManager.globalLanguage;
 
-    public void UpdateGlobalLanguage()
-    {
-        Debug.Log($"ChangeLanguage : {language} to {globalLanguage}");
-        language = globalLanguage;
-    }
 
     // Dialogue
-    public bool useCSV = true;
-    [SerializeField] TextAsset DialogueAsset;
 
 
     static Dictionary<string, DialogueData> AllDialogueData = new Dictionary<string, DialogueData>();
 
     public static DialogueData GetDialogue(string lineIndexID)
     {
-        Debug.Log("PPP6");
         return AllDialogueData[lineIndexID];
     }
     private void Awake()
@@ -57,19 +61,23 @@ public class DialogueManager : MonoBehaviour
         director = GetComponent<PlayableDirector>();
         canvasController = FindAnyObjectByType<DialogCanvasController>();
         canvasController.SetOpened(false);
-        UpdateGlobalLanguage();
-
-
     }
     private void Start()
     {
-        if (useCSV)
+        if (data == DatabaseDialogueType.CSV)
         {
             LoadDialogueCSV();
         }
-        else
+        else if (data == DatabaseDialogueType.CMS)
         {
-            new DialogueManager().LoadDialogueCMS();
+            if (!string.IsNullOrEmpty(npcDialogCode))
+            {
+                new DialogueManager().LoadDialogueCMS(npcDialogCode);
+            }
+            else
+            {
+                Debug.LogWarning($">>npc_dialog_code<< Not Found ");
+            }
         }
     }
     private void Update()
@@ -111,7 +119,7 @@ public class DialogueManager : MonoBehaviour
         }
 
     }
-    public void LoadDialogueCMS()
+    public void LoadDialogueCMS(string dialogCode)
     {
         var questGroupsMasterData = GameRunner.Instance.Core.MasterData.NpcMasterData.QuestGroupsMasterData;
         var dialogMasterData = GameRunner.Instance.Core.MasterData.NpcMasterData.DialogsMasterData;
@@ -148,7 +156,6 @@ public class DialogueManager : MonoBehaviour
     {
         Debug.Log($">>sub_dialog<< {subDialog.Id}");
 
-        var indexArray = 1;
         foreach (var line in subDialog.Lines)
         {
             DialogueData newDialogueData = new DialogueData();
@@ -156,11 +163,10 @@ public class DialogueManager : MonoBehaviour
             Debug.Log($">>dialog_npc_cutscene<< >>line<< {line.Actor} {line.LocalizedText.ToLocalizedString(GameRunner.Instance.Core.Settings.Locale)}");
             newDialogueData.DialogueSentance = line.LocalizedText.ToLocalizedString(GameRunner.Instance.Core.Settings.Locale);
 
-            if (!AllDialogueData.ContainsKey(indexArray.ToString("D3")))
+            if (!AllDialogueData.ContainsKey(line.LocalizedText.Original))
             {
-                AllDialogueData.Add(indexArray.ToString("D3"), newDialogueData);
+                AllDialogueData.Add(line.LocalizedText.Original, newDialogueData);
             }
-            indexArray++;
         }
 
         var childFlag = subDialog.DialogChildFlag;
