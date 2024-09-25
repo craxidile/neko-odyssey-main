@@ -91,14 +91,14 @@ namespace NekoOdyssey.Scripts
         {
             Core.Unbind();
         }
-
+        
         public void SetReady(bool ready)
         {
             Ready = ready;
             OnReady.OnNext(ready);
         }
 
-        IEnumerator IUpdate()
+        private IEnumerator IUpdate()
         {
             OnUpdate.OnNext(UniRx.Unit.Default);
             yield return null;
@@ -133,6 +133,13 @@ namespace NekoOdyssey.Scripts
 
         private void InitializePositions()
         {
+            var cameraActive = SiteRunner.Instance.Core.Site.CurrentSite.CameraActive;
+            if (!cameraActive)
+            {
+                Camera.main?.gameObject.SetActive(false);
+                return;
+            }
+                
             var boundary = FindAnyObjectByType<CameraBoundary>()?.gameObject;
             if (boundary == null)
             {
