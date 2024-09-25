@@ -69,7 +69,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             public DialogType dialogType;
             public EventPoint eventPoint;
             public UnityAction nextDialogueCallback;
-            public Quest quest { get; set; }
+            //public Quest quest { get; set; }
+            public (string Type, string Code, int Value)[] rewards;
 
             public DialogueTemporaryData(string eventCode, DialogType dialogType, EventPoint eventPoint)
             {
@@ -191,7 +192,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                                     if (_enabledTime > Time.time) return;
 
                                     var dialogueTemporaryData = new DialogueTemporaryData(quest.Code, DialogType.Quest, targetEventPoint);
-                                    dialogueTemporaryData.quest = quest;
+                                    //dialogueTemporaryData.quest = quest;
+                                    dialogueTemporaryData.rewards = quest.Rewards.Select(reward => (reward.Type, reward.Code, reward.Value)).ToArray();
                                     OnBeginEventPoint.OnNext(targetEventPoint);
                                     ConversationHandle(quest.Dialog, dialogueTemporaryData);
                                 };
@@ -656,7 +658,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
                 if (!GameRunner.Instance.Core.Player.IsQuestComplete(_currentDialog.eventCode)) //check for one time reward
                 {
-                    GiveRewards(_currentDialog.quest);
+                    GiveRewards();
                 }
             }
             if (_currentDialog.dialogType == DialogType.Routine)
@@ -664,7 +666,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                 if (!_tempCompletedDialogue.Contains(_currentDialog))
                 {
                     _tempCompletedDialogue.Add(_currentDialog);
-                    GiveRewards(_currentDialog.quest);
+                    GiveRewards();
                 }
             }
 
@@ -690,9 +692,9 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             GameRunner.Instance.Core.Player.SetMode(PlayerMode.Move);
         }
 
-        void GiveRewards(Quest quest)
+        void GiveRewards()
         {
-            var rewards = quest.Rewards;
+            var rewards = _currentDialog.rewards;
             foreach (var reward in rewards)
             {
                 if (reward.Type == "Quest Key")
@@ -701,7 +703,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                     {
                         DG.Tweening.DOVirtual.DelayedCall(0.3f, () =>
                         {
-                            UpdateQuestEvent_RelatedQuestCode(quest.Code);
+                            UpdateQuestEvent_RelatedQuestCode(_currentDialog.eventCode);
                         });
                     }
                     else
@@ -804,6 +806,9 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                             if (_enabledTime > Time.time) return;
 
                             var dialogueTemporaryData = new DialogueTemporaryData(routine.Code, DialogType.Routine, targetEventPoint);
+                            //dialogueTemporaryData.quest = routine;
+                            dialogueTemporaryData.rewards = routine.Rewards.Select(reward => (reward.Type, reward.Code, reward.Value)).ToArray();
+                            OnBeginEventPoint.OnNext(targetEventPoint);
                             ConversationHandle(routine.Dialog, dialogueTemporaryData);
 
                         };
@@ -853,7 +858,9 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                             if (quest.Code.Equals(eventPoint.ReferenceEventCode, System.StringComparison.InvariantCultureIgnoreCase))
                             {
                                 Debug.Log("PlayerCapture GiveRewards");
-                                GiveRewards(quest);
+                                var dialogueTemporaryData = new DialogueTemporaryData(quest.Code, DialogType.Quest, eventPoint);
+                                dialogueTemporaryData.rewards = quest.Rewards.Select(reward => (reward.Type, reward.Code, reward.Value)).ToArray();
+                                GiveRewards();
                             }
                         }
                     }
@@ -931,7 +938,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                                     if (_enabledTime > Time.time) return;
 
                                     var dialogueTemporaryData = new DialogueTemporaryData(quest.Code, DialogType.Quest, targetEventPoint);
-                                    dialogueTemporaryData.quest = quest;
+                                    //dialogueTemporaryData.quest = quest;
+                                    dialogueTemporaryData.rewards = quest.Rewards.Select(reward => (reward.Type, reward.Code, reward.Value)).ToArray();
                                     OnBeginEventPoint.OnNext(targetEventPoint);
                                     ConversationHandle(quest.Dialog, dialogueTemporaryData);
                                 };
