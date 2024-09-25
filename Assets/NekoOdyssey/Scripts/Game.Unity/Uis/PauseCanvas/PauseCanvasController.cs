@@ -15,9 +15,12 @@ public class PauseCanvasController : MonoBehaviour
     bool _isShowed;
     float _nextInputTime;
 
+    KeyboardControlNavigation KeyboardControlNavigation;
+
     private void Awake()
     {
         canvasGroup = GetComponent<CanvasGroup>();
+        KeyboardControlNavigation = GetComponentInChildren<KeyboardControlNavigation>();
     }
     // Start is called before the first frame update
     void Start()
@@ -73,6 +76,7 @@ public class PauseCanvasController : MonoBehaviour
         _isShowed = true;
         Debug.Log("Show pause Panel");
 
+        GameRunner.Instance.Core.Player.SetMode(NekoOdyssey.Scripts.Game.Unity.Game.Core.PlayerMode.Stop);
         canvasGroup.DOFade(1, transitionDuration).OnComplete(() =>
         {
             canvasGroup.SetAlpha(1);
@@ -82,6 +86,8 @@ public class PauseCanvasController : MonoBehaviour
 
         GameRunner.Instance.TimeRoutine.PauseTime();
         Time.timeScale = 0;
+
+        KeyboardControlNavigation.OnEnable();
     }
 
     void ClosePanel()
@@ -89,10 +95,15 @@ public class PauseCanvasController : MonoBehaviour
         _isShowed = false;
         Debug.Log("Close pause Panel");
 
-        canvasGroup.LerpAlpha(0, transitionDuration);
+        canvasGroup.LerpAlpha(0, transitionDuration, onComplete: () =>
+        {
+            GameRunner.Instance.Core.Player.SetMode(NekoOdyssey.Scripts.Game.Unity.Game.Core.PlayerMode.Move);
+        });
 
         GameRunner.Instance.TimeRoutine.ContinueTime();
         Time.timeScale = 1;
+
+        KeyboardControlNavigation.OnDisable();
     }
 
 
@@ -103,8 +114,17 @@ public class PauseCanvasController : MonoBehaviour
     }
     void BackToTitle()
     {
-        Application.Quit();
-        // SiteRunner.Instance.Core.Site.SetSite("DemoTitle");
+        ClosePanel();
+
+        //Application.Quit();
+        //GameRunner.Instance.Core.Player.SetMode(NekoOdyssey.Scripts.Game.Unity.Game.Core.PlayerMode.Stop);
+        GameRunner.Instance.Core.GameScene.CloseScene();
+        GameRunner.Instance.Core.GameScene.OnChangeSceneFinish.Subscribe(_ =>
+        {
+            SiteRunner.Instance.Core.Site.SetSite("DemoTitle");
+        });
+
+
     }
     void Setting()
     {
