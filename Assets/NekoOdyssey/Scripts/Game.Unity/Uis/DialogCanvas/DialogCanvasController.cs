@@ -10,6 +10,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.DialogCanvas
         public Text messageBox;
         public GameObject dialogBalloon;
         [SerializeField] Animator animator;
+        public Image dialogImageFrame;
         // For Cutscene
         [HideInInspector] public bool lastLineId;
         [HideInInspector] public bool goNextLineId;

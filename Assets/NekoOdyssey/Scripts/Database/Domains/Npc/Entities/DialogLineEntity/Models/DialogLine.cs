@@ -1,4 +1,5 @@
 ﻿using System;
+using NekoOdyssey.Scripts.Constants;
 using NekoOdyssey.Scripts.Database.Commons.Models;
 using SpatiumInteractive.Libraries.Unity.GRU.Base;
 using SpatiumInteractive.Libraries.Unity.GRU.Contracts;
@@ -39,5 +40,28 @@ namespace NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogLineEntity.Mod
         public int? AnimatorDelay { get; set; }
         
         public string Photo { get; set; }
+
+        public string GetLocalisedText()
+        {
+            return Original; //bypass for now
+            //--------------------------------
+
+            var locale = GameRunner.Instance.Core.Settings.Locale;
+            switch (locale)
+            {
+                case Locale.Th:
+                    return TextTh;
+                case Locale.En:
+                    return TextEn;
+                case Locale.ZhCn:
+                    return TextZhCn;
+                case Locale.ZhTw:
+                    return TextZhTw;
+                case Locale.Ja:
+                    return TextJa;
+                default:
+                    return null;
+            }
+        }
     }
 }

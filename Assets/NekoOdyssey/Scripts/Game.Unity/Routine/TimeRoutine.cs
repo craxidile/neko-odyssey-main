@@ -4,6 +4,7 @@ using UniRx;
 using UnityEngine;
 using NekoOdyssey.Scripts.Constants;
 using NekoOdyssey.Scripts.Game.Core.GameScene;
+using DayOfWeek = NekoOdyssey.Scripts.Database.Commons.Models.DayOfWeek;
 
 public enum Day
 {
@@ -189,8 +190,6 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         public void Start()
         {
 
-
-
             //s_isTimeRunning = true;
 
             //dayMinute = Mathf.RoundToInt(s_dayMinuteFloat);
@@ -225,8 +224,12 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
             //Debug.Log($"current time : {currentTimeText}");
 
-            GameRunner.Instance.Core.Routine.UpdateWorld();
-            GameRunner.Instance.Core.Routine.dayNightLightingManager.Update();
+            //GameRunner.Instance.Core.Routine.UpdateWorld();
+            //GameRunner.Instance.Core.Routine.dayNightLightingManager.Update();
+
+            //GameRunner.Instance.Core.RoutineManger.UpdateWorld();
+            GameRunner.Instance.Core.RoutineManger.dayNightLightingManager.Update();
+
             DayNightTimeActivator.UpdateActivator();
 
         }
@@ -342,9 +345,14 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
             GameDayTotal = timeScriptable.currentDayCount;
 
+            var newTime = new TimeHrMin(timeScriptable.dayMinute / 60, timeScriptable.dayMinute % 60);
+            currentTime = newTime;
+
             //day = currentDay;
 
             //s_hungryOverTimeMultiplier = hungryOverTimeMultiplier;
+
+            GameRunner.Instance.Core.RoutineManger.ForceUpdateWorld();
         }
 
         //private void OnDrawGizmos()
