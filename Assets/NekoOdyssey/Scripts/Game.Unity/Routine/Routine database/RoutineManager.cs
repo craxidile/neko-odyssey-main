@@ -659,6 +659,14 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                     GiveRewards(_currentDialog.quest);
                 }
             }
+            if (_currentDialog.dialogType == DialogType.Routine)
+            {
+                if (!_tempCompletedDialogue.Contains(_currentDialog))
+                {
+                    _tempCompletedDialogue.Add(_currentDialog);
+                    GiveRewards(_currentDialog.quest);
+                }
+            }
 
             OnCompleteEventPoint.OnNext(_currentDialog.eventPoint);
             _currentDialog = null;
