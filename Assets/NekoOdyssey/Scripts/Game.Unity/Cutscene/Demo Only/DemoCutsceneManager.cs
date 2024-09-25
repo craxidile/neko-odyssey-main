@@ -2,6 +2,8 @@ using NekoOdyssey.Scripts;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using NekoOdyssey.Scripts.Database.Domains;
+using NekoOdyssey.Scripts.Database.Domains.SaveV001;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
@@ -51,11 +53,14 @@ public class DemoCutsceneManager : MonoBehaviour
 
     public void CutSceneIntroIsDone()
     {
+        // TODO: Remove this after demo
+        using (new SaveV001DbContext(new() { CopyMode = DbCopyMode.ForceCopy, ReadOnly = false })) ;
         isDone = true;
         Debug.Log("Runsite here");
     }
     public void GoToGame()
     {
+        Debug.Log($">>game<< starts");
         buttonGroup.SetActive(false);
         directorGoToGame.gameObject.SetActive(true);
     }
