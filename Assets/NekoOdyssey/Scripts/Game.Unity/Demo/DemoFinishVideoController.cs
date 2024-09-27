@@ -10,10 +10,12 @@ namespace NekoOdyssey.Scripts.Game.Unity.Demo
     {
         private void Start()
         {
+            Debug.Log("DemoFinishVideoController 1".SetColor(Color.red));
             DOVirtual.DelayedCall(65f, () =>
             {
+                Debug.Log("DemoFinishVideoController 2".SetColor(Color.red));
                 //SceneManager.LoadSceneAsync("SceneLoader");
-               SiteRunner.Instance.Core.Site.SetSite("GamePlayZone3_02", false);
+                SiteRunner.Instance.Core.Site.SetSite("GamePlayZone3_02");
             });
         }
     }

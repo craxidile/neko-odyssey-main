@@ -12,23 +12,6 @@ namespace NekoOdyssey.Scripts.Game.Unity.Demo
 
         private void Start()
         {
-            //fading.GetComponent<CanvasGroup>().alpha = 0;
-            //DOVirtual.DelayedCall(10f, () => { fading.DOFade(1f, 2f); });
-            //DOVirtual.DelayedCall(15f, () =>
-            //{
-            //    Debug.Log("load DemoFinishVideo 0 ");
-            //    if (GameRunner.Instance.CsvHolder.playFinishDemoVideo)
-            //    {
-            //        Debug.Log("load DemoFinishVideo 1 ");
-            //        SceneManager.LoadScene("DemoFinishVideo");
-            //    }
-            //    else
-            //    {
-            //        SiteRunner.Instance.Core.Site.SetSite("FinishDemo");
-            //    }
-            //});
-
-
             if (GameRunner.Instance.CsvHolder.playFinishDemoVideo)
             {
                 Debug.Log("load DemoFinishVideo 1");
@@ -37,6 +20,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Demo
                 {
                     Debug.Log("load DemoFinishVideo 2");
 
+                    Core.EndDay.EndDayController.endDayStep = Core.EndDay.EndDayStep.FinishDemo;
                     SceneManager.LoadScene("DemoFinishVideo");
                 }).AddTo(this);
             }
