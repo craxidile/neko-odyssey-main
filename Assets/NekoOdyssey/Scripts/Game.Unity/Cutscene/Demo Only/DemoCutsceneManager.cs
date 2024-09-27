@@ -37,12 +37,10 @@ public class DemoCutsceneManager : MonoBehaviour
         {
             buttonGroup.SetActive(true);
             directorIntro.gameObject.SetActive(false);
-            Debug.Log($">>valid<< 01 false");
         }
         if (!directorGoToGame.playableGraph.IsValid() && !isDone)
         {
             CutSceneIntroIsDone();
-            Debug.Log($">>valid<< 02 false");
         }
         if (Input.GetKeyUp(KeyCode.KeypadEnter))
         {
@@ -53,6 +51,9 @@ public class DemoCutsceneManager : MonoBehaviour
 
     public void CutSceneIntroIsDone()
     {
+        // TODO: Remove this after demo
+        // using (new SaveV001DbContext(new() { CopyMode = DbCopyMode.ForceCopy, ReadOnly = false })) ;
+        
         isDone = true;
         Debug.Log("Runsite here");
     }
