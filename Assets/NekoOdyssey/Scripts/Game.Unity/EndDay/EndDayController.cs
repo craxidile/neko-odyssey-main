@@ -150,6 +150,9 @@ namespace NekoOdyssey.Scripts.Game.Core.EndDay
                 case EndDayStep.NewDay:
                     LoadNewDay();
                     break;
+                case EndDayStep.FinishDemo:
+                    FinishDemo();
+                    break;
                 default:
                     break;
             }
@@ -292,6 +295,10 @@ namespace NekoOdyssey.Scripts.Game.Core.EndDay
         }
 
 
+        void FinishDemo()
+        {
+            endDayStep = EndDayStep.NewDay;
+        }
 
 
     }
@@ -303,7 +310,7 @@ namespace NekoOdyssey.Scripts.Game.Core.EndDay
     public enum EndDayStep
     {
         None, PlayerAnimation, MikiHome, Result, NewDay,
-        EndDayCutscene,
+        EndDayCutscene, FinishDemo,
     }
 
 }
