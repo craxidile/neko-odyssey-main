@@ -67,7 +67,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.ItemObtain
         {
             var item = _itemPopUpQuene.Dequeue();
 
-            var obtainedText = "obtained";
+            var obtainedText = GameRunner.Instance.Core.Uis.Localisation.TranslateCurrent("obtained");
             var text = $"{item.itemName} - {item.itemQty} {obtainedText}";
             popUpText.text = text;
 
