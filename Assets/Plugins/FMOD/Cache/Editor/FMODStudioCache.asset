@@ -27,6 +27,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 1020
+--- !u!114 &-8143721125558574942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/MiniGame/Alert
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/MiniGame/Alert
+  Guid:
+    Data1: 1343461750
+    Data2: 1247721371
+    Data3: 400791953
+    Data4: 221860906
+  Banks:
+  - {fileID: -3576495623960358431}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 242
 --- !u!114 &-7718762433664074567
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -135,6 +162,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 4355
+--- !u!114 &-5697792984597441781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/MiniGame/Failed
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/MiniGame/Failed
+  Guid:
+    Data1: -349660962
+    Data2: 1093256216
+    Data3: -1533427295
+    Data4: -324264901
+  Banks:
+  - {fileID: -3576495623960358431}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 4500
 --- !u!114 &-5648607722784605729
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -150,11 +204,38 @@ MonoBehaviour:
   Path: Assets/NekoOdyssey/Assets/FMOD/NekoOdyssey/Build/Desktop/Sleep.bank
   Name: Sleep
   StudioPath: bank:/BGM/Sleep
-  lastModified: 638622189037205460
+  lastModified: 638614712027638970
   FileSizes:
   - Name: Desktop
     Value: 67776
   Exists: 1
+--- !u!114 &-5187597321980371635
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/MiniGame/Clear
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/MiniGame/Clear
+  Guid:
+    Data1: -1359081420
+    Data2: 1158678721
+    Data3: 1495006602
+    Data4: -167328785
+  Banks:
+  - {fileID: -3576495623960358431}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 5243
 --- !u!114 &-4949690486099919803
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -253,7 +334,7 @@ MonoBehaviour:
   Path: Assets/NekoOdyssey/Assets/FMOD/NekoOdyssey/Build/Desktop/Ambience.bank
   Name: Ambience
   StudioPath: bank:/Ambience/Ambience
-  lastModified: 638628719672696004
+  lastModified: 638625406117524893
   FileSizes:
   - Name: Desktop
     Value: 3765728
@@ -339,6 +420,26 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 31000
+--- !u!114 &-3576495623960358431
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/MiniGame.bank
+  m_EditorClassIdentifier: 
+  Path: Assets/NekoOdyssey/Assets/FMOD/NekoOdyssey/Build/Desktop/MiniGame.bank
+  Name: MiniGame
+  StudioPath: bank:/SFX/MiniGame
+  lastModified: 638631546044782603
+  FileSizes:
+  - Name: Desktop
+    Value: 146944
+  Exists: 1
 --- !u!114 &-3522699759175422664
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -462,7 +563,7 @@ MonoBehaviour:
   Path: Assets/NekoOdyssey/Assets/FMOD/NekoOdyssey/Build/Desktop/BGM.bank
   Name: BGM
   StudioPath: bank:/BGM/BGM
-  lastModified: 638631537696668207
+  lastModified: 638631520482349209
   FileSizes:
   - Name: Desktop
     Value: 6113792
@@ -482,7 +583,7 @@ MonoBehaviour:
   Path: Assets/NekoOdyssey/Assets/FMOD/NekoOdyssey/Build/Desktop/UI.bank
   Name: UI
   StudioPath: bank:/SFX/UI/UI
-  lastModified: 638622189037215464
+  lastModified: 638614730211500926
   FileSizes:
   - Name: Desktop
     Value: 14144
@@ -502,10 +603,10 @@ MonoBehaviour:
   Path: Assets/NekoOdyssey/Assets/FMOD/NekoOdyssey/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638631537696668207
+  lastModified: 638631542857381517
   FileSizes:
   - Name: Desktop
-    Value: 3012
+    Value: 3260
   Exists: 1
 --- !u!114 &-2168123356030195544
 MonoBehaviour:
@@ -637,6 +738,7 @@ MonoBehaviour:
   - {fileID: 5071473396574969592}
   - {fileID: -5648607722784605729}
   - {fileID: -2389528277289443892}
+  - {fileID: -3576495623960358431}
   EditorEvents:
   - {fileID: 4822752716613775082}
   - {fileID: -1839855692440878021}
@@ -680,12 +782,17 @@ MonoBehaviour:
   - {fileID: 6264036483842474206}
   - {fileID: -7497973337863139228}
   - {fileID: 2884168738119897256}
+  - {fileID: -5187597321980371635}
+  - {fileID: -8143721125558574942}
+  - {fileID: 5932477297311043941}
+  - {fileID: 5427705771714035171}
+  - {fileID: -5697792984597441781}
   EditorParameters: []
   MasterBanks:
   - {fileID: 4547925625316589115}
   StringsBanks:
   - {fileID: -2295913530114626373}
-  cacheTime: 638631537696668207
+  cacheTime: 638631546044782603
   cacheVersion: 131619
 --- !u!114 &240808966096695335
 MonoBehaviour:
@@ -1071,7 +1178,7 @@ MonoBehaviour:
   Path: Assets/NekoOdyssey/Assets/FMOD/NekoOdyssey/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638622189037175630
+  lastModified: 638631542857351605
   FileSizes:
   - Name: Desktop
     Value: 1036
@@ -1145,7 +1252,7 @@ MonoBehaviour:
   Path: Assets/NekoOdyssey/Assets/FMOD/NekoOdyssey/Build/Desktop/SFX.bank
   Name: SFX
   StudioPath: bank:/SFX/SFX
-  lastModified: 638628719672956272
+  lastModified: 638623810317432392
   FileSizes:
   - Name: Desktop
     Value: 292064
@@ -1204,6 +1311,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 656
+--- !u!114 &5427705771714035171
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/MiniGame/Ready
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/MiniGame/Ready
+  Guid:
+    Data1: -1211976766
+    Data2: 1209157802
+    Data3: -1973397058
+    Data4: -1133142901
+  Banks:
+  - {fileID: -3576495623960358431}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 1411
 --- !u!114 &5893617293679924937
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1258,6 +1392,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 31000
+--- !u!114 &5932477297311043941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/MiniGame/Go
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/MiniGame/Go
+  Guid:
+    Data1: 768786560
+    Data2: 1292025954
+    Data3: -1118437737
+    Data4: -1453330627
+  Banks:
+  - {fileID: -3576495623960358431}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 1235
 --- !u!114 &6264036483842474206
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1408,7 +1569,7 @@ MonoBehaviour:
   Path: Assets/NekoOdyssey/Assets/FMOD/NekoOdyssey/Build/Desktop/CatSound.bank
   Name: CatSound
   StudioPath: bank:/SFX/CatSound/CatSound
-  lastModified: 638628719672916019
+  lastModified: 638624277693324842
   FileSizes:
   - Name: Desktop
     Value: 202880
