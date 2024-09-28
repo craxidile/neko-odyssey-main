@@ -159,6 +159,7 @@ namespace MiniGame05_Fishing.Scripts
 
         private IEnumerator GameStartSequence()
         {
+            yield return new WaitForSeconds(2.5f);
             ready.SetActive(true);
             OnPlaySfx.OnNext("SFX_Ready");
             yield return new WaitForSeconds(2f);
