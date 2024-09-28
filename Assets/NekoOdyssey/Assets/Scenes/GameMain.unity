@@ -4443,11 +4443,11 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
-  far clip plane: 1000
-  field of view: 60
+  near clip plane: 0.1
+  far clip plane: 5000
+  field of view: 40
   orthographic: 0
-  orthographic size: 5
+  orthographic size: 10
   m_Depth: 0.4
   m_CullingMask:
     serializedVersion: 2
@@ -4471,8 +4471,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 996425457}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.059864894, y: 0.9125051, z: 0.14452665, w: 0.37797198}
-  m_LocalPosition: {x: 2.54, y: -1.398, z: -37.819}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: 19.72875, y: -0.604, z: -17.79}
   m_LocalScale: {x: 8, y: 0.1, z: 0.10000003}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7266,6 +7266,8 @@ GameObject:
   - component: {fileID: 1666948214}
   - component: {fileID: 1666948216}
   - component: {fileID: 1666948215}
+  - component: {fileID: 1666948218}
+  - component: {fileID: 1666948217}
   m_Layer: 0
   m_Name: BagCamera
   m_TagString: Untagged
@@ -7345,6 +7347,68 @@ MonoBehaviour:
         m_Calls: []
   m_LegacyBlendHint: 0
   m_ComponentOwner: {fileID: 246764879}
+--- !u!114 &1666948217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1666948213}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -1794379078
+      Data2: 1092360684
+      Data3: 1546650292
+      Data4: -2106565061
+    Path: event:/SFX/MikiAction/PhoneDown
+  Event: 
+  PlayEvent: 12
+  StopEvent: 11
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
+--- !u!114 &1666948218
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1666948213}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -787516338
+      Data2: 1311939176
+      Data3: 1761624759
+      Data4: -450437451
+    Path: event:/SFX/MikiAction/PhoneUp
+  Event: 
+  PlayEvent: 11
+  StopEvent: 12
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1 &1671495585
 GameObject:
   m_ObjectHideFlags: 0
@@ -9908,8 +9972,8 @@ RectTransform:
   - {fileID: 4853922651366788767}
   m_Father: {fileID: 3065712530573226296}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 226.53297, y: -199.69}
   m_SizeDelta: {x: 453.06598, y: 515}
   m_Pivot: {x: 0.49999997, y: 1}
@@ -12100,7 +12164,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 124.4, y: -108.728}
+  m_AnchoredPosition: {x: 205, y: -129.99997}
   m_SizeDelta: {x: 200, y: 57.161}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &642571474951764394
@@ -13553,8 +13617,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4286486935
-  m_fontColor: {r: 0.5921569, g: 0.6, b: 0.49411768, a: 1}
+    rgba: 4287646233
+  m_fontColor: {r: 0.09878961, g: 0.29006696, b: 0.5660378, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -13571,8 +13635,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 36
+  m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -14266,7 +14330,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 186.09448, y: 0}
+  m_AnchoredPosition: {x: 185.56503, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &1126152590815391916
@@ -14424,8 +14488,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4286486935
-  m_fontColor: {r: 0.5921569, g: 0.6, b: 0.49411768, a: 1}
+    rgba: 4287646233
+  m_fontColor: {r: 0.09878961, g: 0.29006696, b: 0.5660378, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -14442,8 +14506,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 36
+  m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -18793,7 +18857,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 29.763779, y: 0}
+  m_AnchoredPosition: {x: 29.936031, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &2114202726177048776
@@ -19440,7 +19504,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000045776367, y: 0}
+  m_AnchoredPosition: {x: 0.000045776367, y: 8.000013}
   m_SizeDelta: {x: 0, y: 28.109001}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &2243471280905685035
@@ -19588,7 +19652,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000045776367, y: 0}
+  m_AnchoredPosition: {x: 0.000045776367, y: 8.000013}
   m_SizeDelta: {x: 0, y: 28.109001}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!1 &2285504724326229910
@@ -23439,7 +23503,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 300, y: 60.409447}
+  m_SizeDelta: {x: 300, y: 60.724945}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &3258334704042640642
 GameObject:
@@ -23880,7 +23944,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000045776367, y: 0}
+  m_AnchoredPosition: {x: 0.000045776367, y: 8}
   m_SizeDelta: {x: 0, y: 28.109001}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!224 &3434381558677871717
@@ -28138,6 +28202,8 @@ GameObject:
   - component: {fileID: 5773346080159315328}
   - component: {fileID: 4301229943203661211}
   - component: {fileID: 5773346080159315329}
+  - component: {fileID: 5773346080159315331}
+  - component: {fileID: 5773346080159315330}
   m_Layer: 0
   m_Name: PhoneCamera
   m_TagString: Untagged
@@ -28805,7 +28871,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000045776367, y: 0}
+  m_AnchoredPosition: {x: 0.000045776367, y: 3.999979}
   m_SizeDelta: {x: 0, y: 28.109001}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &4614558795701568519
@@ -29988,7 +30054,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 506.6987, y: 0}
+  m_AnchoredPosition: {x: 506.97974, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &4875309853920812560
@@ -31726,7 +31792,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4286486935
-  m_fontColor: {r: 0.5921569, g: 0.6, b: 0.49411768, a: 1}
+  m_fontColor: {r: 0.09878961, g: 0.29006696, b: 0.5660378, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -31743,8 +31809,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 36
+  m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -31990,7 +32056,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4286486935
-  m_fontColor: {r: 0.5921569, g: 0.6, b: 0.49411768, a: 1}
+  m_fontColor: {r: 0.09878961, g: 0.29006696, b: 0.5660378, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -32007,8 +32073,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 36
+  m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -33722,6 +33788,68 @@ MonoBehaviour:
   m_FocusTarget: {fileID: 0}
   m_FocusOffset: 0
   m_Profile: {fileID: 11400000, guid: d713afdfc000a82469b4f274ca3d1b0d, type: 2}
+--- !u!114 &5773346080159315330
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4432419796363575582}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -1794379078
+      Data2: 1092360684
+      Data3: 1546650292
+      Data4: -2106565061
+    Path: event:/SFX/MikiAction/PhoneDown
+  Event: 
+  PlayEvent: 12
+  StopEvent: 11
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
+--- !u!114 &5773346080159315331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4432419796363575582}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -787516338
+      Data2: 1311939176
+      Data3: 1761624759
+      Data4: -450437451
+    Path: event:/SFX/MikiAction/PhoneUp
+  Event: 
+  PlayEvent: 11
+  StopEvent: 12
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!114 &5773534638224646068
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44768,7 +44896,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 300, y: 60.409447}
+  m_SizeDelta: {x: 300, y: 60.724945}
   m_Pivot: {x: 1, y: 1}
 --- !u!224 &8214678453713357091
 RectTransform:
@@ -45431,7 +45559,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 30.199997, y: -108.728}
+  m_AnchoredPosition: {x: 54, y: -130}
   m_SizeDelta: {x: 200, y: 57.161}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &8374983223820226507
@@ -49508,7 +49636,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 133.30708, y: 0}
+  m_AnchoredPosition: {x: 133.19829, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &9177422954770985187
