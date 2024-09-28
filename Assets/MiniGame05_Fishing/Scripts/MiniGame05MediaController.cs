@@ -29,6 +29,12 @@ namespace MiniGame05_Fishing.Scripts
                     DOVirtual.DelayedCall(3f, () => StopSfx(name));
                 })
                 .AddTo(this);
+            MiniGame05.Instance.OnPlayLoopSfx
+                .Subscribe(PlaySfx)
+                .AddTo(this);
+            MiniGame05.Instance.OnStopSfx
+                .Subscribe(StopSfx)
+                .AddTo(this);
         }
 
         private void PlaySfx(string name)

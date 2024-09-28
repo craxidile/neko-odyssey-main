@@ -53,6 +53,8 @@ namespace MiniGame05_Fishing.Scripts
         [Header("Audio")] public MiniGame05AudioManager audioManager;
 
         public Subject<string> OnPlaySfx { get; } = new();
+        public Subject<string> OnPlayLoopSfx { get; } = new();
+        public Subject<string> OnStopSfx { get; } = new();
 
         private void Awake()
         {
@@ -171,11 +173,12 @@ namespace MiniGame05_Fishing.Scripts
 
             yield return new WaitForSeconds(Random.Range(2.8f, 5f));
             alert.SetActive(true);
-            OnPlaySfx.OnNext("SFX_Alert");
+            OnPlayLoopSfx.OnNext("SFX_Alert");
 
             while (!Input.GetKeyDown(KeyCode.Space)) yield return null;
 
             alert.SetActive(false);
+            OnStopSfx.OnNext("SFX_Alert");
             mikiFishSit.SetActive(false);
             mikiFishStart.SetActive(true);
             yield return new WaitForSeconds(1.471f);
