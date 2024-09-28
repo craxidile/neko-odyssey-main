@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using NekoOdyssey.Scripts;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace MiniGame05_Fishing.Scripts
 {
@@ -100,9 +102,34 @@ namespace MiniGame05_Fishing.Scripts
             }
         }
 
+        private static Rect RectTransformToScreenRect(RectTransform rectTransform)
+        {
+            var corners = new Vector3[4];
+            rectTransform.GetWorldCorners(corners);
+
+            // Convert world space to screen space in pixel values and round to integers
+            for (int i = 0; i < corners.Length; i++)
+            {
+                corners[i] = Camera.main.WorldToScreenPoint(corners[i]);
+                corners[i] = new Vector3(Mathf.RoundToInt(corners[i].x), Mathf.RoundToInt(corners[i].y), corners[i].z);
+            }
+
+            // Calculate the screen space rectangle
+            var minX = Mathf.Min(corners[0].x, corners[1].x, corners[2].x, corners[3].x);
+            var minY = Mathf.Min(corners[0].y, corners[1].y, corners[2].y, corners[3].y);
+            var width = Mathf.Max(corners[0].x, corners[1].x, corners[2].x, corners[3].x) - minX;
+            var height = Mathf.Max(corners[0].y, corners[1].y, corners[2].y, corners[3].y) - minY;
+
+            // Display the screen space rectangle
+            return new Rect(minX, minY, width, height);
+        }
+
         private bool IsRectOverlap(RectTransform indicator, RectTransform boundary)
         {
-            return GetWorldRect(boundary).Contains(GetWorldRect(indicator).center);
+            var worldBoundary = RectTransformToScreenRect(boundary);
+            var worldIndicator = RectTransformToScreenRect(indicator);
+            Debug.Log($">>rect<< {worldBoundary.Contains(worldIndicator.center)} {worldIndicator} {worldBoundary}");
+            return worldBoundary.Contains(worldIndicator.center);
         }
 
         private Rect GetWorldRect(RectTransform rectTransform)
