@@ -734,7 +734,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                     GameRunner.Instance.Core.GameScene.CloseScene();
                     GameRunner.Instance.Core.GameScene.OnChangeSceneFinish.Subscribe(_ =>
                     {
-                        SiteRunner.Instance.Core.Site.SetSite(reward.Code);
+                        SiteRunner.Instance.Core.Site.SetSite(reward.Code, true, reward.Value);
                     });
                 }
             }
