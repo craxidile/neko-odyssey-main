@@ -10,6 +10,7 @@ public class EndDayResult_CanvasController : MonoBehaviour
     private CanvasGroup _canvasGroup;
     
     [SerializeField] public CanvasGroup subCanvasGroup;
+    [SerializeField] public CanvasGroup fading;
     
     public Subject<Unit> OnEndDayResultStart { get; } = new();
     public Subject<Unit> OnEndDayResultFinish { get; } = new();
@@ -19,8 +20,8 @@ public class EndDayResult_CanvasController : MonoBehaviour
     {
         _canvasGroup = GetComponent<CanvasGroup>();
 
-        _canvasGroup.LerpAlpha(0, 0);
-        subCanvasGroup.LerpAlpha(0, 0);
+        // _canvasGroup.LerpAlpha(0, 0);
+        // subCanvasGroup.LerpAlpha(0, 0);
     }
 
 
@@ -45,20 +46,20 @@ public class EndDayResult_CanvasController : MonoBehaviour
     void OpenPanel()
     {
         OnEndDayResultStart.OnNext(Unit.Default);
-        _canvasGroup.DOFade(1, fadeDuration).OnComplete(() =>
+        fading.DOFade(0, fadeDuration).OnComplete(() =>
         {
             _canvasGroup.interactable = true;
             _canvasGroup.blocksRaycasts = true;
-
+        
             subCanvasGroup.LerpAlpha(1, fadeDuration);
-
+        
         });
     }
     void ClosePanel()
     {
         _canvasGroup.interactable = false;
         _canvasGroup.blocksRaycasts = false;
-        _canvasGroup.DOFade(0, fadeDuration).OnComplete(() =>
+        fading.DOFade(1, fadeDuration).OnComplete(() =>
         {
             OnEndDayResultFinish.OnNext(Unit.Default);
         });
@@ -71,9 +72,6 @@ public class EndDayResult_CanvasController : MonoBehaviour
         if (_canvasGroup.interactable)
         {
             Debug.Log("Check input pass");
-
-            _canvasGroup.DOFade(0, fadeDuration);
-
             ClosePanel();
         }
     }
