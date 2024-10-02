@@ -346,7 +346,7 @@ GameObject:
   - component: {fileID: 65825428}
   - component: {fileID: 65825430}
   m_Layer: 0
-  m_Name: Ambience
+  m_Name: BGM
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -440,6 +440,7 @@ GameObject:
   - component: {fileID: 172454530}
   - component: {fileID: 172454529}
   - component: {fileID: 172454528}
+  - component: {fileID: 172454531}
   m_Layer: 0
   m_Name: FishingFight
   m_TagString: Untagged
@@ -536,6 +537,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 997030548}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &172454531
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 172454527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 1435626027
+      Data2: 1171016965
+      Data3: 1352170648
+      Data4: 195090755
+    Path: event:/SFX/MiniGame/Fishing/02Fight
+  Event: 
+  PlayEvent: 11
+  StopEvent: 12
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1 &292000398
 GameObject:
   m_ObjectHideFlags: 0
@@ -630,6 +662,7 @@ GameObject:
   - component: {fileID: 370461116}
   - component: {fileID: 370461115}
   - component: {fileID: 370461114}
+  - component: {fileID: 370461117}
   m_Layer: 0
   m_Name: FishingStart
   m_TagString: Untagged
@@ -726,6 +759,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 997030548}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &370461117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 370461113}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 1113205434
+      Data2: 1120322133
+      Data3: -1883067461
+      Data4: -188845711
+    Path: event:/SFX/MiniGame/Fishing/01StartAlert
+  Event: 
+  PlayEvent: 11
+  StopEvent: 12
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1 &486101566
 GameObject:
   m_ObjectHideFlags: 0
@@ -806,8 +870,10 @@ MonoBehaviour:
   mikiFishCatch: {fileID: 2014153387}
   mikiFishSnap: {fileID: 543359327}
   audioManager: {fileID: 486101569}
-  pullInput: {fileID: -6345154771045038727, guid: 70fcade2ab3a23947b7e1c81d323f40f, type: 3}
-  anyKeyInput: {fileID: -1111510344128302930, guid: 70fcade2ab3a23947b7e1c81d323f40f, type: 3}
+  pullInput: {fileID: -6345154771045038727, guid: 70fcade2ab3a23947b7e1c81d323f40f,
+    type: 3}
+  anyKeyInput: {fileID: -1111510344128302930, guid: 70fcade2ab3a23947b7e1c81d323f40f,
+    type: 3}
 --- !u!114 &486101569
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -822,8 +888,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SFXList: []
   BGMList: []
-  sfxMixerGroup: {fileID: 6368324167639461447, guid: ae6dc8e8c39bac543a59c0001597dfaa, type: 2}
-  bgmMixerGroup: {fileID: 2284069244973234203, guid: ae6dc8e8c39bac543a59c0001597dfaa, type: 2}
+  sfxMixerGroup: {fileID: 6368324167639461447, guid: ae6dc8e8c39bac543a59c0001597dfaa,
+    type: 2}
+  bgmMixerGroup: {fileID: 2284069244973234203, guid: ae6dc8e8c39bac543a59c0001597dfaa,
+    type: 2}
 --- !u!114 &486101570
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -848,7 +916,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: 70fcade2ab3a23947b7e1c81d323f40f, type: 3}
+  m_Actions: {fileID: -944628639613478452, guid: 70fcade2ab3a23947b7e1c81d323f40f,
+    type: 3}
   m_NotificationBehavior: 0
   m_UIInputModule: {fileID: 0}
   m_DeviceLostEvent:
@@ -877,6 +946,7 @@ GameObject:
   - component: {fileID: 543359330}
   - component: {fileID: 543359329}
   - component: {fileID: 543359328}
+  - component: {fileID: 543359331}
   m_Layer: 0
   m_Name: FishingFail
   m_TagString: Untagged
@@ -973,6 +1043,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 997030548}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &543359331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 543359327}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 386401530
+      Data2: 1281503214
+      Data3: -1722924672
+      Data4: 739761541
+    Path: event:/SFX/MiniGame/Fishing/04FishingFail
+  Event: 
+  PlayEvent: 11
+  StopEvent: 12
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1 &544005014
 GameObject:
   m_ObjectHideFlags: 0
@@ -1050,7 +1151,8 @@ SpriteMask:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
+  m_Sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7,
+    type: 3}
   m_MaskAlphaCutoff: 0.2
   m_FrontSortingLayerID: 0
   m_BackSortingLayerID: 0
@@ -1221,7 +1323,8 @@ SpriteMask:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
+  m_Sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7,
+    type: 3}
   m_MaskAlphaCutoff: 0.2
   m_FrontSortingLayerID: 0
   m_BackSortingLayerID: 0
@@ -1741,7 +1844,8 @@ SpriteMask:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
+  m_Sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7,
+    type: 3}
   m_MaskAlphaCutoff: 0.2
   m_FrontSortingLayerID: 0
   m_BackSortingLayerID: 0
@@ -2433,7 +2537,8 @@ SpriteMask:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
+  m_Sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7,
+    type: 3}
   m_MaskAlphaCutoff: 0.2
   m_FrontSortingLayerID: 0
   m_BackSortingLayerID: 0
@@ -3401,7 +3506,8 @@ SpriteMask:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
+  m_Sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7,
+    type: 3}
   m_MaskAlphaCutoff: 0.2
   m_FrontSortingLayerID: 0
   m_BackSortingLayerID: 0
@@ -3423,6 +3529,7 @@ GameObject:
   - component: {fileID: 2014153390}
   - component: {fileID: 2014153389}
   - component: {fileID: 2014153388}
+  - component: {fileID: 2014153391}
   m_Layer: 0
   m_Name: FishingCatch
   m_TagString: Untagged
@@ -3519,6 +3626,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 997030548}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2014153391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2014153387}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -850650738
+      Data2: 1304386307
+      Data3: 505250228
+      Data4: 134727818
+    Path: event:/SFX/MiniGame/Fishing/03FishingCatch
+  Event: 
+  PlayEvent: 11
+  StopEvent: 12
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!4 &111308840428245521
 Transform:
   m_ObjectHideFlags: 0
@@ -4350,6 +4488,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 65825429}
   - {fileID: 861870963302504470}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

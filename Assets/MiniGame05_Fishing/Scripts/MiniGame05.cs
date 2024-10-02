@@ -249,7 +249,7 @@ namespace MiniGame05_Fishing.Scripts
 
             
             var connector = MiniGameRunner.Instance.Connector;
-            OnStopSfx.OnNext("Ambience");
+            OnStopSfx.OnNext("BGM");
             connector.LeaveSite();
         }
         
