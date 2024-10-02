@@ -35,19 +35,32 @@ namespace MiniGame05_Fishing.Scripts
             MiniGame05.Instance.OnStopSfx
                 .Subscribe(StopSfx)
                 .AddTo(this);
+            MiniGame05.Instance.OnPlayCloneSfx
+                .Subscribe(CloneAndPlaySfx)
+                .AddTo(this);
         }
 
-        private void PlaySfx(string name)
+        private void CloneAndPlaySfx(string gameObjectName)
         {
-            if (!_audioSwitchMap.ContainsKey(name)) return;
-            var switchGameObject = _audioSwitchMap[name];
+            if (!_audioSwitchMap.TryGetValue(gameObjectName, out var switchGameObject)) return;
+            var clonedGameObject = Instantiate(switchGameObject, switchGameObject.transform.parent);
+            clonedGameObject.SetActive(true);
+            DOVirtual.DelayedCall(3f, () =>
+            {
+                clonedGameObject.SetActive(false);
+                Destroy(clonedGameObject);
+            });
+        }
+
+        private void PlaySfx(string gameObjectName)
+        {
+            if (!_audioSwitchMap.TryGetValue(gameObjectName, out var switchGameObject)) return;
             switchGameObject.SetActive(true);
         }
 
-        private void StopSfx(string name)
+        private void StopSfx(string gameObjectName)
         {
-            if (!_audioSwitchMap.ContainsKey(name)) return;
-            var switchGameObject = _audioSwitchMap[name];
+            if (!_audioSwitchMap.TryGetValue(gameObjectName, out var switchGameObject)) return;
             switchGameObject.SetActive(false);
         }
     }
