@@ -148,7 +148,7 @@ namespace MiniGame05_Fishing.Scripts
             if (pullInput.action.triggered)
             {
                 hookProgress += hookPower;
-                OnPlayCloneSfx.OnNext("SFX_Tab");
+                OnPlayCloneSfx.OnNext("SFX_Tap");
             }
 
             hookProgress -= hookProgressDegradationPower * Time.deltaTime;
