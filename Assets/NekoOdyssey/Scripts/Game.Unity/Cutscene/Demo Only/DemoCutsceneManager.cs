@@ -52,7 +52,7 @@ public class DemoCutsceneManager : MonoBehaviour
     public void CutSceneIntroIsDone()
     {
         // TODO: Remove this after demo
-        using (new SaveV001DbContext(new() { CopyMode = DbCopyMode.ForceCopy, ReadOnly = false })) ;
+        // using (new SaveV001DbContext(new() { CopyMode = DbCopyMode.ForceCopy, ReadOnly = false })) ;
         
         isDone = true;
         Debug.Log("Runsite here");
