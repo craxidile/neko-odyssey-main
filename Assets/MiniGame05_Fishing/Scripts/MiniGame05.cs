@@ -4,6 +4,7 @@ using DG.Tweening;
 using NekoOdyssey.Scripts;
 using UniRx;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
 
 namespace MiniGame05_Fishing.Scripts
@@ -52,8 +53,13 @@ namespace MiniGame05_Fishing.Scripts
 
         [Header("Audio")] public MiniGame05AudioManager audioManager;
 
+        [Header("Input Actions")]
+        public InputActionReference pullInput;
+        public InputActionReference anyKeyInput;
+
         public Subject<string> OnPlaySfx { get; } = new();
         public Subject<string> OnPlayLoopSfx { get; } = new();
+        public Subject<string> OnPlayCloneSfx { get; } = new();
         public Subject<string> OnStopSfx { get; } = new();
 
         private void Awake()
@@ -138,7 +144,12 @@ namespace MiniGame05_Fishing.Scripts
 
         private void HookProgress()
         {
-            if (Input.GetKeyDown(KeyCode.Space)) hookProgress += hookPower;
+            // if (Input.GetKeyDown(KeyCode.Space)) hookProgress += hookPower;
+            if (pullInput.action.triggered)
+            {
+                hookProgress += hookPower;
+                OnPlayCloneSfx.OnNext("SFX_Tap");
+            }
 
             hookProgress -= hookProgressDegradationPower * Time.deltaTime;
             hookProgress = Mathf.Clamp(hookProgress, 0f, 1f);
@@ -175,7 +186,8 @@ namespace MiniGame05_Fishing.Scripts
             alert.SetActive(true);
             OnPlayLoopSfx.OnNext("SFX_Alert");
 
-            while (!Input.GetKeyDown(KeyCode.Space)) yield return null;
+            // while (!Input.GetKeyDown(KeyCode.Space)) yield return null;
+            while (!anyKeyInput.action.triggered) yield return null;
 
             alert.SetActive(false);
             OnStopSfx.OnNext("SFX_Alert");
@@ -235,8 +247,11 @@ namespace MiniGame05_Fishing.Scripts
                 yield return null;
             }
 
+            
             var connector = MiniGameRunner.Instance.Connector;
+            OnStopSfx.OnNext("BGM");
             connector.LeaveSite();
         }
+        
     }
 }
