@@ -23,6 +23,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.Feed
             PlayerMenuAction.FeedFish008,
             PlayerMenuAction.FeedFish009,
             PlayerMenuAction.FeedFish010,
+            PlayerMenuAction.FeedFish011,
+            PlayerMenuAction.FeedCan,
         };
         
         private Core.Player.Player _player;

@@ -21,7 +21,7 @@
         RightExit,
         NoEntry,
         SkipTime,
-        FeedFish000,
+        FeedFish000 = 100,
         FeedFish001,
         FeedFish002,
         FeedFish003,
@@ -32,5 +32,7 @@
         FeedFish008,
         FeedFish009,
         FeedFish010,
+        FeedFish011,
+        FeedCan = 200,
     }
 }
