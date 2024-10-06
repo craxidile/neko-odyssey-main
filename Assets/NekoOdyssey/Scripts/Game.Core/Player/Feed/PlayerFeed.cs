@@ -1,4 +1,5 @@
-﻿using NekoOdyssey.Scripts.Game.Core.Feed;
+﻿using System.Collections.Generic;
+using NekoOdyssey.Scripts.Game.Core.Feed;
 using NekoOdyssey.Scripts.Game.Core.PlayerMenu;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 using UniRx;
@@ -8,6 +9,23 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Feed
 {
     public class PlayerFeed
     {
+        private static readonly Dictionary<PlayerMenuAction, string> ActionToCodeMap = new()
+        {
+            { PlayerMenuAction.FeedFish000, "CatFoodFish000" },
+            { PlayerMenuAction.FeedFish001, "CatFoodFish001" },
+            { PlayerMenuAction.FeedFish002, "CatFoodFish002" },
+            { PlayerMenuAction.FeedFish003, "CatFoodFish003" },
+            { PlayerMenuAction.FeedFish004, "CatFoodFish004" },
+            { PlayerMenuAction.FeedFish005, "CatFoodFish005" },
+            { PlayerMenuAction.FeedFish006, "CatFoodFish006" },
+            { PlayerMenuAction.FeedFish007, "CatFoodFish007" },
+            { PlayerMenuAction.FeedFish008, "CatFoodFish008" },
+            { PlayerMenuAction.FeedFish009, "CatFoodFish009" },
+            { PlayerMenuAction.FeedFish010, "CatFoodFish010" },
+            { PlayerMenuAction.FeedFish011, "CatFoodFish011" },
+            { PlayerMenuAction.FeedCan, "CatFoodCan001" },
+        };
+
         public Vector3 TargetPosition { get; set; }
         public FeedMode Mode { get; set; }
 
@@ -27,45 +45,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Feed
 
         public void FeedCat(PlayerMenuAction action)
         {
-            string itemName = null;
-            switch (action)
-            {
-                case PlayerMenuAction.FeedFish000:
-                    itemName = "CatFoodFish001";
-                    break;
-                case PlayerMenuAction.FeedFish001:
-                    itemName = "CatFoodFish002";
-                    break;
-                case PlayerMenuAction.FeedFish002:
-                    itemName = "CatFoodFish003";
-                    break;
-                case PlayerMenuAction.FeedFish003:
-                    itemName = "CatFoodFish004";
-                    break;
-                case PlayerMenuAction.FeedFish004:
-                    itemName = "CatFoodFish005";
-                    break;
-                case PlayerMenuAction.FeedFish005:
-                    itemName = "CatFoodFish006";
-                    break;
-                case PlayerMenuAction.FeedFish006:
-                    itemName = "CatFoodFish007";
-                    break;
-                case PlayerMenuAction.FeedFish007:
-                    itemName = "CatFoodFish008";
-                    break;
-                case PlayerMenuAction.FeedFish008:
-                    itemName = "CatFoodFish009";
-                    break;
-                case PlayerMenuAction.FeedFish009:
-                    itemName = "CatFoodFish010";
-                    break;
-                case PlayerMenuAction.FeedFish010:
-                    itemName = "CatFoodFish011";
-                    break;
-                default: return;
-            }
-            GameRunner.Instance.Core.Player.Bag.UseBagItem(itemName);
+            if (!ActionToCodeMap.TryGetValue(action, out var itemCode)) return;
+            GameRunner.Instance.Core.Player.Bag.UseBagItem(itemCode);
         }
 
         public void Finish()
