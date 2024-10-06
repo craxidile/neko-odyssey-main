@@ -8,6 +8,7 @@ using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 using NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone.CatNote;
 using NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone.PhotoGallery;
 using NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone.SocialNetwork;
+using NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone.Chatbox;
 using NekoOdyssey.Scripts.Game.Unity.Uis.Utils;
 using TMPro;
 using UniRx;
@@ -75,6 +76,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone
             gameObject.AddComponent<PhoneSocialNetworkController>();
             gameObject.AddComponent<PhonePhotoGalleryController>();
             gameObject.AddComponent<PhoneCatNoteController>();
+            gameObject.AddComponent<PhoneChatboxController2>();
         }
 
         private void Start()

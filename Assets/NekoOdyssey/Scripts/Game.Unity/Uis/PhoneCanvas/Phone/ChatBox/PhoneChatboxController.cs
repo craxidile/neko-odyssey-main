@@ -3,10 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
+using UniRx;
+using NekoOdyssey.Scripts.Game.Core.Player.Phone;
+using NekoOdyssey.Scripts.Game.Unity.AssetBundles;
+using NekoOdyssey.Scripts.Models;
 
 using DG.Tweening;
 
-public class PhoneChatboxController : MonoBehaviour
+namespace NekoOdyssey.Scripts.Game.Unity.Uis.PhoneCanvas.Phone.Chatbox
+{
+    public class PhoneChatboxController : MonoBehaviour
 {
     #region Move this part to database or file save later
     //public class ChatHistoryElement
@@ -96,6 +102,7 @@ public class PhoneChatboxController : MonoBehaviour
         {
             ClosePanel_chatDetail();
         });
+
     }
     // Start is called before the first frame update
     void Start()
@@ -554,4 +561,6 @@ public class PhoneChatboxController : MonoBehaviour
 
         return friendPresenter;
     }
+}
+
 }

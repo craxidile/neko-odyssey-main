@@ -9,12 +9,9 @@ namespace NekoOdyssey.Scripts.Game.Unity.Petting
     public class CentralPlayerPettingHandler : MonoBehaviour
     {
         private Core.Player.Player _player;
-        private global::Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu.PlayerMenu _playerMenu;
+        private global::NekoOdyssey.Scripts.Game.Core.PlayerMenu.PlayerMenu _playerMenu;
         private Core.Player.Petting.PlayerPetting _petting;
         
-        private Animator _animator;
-        private SpriteRenderer _renderer;
-
         private void Awake()
         {
             _player = GameRunner.Instance.Core.Player;
@@ -25,7 +22,9 @@ namespace NekoOdyssey.Scripts.Game.Unity.Petting
 
         private void Start()
         {
-            _playerMenu.OnCommitAction.Subscribe(HandlePlayerMenuAction);
+            _playerMenu.OnCommitAction
+                .Subscribe(HandlePlayerMenuAction)
+                .AddTo(this);
         }
 
         private void HandlePlayerMenuAction(PlayerMenuAction action)

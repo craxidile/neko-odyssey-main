@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NekoOdyssey.Scripts;
-using NekoOdyssey.Scripts.Game.Core.PlayerMenu;
-using NekoOdyssey.Scripts.Game.Unity;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 using UniRx;
+using UniRx.Triggers;
 using UnityEngine;
 
-namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
+namespace NekoOdyssey.Scripts.Game.Core.PlayerMenu
 {
     public class PlayerMenu
     {
+        private const float SlideInputDelay = .3f;
+
         private readonly List<PlayerMenuAction> _actionsToStopPlayer = new()
         {
             PlayerMenuAction.Enter,
@@ -29,6 +29,7 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
         private bool _active;
         private PlayerMenuAction _currentAction;
         private PlayerMenuAction[] _actions = Array.Empty<PlayerMenuAction>();
+        private float _slideInputTime;
 
         // public PlayerMenuSite Site { get; private set; } = PlayerMenuSite.None;
         public string SiteName { get; private set; }
@@ -73,7 +74,8 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
         public void SetMenuLevel(int level)
         {
             var playerMode = GameRunner.Instance.Core.Player.Mode;
-            Debug.Log($"<color=yellow>>>player_mode<< {playerMode} {(new System.Diagnostics.StackTrace()).GetFrame(1).GetMethod().Name}</color>");
+            Debug.Log(
+                $"<color=yellow>>>player_mode<< {playerMode} {(new System.Diagnostics.StackTrace()).GetFrame(1).GetMethod().Name}</color>");
             if (playerMode != PlayerMode.Move && playerMode != PlayerMode.Submenu) return;
             GameRunner.Instance.Core.Player.SetMode(level == 0 ? PlayerMode.Move : PlayerMode.Submenu);
             MenuLevel = level;
@@ -127,23 +129,26 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
         {
             // Commit Action
             GameRunner.Instance.PlayerInputHandler.OnFireTriggerred
-                .Subscribe(_ => { CommitAction(); })
+                .Subscribe(_ => CommitAction())
                 .AddTo(GameRunner.Instance);
             // Cancel Action
             GameRunner.Instance.PlayerInputHandler.OnCancelTriggerred
-                .Subscribe(_ => { CancelAction(); })
+                .Subscribe(_ => CancelAction())
                 .AddTo(GameRunner.Instance);
             // Previous Action
             GameRunner.Instance.PlayerInputHandler.OnNextMenuTriggerred
-                .Subscribe(_ => { SelectPreviousAction(); })
+                .Subscribe(_ => SelectPreviousAction())
                 .AddTo(GameRunner.Instance);
             // Next Action
             GameRunner.Instance.PlayerInputHandler.OnPrevMenuTriggerred
-                .Subscribe(_ => { SelectNextAction(); })
+                .Subscribe(_ => SelectNextAction())
                 .AddTo(GameRunner.Instance);
             // Slide Action
             GameRunner.Instance.PlayerInputHandler.OnSlideAction
                 .Subscribe(SlideAction)
+                .AddTo(GameRunner.Instance);
+            GameRunner.Instance.UpdateAsObservable()
+                .Subscribe(_ => DecreaseSlideInputTime())
                 .AddTo(GameRunner.Instance);
         }
 
@@ -179,10 +184,21 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
                 GameRunner.Instance.Core.Player.SetMode(PlayerMode.Stop);
         }
 
+        private void DecreaseSlideInputTime()
+        {
+            _slideInputTime = Math.Max(0, _slideInputTime - Time.deltaTime);
+            Debug.Log($">>player_menu<< input_delay {_slideInputTime}");
+        }
+
         private void SlideAction(Vector2 movement)
         {
             var mode = GameRunner.Instance.Core.Player.Mode;
             if (mode != PlayerMode.Submenu || !_active || _actions.Length == 0) return;
+
+            Debug.Log($">>player_menu<< slide");
+
+            if (_slideInputTime > 0) return;
+
             var x = movement.x;
             switch (x)
             {
@@ -192,7 +208,10 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
                 case < 0:
                     SelectNextAction();
                     break;
+                default: return;
             }
+
+            _slideInputTime = SlideInputDelay;
         }
 
         private void SelectPreviousAction()
@@ -201,6 +220,7 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
             if (mode != PlayerMode.Submenu || !_active || _actions.Length == 0) return;
             var index = _actions.ToList().IndexOf(_currentAction);
             index = Math.Min(_actions.Length - 1, index + 1);
+            Debug.Log($">>player_menu<< prev <color=green>{index}</color>");
             SetCurrentAction(_actions[index]);
         }
 
@@ -210,6 +230,7 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
             if (mode != PlayerMode.Submenu || !_active || _actions.Length == 0) return;
             var index = _actions.ToList().IndexOf(_currentAction);
             index = Math.Max(0, index - 1);
+            Debug.Log($">>player_menu<< next <color=green>{index}</color>");
             SetCurrentAction(_actions[index]);
         }
     }

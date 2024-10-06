@@ -95,6 +95,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.ConfirmationPanel
 
         public void SetVisible(bool visible, bool animating = true)
         {
+            Debug.Log($"ConfirmationPanel SetVisible {visible} {animating}");
             _visible = visible;
             var canvasGroupAlpha = !visible ? 0 : 1;
             if (!animating)

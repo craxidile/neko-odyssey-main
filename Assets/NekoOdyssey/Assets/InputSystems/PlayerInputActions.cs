@@ -100,6 +100,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""SlideMenu"",
+                    ""type"": ""Value"",
+                    ""id"": ""5109e9fc-adab-454f-b758-58c0dfcb87fa"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": ""NormalizeVector2"",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
                     ""name"": ""Fire"",
                     ""type"": ""Button"",
                     ""id"": ""8d194a38-139c-4c47-8262-85866b3d27ae"",
@@ -645,6 +654,39 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""PauseGame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8da6da2d-b50d-4183-94a5-ad271cb44a62"",
+                    ""path"": ""<Gamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""SlideMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""598e9f6d-7987-45f1-aebd-b23fd56b606f"",
+                    ""path"": ""<XRController>/{Primary2DAxis}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""XR"",
+                    ""action"": ""SlideMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3b0fe14d-76c2-4d1a-9ccc-8065a9b43519"",
+                    ""path"": ""<Joystick>/stick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Joystick"",
+                    ""action"": ""SlideMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1638,6 +1680,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_Bag = m_Player.FindAction("Bag", throwIfNotFound: true);
         m_Player_PrevMenu = m_Player.FindAction("PrevMenu", throwIfNotFound: true);
         m_Player_NextMenu = m_Player.FindAction("NextMenu", throwIfNotFound: true);
+        m_Player_SlideMenu = m_Player.FindAction("SlideMenu", throwIfNotFound: true);
         m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
         m_Player_Speed = m_Player.FindAction("Speed", throwIfNotFound: true);
         m_Player_Cancel = m_Player.FindAction("Cancel", throwIfNotFound: true);
@@ -1731,6 +1774,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Bag;
     private readonly InputAction m_Player_PrevMenu;
     private readonly InputAction m_Player_NextMenu;
+    private readonly InputAction m_Player_SlideMenu;
     private readonly InputAction m_Player_Fire;
     private readonly InputAction m_Player_Speed;
     private readonly InputAction m_Player_Cancel;
@@ -1750,6 +1794,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @Bag => m_Wrapper.m_Player_Bag;
         public InputAction @PrevMenu => m_Wrapper.m_Player_PrevMenu;
         public InputAction @NextMenu => m_Wrapper.m_Player_NextMenu;
+        public InputAction @SlideMenu => m_Wrapper.m_Player_SlideMenu;
         public InputAction @Fire => m_Wrapper.m_Player_Fire;
         public InputAction @Speed => m_Wrapper.m_Player_Speed;
         public InputAction @Cancel => m_Wrapper.m_Player_Cancel;
@@ -1790,6 +1835,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @NextMenu.started += instance.OnNextMenu;
             @NextMenu.performed += instance.OnNextMenu;
             @NextMenu.canceled += instance.OnNextMenu;
+            @SlideMenu.started += instance.OnSlideMenu;
+            @SlideMenu.performed += instance.OnSlideMenu;
+            @SlideMenu.canceled += instance.OnSlideMenu;
             @Fire.started += instance.OnFire;
             @Fire.performed += instance.OnFire;
             @Fire.canceled += instance.OnFire;
@@ -1839,6 +1887,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @NextMenu.started -= instance.OnNextMenu;
             @NextMenu.performed -= instance.OnNextMenu;
             @NextMenu.canceled -= instance.OnNextMenu;
+            @SlideMenu.started -= instance.OnSlideMenu;
+            @SlideMenu.performed -= instance.OnSlideMenu;
+            @SlideMenu.canceled -= instance.OnSlideMenu;
             @Fire.started -= instance.OnFire;
             @Fire.performed -= instance.OnFire;
             @Fire.canceled -= instance.OnFire;
@@ -2112,6 +2163,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnBag(InputAction.CallbackContext context);
         void OnPrevMenu(InputAction.CallbackContext context);
         void OnNextMenu(InputAction.CallbackContext context);
+        void OnSlideMenu(InputAction.CallbackContext context);
         void OnFire(InputAction.CallbackContext context);
         void OnSpeed(InputAction.CallbackContext context);
         void OnCancel(InputAction.CallbackContext context);

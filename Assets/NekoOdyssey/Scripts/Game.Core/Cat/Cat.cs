@@ -6,6 +6,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Cat
     {
         public string Code { get; }
         public Subject<CatEmotion> OnChangeEmotion { get; } = new();
+        public Subject<bool> OnEat { get; } = new();
         public CatEmotion Emotion { get; set; } = CatEmotion.None;
 
         public Cat(string code)
@@ -23,6 +24,11 @@ namespace NekoOdyssey.Scripts.Game.Core.Cat
 
         public void Start()
         {
+        }
+
+        public void Eat(bool eating)
+        {
+            OnEat.OnNext(eating);
         }
 
         public void SetEmotion(CatEmotion emotion)

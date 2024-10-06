@@ -9,6 +9,7 @@ using NekoOdyssey.Scripts.Game.Unity.Player.Movement;
 using NekoOdyssey.Scripts.Game.Unity.Player.Petting;
 using NekoOdyssey.Scripts.Game.Unity.Player.Phone;
 using NekoOdyssey.Scripts.Game.Unity.Player.EndDay;
+using NekoOdyssey.Scripts.Game.Unity.Player.Feed;
 using UniRx;
 using UniRx.Triggers;
 using Unity.VisualScripting;
@@ -37,6 +38,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
         private PlayerCaptureController _captureController;
         private PlayerConversationController _conversationController;
         private PlayerPettingController _pettingController;
+        private PlayerFeedController _feedController;
 
         private Animator _animator;
         public Animator Animator => _animator;
@@ -61,6 +63,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
             _captureController = gameObject.AddComponent<PlayerCaptureController>();
             _conversationController = gameObject.AddComponent<PlayerConversationController>();
             _pettingController = gameObject.AddComponent<PlayerPettingController>();
+            _feedController = gameObject.AddComponent<PlayerFeedController>();
             gameObject.AddComponent<PlayerEndDayController>();
 
             _animator = GetComponent<Animator>() ?? GetComponentInChildren<Animator>();
