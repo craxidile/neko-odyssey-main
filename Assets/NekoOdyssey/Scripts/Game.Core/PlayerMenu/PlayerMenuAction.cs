@@ -20,6 +20,17 @@
         RightEnter,
         RightExit,
         NoEntry,
-        SkipTime
+        SkipTime,
+        FeedFish000,
+        FeedFish001,
+        FeedFish002,
+        FeedFish003,
+        FeedFish004,
+        FeedFish005,
+        FeedFish006,
+        FeedFish007,
+        FeedFish008,
+        FeedFish009,
+        FeedFish010,
     }
 }

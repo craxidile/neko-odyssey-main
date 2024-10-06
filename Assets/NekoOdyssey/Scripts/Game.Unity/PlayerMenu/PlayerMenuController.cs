@@ -212,8 +212,12 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
             if (actionName == null) return;
             var bundleName = $"{actionName.ToLower()}action";
 
-            if (!GameRunner.Instance.AssetMap.ContainsKey(bundleName)) return;
-            var bannerAsset = GameRunner.Instance.AssetMap[bundleName];
+            Debug.Log($">>bundle_name<< {bundleName} load");
+            if (!GameRunner.Instance.AssetMap.TryGetValue(bundleName, out var bannerAsset))
+            {
+                Debug.Log($">>bundle_name<< {bundleName} not_found");
+                return;
+            }
 
             if (!bannerAsset) return;
             var banner = Instantiate(bannerAsset, transform) as GameObject;
