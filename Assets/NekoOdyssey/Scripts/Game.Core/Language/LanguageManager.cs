@@ -8,8 +8,8 @@ public enum languageType
     EN,
     TH,
     JP,
-    S_CN,
-    T_CN,
+    ZH_CN,
+    ZH_TW,
 }
 
 public class LanguageManager : MonoBehaviour

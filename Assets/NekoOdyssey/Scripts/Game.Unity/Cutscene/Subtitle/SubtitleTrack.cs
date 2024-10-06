@@ -4,8 +4,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
+using UnityEngine.UI;
 
-[TrackBindingType(typeof(TextMeshProUGUI))]
+[TrackBindingType(typeof(Text))]
 [TrackColor(0.855f, 0.903f, 0.87f)]
 [TrackClipType(typeof(SubtitleClip))]
 public class SubtitleTrack : TrackAsset

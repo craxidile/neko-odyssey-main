@@ -1,43 +1,55 @@
+using NekoOdyssey.Scripts.Constants;
+using NekoOdyssey.Scripts.Database.Domains.Npc.Commons;
+using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.ChatGroupEntity.Models;
+using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogAnswerEntity.Models;
+using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogConditionEntity.Models;
+using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogEntity.Models;
+using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogQuestionEntity.Models;
+using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.QuestGroupEntity.Models;
+using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.SubDialogEntity.Models;
 using NekoOdyssey.Scripts.Game.Unity.Uis.DialogCanvas;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Playables;
-
+using UniRx;
+using DayOfWeek = NekoOdyssey.Scripts.Database.Commons.Models.DayOfWeek;
+using NekoOdyssey.Scripts;
+public enum DatabaseDialogueType
+{
+    CMS,
+    CSV,
+}
 public class DialogueData
 {
     public string DialogueSentance;
-
-    public string[] GetDialogueSentanceSeperateLine()
-    {
-        return DialogueSentance.Split(('\n')).ToArray();
-    }
 }
 
 public class DialogueManager : MonoBehaviour
 {
     public static DialogueManager instance;
-    [HideInInspector]
-    public PlayableDirector director;
-    public DialogCanvasController canvasController;
-    public bool endBubble;
+    [Header("Type of data")]
+    public DatabaseDialogueType data = DatabaseDialogueType.CMS;
 
-    //languege
+    [Header("CMS")]
+    public string npcDialogCode;
+
+    [Header("CSV")]
+    [SerializeField] TextAsset DialogueAsset;
     int languageColumnIndex = 1;
-        public languageType language = languageType.EN;
-    public static languageType globalLanguage = LanguageManager.globalLanguage;
+    public languageType language = languageType.EN;
 
-    public void UpdateGlobalLanguage()
-    {
-        Debug.Log($"ChangeLanguage : {language} to {globalLanguage}");
-        language = globalLanguage;
-    }
+    [HideInInspector] public PlayableDirector director;
+    [HideInInspector] public DialogCanvasController canvasController;
+    [HideInInspector] public bool endBubble;
+    //languege
+
 
     // Dialogue
-    [SerializeField] TextAsset DialogueAsset;
 
-    
+
     static Dictionary<string, DialogueData> AllDialogueData = new Dictionary<string, DialogueData>();
 
     public static DialogueData GetDialogue(string lineIndexID)
@@ -47,11 +59,27 @@ public class DialogueManager : MonoBehaviour
     private void Awake()
     {
         director = GetComponent<PlayableDirector>();
+        canvasController = FindAnyObjectByType<DialogCanvasController>();
         canvasController.SetOpened(false);
-        UpdateGlobalLanguage();
-        LoadDialogueCSV();
     }
-
+    private void Start()
+    {
+        if (data == DatabaseDialogueType.CSV)
+        {
+            LoadDialogueCSV();
+        }
+        else if (data == DatabaseDialogueType.CMS)
+        {
+            if (!string.IsNullOrEmpty(npcDialogCode))
+            {
+                new DialogueManager().LoadDialogueCMS(npcDialogCode);
+            }
+            else
+            {
+                Debug.LogWarning($">>npc_dialog_code<< Not Found ");
+            }
+        }
+    }
     private void Update()
     {
         if (Input.anyKeyDown && !endBubble)
@@ -84,13 +112,86 @@ public class DialogueManager : MonoBehaviour
             dialogue = dialogue.Replace('_', '\n');
             newDialogueData.DialogueSentance = dialogue;
 
-            if (!AllDialogueData.ContainsKey(row[0])) 
+            if (!AllDialogueData.ContainsKey(row[0]))
             {
                 AllDialogueData.Add(row[0], newDialogueData);
             }
         }
 
     }
+    public void LoadDialogueCMS(string dialogCode)
+    {
+        var questGroupsMasterData = GameRunner.Instance.Core.MasterData.NpcMasterData.QuestGroupsMasterData;
+        var dialogMasterData = GameRunner.Instance.Core.MasterData.NpcMasterData.DialogsMasterData;
+        if (questGroupsMasterData.Ready)
+        {
+            ExecuteDialog(dialogMasterData.Dialogs.FirstOrDefault(d => d.Code == dialogCode));
+
+        }
+        else
+        {
+            questGroupsMasterData.OnReady
+                .Subscribe(_ =>
+                {
+                    ExecuteDialog(dialogMasterData.Dialogs.FirstOrDefault(d => d.Code == dialogCode));
+                })
+                .AddTo(GameRunner.Instance);
+        }
+
+    }
+
+    private void ExecuteDialog(Dialog dialog)
+    {
+        Debug.Log($">>test_npc<< >>dialog<< {dialog.Code}");
+
+        IDialogNextEntity next;
+        next = dialog.NextEntity;
+        if (next is SubDialog)
+        {
+            ExecuteSubDialog(next as SubDialog);
+        }
+    }
+
+    private void ExecuteSubDialog(SubDialog subDialog)
+    {
+        Debug.Log($">>sub_dialog<< {subDialog.Id}");
+
+        foreach (var line in subDialog.Lines)
+        {
+            DialogueData newDialogueData = new DialogueData();
+
+            Debug.Log($">>dialog_npc_cutscene<< >>line<< {line.Actor} {line.LocalizedText.ToLocalizedString(GameRunner.Instance.Core.Settings.Locale)}");
+            newDialogueData.DialogueSentance = line.LocalizedText.ToLocalizedString(GameRunner.Instance.Core.Settings.Locale);
+
+            if (!AllDialogueData.ContainsKey(line.LocalizedText.Original))
+            {
+                AllDialogueData.Add(line.LocalizedText.Original, newDialogueData);
+            }
+        }
+
+        var childFlag = subDialog.DialogChildFlag;
+        switch (childFlag)
+        {
+            case DialogChildFlag.End:
+                EndDialog();
+                break;
+            case DialogChildFlag.Cancel:
+                CancelDialog();
+                break;
+            default:
+                return;
+        }
+    }
+    private void EndDialog()
+    {
+        Debug.Log($">>test_npc<< >>end<<");
+    }
+
+    private void CancelDialog()
+    {
+        Debug.Log($">>test_npc<< >>cancel<<");
+    }
+
     void CheckColumnIndex(string fristColumn)
     {
         var row = fristColumn.Split((',')).ToArray();
@@ -104,6 +205,5 @@ public class DialogueManager : MonoBehaviour
             }
         }
     }
-
 }
 

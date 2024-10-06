@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
+  m_IndirectSpecularColor: {r: 0.17883006, g: 0.22392084, b: 0.30580437, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2422,11 +2422,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a851123401674164ab4b782e01c4af3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  data: 0
+  npcDialogCode: 
+  DialogueAsset: {fileID: 4900000, guid: 3ee4f69fe5cfedf468ee543c7424154d, type: 3}
+  language: 1
   director: {fileID: 0}
   canvasController: {fileID: 949533038}
   endBubble: 0
-  language: 1
-  DialogueAsset: {fileID: 4900000, guid: 3ee4f69fe5cfedf468ee543c7424154d, type: 3}
 --- !u!320 &455220797
 PlayableDirector:
   m_ObjectHideFlags: 0
@@ -2476,6 +2478,16 @@ PlayableDirector:
     value: {fileID: 205696136}
   - key: {fileID: -5201299704729500822, guid: 23718df98aa781847a558e72cc5d0025, type: 2}
     value: {fileID: 791999154}
+  - key: {fileID: -6377284431517895059, guid: 23718df98aa781847a558e72cc5d0025, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -3621866221220294276, guid: 23718df98aa781847a558e72cc5d0025, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -3570440032912141771, guid: 23718df98aa781847a558e72cc5d0025, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -2056403931016459673, guid: 23718df98aa781847a558e72cc5d0025, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -7622375081701334906, guid: 23718df98aa781847a558e72cc5d0025, type: 2}
+    value: {fileID: 0}
   m_ExposedReferences:
     m_References:
     - 4f8647c87001b844d968eefe0cee7b96: {fileID: 0}
@@ -5127,6 +5139,7 @@ MonoBehaviour:
   cameras:
     mainCamera: {fileID: 0}
     playerCamera: {fileID: 0}
+    mainVirtualCamera: {fileID: 0}
   gameCoreMode: 1
   CsvHolder: {fileID: 11400000, guid: 82a36c8f9637f3c40bc603bbea42118b, type: 2}
 --- !u!1 &993745711
@@ -5784,11 +5797,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a851123401674164ab4b782e01c4af3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  data: 0
+  npcDialogCode: 
+  DialogueAsset: {fileID: 4900000, guid: 71e3827838da3dc418e7fca12803a184, type: 3}
+  language: 1
   director: {fileID: 1070239354}
   canvasController: {fileID: 1373956152}
   endBubble: 0
-  language: 1
-  DialogueAsset: {fileID: 4900000, guid: 71e3827838da3dc418e7fca12803a184, type: 3}
 --- !u!114 &1070239357
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5927,6 +5942,14 @@ PlayableDirector:
     value: {fileID: 1668572763}
   - key: {fileID: -3785270706442776295, guid: 906dcbe12bd97d341a6eadd1b9eda1c2, type: 2}
     value: {fileID: 1101709102}
+  - key: {fileID: 8699955066041265978, guid: 906dcbe12bd97d341a6eadd1b9eda1c2, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 8161512575223872960, guid: 906dcbe12bd97d341a6eadd1b9eda1c2, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 591949006059228007, guid: 906dcbe12bd97d341a6eadd1b9eda1c2, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -1748248029582325939, guid: 906dcbe12bd97d341a6eadd1b9eda1c2, type: 2}
+    value: {fileID: 0}
   m_ExposedReferences:
     m_References:
     - 4f8647c87001b844d968eefe0cee7b96: {fileID: 0}
@@ -5973,11 +5996,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a851123401674164ab4b782e01c4af3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  data: 0
+  npcDialogCode: 
+  DialogueAsset: {fileID: 4900000, guid: 3ee4f69fe5cfedf468ee543c7424154d, type: 3}
+  language: 1
   director: {fileID: 0}
   canvasController: {fileID: 1668572763}
   endBubble: 0
-  language: 1
-  DialogueAsset: {fileID: 4900000, guid: 3ee4f69fe5cfedf468ee543c7424154d, type: 3}
 --- !u!114 &1101709103
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8878,7 +8903,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!320 &1864802090
 PlayableDirector:
   m_ObjectHideFlags: 0
@@ -8930,6 +8955,10 @@ PlayableDirector:
     value: {fileID: 993745711}
   - key: {fileID: 5638257004242190045, guid: bbde2d9d20697cf4f81d4e441859ecf3, type: 2}
     value: {fileID: 1936102136}
+  - key: {fileID: -1561334859504936165, guid: bbde2d9d20697cf4f81d4e441859ecf3, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -361628834624669168, guid: bbde2d9d20697cf4f81d4e441859ecf3, type: 2}
+    value: {fileID: 0}
   m_ExposedReferences:
     m_References:
     - 74e8328f4ec6d9841b1b4149c99a24c7: {fileID: 1193577899}
@@ -9944,7 +9973,7 @@ Transform:
   m_GameObject: {fileID: 2103985733}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 23, y: -1.47, z: -25.984}
+  m_LocalPosition: {x: -8.5, y: -1.221, z: 11.57}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10102,7 +10131,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 35.983395
+  field of view: 60.000004
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
