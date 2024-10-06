@@ -16,6 +16,7 @@ using NekoOdyssey.Scripts.Game.Core.Player.Capture;
 using NekoOdyssey.Scripts.Game.Core.Player.Conversation;
 using NekoOdyssey.Scripts.Game.Core.Player.ItemObain;
 using NekoOdyssey.Scripts.Game.Core.Player.ConfirmationPanel;
+using NekoOdyssey.Scripts.Game.Core.Player.Feed;
 using NekoOdyssey.Scripts.Game.Core.Player.Petting;
 using NekoOdyssey.Scripts.Game.Core.Player.Phone;
 using NekoOdyssey.Scripts.Game.Core.Player.Phone.Apps;
@@ -41,6 +42,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
         public PlayerBag Bag { get; } = new();
         public PlayerCapture Capture { get; } = new();
         public PlayerPetting Petting { get; } = new();
+        public PlayerFeed Feed { get; } = new();
         public PlayerConversation Conversation { get; } = new();
         public PlayerStamina Stamina { get; } = new(); // linias added
         public PlayerItemObtainPopUp ItemObtainPopUp { get; } = new();
@@ -79,6 +81,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
             Bag.Bind();
             Capture.Bind();
             Conversation.Bind();
+            Petting.Bind();
+            Feed.Bind();
             Stamina.Bind();
             ItemObtainPopUp.Bind();
             ConfirmationPanel.Bind();
@@ -110,6 +114,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
             Bag.Start();
             Capture.Start();
             Conversation.Start();
+            Petting.Start();
+            Feed.Start();
 
             Stamina.Start();
             Stamina.OnChangeStamina
@@ -137,6 +143,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
             Bag.Unbind();
             Capture.Unbind();
             Conversation.Unbind();
+            Petting.Unbind();
+            Feed.Unbind();
             Stamina.Unbind();
             ItemObtainPopUp.Unbind();
             ConfirmationPanel.Unbind();

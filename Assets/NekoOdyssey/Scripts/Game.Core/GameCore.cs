@@ -27,7 +27,7 @@ namespace NekoOdyssey.Scripts.Game.Core
         public GameUis Uis { get; } = new();
         public GameSimulators Simulators { get; } = new();
         public GameAreas Areas { get; } = new();
-        public global::Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu.PlayerMenu PlayerMenu { get; } = new();
+        public global::NekoOdyssey.Scripts.Game.Core.PlayerMenu.PlayerMenu PlayerMenu { get; } = new();
         public PlayerMenuCandidateManager PlayerMenuCandidateManager { get; } = new();
         public Routine.Routine Routine { get; } = new(); // Linias Edit
         public Routine.RoutineManger RoutineManger { get; } = new(); // Linias Edit

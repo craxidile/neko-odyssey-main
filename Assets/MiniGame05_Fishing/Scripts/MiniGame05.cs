@@ -1,6 +1,11 @@
+using System;
 using System.Collections;
+using DG.Tweening;
 using NekoOdyssey.Scripts;
+using UniRx;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using Random = UnityEngine.Random;
 
 namespace MiniGame05_Fishing.Scripts
 {
@@ -48,17 +53,27 @@ namespace MiniGame05_Fishing.Scripts
 
         [Header("Audio")] public MiniGame05AudioManager audioManager;
 
+        [Header("Input Actions")]
+        public InputActionReference pullInput;
+        public InputActionReference anyKeyInput;
+
+        public Subject<string> OnPlaySfx { get; } = new();
+        public Subject<string> OnPlayLoopSfx { get; } = new();
+        public Subject<string> OnPlayCloneSfx { get; } = new();
+        public Subject<string> OnStopSfx { get; } = new();
+
         private void Awake()
         {
             Instance = this;
 
             ready = GameObject.Find("Ready");
-            ready.SetActive(false);
             go = GameObject.Find("Go");
-            go.SetActive(false);
             clear = GameObject.Find("Clear");
-            clear.SetActive(false);
             fail = GameObject.Find("Fail");
+            
+            ready.SetActive(false);
+            go.SetActive(false);
+            clear.SetActive(false);
             fail.SetActive(false);
             alert.SetActive(false);
         }
@@ -67,7 +82,7 @@ namespace MiniGame05_Fishing.Scripts
         {
             var connector = MiniGameRunner.Instance.Connector;
             connector.EnterSite();
-            
+
             fishGauge.SetActive(false);
             mikiFishCatch.SetActive(false);
             mikiFishFight.SetActive(false);
@@ -100,27 +115,41 @@ namespace MiniGame05_Fishing.Scripts
             }
         }
 
-        private bool IsRectOverlap(RectTransform indicator, RectTransform boundary)
-        {
-            return GetWorldRect(boundary).Contains(GetWorldRect(indicator).center);
-        }
-
-        private Rect GetWorldRect(RectTransform rectTransform)
+        private static Rect RectTransformToScreenRect(RectTransform rectTransform)
         {
             var corners = new Vector3[4];
             rectTransform.GetWorldCorners(corners);
 
-            return new Rect(
-                corners[0].x,
-                corners[0].y,
-                corners[2].x - corners[0].x,
-                corners[2].y - corners[0].y
-            );
+            for (var i = 0; i < corners.Length; i++)
+            {
+                corners[i] = Camera.main.WorldToScreenPoint(corners[i]);
+                corners[i] = new Vector3(Mathf.RoundToInt(corners[i].x), Mathf.RoundToInt(corners[i].y), corners[i].z);
+            }
+
+            var minX = Mathf.Min(corners[0].x, corners[1].x, corners[2].x, corners[3].x);
+            var minY = Mathf.Min(corners[0].y, corners[1].y, corners[2].y, corners[3].y);
+            var width = Mathf.Max(corners[0].x, corners[1].x, corners[2].x, corners[3].x) - minX;
+            var height = Mathf.Max(corners[0].y, corners[1].y, corners[2].y, corners[3].y) - minY;
+
+            return new Rect(minX, minY, width, height);
+        }
+
+        private bool IsRectOverlap(RectTransform indicator, RectTransform boundary)
+        {
+            var worldBoundary = RectTransformToScreenRect(boundary);
+            var worldIndicator = RectTransformToScreenRect(indicator);
+            Debug.Log($">>rect<< {worldBoundary.Contains(worldIndicator.center)} {worldIndicator} {worldBoundary}");
+            return worldBoundary.Contains(worldIndicator.center);
         }
 
         private void HookProgress()
         {
-            if (Input.GetKeyDown(KeyCode.Space)) hookProgress += hookPower;
+            // if (Input.GetKeyDown(KeyCode.Space)) hookProgress += hookPower;
+            if (pullInput.action.triggered)
+            {
+                hookProgress += hookPower;
+                OnPlayCloneSfx.OnNext("SFX_Tap");
+            }
 
             hookProgress -= hookProgressDegradationPower * Time.deltaTime;
             hookProgress = Mathf.Clamp(hookProgress, 0f, 1f);
@@ -143,19 +172,25 @@ namespace MiniGame05_Fishing.Scripts
 
         private IEnumerator GameStartSequence()
         {
+            yield return new WaitForSeconds(2.5f);
             ready.SetActive(true);
+            OnPlaySfx.OnNext("SFX_Ready");
             yield return new WaitForSeconds(2f);
             ready.SetActive(false);
             go.SetActive(true);
+            OnPlaySfx.OnNext("SFX_Go");
             yield return new WaitForSeconds(.7f);
             go.SetActive(false);
 
             yield return new WaitForSeconds(Random.Range(2.8f, 5f));
             alert.SetActive(true);
+            OnPlayLoopSfx.OnNext("SFX_Alert");
 
-            while (!Input.GetKeyDown(KeyCode.Space)) yield return null;
+            // while (!Input.GetKeyDown(KeyCode.Space)) yield return null;
+            while (!anyKeyInput.action.triggered) yield return null;
 
             alert.SetActive(false);
+            OnStopSfx.OnNext("SFX_Alert");
             mikiFishSit.SetActive(false);
             mikiFishStart.SetActive(true);
             yield return new WaitForSeconds(1.471f);
@@ -190,6 +225,7 @@ namespace MiniGame05_Fishing.Scripts
                     fishGauge.SetActive(false);
                     yield return new WaitForSeconds(1.583f);
                     clear.SetActive(true);
+                    OnPlaySfx.OnNext("SFX_Clear");
                     var reward = MiniGame05RewardManager.Instance;
                     reward.RandomReward(difficult);
                     break;
@@ -204,12 +240,16 @@ namespace MiniGame05_Fishing.Scripts
                     fishGauge.SetActive(false);
                     yield return new WaitForSeconds(3.583f);
                     fail.SetActive(true);
+                    OnPlaySfx.OnNext("SFX_Fail");
                     break;
                 }
 
                 yield return null;
             }
+
+            
             var connector = MiniGameRunner.Instance.Connector;
+            OnStopSfx.OnNext("BGM");
             connector.LeaveSite();
         }
         

@@ -7,7 +7,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.Cats
     public class CatController : MonoBehaviour
     {
         private Animator _emojiAnimator;
-        private Core.Cat.Cat _cat;
+        private Animator _catAnimator;
+        private Cat _cat;
 
         public string code;
         public GameObject emoji;
@@ -15,6 +16,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Cats
         private void Awake()
         {
             emoji.SetActive(false);
+            _catAnimator = GetComponent<Animator>();
             _emojiAnimator = emoji.GetComponent<Animator>();
 
         }
@@ -24,6 +26,9 @@ namespace NekoOdyssey.Scripts.Game.Unity.Cats
             _cat = GameRunner.Instance.Core.Cats.RegisterCat(code);
             _cat.OnChangeEmotion
                 .Subscribe(HandleEmotion)
+                .AddTo(this);
+            _cat.OnEat
+                .Subscribe(HandleEat)
                 .AddTo(this);
         }
 
@@ -54,6 +59,11 @@ namespace NekoOdyssey.Scripts.Game.Unity.Cats
 
 
             emoji.SetActive(emotion != CatEmotion.None);
+        }
+
+        private void HandleEat(bool eating)
+        {
+            _catAnimator.SetBool($"Eat", eating);
         }
     }
 }

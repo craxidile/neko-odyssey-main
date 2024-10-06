@@ -3,7 +3,7 @@ using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
 
-namespace NekoOdyssey.Scripts.Game.Unity.Inputs
+namespace NekoOdyssey.Scripts.Game.Inputs
 {
     public class PlayerInputHandler : MonoBehaviour
     {
@@ -21,6 +21,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.Inputs
         public IObservable<Unit> OnSpeedEnd => this.UpdateAsObservable()
             .Where(_ => !InputActions.Player.Speed.inProgress);
 
+        public IObservable<Vector2> OnSlideAction => this.UpdateAsObservable()
+            .Select(_ => InputActions.Player.SlideMenu.ReadValue<Vector2>());
 
         public IObservable<Unit> OnPhoneTriggerred => this.UpdateAsObservable()
             .Where(_ => InputActions.Player.Phone.triggered);

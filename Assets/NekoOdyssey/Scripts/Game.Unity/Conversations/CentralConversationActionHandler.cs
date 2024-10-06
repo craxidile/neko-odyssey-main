@@ -24,7 +24,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.Conversations
             
             if (action != PlayerMenuAction.Information) return;
             playerMenu.SetActive(false);
-            SoundEffectController.Instance.talk.Play();
+            // SoundEffectController.Instance.talk.Play();
+            GameRunner.Instance.Core.Audios.AudioToClone.OnNext(("SFX_Dialog_Bubble", 3f));
 
             var menuGameObject = playerMenu.GameObject;
             var attributes = menuGameObject.GetComponent<ConversationAttributes>();
