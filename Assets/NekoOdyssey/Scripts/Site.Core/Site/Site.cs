@@ -50,7 +50,7 @@ namespace NekoOdyssey.Scripts.Site.Core.Site
             if (CurrentSite != null) return;
             // SetSite("Intro", false);
             // SetSite("QuestPhase0Scene01B", false);
-            SetSite("GamePlayZone4_01", false);
+           // SetSite("GamePlayZone4_01", false);
             // SetSite("GamePlayZone4_03", false);
             //SetSite("GamePlayZone5_02", false);
             // SetSite("GamePlayZone6_01", false);
