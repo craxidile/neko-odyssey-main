@@ -169,10 +169,14 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
         {
             var masterItems = GameRunner.Instance.Core.MasterData.ItemsMasterData.Items.ToList();
             var item = masterItems.FirstOrDefault(i => i.Code == itemCode);
+            Debug.Log($">>player_feed<< master_item {item}");
             if (item == null) return;
+
+            var bagItem = BagItems.FirstOrDefault(bi => bi.Item.Code == item.Code);
+            if (bagItem == null) return;
             
-            var bagItem = new BagItemV001(item);
-            if (!bagItem.Item.SingleUse) return;
+            Debug.Log($">>player_feed<< single_use {item.SingleUse}");
+            if (!item.SingleUse) return;
 
             BagItems.Remove(bagItem);
             GameRunner.Instance.Core.SaveDbWriter.Add(dbContext =>

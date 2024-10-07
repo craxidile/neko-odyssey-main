@@ -45,6 +45,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Feed
 
         public void FeedCat(PlayerMenuAction action)
         {
+            ActionToCodeMap.TryGetValue(action, out var aa);
+            Debug.Log($">>player_feed<< try_get {aa}");
             if (!ActionToCodeMap.TryGetValue(action, out var itemCode)) return;
             GameRunner.Instance.Core.Player.Bag.UseBagItem(itemCode);
         }

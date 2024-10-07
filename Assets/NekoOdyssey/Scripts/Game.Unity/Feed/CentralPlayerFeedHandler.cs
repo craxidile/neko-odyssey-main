@@ -61,6 +61,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Feed
 
             _feed.Mode = attributes.feedMode;
             _feed.TargetPosition = attributes.feedAnchor.position;
+            
             _feed.FeedCat(action);
             
             GameRunner.Instance.Core.Cats.CurrentCatCode = attributes.catCode;

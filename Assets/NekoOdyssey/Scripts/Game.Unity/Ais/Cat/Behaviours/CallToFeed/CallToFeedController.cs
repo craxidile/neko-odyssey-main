@@ -3,6 +3,7 @@ using System.Collections;
 using DG.Tweening;
 using UniRx;
 using NekoOdyssey.Scripts.Game.Core.Ais.Cat;
+using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -36,7 +37,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.Ais.Cat.Behaviours.CallToFeed
 
         private void HandleCallToFeed(float delay)
         {
-            if (_executing) return;
+            var isWalking = GameRunner.Instance.Core.Player.Mode == PlayerMode.Move;
+            if (_executing || !isWalking) return;
             _executing = true;
             DOVirtual.DelayedCall(.1f, () =>
             {
