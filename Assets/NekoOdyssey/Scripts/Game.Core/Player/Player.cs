@@ -70,6 +70,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
         public Subject<bool> OnRun { get; } = new();
         public Subject<Vector2> OnMove { get; } = new();
         public Subject<Vector3> OnChangePosition { get; } = new();
+        public Subject<Unit> OnShakeHead { get; } = new();
         public Subject<int> OnChangePocketMoney { get; } = new();
         public Subject<int> OnChangeLikeCount { get; } = new();
         public Subject<int> OnChangeFollowerCount { get; } = new();
@@ -418,6 +419,11 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
                 var playerSite = repo.FindBySiteCode(siteName);
                 return playerSite != null;
             }
+        }
+
+        public void ShakeHead()
+        {
+            OnShakeHead.OnNext(default);
         }
     }
 }

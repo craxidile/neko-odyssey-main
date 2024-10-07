@@ -61,8 +61,12 @@ namespace NekoOdyssey.Scripts.Game.Unity.Feed
 
             _feed.Mode = attributes.feedMode;
             _feed.TargetPosition = attributes.feedAnchor.position;
-            
-            _feed.FeedCat(action);
+
+            if (!_feed.FeedCat(action))
+            {
+                _player.SetMode(PlayerMode.Move);
+                return;
+            }
             
             GameRunner.Instance.Core.Cats.CurrentCatCode = attributes.catCode;
             GameRunner.Instance.Core.Cats.CurrentCat?.Eat(true);

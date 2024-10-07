@@ -165,18 +165,18 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
             OnSelectBagItem.OnNext(CurrentBagItem);
         }
 
-        public void UseBagItem(string itemCode)
+        public bool UseBagItem(string itemCode)
         {
             var masterItems = GameRunner.Instance.Core.MasterData.ItemsMasterData.Items.ToList();
             var item = masterItems.FirstOrDefault(i => i.Code == itemCode);
             Debug.Log($">>player_feed<< master_item {item}");
-            if (item == null) return;
+            if (item == null) return false;
 
             var bagItem = BagItems.FirstOrDefault(bi => bi.Item.Code == item.Code);
-            if (bagItem == null) return;
+            if (bagItem == null) return false;
             
             Debug.Log($">>player_feed<< single_use {item.SingleUse}");
-            if (!item.SingleUse) return;
+            if (!item.SingleUse) return true;
 
             BagItems.Remove(bagItem);
             GameRunner.Instance.Core.SaveDbWriter.Add(dbContext =>
@@ -184,6 +184,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Bag
                 var bagItemRepo = new BagItemV001Repo(dbContext);
                 bagItemRepo.Remove(bagItem);
             });
+
+            return true;
         }
 
         public void UseBagItem()

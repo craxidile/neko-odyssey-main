@@ -72,6 +72,13 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
             InitializePosition();
         }
 
+        private void Start()
+        {
+            GameRunner.Instance.Core.Player.OnShakeHead
+                .Subscribe(_ => HandleHeadShake())
+                .AddTo(this);
+        }
+
         private void InitializePosition()
         {
             var positionSet = false;
@@ -162,6 +169,11 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player
         public void ResetDialogueAnimator()
         {
             _animator.runtimeAnimatorController = _baseRuntimeAnimator;
+        }
+
+        private void HandleHeadShake()
+        {
+            _animator.SetTrigger($"ShakeHead");
         }
     }
 }

@@ -43,12 +43,23 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Feed
         {
         }
 
-        public void FeedCat(PlayerMenuAction action)
+        public bool FeedCat(PlayerMenuAction action)
         {
             ActionToCodeMap.TryGetValue(action, out var aa);
             Debug.Log($">>player_feed<< try_get {aa}");
-            if (!ActionToCodeMap.TryGetValue(action, out var itemCode)) return;
-            GameRunner.Instance.Core.Player.Bag.UseBagItem(itemCode);
+            if (!ActionToCodeMap.TryGetValue(action, out var itemCode))
+            {
+                GameRunner.Instance.Core.Player.ShakeHead();
+                return false;
+            }
+
+            if (!GameRunner.Instance.Core.Player.Bag.UseBagItem(itemCode))
+            {
+                GameRunner.Instance.Core.Player.ShakeHead();
+                return false;
+            }
+
+            return true;
         }
 
         public void Finish()
