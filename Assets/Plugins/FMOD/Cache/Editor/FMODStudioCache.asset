@@ -393,6 +393,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 3500
+--- !u!114 &-4295338525654652740
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/BGM/IntroBGM
+  m_EditorClassIdentifier: 
+  Path: event:/BGM/IntroBGM
+  Guid:
+    Data1: -486034892
+    Data2: 1334077020
+    Data3: -1392925045
+    Data4: 110719565
+  Banks:
+  - {fileID: -2683800841104931398}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 79838
 --- !u!114 &-4064975644632616782
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -590,10 +617,10 @@ MonoBehaviour:
   Path: Assets/NekoOdyssey/Assets/FMOD/NekoOdyssey/Build/Desktop/BGM.bank
   Name: BGM
   StudioPath: bank:/BGM/BGM
-  lastModified: 638638074824771145
+  lastModified: 638638835986720075
   FileSizes:
   - Name: Desktop
-    Value: 6113792
+    Value: 7167712
   Exists: 1
 --- !u!114 &-2389528277289443892
 MonoBehaviour:
@@ -630,10 +657,10 @@ MonoBehaviour:
   Path: Assets/NekoOdyssey/Assets/FMOD/NekoOdyssey/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638638074824791496
+  lastModified: 638638835986730138
   FileSizes:
   - Name: Desktop
-    Value: 3506
+    Value: 3844
   Exists: 1
 --- !u!114 &-2168123356030195544
 MonoBehaviour:
@@ -663,6 +690,26 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 368312
+--- !u!114 &-1880911033349569022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/SFXIntro.bank
+  m_EditorClassIdentifier: 
+  Path: Assets/NekoOdyssey/Assets/FMOD/NekoOdyssey/Build/Desktop/SFXIntro.bank
+  Name: SFXIntro
+  StudioPath: bank:/SFX/Intro/SFXIntro
+  lastModified: 638638835986750128
+  FileSizes:
+  - Name: Desktop
+    Value: 288384
+  Exists: 1
 --- !u!114 &-1839855692440878021
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -798,6 +845,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 450
+--- !u!114 &-533178168973796431
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Intro/Takeabag
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Intro/Takeabag
+  Guid:
+    Data1: 760105680
+    Data2: 1266581321
+    Data3: 126356130
+    Data4: 1693078574
+  Banks:
+  - {fileID: -1880911033349569022}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 646
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -820,6 +894,7 @@ MonoBehaviour:
   - {fileID: -5648607722784605729}
   - {fileID: -2389528277289443892}
   - {fileID: -3576495623960358431}
+  - {fileID: -1880911033349569022}
   EditorEvents:
   - {fileID: 4822752716613775082}
   - {fileID: -1839855692440878021}
@@ -873,12 +948,19 @@ MonoBehaviour:
   - {fileID: 7660707932637019426}
   - {fileID: 6981421775033183397}
   - {fileID: -5402535924014172521}
+  - {fileID: -4295338525654652740}
+  - {fileID: 5557403359166571230}
+  - {fileID: 8518742187234176973}
+  - {fileID: 9184300408751695551}
+  - {fileID: 5881321748177469642}
+  - {fileID: -533178168973796431}
+  - {fileID: 2825072444906892263}
   EditorParameters: []
   MasterBanks:
   - {fileID: 4547925625316589115}
   StringsBanks:
   - {fileID: -2295913530114626373}
-  cacheTime: 638638074824836578
+  cacheTime: 638638835986750128
   cacheVersion: 131619
 --- !u!114 &240808966096695335
 MonoBehaviour:
@@ -988,6 +1070,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 89808
+--- !u!114 &2825072444906892263
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Intro/DevilExplosion
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Intro/DevilExplosion
+  Guid:
+    Data1: 852718074
+    Data2: 1198663972
+    Data3: 535590826
+    Data4: -1208757960
+  Banks:
+  - {fileID: -1880911033349569022}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 6074
 --- !u!114 &2884168738119897256
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1424,6 +1533,60 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 1411
+--- !u!114 &5557403359166571230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Intro/Walk
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Intro/Walk
+  Guid:
+    Data1: 1341668686
+    Data2: 1256699216
+    Data3: 684707466
+    Data4: -110239110
+  Banks:
+  - {fileID: -1880911033349569022}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 3344
+--- !u!114 &5881321748177469642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Intro/Brochure
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Intro/Brochure
+  Guid:
+    Data1: 463738759
+    Data2: 1208496156
+    Data3: 421978301
+    Data4: -1134998728
+  Banks:
+  - {fileID: -1880911033349569022}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 483
 --- !u!114 &5893617293679924937
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1714,6 +1877,33 @@ MonoBehaviour:
   - Name: Desktop
     Value: 202880
   Exists: 1
+--- !u!114 &8518742187234176973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Intro/Ship
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Intro/Ship
+  Guid:
+    Data1: -768846751
+    Data2: 1182142254
+    Data3: -1827010421
+    Data4: 1653513991
+  Banks:
+  - {fileID: -1880911033349569022}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 12742
 --- !u!114 &8926413471499727072
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1741,3 +1931,30 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 94426
+--- !u!114 &9184300408751695551
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Intro/YellowPower
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Intro/YellowPower
+  Guid:
+    Data1: 1105146238
+    Data2: 1209803610
+    Data3: -825890646
+    Data4: 1351682434
+  Banks:
+  - {fileID: -1880911033349569022}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 8022
