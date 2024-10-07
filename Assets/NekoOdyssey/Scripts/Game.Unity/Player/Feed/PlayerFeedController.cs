@@ -1,7 +1,6 @@
 ﻿using System;
 using DG.Tweening;
 using NekoOdyssey.Scripts.Game.Core.Feed;
-using NekoOdyssey.Scripts.Game.Core.Petting;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 using UniRx;
 using UnityEngine;
@@ -10,7 +9,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Feed
 {
     public class PlayerFeedController : MonoBehaviour
     {
-        private const float PettingDelay = 4f;
+        private const float FeedDelay = 4f;
 
         private bool _active;
 
@@ -32,7 +31,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Feed
                 .Subscribe(SetActive)
                 .AddTo(this);
             GameRunner.Instance.Core.Player.Feed.OnFinishFeed
-                .Subscribe(HandlePettingEnd)
+                .Subscribe(HandleFeedEnd)
                 .AddTo(this);
         }
 
@@ -42,11 +41,11 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Feed
             _active = mode == PlayerMode.Feed;
             Debug.Log($">>feed<< active {_active}");
             if (!_active) return;
-            HandlePetting();
+            HandleFeed();
         }
 
 
-        private void HandlePetting()
+        private void HandleFeed()
         {
             _animator.SetLayerWeight(_animator.GetLayerIndex($"Feed"), 1f);
 
@@ -84,7 +83,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Feed
             var left = -cameraTransform.right;
 
             var playerPosition = GameRunner.Instance.Core.Player.Position;
-            var capturePosition = GameRunner.Instance.Core.Player.Petting.TargetPosition;
+            var capturePosition = GameRunner.Instance.Core.Player.Feed.TargetPosition;
             var delta = capturePosition - playerPosition;
             var forwardX = Math.Abs(forward.x) < .0001f ? 0f : forward.x;
             var forwardZ = Math.Abs(forward.z) < .0001f ? 0f : forward.z;
@@ -100,10 +99,10 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Feed
             _animator.SetFloat($"CaptureAngle", angle);
             _renderer.flipX = deltaSide > 0f;
 
-            DOVirtual.DelayedCall(PettingDelay, () => _animator.SetBool(feedMode, false));
+            DOVirtual.DelayedCall(FeedDelay, () => _animator.SetBool(feedMode, false));
         }
 
-        private void HandlePettingEnd(Unit _)
+        private void HandleFeedEnd(Unit _)
         {
             _animator.SetLayerWeight(_animator.GetLayerIndex($"Feed"), 0);
         }
