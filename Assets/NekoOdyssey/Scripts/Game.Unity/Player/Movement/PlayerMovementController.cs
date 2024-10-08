@@ -65,8 +65,12 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Movement
 
         private void Start()
         {
-            GameRunner.Instance.Core.Player.OnMove.Subscribe(input => { _moveInput = input; });
-            GameRunner.Instance.Core.Player.OnChangeMode.Subscribe(SetActive);
+            GameRunner.Instance.Core.Player.OnMove
+                .Subscribe(input => { _moveInput = input; })
+                .AddTo(this);
+            GameRunner.Instance.Core.Player.OnChangeMode
+                .Subscribe(SetActive)
+                .AddTo(this);
         }
 
         private void Update()

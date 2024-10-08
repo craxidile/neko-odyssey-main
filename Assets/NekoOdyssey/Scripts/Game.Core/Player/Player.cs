@@ -423,7 +423,15 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
 
         public void ShakeHead()
         {
+            GameRunner.Instance.Core.Player.SetMode(PlayerMode.Stop);
             OnShakeHead.OnNext(default);
+        }
+
+        public void FinishHeadShake()
+        {
+            GameRunner.Instance.Core.PlayerMenu.SetCurrentSiteNameActive();
+            GameRunner.Instance.Core.Player.SetMode(PlayerMode.Move);
+            GameRunner.Instance.Core.PlayerMenu.SetMenuLevel(0);
         }
     }
 }

@@ -45,8 +45,6 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Feed
 
         public bool FeedCat(PlayerMenuAction action)
         {
-            ActionToCodeMap.TryGetValue(action, out var aa);
-            Debug.Log($">>player_feed<< try_get {aa}");
             if (!ActionToCodeMap.TryGetValue(action, out var itemCode))
             {
                 GameRunner.Instance.Core.Player.ShakeHead();
