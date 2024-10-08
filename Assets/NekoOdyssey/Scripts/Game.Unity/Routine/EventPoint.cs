@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class EventPoint : MonoBehaviour
@@ -52,5 +53,20 @@ public class EventPoint : MonoBehaviour
         {
             eventPoint.gameObject.SetActive(false);
         }
+    }
+
+    public static List<EventPoint> GetEventPointsOfActors(List<string> actors)
+    {
+        List<EventPoint> result = new();
+        foreach (var eventPoint in AllEventPoint.Values)
+        {
+            var eventPointActors = eventPoint.GetComponentsInChildren<DialogueActor>();
+
+            if (eventPointActors.Any(actor => actors.Contains(actor.actorId)))
+            {
+                result.Add(eventPoint);
+            }
+        }
+        return result;
     }
 }

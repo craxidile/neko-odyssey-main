@@ -228,7 +228,11 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             //GameRunner.Instance.Core.Routine.dayNightLightingManager.Update();
 
             //GameRunner.Instance.Core.RoutineManger.UpdateWorld();
-            GameRunner.Instance.Core.RoutineManger.dayNightLightingManager.Update();
+            //if (GameRunner.Instance != null && GameRunner.Instance.Core.RoutineManger != null)
+            //{
+                GameRunner.Instance?.Core.RoutineManger?.dayNightLightingManager?.Update();
+            //}
+
 
             DayNightTimeActivator.UpdateActivator();
 
