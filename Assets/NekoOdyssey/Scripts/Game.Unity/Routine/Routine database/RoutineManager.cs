@@ -25,6 +25,7 @@ using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogConditionCaseEntit
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogLineEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.RoutineConditionEntity.Models;
 using NekoOdyssey.Scripts.Game.Unity.Player;
+using NekoOdyssey.Scripts.Database.Domains.Items.Entities.ItemEntity.Models;
 
 namespace NekoOdyssey.Scripts.Game.Core.Routine
 {
@@ -121,7 +122,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             ChatBalloonManager.Start();
             dayNightLightingManager.Start();
 
-            SetUpCaptureQuest();
+            SetUpRewardsAction();
         }
 
         public void Unbind()
@@ -190,6 +191,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                                 eventPointInteractive.OnInteractive += () =>
                                 {
                                     if (_enabledTime > Time.time) return;
+                                    Debug.Log("Quest trigger");
 
                                     var dialogueTemporaryData = new DialogueTemporaryData(quest.Code, DialogType.Quest, targetEventPoint);
                                     //dialogueTemporaryData.quest = quest;
@@ -701,7 +703,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                 if (reward.Type.Equals("Quest Key", System.StringComparison.InvariantCultureIgnoreCase))
                 {
                     Debug.Log($"Give reward 0");
-                    if (reward.Code.Equals("next" , System.StringComparison.InvariantCultureIgnoreCase))
+                    if (reward.Code.Equals("next", System.StringComparison.InvariantCultureIgnoreCase))
                     {
                         Debug.Log($"Give reward 1");
                         DG.Tweening.DOVirtual.DelayedCall(0.1f, () =>
@@ -719,6 +721,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                 }
                 else if (reward.Type.Equals("Item", System.StringComparison.InvariantCultureIgnoreCase))
                 {
+                    Debug.Log($"Get item : {reward.Code} , {reward.Value}");
                     var masterItems = GameRunner.Instance.Core.MasterData.ItemsMasterData.Items.ToList();
                     var item = masterItems.FirstOrDefault(i => i.Code == reward.Code);
                     var itemQty = reward.Value;
@@ -826,55 +829,76 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
         }
 
-        void SetUpCaptureQuest()
+        void SetUpRewardsAction()
         {
-            //GameRunner.Instance.Core.Player.Capture.OnCaptureBegin.Subscribe(_ =>
-            //{
-            //    var eventPoint = GameRunner.Instance.Core.PlayerMenu.GameObject.GetComponentInParent<EventPoint>();
-            //    if (eventPoint == null) return;
-            //    if (eventPoint.eventPointType != EventPoint.EventPointType.Quest) return;
-
-            //    Debug.Log("PlayerCapture begin");
-
-            //    if (!string.IsNullOrEmpty(eventPoint.ReferenceEventCode))
-            //    {
-            //        Debug.Log($"PlayerCapture AddAchievedQuest {eventPoint.ReferenceEventCode}");
-            //        GameRunner.Instance.Core.Player.AddAchievedQuest(eventPoint.ReferenceEventCode);
-            //    }
-            //});
-
             GameRunner.Instance.Core.Player.Capture.OnCaptureFinish.Subscribe(_ =>
             {
-                var eventPoint = GameRunner.Instance.Core.PlayerMenu.GameObject.GetComponentInParent<EventPoint>();
-                if (eventPoint == null) return;
-                if (eventPoint.eventPointType != EventPoint.EventPointType.Quest) return;
+                GiveRewardFromAction();
+            }
+            ).AddTo(GameRunner.Instance);
 
-                Debug.Log("PlayerCapture Finish");
+            GameRunner.Instance.Core.Player.Feed.OnFinishFeed.Subscribe(_ =>
+            {
+                GiveRewardFromAction();
+            }
+            ).AddTo(GameRunner.Instance);
 
-                if (!string.IsNullOrEmpty(eventPoint.ReferenceEventCode))
+
+
+        }
+
+        void GiveRewardFromAction()
+        {
+            Debug.Log($"PlayerActionQuest Finish check EventPoint ,{GameRunner.Instance.Core.PlayerMenu.GameObject.name} ,{GameRunner.Instance.Core.PlayerMenu.GameObject.GetComponentInParent<EventPoint>() == null}");
+            var eventPoint = GameRunner.Instance.Core.PlayerMenu.GameObject.GetComponentInParent<EventPoint>();
+            if (eventPoint == null) return;
+
+            Debug.Log("PlayerActionQuest Finish check ref event code");
+            if (string.IsNullOrEmpty(eventPoint.ReferenceEventCode)) return;
+
+            if (eventPoint.eventPointType == EventPoint.EventPointType.Quest)
+            {
+                Debug.Log("PlayerActionQuest Finish quest check");
+
+                Debug.Log($"PlayerActionQuest AddAchievedQuest {eventPoint.ReferenceEventCode}");
+                GameRunner.Instance.Core.Player.AddAchievedQuest(eventPoint.ReferenceEventCode);
+
+                var allQuestGroups = GameRunner.Instance.Core.MasterData.NpcMasterData.QuestGroupsMasterData.QuestGroups;
+                foreach (var questGroup in allQuestGroups)
                 {
-                    Debug.Log($"PlayerCapture AddAchievedQuest {eventPoint.ReferenceEventCode}");
-                    GameRunner.Instance.Core.Player.AddAchievedQuest(eventPoint.ReferenceEventCode);
-
-                    var allQuestGroups = GameRunner.Instance.Core.MasterData.NpcMasterData.QuestGroupsMasterData.QuestGroups;
-                    foreach (var questGroup in allQuestGroups)
+                    foreach (var quest in questGroup.Quests)
                     {
-                        foreach (var quest in questGroup.Quests)
+                        if (quest.Code.Equals(eventPoint.ReferenceEventCode, System.StringComparison.InvariantCultureIgnoreCase))
                         {
-                            if (quest.Code.Equals(eventPoint.ReferenceEventCode, System.StringComparison.InvariantCultureIgnoreCase))
-                            {
-                                Debug.Log("PlayerCapture GiveRewards");
-                                var dialogueTemporaryData = new DialogueTemporaryData(quest.Code, DialogType.Quest, eventPoint);
-                                dialogueTemporaryData.rewards = quest.Rewards.Select(reward => (reward.Type, reward.Code, reward.Value)).ToArray();
-                                GiveRewards();
-                            }
+                            Debug.Log($"PlayerActionQuest Finish rewards ,quest : {quest.Code}");
+                            var dialogueTemporaryData = new DialogueTemporaryData(quest.Code, DialogType.Quest, eventPoint);
+                            dialogueTemporaryData.rewards = quest.Rewards.Select(reward => (reward.Type, reward.Code, reward.Value)).ToArray();
+                            _currentDialog = dialogueTemporaryData;
+                            GiveRewards();
                         }
                     }
                 }
-            });
 
+            }
+            else
+            if (eventPoint.eventPointType == EventPoint.EventPointType.Routine)
+            {
+                Debug.Log("PlayerActionQuest Finish routine check");
 
+                var allRoutine = GameRunner.Instance.Core.MasterData.NpcMasterData.RoutinesMasterData.Routines;
+                foreach (var routine in allRoutine)
+                {
+                    if (routine.Code.Equals(eventPoint.ReferenceEventCode, System.StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        Debug.Log($"PlayerActionQuest Finish rewards ,routine : {routine.Code}");
+                        var dialogueTemporaryData = new DialogueTemporaryData(routine.Code, DialogType.Quest, eventPoint);
+                        dialogueTemporaryData.rewards = routine.Rewards.Select(reward => (reward.Type, reward.Code, reward.Value)).ToArray();
+                        _currentDialog = dialogueTemporaryData;
+                        GiveRewards();
+                    }
+                }
 
+            }
         }
 
         //update quests that required questCode as condition 
