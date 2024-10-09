@@ -83,6 +83,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         DialogueTemporaryData _currentDialog;
         List<DialogueTemporaryData> _tempCompletedDialogue = new();
 
+        Dictionary<string, Quest> _tempQuestCodeAndQuest = new();
+
 
 
         public DayNightLightingManager dayNightLightingManager;
@@ -182,6 +184,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                             targetEventPoint.gameObject.SetActive(true);
                             targetEventPoint.eventPointType = EventPoint.EventPointType.Quest;
                             targetEventPoint.ReferenceEventCode = quest.Code;
+
+                            _tempQuestCodeAndQuest.Add(quest.Code, quest);
 
                             //talk to npc
                             var dialogueActors = targetEventPoint.GetComponentsInChildren<DialogueActor>();
@@ -905,7 +909,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         //used for immediately update quest on the same site
         public void UpdateQuestEvent_RelatedQuestCode(string questCode)
         {
-            _currentDialog.eventPoint.gameObject.SetActive(false);
+            //_currentDialog.eventPoint.gameObject.SetActive(false);
 
             Debug.Log($"UpdateQuestEvent_RelatedQuestCode {questCode}");
             var player = GameRunner.Instance.Core.Player;
@@ -955,6 +959,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
                         if (targetEventPoint != null)
                         {
+                            Debug.Log($"UpdateQuestEvent_RelatedQuestCode 6");
                             targetEventPoint.gameObject.SetActive(true);
                             targetEventPoint.eventPointType = EventPoint.EventPointType.Quest;
                             targetEventPoint.ReferenceEventCode = quest.Code;
@@ -981,30 +986,19 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                                 }
                             }
 
-                            ////disable duplicate actor objects
-                            //var sameActorEventPoints = EventPoint.GetEventPointsOfActors(quest.TargetActorList.ToList());
-                            //Debug.Log($"check for same event point {quest.TargetActorList.Count}/ {sameActorEventPoints.Count}");
 
-                            //foreach (var sameActorEventPoint in sameActorEventPoints)
-                            //{
-                            //    Debug.Log($"Disable eventpoint {sameActorEventPoint.name}");
-                            //    //if (sameActorEventPoint != targetEventPoint)
-                            //    //{
-                            //    sameActorEventPoint.gameObject.SetActive(false);
-                            //    //}
-                            //}
+                            //disable duplicate actor objects
+                            Debug.Log($"Check duplicate quest : {_currentDialog.eventCode}");
 
-
-                            ////if use the same actor SetActive false the current event object 
-                            //var currentQuest = GameRunner.Instance.Core.MasterData.NpcMasterData.QuestGroupsMasterData.QuestGroups
-                            //    .Select(questGroup => questGroup.Quests.FirstOrDefault(quest => quest.Code == _currentDialog.eventCode))
-                            //    .FirstOrDefault();
-
-                            //Debug.Log();
-                            //if (quest.TargetActorList.Any(actor => currentQuest.TargetActorExists(actor)))
-                            //{
-                            //    _currentDialog.eventPoint.gameObject.SetActive(false);
-                            //}
+                            if (_tempQuestCodeAndQuest.TryGetValue(_currentDialog.eventCode, out Quest currentQuest))
+                            {
+                                Debug.Log($"Check duplicate quest get tempQuest");
+                                if (quest.TargetActorList.Any(actor => currentQuest.TargetActorExists(actor)))
+                                {
+                                    Debug.Log($"Check duplicate quest quest have same actor");
+                                    _currentDialog.eventPoint.gameObject.SetActive(false);
+                                }
+                            }
                         }
 
                     }
