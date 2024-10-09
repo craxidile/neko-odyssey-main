@@ -3446,7 +3446,6 @@ GameObject:
   - component: {fileID: 1319013915}
   - component: {fileID: 1319013919}
   - component: {fileID: 1319013918}
-  - component: {fileID: 1319013916}
   - component: {fileID: 1319013920}
   m_Layer: 0
   m_Name: A04Action
@@ -3472,21 +3471,6 @@ Transform:
   - {fileID: 1247209362}
   m_Father: {fileID: 1843528032}
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
---- !u!114 &1319013916
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1319013914}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9daca120269a48408dd9b5af36243f7c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pettingAnchor: {fileID: 1247209362}
-  pettingMode: 1
-  catCode: A04Hungry01
 --- !u!114 &1319013918
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3499,7 +3483,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a4ec80f51c543b185cea23812e7ebe0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  availableActions: 0a000000c8000000
+  availableActions: c8000000
   site: 8
   siteName: 
   activeAtSiteName: 
@@ -5394,6 +5378,10 @@ PrefabInstance:
     - target: {fileID: 3282742610392407140, guid: 855ffa8897f2ee24ca6b07dbbf890967, type: 3}
       propertyPath: m_Name
       value: A04QuestPhase0Scene01BEat
+      objectReference: {fileID: 0}
+    - target: {fileID: 3282742610392407140, guid: 855ffa8897f2ee24ca6b07dbbf890967, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6355667282364353543, guid: 855ffa8897f2ee24ca6b07dbbf890967, type: 3}
       propertyPath: availableActions.Array.size
