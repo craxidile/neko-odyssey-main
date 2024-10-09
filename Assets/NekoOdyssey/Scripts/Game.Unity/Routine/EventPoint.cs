@@ -55,18 +55,29 @@ public class EventPoint : MonoBehaviour
         }
     }
 
-    public static List<EventPoint> GetEventPointsOfActors(List<string> actors)
-    {
-        List<EventPoint> result = new();
-        foreach (var eventPoint in AllEventPoint.Values)
-        {
-            var eventPointActors = eventPoint.GetComponentsInChildren<DialogueActor>();
+    //public static List<EventPoint> GetEventPointsOfActors(List<string> actors)
+    //{
+    //    List<EventPoint> result = new();
+    //    foreach (var eventPoint in AllEventPoint.Values)
+    //    {
+    //        var eventPointActors = eventPoint.GetComponentsInChildren<DialogueActor>();
 
-            if (eventPointActors.Any(actor => actors.Contains(actor.actorId)))
-            {
-                result.Add(eventPoint);
-            }
-        }
-        return result;
-    }
+    //        if (eventPointActors.Any(actor => actors.Contains(actor.actorId)))
+    //        {
+    //            result.Add(eventPoint);
+    //            continue;
+    //        }
+
+    //        Debug.Log($"check eventPoint : {eventPoint.name}");
+    //        foreach (var actor in eventPointActors)
+    //        {
+    //            foreach (var actorActor in actors)
+    //            {
+    //                Debug.Log($"compare Actor : {actor.actorId},{actorActor}");
+
+    //            }
+    //        }
+    //    }
+    //    return result;
+    //}
 }
