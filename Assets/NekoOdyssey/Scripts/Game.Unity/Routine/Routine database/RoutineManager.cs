@@ -962,29 +962,49 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                             //talk to npc
                             var dialogueActors = targetEventPoint.GetComponentsInChildren<DialogueActor>();
                             var eventPointInteractive = targetEventPoint.GetComponent<EventPointInteractive>();
-                            if (dialogueActors != null && dialogueActors.Length > 0 && eventPointInteractive != null)
+                            if (dialogueActors != null && dialogueActors.Length > 0)
                             {
-                                eventPointInteractive.OnInteractive += () =>
+                                if (eventPointInteractive != null)
                                 {
-                                    if (_enabledTime > Time.time) return;
-
-                                    var dialogueTemporaryData = new DialogueTemporaryData(quest.Code, DialogType.Quest, targetEventPoint);
-                                    //dialogueTemporaryData.quest = quest;
-                                    dialogueTemporaryData.rewards = quest.Rewards.Select(reward => (reward.Type, reward.Code, reward.Value)).ToArray();
-                                    OnBeginEventPoint.OnNext(targetEventPoint);
-                                    ConversationHandle(quest.Dialog, dialogueTemporaryData);
-                                };
-
-                                //disable duplicate actor objects
-                                var sameActorEventPoints = EventPoint.GetEventPointsOfActors(quest.TargetActorList.ToList());
-                                foreach (var sameActorEventPoint in sameActorEventPoints)
-                                {
-                                    if (sameActorEventPoint != targetEventPoint)
+                                    eventPointInteractive.OnInteractive += () =>
                                     {
-                                        sameActorEventPoint.gameObject.SetActive(false);
-                                    }
+                                        if (_enabledTime > Time.time) return;
+
+                                        var dialogueTemporaryData = new DialogueTemporaryData(quest.Code, DialogType.Quest, targetEventPoint);
+                                        //dialogueTemporaryData.quest = quest;
+                                        dialogueTemporaryData.rewards = quest.Rewards.Select(reward => (reward.Type, reward.Code, reward.Value)).ToArray();
+                                        OnBeginEventPoint.OnNext(targetEventPoint);
+                                        ConversationHandle(quest.Dialog, dialogueTemporaryData);
+                                    };
+
+
                                 }
                             }
+
+                            ////disable duplicate actor objects
+                            //var sameActorEventPoints = EventPoint.GetEventPointsOfActors(quest.TargetActorList.ToList());
+                            //Debug.Log($"check for same event point {quest.TargetActorList.Count}/ {sameActorEventPoints.Count}");
+
+                            //foreach (var sameActorEventPoint in sameActorEventPoints)
+                            //{
+                            //    Debug.Log($"Disable eventpoint {sameActorEventPoint.name}");
+                            //    //if (sameActorEventPoint != targetEventPoint)
+                            //    //{
+                            //    sameActorEventPoint.gameObject.SetActive(false);
+                            //    //}
+                            //}
+
+
+                            ////if use the same actor SetActive false the current event object 
+                            //var currentQuest = GameRunner.Instance.Core.MasterData.NpcMasterData.QuestGroupsMasterData.QuestGroups
+                            //    .Select(questGroup => questGroup.Quests.FirstOrDefault(quest => quest.Code == _currentDialog.eventCode))
+                            //    .FirstOrDefault();
+
+                            //Debug.Log();
+                            //if (quest.TargetActorList.Any(actor => currentQuest.TargetActorExists(actor)))
+                            //{
+                            //    _currentDialog.eventPoint.gameObject.SetActive(false);
+                            //}
                         }
 
                     }
