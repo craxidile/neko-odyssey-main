@@ -255,6 +255,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
 
         public void SetMode(PlayerMode mode)
         {
+            if (Mode == PlayerMode.Freeze) return;
             Debug.Log($"<color=green>>>change_mode<< {mode} {(new System.Diagnostics.StackTrace()).GetFrame(1).GetMethod().Name}</color>");
             PreviousMode = Mode;
             Mode = mode;

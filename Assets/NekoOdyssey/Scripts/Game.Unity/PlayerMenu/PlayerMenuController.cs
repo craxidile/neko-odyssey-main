@@ -67,6 +67,9 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
             GameRunner.Instance.Core.PlayerMenu.OnCommitAction
                 .Subscribe(HandlePlayerMenuAction)
                 .AddTo(this);
+            GameRunner.Instance.Core.Player.OnChangeMode
+                .Subscribe(HandlePlayerModeChange)
+                .AddTo(this);
             // GameRunner.Instance.Core.PlayerMenu.OnChangeSiteActive
             //     .Subscribe(HandleSiteActiveChange)
             //     .AddTo(this);
@@ -81,6 +84,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
         {
             if (!other.CompareTag("Player")) return;
             if (GameRunner.Instance.Core.Player.Mode == PlayerMode.QuestConversation) return;
+            if (GameRunner.Instance.Core.Player.Mode == PlayerMode.Freeze) return;
             if (
                 !string.IsNullOrEmpty(activeAtSiteName) &&
                 SiteRunner.Instance.Core.Site.CurrentSite.Name != activeAtSiteName
@@ -101,6 +105,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
         {
             if (!other.CompareTag("Player")) return;
             if (GameRunner.Instance.Core.Player.Mode == PlayerMode.QuestConversation) return;
+            if (GameRunner.Instance.Core.Player.Mode == PlayerMode.Freeze) return;
             if (
                 !string.IsNullOrEmpty(activeAtSiteName) &&
                 SiteRunner.Instance.Core.Site.CurrentSite.Name != activeAtSiteName
@@ -114,6 +119,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
         {
             // if (GameRunner.Instance.Core.PlayerMenu.Site != site) return;
             if (GameRunner.Instance.Core.PlayerMenu.SiteName != siteName) return;
+            if (GameRunner.Instance.Core.Player.Mode == PlayerMode.QuestConversation) return;
+            if (GameRunner.Instance.Core.Player.Mode == PlayerMode.Freeze) return;
             Debug.Log($">>menu_level<< current_action {currentAction}");
             var availableActionList = availableActions.ToList();
             var banners = GameRunner.Instance.Core.PlayerMenu.MenuLevel == 0
@@ -158,8 +165,22 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
         //         banner.SetActive(true);
         // }
 
+        private void HandlePlayerModeChange(PlayerMode mode)
+        {
+            Debug.Log($"<color=red>>>player_menu<< mode {mode}</color>");
+            if (mode != PlayerMode.Freeze) return;
+            Debug.Log($"<color=yellow>>>player_menu<< freeze!!!</color>");
+            _active = false;
+            foreach (var banner in _banners)
+            {
+                banner.SetActive(false);
+            }
+        }
+
         private void HandleSiteNameActiveChange(Tuple<string, bool> siteActive)
         {
+            if (GameRunner.Instance.Core.Player.Mode == PlayerMode.Freeze) return;
+            
             var currentSiteName = siteActive.Item1;
             if (currentSiteName != siteName) return;
             var active = siteActive.Item2;
@@ -182,6 +203,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
 
         private void HandlePlayerMenuAction(PlayerMenuAction action)
         {
+            if (GameRunner.Instance.Core.Player.Mode == PlayerMode.Freeze) return;
+            
             if (_active || action != PlayerMenuAction.Exclamation) return;
             Debug.Log($">>menu_level<< 1");
             GameRunner.Instance.Core.PlayerMenu.SetMenuLevel(1);
@@ -189,6 +212,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
 
         private void SetMenuLevel(int level)
         {
+            if (GameRunner.Instance.Core.Player.Mode == PlayerMode.Freeze) return;
+            
             // if (GameRunner.Instance.Core.PlayerMenu.Site != site) return;
             if (GameRunner.Instance.Core.PlayerMenu.SiteName != siteName) return;
             Debug.Log($">>level<< {level}");
@@ -208,6 +233,8 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
 
         private void CreateActionBanner(PlayerMenuAction action, int index, int length, int level)
         {
+            if (GameRunner.Instance.Core.Player.Mode == PlayerMode.Freeze) return;
+            
             var originalPosition = new Vector3(0, 0, -MenuGap * (length - 1) / 2);
 
             if (action == PlayerMenuAction.None) return;

@@ -2,6 +2,7 @@
 using DG.Tweening;
 using NekoOdyssey.Scripts.Game.Core.Ais.Cat;
 using NekoOdyssey.Scripts.Game.Core.Ais.Cat.Behaviours;
+using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 using UniRx;
 using UnityEngine;
 
@@ -74,6 +75,13 @@ namespace NekoOdyssey.Scripts.Game.Unity.Ais.Cat.Behaviours.Move
         private void HandleMove(Vector3 position)
         {
             if (!_running) return;
+            if (GameRunner.Instance.Core.Player.Mode == PlayerMode.Feed)
+            {
+                _animator.SetBool($"Move", false);
+                _animator.SetBool($"Eat", true);
+                return;
+            }
+
             _currentCoroutine = StartCoroutine(MoveToPosition(position));
         }
 
