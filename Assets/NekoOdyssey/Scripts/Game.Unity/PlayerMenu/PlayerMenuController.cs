@@ -8,6 +8,7 @@ using DG.Tweening;
 using UniRx;
 using NekoOdyssey.Scripts.Game.Core.PlayerMenu;
 using NekoOdyssey.Scripts.Game.Unity.AssetBundles;
+using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -79,6 +80,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
         private void OnTriggerStay(Collider other)
         {
             if (!other.CompareTag("Player")) return;
+            if (GameRunner.Instance.Core.Player.Mode == PlayerMode.QuestConversation) return;
             if (
                 !string.IsNullOrEmpty(activeAtSiteName) &&
                 SiteRunner.Instance.Core.Site.CurrentSite.Name != activeAtSiteName
@@ -98,6 +100,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
         private void OnTriggerExit(Collider other)
         {
             if (!other.CompareTag("Player")) return;
+            if (GameRunner.Instance.Core.Player.Mode == PlayerMode.QuestConversation) return;
             if (
                 !string.IsNullOrEmpty(activeAtSiteName) &&
                 SiteRunner.Instance.Core.Site.CurrentSite.Name != activeAtSiteName
