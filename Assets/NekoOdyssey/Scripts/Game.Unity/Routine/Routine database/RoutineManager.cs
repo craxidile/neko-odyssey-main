@@ -712,6 +712,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                         Debug.Log($"Give reward 1");
                         DG.Tweening.DOVirtual.DelayedCall(0.1f, () =>
                         {
+                            GameRunner.Instance.Core.PlayerMenu.SetActive(false);
                             Debug.Log($"Give reward 2");
                             UpdateQuestEvent_RelatedQuestCode(_currentDialog.eventCode);
                             Debug.Log($"Give reward 3");
@@ -743,6 +744,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                 }
                 else if (reward.Type.Equals("Site", System.StringComparison.InvariantCultureIgnoreCase))
                 {
+                    GameRunner.Instance.Core.PlayerMenu.SetActive(false);
                     GameRunner.Instance.Core.Player.SetMode(PlayerMode.Stop);
                     GameRunner.Instance.Core.GameScene.CloseScene();
                     GameRunner.Instance.Core.GameScene.OnChangeSceneFinish.Subscribe(_ =>
