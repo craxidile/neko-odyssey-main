@@ -167,9 +167,9 @@ namespace NekoOdyssey.Scripts.Game.Unity.PlayerMenu
 
         private void HandlePlayerModeChange(PlayerMode mode)
         {
-            Debug.Log($"<color=red>>>player_menu<< mode {mode}</color>");
+            // Debug.Log($"<color=red>>>player_menu<< mode {mode}</color>");
             if (mode != PlayerMode.Freeze) return;
-            Debug.Log($"<color=yellow>>>player_menu<< freeze!!!</color>");
+            // Debug.Log($"<color=yellow>>>player_menu<< freeze!!!</color>");
             _active = false;
             foreach (var banner in _banners)
             {
