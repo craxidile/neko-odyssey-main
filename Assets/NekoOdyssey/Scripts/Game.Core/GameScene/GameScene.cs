@@ -1,4 +1,5 @@
 ﻿using DG.Tweening;
+using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 using UniRx;
 
 namespace NekoOdyssey.Scripts.Game.Core.GameScene
@@ -18,6 +19,7 @@ namespace NekoOdyssey.Scripts.Game.Core.GameScene
 
         public void CloseScene()
         {
+            GameRunner.Instance.Core.Player.SetMode(PlayerMode.Freeze);
             _sceneMode = GameSceneMode.Closing;
             OnChangeSceneMode.OnNext(_sceneMode);
         }

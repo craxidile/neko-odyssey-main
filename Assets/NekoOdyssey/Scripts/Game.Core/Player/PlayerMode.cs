@@ -16,5 +16,6 @@
         EndDay_StaminaOut,
         EndDay_TimeOut,
         Feed,
+        Freeze = int.MaxValue,
     }
 }

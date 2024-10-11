@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using DG.Tweening;
 using NekoOdyssey.Scripts.Game.Core.Player.Feed;
 using NekoOdyssey.Scripts.Game.Core.PlayerMenu;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
@@ -61,12 +62,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Feed
 
             _feed.Mode = attributes.feedMode;
             _feed.TargetPosition = attributes.feedAnchor.position;
-
-            if (!_feed.FeedCat(action))
-            {
-                _player.SetMode(PlayerMode.Move);
-                return;
-            }
+            if (!_feed.FeedCat(action)) return;
             
             GameRunner.Instance.Core.Cats.CurrentCatCode = attributes.catCode;
             GameRunner.Instance.Core.Cats.CurrentCat?.Eat(true);

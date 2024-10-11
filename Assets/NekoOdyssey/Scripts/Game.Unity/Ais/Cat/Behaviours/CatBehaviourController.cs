@@ -9,6 +9,7 @@ using NekoOdyssey.Scripts.Game.Core.Ais.Cat.Behaviours;
 using NekoOdyssey.Scripts.Game.Unity.Ais.Cat.Behaviours.CallToFeed;
 using NekoOdyssey.Scripts.Game.Unity.Ais.Cat.Behaviours.Move;
 using NekoOdyssey.Scripts.Game.Unity.AssetBundles;
+using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 using NekoOdyssey.Scripts.Models;
 using UnityEngine;
 

@@ -745,7 +745,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                 else if (reward.Type.Equals("Site", System.StringComparison.InvariantCultureIgnoreCase))
                 {
                     GameRunner.Instance.Core.PlayerMenu.SetActive(false);
-                    GameRunner.Instance.Core.Player.SetMode(PlayerMode.Stop);
+                    Debug.Log($">>player_menu<< change_site {reward.Code}");
+                    GameRunner.Instance.Core.Player.SetMode(PlayerMode.Freeze);
                     GameRunner.Instance.Core.GameScene.CloseScene();
                     GameRunner.Instance.Core.GameScene.OnChangeSceneFinish.Subscribe(_ =>
                     {

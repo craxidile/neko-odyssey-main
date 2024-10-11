@@ -37,6 +37,12 @@ namespace NekoOdyssey.Scripts.Game.Unity.Ais.Cat.Behaviours.CallToFeed
 
         private void HandleCallToFeed(float delay)
         {
+            if (GameRunner.Instance.Core.Player.Mode == PlayerMode.Feed)
+            {
+                _animator.SetBool($"Hungry", false);
+                _animator.SetBool($"Eat", true);
+                return;
+            }
             var isWalking = GameRunner.Instance.Core.Player.Mode == PlayerMode.Move;
             if (_executing || !isWalking) return;
             _executing = true;

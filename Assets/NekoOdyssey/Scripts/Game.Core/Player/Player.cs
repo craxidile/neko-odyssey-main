@@ -255,6 +255,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
 
         public void SetMode(PlayerMode mode)
         {
+            if (Mode == PlayerMode.Freeze) return;
             Debug.Log($"<color=green>>>change_mode<< {mode} {(new System.Diagnostics.StackTrace()).GetFrame(1).GetMethod().Name}</color>");
             PreviousMode = Mode;
             Mode = mode;
@@ -423,7 +424,15 @@ namespace NekoOdyssey.Scripts.Game.Core.Player
 
         public void ShakeHead()
         {
+            GameRunner.Instance.Core.Player.SetMode(PlayerMode.Stop);
             OnShakeHead.OnNext(default);
+        }
+
+        public void FinishHeadShake()
+        {
+            GameRunner.Instance.Core.PlayerMenu.SetCurrentSiteNameActive();
+            GameRunner.Instance.Core.Player.SetMode(PlayerMode.Move);
+            GameRunner.Instance.Core.PlayerMenu.SetMenuLevel(0);
         }
     }
 }
