@@ -226,7 +226,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8889646181857751449, guid: c72dce06505800d4ea0ae409dfaea0a7, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -1.2532
+      value: -1.2305999
       objectReference: {fileID: 0}
     - target: {fileID: 8889646181857751449, guid: c72dce06505800d4ea0ae409dfaea0a7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -341,6 +341,69 @@ Transform:
   - {fileID: 1527009376}
   m_Father: {fileID: 1684695074}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!1 &52541495
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 52541496}
+  - component: {fileID: 52541497}
+  m_Layer: 0
+  m_Name: Balloon
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &52541496
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 52541495}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1372212117}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &52541497
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 52541495}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -2093833771
+      Data2: 1259382587
+      Data3: -1359236687
+      Data4: -1329875572
+    Path: event:/SFX/ChatBalloon
+  Event: 
+  PlayEvent: 11
+  StopEvent: 12
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1 &157796784
 GameObject:
   m_ObjectHideFlags: 0
@@ -541,6 +604,8 @@ PlayableDirector:
     value: {fileID: 480525508}
   - key: {fileID: -4216835264851422862, guid: 526b856da1213d146816bb18e6d410ca, type: 2}
     value: {fileID: 480525508}
+  - key: {fileID: 7298978536986217478, guid: 526b856da1213d146816bb18e6d410ca, type: 2}
+    value: {fileID: 52541495}
   m_ExposedReferences:
     m_References:
     - 31e62fb27e8a4be409db13fc20f49067: {fileID: 0}
@@ -577,6 +642,7 @@ Transform:
   - {fileID: 1684695074}
   - {fileID: 1986564945}
   - {fileID: 1761364365}
+  - {fileID: 1372212117}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &255447547
@@ -2301,6 +2367,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: DialogCanvas Variant (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 8395892105349879262, guid: c72dce06505800d4ea0ae409dfaea0a7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8889646181857751449, guid: c72dce06505800d4ea0ae409dfaea0a7, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -2676,6 +2746,38 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1235886703}
   m_Mesh: {fileID: -5495902117074765545, guid: 1d5e38e6d827af947845218c1267700f, type: 3}
+--- !u!1 &1372212116
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1372212117}
+  m_Layer: 0
+  m_Name: SFX
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1372212117
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1372212116}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 52541496}
+  m_Father: {fileID: 234538029}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1372804316
 GameObject:
   m_ObjectHideFlags: 0
