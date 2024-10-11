@@ -43,19 +43,23 @@ namespace NekoOdyssey.Scripts.Game.Unity.Ais.Cat.Behaviours.CallToFeed
                 _animator.SetBool($"Eat", true);
                 return;
             }
+
+            if (GameRunner.Instance.Core.Player.Mode == PlayerMode.Pet)
+            {
+                _animator.SetBool($"Hungry", false);
+                _animator.SetBool($"Sit", true);
+                return;
+            }
+
             var isWalking = GameRunner.Instance.Core.Player.Mode == PlayerMode.Move;
             if (_executing || !isWalking) return;
             _executing = true;
-            DOVirtual.DelayedCall(.1f, () =>
-            {
-                _animator.SetBool($"Hungry", true);
-            });
+            DOVirtual.DelayedCall(.1f, () => { _animator.SetBool($"Hungry", true); });
             DOVirtual.DelayedCall(delay, () =>
             {
                 _animator.SetBool($"Hungry", false);
                 _executing = false;
             });
         }
-        
     }
 }
