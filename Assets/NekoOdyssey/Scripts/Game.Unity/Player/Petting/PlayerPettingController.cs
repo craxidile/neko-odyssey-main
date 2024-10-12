@@ -12,7 +12,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Petting
 {
     public class PlayerPettingController : MonoBehaviour
     {
-        private const float PettingDelay = 4f;
+        public const float PettingDelay = 4f;
         
         private bool _active;
 

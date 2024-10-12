@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using DG.Tweening;
+using NekoOdyssey.Scripts.Game.Core.Ais.Cat;
 using UnityEngine;
 
 namespace NekoOdyssey.Scripts.Game.Unity.Cats
@@ -8,11 +10,15 @@ namespace NekoOdyssey.Scripts.Game.Unity.Cats
     {
         public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
+            var gameObject = animator.transform.gameObject;
+            var eligibleAis = GameRunner.Instance.Core.Ais.CatAis.Where(catAi => catAi.GameObject = gameObject);
+
+            var catAis = eligibleAis as CatAi[] ?? eligibleAis.ToArray();
+            foreach (var ai in catAis) ai.SetWalkable(stateInfo.shortNameHash == Animator.StringToHash($"Walk"));
+            
             if (stateInfo.shortNameHash == Animator.StringToHash($"Stand"))
             {
-                var gameObject = animator.transform.gameObject;
-                var eligibleAis = GameRunner.Instance.Core.Ais.CatAis.Where(catAi => catAi.GameObject = gameObject);
-                foreach (var ai in eligibleAis) ai.SetReadyToWalk(true);
+                foreach (var ai in catAis) ai.SetReadyToWalk(true);
             }
         }
     }

@@ -9,7 +9,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Player.Feed
 {
     public class PlayerFeedController : MonoBehaviour
     {
-        private const float FeedDelay = 4f;
+        public const float FeedDelay = 4f;
 
         private bool _active;
 

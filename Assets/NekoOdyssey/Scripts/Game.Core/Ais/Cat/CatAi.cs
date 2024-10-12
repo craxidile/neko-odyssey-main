@@ -18,6 +18,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Ais.Cat
         public bool ReadyToWalk { get; private set; } = false;
         public Vector3 CatPosition { get; private set; } = Vector3.zero;
         public CatProfile Profile { get; private set; }
+        public bool Walkable { get; private set; }
         public CatBehaviourMode Mode { get; private set; } = CatBehaviourMode.None;
         public Dictionary<CatBehaviourMode, ICatBehaviour> Behaviours { get; } = new();
 
@@ -115,6 +116,11 @@ namespace NekoOdyssey.Scripts.Game.Core.Ais.Cat
         {
             ReadyToWalk = ready;
             OnReadyToWalk.OnNext(ready);
+        }
+
+        public void SetWalkable(bool walkable)
+        {
+            Walkable = walkable;
         }
         
     }
