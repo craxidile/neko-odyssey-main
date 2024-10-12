@@ -155,6 +155,7 @@ public class DialogueManager : MonoBehaviour
     private void ExecuteSubDialog(SubDialog subDialog)
     {
         Debug.Log($">>sub_dialog<< {subDialog.Id}");
+        Debug.Log($">>locale<< {GameRunner.Instance.Core.Settings.Locale}");
 
         foreach (var line in subDialog.Lines)
         {

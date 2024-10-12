@@ -3,12 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-
 using System.Linq;
-
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 using UniRx;
-
 using NekoOdyssey.Scripts.Database.Domains.Npc.Commons;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.ChatGroupEntity.Models;
 using NekoOdyssey.Scripts.Database.Domains.Npc.Entities.DialogAnswerEntity.Models;
@@ -38,6 +35,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             public string npcCode;
 
             public bool isAppearedInQuest, isAppearedInRoutine;
+
             public NpcData(string npcCode = "newNpc")
             {
                 this.npcCode = npcCode;
@@ -45,7 +43,9 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                 isAppearedInRoutine = false;
             }
         }
+
         List<NpcData> npcDatas = new();
+
         NpcData GetNpcData(string npcCode)
         {
             foreach (var npc in npcDatas)
@@ -63,13 +63,20 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         }
 
 
-        enum DialogType { Quest, Routine }
+        enum DialogType
+        {
+            Quest,
+            Routine
+        }
+
         class DialogueTemporaryData
         {
             public string eventCode;
             public DialogType dialogType;
             public EventPoint eventPoint;
+
             public UnityAction nextDialogueCallback;
+
             //public Quest quest { get; set; }
             public (string Type, string Code, int Value)[] rewards;
 
@@ -80,11 +87,11 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                 this.eventPoint = eventPoint;
             }
         }
+
         DialogueTemporaryData _currentDialog;
         List<DialogueTemporaryData> _tempCompletedDialogue = new();
 
         Dictionary<string, Quest> _tempQuestCodeAndQuest = new();
-
 
 
         public DayNightLightingManager dayNightLightingManager;
@@ -95,7 +102,6 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         public Subject<EventPoint> OnBeginEventPoint { get; } = new();
         public Subject<EventPoint> OnCompleteEventPoint { get; } = new();
         public Subject<EventPoint> OnCancelEventPoint { get; } = new();
-
 
 
         public void Bind()
@@ -112,10 +118,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             }
             else
             {
-                SiteRunner.Instance.Core.Site.OnReady.Subscribe(_ =>
-                {
-                    UpdateWorld();
-                }).AddTo(SiteRunner.Instance);
+                SiteRunner.Instance.Core.Site.OnReady.Subscribe(_ => { UpdateWorld(); }).AddTo(SiteRunner.Instance);
             }
         }
 
@@ -132,14 +135,13 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         }
 
 
-
-
         public void UpdateWorld()
         {
             Debug.Log("UpdateWorld");
             UpdateQuestEvent();
             UpdateNpcRoutine();
         }
+
         public void ForceUpdateWorld()
         {
             Debug.Log("UpdateWorld");
@@ -167,7 +169,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
                     var startingTime = new TimeHrMin(quest.StartingHour, quest.StartingMinute);
                     var EndingTime = new TimeHrMin(quest.EndingHour, quest.EndingMinute);
-                    var isInQuestTime = GameRunner.Instance.TimeRoutine.currentTime.inBetweenTime(startingTime, EndingTime);
+                    var isInQuestTime =
+                        GameRunner.Instance.TimeRoutine.currentTime.inBetweenTime(startingTime, EndingTime);
 
                     var targetEventPoint = EventPoint.GetEventPoint(quest.TargetEventPoint);
 
@@ -197,15 +200,16 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                                     if (_enabledTime > Time.time) return;
                                     Debug.Log("Quest trigger");
 
-                                    var dialogueTemporaryData = new DialogueTemporaryData(quest.Code, DialogType.Quest, targetEventPoint);
+                                    var dialogueTemporaryData =
+                                        new DialogueTemporaryData(quest.Code, DialogType.Quest, targetEventPoint);
                                     //dialogueTemporaryData.quest = quest;
-                                    dialogueTemporaryData.rewards = quest.Rewards.Select(reward => (reward.Type, reward.Code, reward.Value)).ToArray();
+                                    dialogueTemporaryData.rewards = quest.Rewards
+                                        .Select(reward => (reward.Type, reward.Code, reward.Value)).ToArray();
                                     OnBeginEventPoint.OnNext(targetEventPoint);
                                     ConversationHandle(quest.Dialog, dialogueTemporaryData);
                                 };
                             }
                         }
-
                     }
                     else //outside event time
                     {
@@ -219,9 +223,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                                 npcData.isAppearedInQuest = true;
                             }
                         }
-
                     }
-
                 }
             }
         }
@@ -232,30 +234,37 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             {
                 if (!CheckCondition(condition.Type, condition.Code, condition.Operator, condition.Value)) return false;
             }
+
             return true;
         }
+
         bool CheckQuestCondition(ICollection<QuestCondition> conditionList)
         {
             foreach (var condition in conditionList)
             {
                 if (!CheckCondition(condition.Type, condition.Code, condition.Operator, condition.Value)) return false;
             }
+
             return true;
         }
+
         bool CheckDialogueCondition(ICollection<DialogConditionCase> conditionList)
         {
             foreach (var condition in conditionList)
             {
                 if (!CheckCondition(condition.Type, condition.Code, condition.Operator, condition.Value)) return false;
             }
+
             return true;
         }
+
         bool CheckRoutineCondition(ICollection<RoutineCondition> conditionList)
         {
             foreach (var condition in conditionList)
             {
                 if (!CheckCondition(condition.Type, condition.Code, condition.Operator, condition.Value)) return false;
             }
+
             return true;
         }
 
@@ -265,6 +274,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             {
                 if (!GameRunner.Instance.Core.Player.IsQuestComplete(code)) return false;
             }
+
             if (type == "Exclude Quest Key" || type == "Exclude Quest Group Key")
             {
                 if (GameRunner.Instance.Core.Player.IsQuestComplete(code)) return false;
@@ -275,21 +285,25 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                 var itemCount = GameRunner.Instance.Core.Player.Bag.CheckBagItem(code);
                 if (!ExtecuteOperation(itemCount, value, operation)) return false;
             }
+
             if (type == "Stamina")
             {
                 var stamina = GameRunner.Instance.Core.Player.Stamina.Stamina;
                 if (!ExtecuteOperation(stamina, value, operation)) return false;
             }
+
             if (type == "Followers")
             {
                 var follower = GameRunner.Instance.Core.Player.FollowerCount;
                 if (!ExtecuteOperation(follower, value, operation)) return false;
             }
+
             if (type == "Likes")
             {
                 var like = GameRunner.Instance.Core.Player.LikeCount;
                 if (!ExtecuteOperation(like, value, operation)) return false;
             }
+
             if (type == "Money")
             {
                 var money = GameRunner.Instance.Core.Player.PocketMoney;
@@ -298,6 +312,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
             return true;
         }
+
         bool ExtecuteOperation(int a, int b, string opeator)
         {
             bool result = false;
@@ -324,21 +339,22 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                 default:
                     break;
             }
+
             Debug.Log($"{a} {opeator} {b} = {result}");
             return result;
         }
 
 
-
         //public void ConversationHandle(QuestEventDetail questEventDetail)
         void ConversationHandle(Dialog dialog, DialogueTemporaryData dialogueData)
         {
-            var lastestDialogue = _tempCompletedDialogue.FirstOrDefault(dialog => dialog.eventCode == dialogueData.eventCode);
-            if (lastestDialogue != null)
+            var latestDialogue =
+                _tempCompletedDialogue.FirstOrDefault(dialog => dialog.eventCode == dialogueData.eventCode);
+            if (latestDialogue != null)
             {
                 Debug.Log("Repeat quest dialogue");
-                _currentDialog = lastestDialogue;
-                lastestDialogue.nextDialogueCallback?.Invoke();
+                _currentDialog = latestDialogue;
+                latestDialogue.nextDialogueCallback?.Invoke();
                 return;
             }
 
@@ -358,7 +374,6 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
                 if (dialog == null) return;
                 ExecuteDialog(dialog);
-
             }
         }
 
@@ -366,7 +381,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         {
             var targetEventPoint = _currentDialog.eventPoint;
             var dialogueActors = targetEventPoint?.GetComponentsInChildren<DialogueActor>();
-            var targetActor = dialogueActors.FirstOrDefault(dialogActor => dialogActor.actorId.Equals(actor, System.StringComparison.InvariantCultureIgnoreCase));
+            var targetActor = dialogueActors.FirstOrDefault(dialogActor =>
+                dialogActor.actorId.Equals(actor, System.StringComparison.InvariantCultureIgnoreCase));
             if (targetActor != null)
             {
                 GameRunner.Instance.Core.PlayerMenu.GameObject = targetActor.gameObject;
@@ -433,15 +449,13 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
 
                 //line.LocalizedText.ToLocalizedString(GameRunner.Instance.Core.Settings.Locale);
-                Debug.Log($">>test_npc<< >>line<< {line.Actor} {line.LocalizedText.ToLocalizedString(GameRunner.Instance.Core.Settings.Locale)} <color=purple>{line.AnimatorParam} {line.AnimatorParamValue}</color> <color=green>{line.Photo}</color>");
+                Debug.Log(
+                    $">>test_npc<< >>line<< {line.Actor} {line.LocalizedText.ToLocalizedString(GameRunner.Instance.Core.Settings.Locale)} <color=purple>{line.AnimatorParam} {line.AnimatorParamValue}</color> <color=green>{line.Photo}</color>");
 
                 ShowDialog(line.LocalizedText.ToLocalizedString(GameRunner.Instance.Core.Settings.Locale), line.Actor);
 
 
-                _currentDialog.nextDialogueCallback = () =>
-                {
-                    ExecuteSubDialog(subDialog, lineIndex + 1);
-                };
+                _currentDialog.nextDialogueCallback = () => { ExecuteSubDialog(subDialog, lineIndex + 1); };
                 SetAnimator(line);
             }
             else
@@ -456,10 +470,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                         ExecuteCondition(subDialog.Condition);
                         break;
                     case DialogChildFlag.End:
-                        _currentDialog.nextDialogueCallback = () =>
-                        {
-                            ExecuteSubDialog(subDialog, lineIndex - 1);
-                        };
+                        _currentDialog.nextDialogueCallback = () => { ExecuteSubDialog(subDialog, lineIndex - 1); };
                         CompleteQuest();
                         break;
                     case DialogChildFlag.Cancel:
@@ -469,7 +480,6 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                         return;
                 }
             }
-
         }
 
         private void ExecuteQuestion(DialogQuestion question)
@@ -504,15 +514,11 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                         default:
                             break;
                     }
-
                 });
 
                 //ChatBalloonManager.HideChatBalloon();
                 ChatBalloonManager.GrayBalloon();
             };
-
-
-
         }
 
         private void ExecuteCondition(DialogCondition condition)
@@ -565,20 +571,19 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
 
             RuntimeAnimatorController targetRuntimeAnimator = null;
-            if (GameRunner.Instance.AssetMap.ContainsKey(animationName) && GameRunner.Instance.AssetMap[animationName] is RuntimeAnimatorController)
+            if (GameRunner.Instance.AssetMap.ContainsKey(animationName) &&
+                GameRunner.Instance.AssetMap[animationName] is RuntimeAnimatorController)
             {
                 targetRuntimeAnimator = GameRunner.Instance.AssetMap[animationName] as RuntimeAnimatorController;
             }
-            else
-                return;
-
-
+            else return;
 
 
             Animator targetCharacterAnimator = null;
             if (line.Actor == "player")
             {
-                targetCharacterAnimator = GameRunner.Instance.Core.Player.GameObject.GetComponent<PlayerController>().Animator;
+                targetCharacterAnimator =
+                    GameRunner.Instance.Core.Player.GameObject.GetComponent<PlayerController>().Animator;
             }
             else
             {
@@ -603,6 +608,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                     _enabledTime = Time.time;
                     _currentDialog.nextDialogueCallback?.Invoke();
                 }
+
                 return;
             }
 
@@ -639,15 +645,9 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                     {
                         _enabledTime = Time.time;
                         _currentDialog.nextDialogueCallback?.Invoke();
-
                     });
                 }
-
-
-
             });
-
-
         }
 
         public void CompleteQuest()
@@ -659,7 +659,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             if (_currentDialog.dialogType == DialogType.Quest)
             {
                 //_currentDialog.eventPoint.gameObject.SetActive(false);
-                if (!GameRunner.Instance.Core.Player.IsQuestComplete(_currentDialog.eventCode)) //check for one time reward
+                if (!GameRunner.Instance.Core.Player.IsQuestComplete(_currentDialog
+                        .eventCode)) //check for one time reward
                 {
                     GiveRewards();
                 }
@@ -667,6 +668,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                 GameRunner.Instance.Core.Player.AddAchievedQuest(_currentDialog.eventCode);
                 _tempCompletedDialogue.Add(_currentDialog);
             }
+
             if (_currentDialog.dialogType == DialogType.Routine)
             {
                 if (!_tempCompletedDialogue.Contains(_currentDialog))
@@ -681,6 +683,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
             //UpdateWorld();
         }
+
         public void CancelQuest()
         {
             EndDialogue();
@@ -755,7 +758,6 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         }
 
 
-
         void UpdateNpcRoutine()
         {
             var player = GameRunner.Instance.Core.Player;
@@ -780,6 +782,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                         break;
                     }
                 }
+
                 Debug.Log($"CheckRoutineEnable : {routineEnable}");
                 if (!routineEnable) continue;
 
@@ -819,42 +822,34 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                         {
                             if (_enabledTime > Time.time) return;
 
-                            var dialogueTemporaryData = new DialogueTemporaryData(routine.Code, DialogType.Routine, targetEventPoint);
+                            var dialogueTemporaryData =
+                                new DialogueTemporaryData(routine.Code, DialogType.Routine, targetEventPoint);
                             //dialogueTemporaryData.quest = routine;
-                            dialogueTemporaryData.rewards = routine.Rewards.Select(reward => (reward.Type, reward.Code, reward.Value)).ToArray();
+                            dialogueTemporaryData.rewards = routine.Rewards
+                                .Select(reward => (reward.Type, reward.Code, reward.Value)).ToArray();
                             OnBeginEventPoint.OnNext(targetEventPoint);
                             ConversationHandle(routine.Dialog, dialogueTemporaryData);
-
                         };
                     }
-
                 }
-
             }
-
         }
 
         void SetUpRewardsAction()
         {
-            GameRunner.Instance.Core.Player.Capture.OnCaptureFinish.Subscribe(_ =>
-            {
-                GiveRewardFromAction();
-            }
-            ).AddTo(GameRunner.Instance);
+            GameRunner.Instance.Core.Player.Capture.OnCaptureFinish
+                .Subscribe(_ => GiveRewardFromAction())
+                .AddTo(GameRunner.Instance);
 
-            GameRunner.Instance.Core.Player.Feed.OnFinishFeed.Subscribe(_ =>
-            {
-                GiveRewardFromAction();
-            }
-            ).AddTo(GameRunner.Instance);
-
-
-
+            GameRunner.Instance.Core.Player.Feed.OnFinishFeed
+                .Subscribe(_ => GiveRewardFromAction())
+                .AddTo(GameRunner.Instance);
         }
 
         void GiveRewardFromAction()
         {
-            Debug.Log($"PlayerActionQuest Finish check EventPoint ,{GameRunner.Instance.Core.PlayerMenu.GameObject.name} ,{GameRunner.Instance.Core.PlayerMenu.GameObject.GetComponentInParent<EventPoint>() == null}");
+            Debug.Log(
+                $"PlayerActionQuest Finish check EventPoint ,{GameRunner.Instance.Core.PlayerMenu.GameObject.name} ,{GameRunner.Instance.Core.PlayerMenu.GameObject.GetComponentInParent<EventPoint>() == null}");
             var eventPoint = GameRunner.Instance.Core.PlayerMenu.GameObject.GetComponentInParent<EventPoint>();
             if (eventPoint == null) return;
 
@@ -868,41 +863,46 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                 Debug.Log($"PlayerActionQuest AddAchievedQuest {eventPoint.ReferenceEventCode}");
                 GameRunner.Instance.Core.Player.AddAchievedQuest(eventPoint.ReferenceEventCode);
 
-                var allQuestGroups = GameRunner.Instance.Core.MasterData.NpcMasterData.QuestGroupsMasterData.QuestGroups;
+                var allQuestGroups =
+                    GameRunner.Instance.Core.MasterData.NpcMasterData.QuestGroupsMasterData.QuestGroups;
                 foreach (var questGroup in allQuestGroups)
                 {
                     foreach (var quest in questGroup.Quests)
                     {
-                        if (quest.Code.Equals(eventPoint.ReferenceEventCode, System.StringComparison.InvariantCultureIgnoreCase))
+                        if (quest.Code.Equals(eventPoint.ReferenceEventCode,
+                                System.StringComparison.InvariantCultureIgnoreCase))
                         {
                             Debug.Log($"PlayerActionQuest Finish rewards ,quest : {quest.Code}");
-                            var dialogueTemporaryData = new DialogueTemporaryData(quest.Code, DialogType.Quest, eventPoint);
-                            dialogueTemporaryData.rewards = quest.Rewards.Select(reward => (reward.Type, reward.Code, reward.Value)).ToArray();
+                            var dialogueTemporaryData =
+                                new DialogueTemporaryData(quest.Code, DialogType.Quest, eventPoint);
+                            dialogueTemporaryData.rewards = quest.Rewards
+                                .Select(reward => (reward.Type, reward.Code, reward.Value)).ToArray();
                             _currentDialog = dialogueTemporaryData;
                             GiveRewards();
                         }
                     }
                 }
-
             }
-            else
-            if (eventPoint.eventPointType == EventPoint.EventPointType.Routine)
+            else if (eventPoint.eventPointType == EventPoint.EventPointType.Routine)
             {
                 Debug.Log("PlayerActionQuest Finish routine check");
 
                 var allRoutine = GameRunner.Instance.Core.MasterData.NpcMasterData.RoutinesMasterData.Routines;
                 foreach (var routine in allRoutine)
                 {
-                    if (routine.Code.Equals(eventPoint.ReferenceEventCode, System.StringComparison.InvariantCultureIgnoreCase))
+                    if (routine.Code.Equals(eventPoint.ReferenceEventCode,
+                            System.StringComparison.InvariantCultureIgnoreCase))
                     {
                         Debug.Log($"PlayerActionQuest Finish rewards ,routine : {routine.Code}");
-                        var dialogueTemporaryData = new DialogueTemporaryData(routine.Code, DialogType.Quest, eventPoint);
+                        var dialogueTemporaryData =
+                            new DialogueTemporaryData(routine.Code, DialogType.Quest, eventPoint);
+                        if (dialogueTemporaryData.rewards == null) return;
+
                         dialogueTemporaryData.rewards = routine.Rewards.Select(reward => (reward.Type, reward.Code, reward.Value)).ToArray();
                         _currentDialog = dialogueTemporaryData;
                         GiveRewards();
                     }
                 }
-
             }
         }
 
@@ -934,6 +934,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                             }
                         }
                     }
+
                     if (!checkThisQuest) continue; //only check quests that on the same quest group
 
                     Debug.Log($"UpdateQuestEvent_RelatedQuestCode 2");
@@ -945,7 +946,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
                     var startingTime = new TimeHrMin(quest.StartingHour, quest.StartingMinute);
                     var EndingTime = new TimeHrMin(quest.EndingHour, quest.EndingMinute);
-                    var isInQuestTime = GameRunner.Instance.TimeRoutine.currentTime.inBetweenTime(startingTime, EndingTime);
+                    var isInQuestTime =
+                        GameRunner.Instance.TimeRoutine.currentTime.inBetweenTime(startingTime, EndingTime);
 
                     var targetEventPoint = EventPoint.GetEventPoint(quest.TargetEventPoint);
 
@@ -976,14 +978,14 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                                     {
                                         if (_enabledTime > Time.time) return;
 
-                                        var dialogueTemporaryData = new DialogueTemporaryData(quest.Code, DialogType.Quest, targetEventPoint);
+                                        var dialogueTemporaryData = new DialogueTemporaryData(quest.Code,
+                                            DialogType.Quest, targetEventPoint);
                                         //dialogueTemporaryData.quest = quest;
-                                        dialogueTemporaryData.rewards = quest.Rewards.Select(reward => (reward.Type, reward.Code, reward.Value)).ToArray();
+                                        dialogueTemporaryData.rewards = quest.Rewards
+                                            .Select(reward => (reward.Type, reward.Code, reward.Value)).ToArray();
                                         OnBeginEventPoint.OnNext(targetEventPoint);
                                         ConversationHandle(quest.Dialog, dialogueTemporaryData);
                                     };
-
-
                                 }
                             }
 
@@ -1001,7 +1003,6 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                                 }
                             }
                         }
-
                     }
                     else //outside event time
                     {
@@ -1015,12 +1016,9 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                                 npcData.isAppearedInQuest = true;
                             }
                         }
-
                     }
-
                 }
             }
         }
-
     }
 }

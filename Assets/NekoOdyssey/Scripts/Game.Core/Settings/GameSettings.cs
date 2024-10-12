@@ -40,6 +40,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Settings
             {
                 var repo = new GameSettingsV001Repo(dbContext);
                 Settings = repo.Load();
+                Debug.Log($">>locale<< db {Settings.Locale}");
             }
             OnChangeLocale.OnNext(Settings.Locale.ToEnum<Locale>());
         }
