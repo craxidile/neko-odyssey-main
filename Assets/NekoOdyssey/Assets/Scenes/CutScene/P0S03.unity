@@ -222,11 +222,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8889646181857751449, guid: c72dce06505800d4ea0ae409dfaea0a7, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 26.239
+      value: 26.719
       objectReference: {fileID: 0}
     - target: {fileID: 8889646181857751449, guid: c72dce06505800d4ea0ae409dfaea0a7, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -1.2305999
+      value: -1.0431999
       objectReference: {fileID: 0}
     - target: {fileID: 8889646181857751449, guid: c72dce06505800d4ea0ae409dfaea0a7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -599,13 +599,15 @@ PlayableDirector:
   - key: {fileID: 1594470759407938615, guid: 526b856da1213d146816bb18e6d410ca, type: 2}
     value: {fileID: 660752011}
   - key: {fileID: 5538085022241473161, guid: 526b856da1213d146816bb18e6d410ca, type: 2}
-    value: {fileID: 480525506}
+    value: {fileID: 959585621}
   - key: {fileID: -7453369507005474159, guid: 526b856da1213d146816bb18e6d410ca, type: 2}
     value: {fileID: 480525508}
   - key: {fileID: -4216835264851422862, guid: 526b856da1213d146816bb18e6d410ca, type: 2}
     value: {fileID: 480525508}
   - key: {fileID: 7298978536986217478, guid: 526b856da1213d146816bb18e6d410ca, type: 2}
     value: {fileID: 52541495}
+  - key: {fileID: 7828405953975724930, guid: 526b856da1213d146816bb18e6d410ca, type: 2}
+    value: {fileID: 480525506}
   m_ExposedReferences:
     m_References:
     - 31e62fb27e8a4be409db13fc20f49067: {fileID: 0}
@@ -2255,6 +2257,69 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &959585621
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 959585622}
+  - component: {fileID: 959585623}
+  m_Layer: 0
+  m_Name: Walk
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &959585622
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 959585621}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1372212117}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &959585623
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 959585621}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -776030340
+      Data2: 1137794216
+      Data3: 1818280881
+      Data4: 1054291492
+    Path: event:/SFX/MikiAction/WalkTatami
+  Event: 
+  PlayEvent: 11
+  StopEvent: 12
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1 &1013790860
 GameObject:
   m_ObjectHideFlags: 0
@@ -2776,6 +2841,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 52541496}
+  - {fileID: 959585622}
   m_Father: {fileID: 234538029}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1372804316
