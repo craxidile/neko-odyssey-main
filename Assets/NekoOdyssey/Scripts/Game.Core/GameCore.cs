@@ -128,7 +128,7 @@ namespace NekoOdyssey.Scripts.Game.Core
 
         private void ResetSave(Unit _)
         {
-            using (new SaveV001DbContext(new() { CopyMode = DbCopyMode.ForceCopy, ReadOnly = false })) ;
+            // using (new SaveV001DbContext(new() { CopyMode = DbCopyMode.ForceCopy, ReadOnly = false })) ;
         }
     }
 }
