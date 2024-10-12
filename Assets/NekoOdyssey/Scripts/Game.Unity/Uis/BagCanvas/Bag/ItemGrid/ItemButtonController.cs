@@ -79,6 +79,13 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.BagCanvas.Bag.ItemGrid
         {
             var confirmationVisible = GameRunner.Instance.Core.Player.Bag.ConfirmationVisible;
             if (ReadOnly || !_visible || confirmationVisible) return;
+            Debug.Log($">>bag_item<< {_bagItem.Item.Type.Code == "PlayerFood"}");
+            // TODO: Add action to animate not to use this item
+            if (_bagItem.Item.Type.Code != "PlayerFood")
+            {
+                GameRunner.Instance.Core.Audios.AudioToClone.OnNext(($"SFX_Ui_Disabled", 3f));
+                return;
+            }
             GameRunner.Instance.Core.Player.Bag.SetConfirmationVisible(true);
         }
 
