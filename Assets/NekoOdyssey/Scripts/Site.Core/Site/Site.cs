@@ -52,14 +52,14 @@ namespace NekoOdyssey.Scripts.Site.Core.Site
             // SetSite("Intro", false);
             // SetSite("GamePlayZone4_01", false);
             // SetSite("GamePlayZone4_02", false);
-            SetSite("GamePlayZone6_01", false);
+            // SetSite("GamePlayZone6_01", false);
             // SetSite("GamePlayZone6_02", false);
             // SetSite("GamePlayZone3_01", false);
             // SetSite("GamePlayZone3_02", false);
             // SetSite("P0S04", false);
             // SetSite("NekoInside28BedroomFinal", false);
             // SetSite("MiniGameFishing", false);
-            // SetSite("DemoTitle", false);
+            SetSite("DemoTitle", false);
             // SetSite("StartTitle", false);
         }
 

@@ -17,6 +17,8 @@ using UnityEngine.Playables;
 using UniRx;
 using DayOfWeek = NekoOdyssey.Scripts.Database.Commons.Models.DayOfWeek;
 using NekoOdyssey.Scripts;
+using NekoOdyssey.Scripts.Game.Unity.Uis.Utils;
+
 public enum DatabaseSubtitleType
 {
     CMS,
@@ -24,7 +26,7 @@ public enum DatabaseSubtitleType
 }
 public class SubtitleData
 {
-    public string SubtitleSentance;
+    public string SubtitleSentence;
 }
 
 public class SubtitleManager : MonoBehaviour
@@ -103,7 +105,7 @@ public class SubtitleManager : MonoBehaviour
             string subtitle = row[languageColumnIndex];
             subtitle = subtitle.Replace(';', ',');
             subtitle = subtitle.Replace('_', '\n');
-            newSubtitleData.SubtitleSentance = subtitle;
+            newSubtitleData.SubtitleSentence = subtitle;
 
             if (!AllSubtitleData.ContainsKey(row[0]))
             {
@@ -133,7 +135,9 @@ public class SubtitleManager : MonoBehaviour
             SubtitleData newSubtitleData = new SubtitleData();
 
             Debug.Log($">>dialog_npc_cutscene<< >>line<< {line.Actor} {line.LocalizedText.ToLocalizedString(GameRunner.Instance.Core.Settings.Locale)}");
-            newSubtitleData.SubtitleSentance = line.LocalizedText.ToLocalizedString(GameRunner.Instance.Core.Settings.Locale);
+            newSubtitleData.SubtitleSentence = ThaiGlyphAdjuster.Adjust(
+                line.LocalizedText.ToLocalizedString(GameRunner.Instance.Core.Settings.Locale)
+            );
 
             if (!AllSubtitleData.ContainsKey(line.LocalizedText.Original))
             {
