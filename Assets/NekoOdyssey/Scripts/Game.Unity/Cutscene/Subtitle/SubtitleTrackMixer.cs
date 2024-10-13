@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using NekoOdyssey.Scripts.Game.Unity.Uis.Utils;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Playables;
@@ -25,11 +26,21 @@ public class SubtitleTrackMixer : PlayableBehaviour
                 ScriptPlayable<SubtitleBehaviour> inputPlayable = (ScriptPlayable<SubtitleBehaviour>)playable.GetInput(i);
                 SubtitleBehaviour input = inputPlayable.GetBehaviour();
                 var textData = SubtitleManager.GetSubtitle(input.lineIndexID);
-                currentText = textData.SubtitleSentance;
+                currentText = textData.SubtitleSentence;
                 currentAlpha = inputWeight;
             }
         }
 
+        if (!ThaiGlyphAdjuster.IsThaiString(currentText))
+        {
+            text.fontSize = 36;
+            text.lineSpacing = 1f;
+        }
+        else
+        {
+            text.fontSize = 32;
+            text.lineSpacing = 1.35f;
+        }
         text.text = currentText;
         //text.color.a = currentAlpha;
     }

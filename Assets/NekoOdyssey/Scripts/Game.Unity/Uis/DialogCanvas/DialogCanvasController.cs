@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using NekoOdyssey.Scripts.Game.Unity.Uis.Utils;
 
 namespace NekoOdyssey.Scripts.Game.Unity.Uis.DialogCanvas
 {
@@ -17,7 +18,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.DialogCanvas
         [HideInInspector] public bool endDialogue;
         public void SetText(string text)
         {
-            messageBox.text = text;
+            messageBox.text = ThaiGlyphAdjuster.Adjust(text);
 
             Canvas.ForceUpdateCanvases();
             messageBox.gameObject.SetActive(false);

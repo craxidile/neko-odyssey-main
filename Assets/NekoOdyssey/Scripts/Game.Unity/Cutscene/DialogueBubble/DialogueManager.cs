@@ -17,11 +17,14 @@ using UnityEngine.Playables;
 using UniRx;
 using DayOfWeek = NekoOdyssey.Scripts.Database.Commons.Models.DayOfWeek;
 using NekoOdyssey.Scripts;
+using NekoOdyssey.Scripts.Game.Unity.Uis.Utils;
+
 public enum DatabaseDialogueType
 {
     CMS,
     CSV,
 }
+
 public class DialogueData
 {
     public string DialogueSentance;
@@ -30,14 +33,11 @@ public class DialogueData
 public class DialogueManager : MonoBehaviour
 {
     public static DialogueManager instance;
-    [Header("Type of data")]
-    public DatabaseDialogueType data = DatabaseDialogueType.CMS;
+    [Header("Type of data")] public DatabaseDialogueType data = DatabaseDialogueType.CMS;
 
-    [Header("CMS")]
-    public string npcDialogCode;
+    [Header("CMS")] public string npcDialogCode;
 
-    [Header("CSV")]
-    [SerializeField] TextAsset DialogueAsset;
+    [Header("CSV")] [SerializeField] TextAsset DialogueAsset;
     int languageColumnIndex = 1;
     public languageType language = languageType.EN;
 
@@ -56,12 +56,14 @@ public class DialogueManager : MonoBehaviour
     {
         return AllDialogueData[lineIndexID];
     }
+
     private void Awake()
     {
         director = GetComponent<PlayableDirector>();
         canvasController = FindAnyObjectByType<DialogCanvasController>();
         canvasController.SetOpened(false);
     }
+
     private void Start()
     {
         if (data == DatabaseDialogueType.CSV)
@@ -80,6 +82,7 @@ public class DialogueManager : MonoBehaviour
             }
         }
     }
+
     private void Update()
     {
         if (Input.anyKeyDown && !endBubble)
@@ -117,8 +120,8 @@ public class DialogueManager : MonoBehaviour
                 AllDialogueData.Add(row[0], newDialogueData);
             }
         }
-
     }
+
     public void LoadDialogueCMS(string dialogCode)
     {
         var questGroupsMasterData = GameRunner.Instance.Core.MasterData.NpcMasterData.QuestGroupsMasterData;
@@ -126,18 +129,13 @@ public class DialogueManager : MonoBehaviour
         if (questGroupsMasterData.Ready)
         {
             ExecuteDialog(dialogMasterData.Dialogs.FirstOrDefault(d => d.Code == dialogCode));
-
         }
         else
         {
             questGroupsMasterData.OnReady
-                .Subscribe(_ =>
-                {
-                    ExecuteDialog(dialogMasterData.Dialogs.FirstOrDefault(d => d.Code == dialogCode));
-                })
+                .Subscribe(_ => { ExecuteDialog(dialogMasterData.Dialogs.FirstOrDefault(d => d.Code == dialogCode)); })
                 .AddTo(GameRunner.Instance);
         }
-
     }
 
     private void ExecuteDialog(Dialog dialog)
@@ -161,8 +159,11 @@ public class DialogueManager : MonoBehaviour
         {
             DialogueData newDialogueData = new DialogueData();
 
-            Debug.Log($">>dialog_npc_cutscene<< >>line<< {line.Actor} {line.LocalizedText.ToLocalizedString(GameRunner.Instance.Core.Settings.Locale)}");
-            newDialogueData.DialogueSentance = line.LocalizedText.ToLocalizedString(GameRunner.Instance.Core.Settings.Locale);
+            Debug.Log(
+                $">>dialog_npc_cutscene<< >>line<< {line.Actor} {line.LocalizedText.ToLocalizedString(GameRunner.Instance.Core.Settings.Locale)}");
+            newDialogueData.DialogueSentance = ThaiGlyphAdjuster.Adjust(
+                line.LocalizedText.ToLocalizedString(GameRunner.Instance.Core.Settings.Locale)
+            );
 
             if (!AllDialogueData.ContainsKey(line.LocalizedText.Original))
             {
@@ -183,6 +184,7 @@ public class DialogueManager : MonoBehaviour
                 return;
         }
     }
+
     private void EndDialog()
     {
         Debug.Log($">>test_npc<< >>end<<");
@@ -207,4 +209,3 @@ public class DialogueManager : MonoBehaviour
         }
     }
 }
-
