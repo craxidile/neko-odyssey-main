@@ -37,7 +37,8 @@ namespace NekoOdyssey.Scripts.Database.Domains.SaveV001.PlayerSiteEntity.Repo
                 .Where(ps => !ps.SiteCode.Contains("Title") &&
                              !ps.SiteCode.Contains("MiniGame") &&
                              !ps.SiteCode.Contains("Cutscene") &&
-                             !ps.SiteCode.Contains("CutScene"))
+                             !ps.SiteCode.Contains("CutScene") &&
+                             !ps.SiteCode.Contains("Inside"))
                 .OrderByDescending(ps => ps.LastVisit)
                 .FirstOrDefault();
         }
