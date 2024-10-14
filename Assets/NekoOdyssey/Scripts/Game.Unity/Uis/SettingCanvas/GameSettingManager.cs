@@ -240,10 +240,10 @@ public class GameSettingManager : MonoBehaviour, IStackPanel
                 case "JP":
                     locale = Locale.Ja;
                     break;
-                case "S_CN":
+                case "ZH_CN":
                     locale = Locale.ZhCn;
                     break;
-                case "T_CN":
+                case "ZH_TW":
                     locale = Locale.ZhTw;
                     break;
                 default:
@@ -252,6 +252,7 @@ public class GameSettingManager : MonoBehaviour, IStackPanel
             }
             
             GameRunner.Instance.Core.Settings.SetLocale(locale);
+            ChangeWindowMode(0);
         }
 
         _languageLeftButton.gameObject.SetActive(languageIndex != 0);
@@ -308,6 +309,7 @@ public class GameSettingManager : MonoBehaviour, IStackPanel
         //_fullscreenText.text = WindowMode == 0 ? "Fullscreen" : "Windowed";
         // _fullscreenText.text = LoadUiLanguageFromCSV.GetUiLanguageText(textOption);
         var localiser = _fullscreenText.GetComponent<UiTextLocaliser>();
+        Debug.Log($">>text_option<< localiser {localiser}");
         if (localiser == null) return;
         Debug.Log($">>text_option<< {textOption} {GameRunner.Instance.Core.Uis.Localisation.TranslateCurrent(textOption)}");
         localiser.OriginalText = textOption;

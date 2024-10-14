@@ -24,13 +24,13 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.Utils
         private void Awake()
         {
             _text = gameObject.GetComponent<Text>();
+            _baseFontSize = _text.fontSize;
         }
 
         private void Start()
         {
             Debug.Log($">>locale<< start_util");
             _originalText = _text.text;
-            _baseFontSize = _text.fontSize;
             if (GameRunner.Instance.Core.Uis.Ready)
             {
                 HandleLocalisationReady(default);
@@ -54,12 +54,15 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.Utils
 
         private void HandleLocaleChange(Locale locale)
         {
-            if (_prevLocale == locale) return;
+            Debug.Log($">>locale<< debug 05 {_originalText}");
+            // if (_prevLocale == locale) return;
             _prevLocale = locale;
-            Debug.Log($">>locale<< change {locale}");
+            Debug.Log($">>locale<< debug 06 {_originalText}");
+            Debug.Log($">>locale<< change {locale} {_originalText} {GameRunner.Instance.Core.Uis.Localisation.Translate(_originalText, locale)}");
             _text.text = ThaiGlyphAdjuster.Adjust(
                 GameRunner.Instance.Core.Uis.Localisation.Translate(_originalText, locale) ?? _originalText
             );
+            Debug.Log($">>locale<< debug 07 {_originalText}");
             Debug.Log($">>locale<< text {_text.text}");
 
             var fontSize = _baseFontSize == 0 ? _text.fontSize : _baseFontSize;
@@ -68,10 +71,13 @@ namespace NekoOdyssey.Scripts.Game.Unity.Uis.Utils
 
         private void SetOriginalText(string text)
         {
-            if (_prevText == text) return;
+            Debug.Log($">>locale<< debug 00 {text}");
+            // if (_prevText == text) return;
             _prevText = text;
+            Debug.Log($">>locale<< debug 02 {text}");
             Debug.Log($">>locale<< original_text {text}");
             _originalText = text;
+            Debug.Log($">>locale<< debug 03 {text}");
             HandleLocaleChange(GameRunner.Instance.Core.Settings.Locale);
         }
     }
