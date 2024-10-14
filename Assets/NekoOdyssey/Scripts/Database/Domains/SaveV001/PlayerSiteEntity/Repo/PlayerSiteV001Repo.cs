@@ -4,6 +4,7 @@ using NekoOdyssey.Scripts.Database.Domains.SaveV001.PlayerSiteEntity.Models;
 using SpatiumInteractive.Libraries.Unity.GRU.Contracts;
 using SpatiumInteractive.Libraries.Unity.GRU.Domain;
 using SQLite4Unity3d;
+using UnityEngine;
 
 namespace NekoOdyssey.Scripts.Database.Domains.SaveV001.PlayerSiteEntity.Repo
 {
@@ -26,6 +27,19 @@ namespace NekoOdyssey.Scripts.Database.Domains.SaveV001.PlayerSiteEntity.Repo
             return _dbContext.Context
                 .Table<PlayerSiteV001>()
                 .FirstOrDefault(ps => ps.SiteCode == siteCode);
+        }
+
+        public PlayerSiteV001 FindLastVisited()
+        {
+            return _dbContext.Context
+                .Table<PlayerSiteV001>()
+                .ToList()
+                .Where(ps => !ps.SiteCode.Contains("Title") &&
+                             !ps.SiteCode.Contains("MiniGame") &&
+                             !ps.SiteCode.Contains("Cutscene") &&
+                             !ps.SiteCode.Contains("CutScene"))
+                .OrderByDescending(ps => ps.LastVisit)
+                .FirstOrDefault();
         }
     }
 }

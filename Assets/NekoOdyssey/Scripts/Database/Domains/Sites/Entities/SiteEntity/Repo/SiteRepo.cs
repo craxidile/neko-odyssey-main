@@ -15,15 +15,19 @@ namespace NekoOdyssey.Scripts.Database.Domains.Sites.Entities.SiteEntity.Repo
             _siteSceneRepo = new SiteSceneRepo(dbContext);
         }
 
+        private void PopulateNextSite(Models.Site site)
+        {
+            site.Include(site => site.Scenes, _siteSceneRepo);
+            if (site.NextSiteId != null) site.Include(site => site.NextSite, this);
+        }
+
         public Models.Site FindByName(string name)
         {
             var site = _dbContext.Context.Table<Models.Site>()
                 .Where(site => site.Name == name)
                 .FirstOrDefault();
             if (site == null) return null;
-            site.Include(site => site.Scenes, _siteSceneRepo);
-            if (site.NextSiteId != null) site.Include(site => site.NextSite, this);
-
+            PopulateNextSite(site);
             return site;
         }
     }
