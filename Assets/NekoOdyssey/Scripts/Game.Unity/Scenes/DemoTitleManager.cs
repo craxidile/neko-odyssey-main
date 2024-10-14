@@ -1,12 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
+using NekoOdyssey.Scripts.Game.Unity.Uis.Utils;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class DemoTitleManager : MonoBehaviour
+namespace NekoOdyssey.Scripts.Game.Unity.Scenes
 {
-    
-    public void QuitGame()
+    public class DemoTitleManager : MonoBehaviour
     {
-        Application.Quit();
+        public Text newGameText;
+
+        private void Start()
+        {
+            var localiser = newGameText.GetComponent<UiTextLocaliser>();
+            if (!localiser) return;
+            if (SiteRunner.Instance.Core.Site.GameStarted) localiser.OriginalText = "Continue";
+        }
+
+        public void QuitGame()
+        {
+            Application.Quit();
+        }
     }
 }

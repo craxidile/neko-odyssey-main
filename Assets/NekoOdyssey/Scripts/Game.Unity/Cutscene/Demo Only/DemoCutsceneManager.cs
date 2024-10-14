@@ -56,20 +56,20 @@ public class DemoCutsceneManager : MonoBehaviour
     public void CutSceneIntroIsDone()
     {
         // TODO: Remove this after demo
-        GameSettingsV001 settings;
-        using (var context = new SaveV001DbContext(new() { CopyMode = DbCopyMode.CopyIfNotExists, ReadOnly = true }))
-        {
-            var settingsRepo = new GameSettingsV001Repo(context);
-            settings = settingsRepo.Load();
-        }
-
-        using (new SaveV001DbContext(new() { CopyMode = DbCopyMode.ForceCopy, ReadOnly = false })) ;
-        
-        using (var context = new SaveV001DbContext(new() { CopyMode = DbCopyMode.CopyIfNotExists, ReadOnly = false }))
-        {
-            var settingsRepo = new GameSettingsV001Repo(context);
-            settingsRepo.Update(settings);
-        }
+        // GameSettingsV001 settings;
+        // using (var context = new SaveV001DbContext(new() { CopyMode = DbCopyMode.CopyIfNotExists, ReadOnly = true }))
+        // {
+        //     var settingsRepo = new GameSettingsV001Repo(context);
+        //     settings = settingsRepo.Load();
+        // }
+        //
+        // using (new SaveV001DbContext(new() { CopyMode = DbCopyMode.ForceCopy, ReadOnly = false })) ;
+        //
+        // using (var context = new SaveV001DbContext(new() { CopyMode = DbCopyMode.CopyIfNotExists, ReadOnly = false }))
+        // {
+        //     var settingsRepo = new GameSettingsV001Repo(context);
+        //     settingsRepo.Update(settings);
+        // }
 
         isDone = true;
         Debug.Log("Runsite here");

@@ -1,14 +1,18 @@
 ﻿using NekoOdyssey.Scripts.Database.Domains;
+using NekoOdyssey.Scripts.Database.Domains.SaveV001.PlayerSiteEntity.Models;
+using NekoOdyssey.Scripts.Database.Domains.SaveV001.PlayerSiteEntity.Repo;
 using NekoOdyssey.Scripts.Database.Domains.Sites;
 using NekoOdyssey.Scripts.Database.Domains.Sites.Entities.SiteEntity.Repo;
-using NekoOdyssey.Scripts.MiniGame.Unity.Connector;
 using UniRx;
 using UnityEngine;
+using SaveV001DbContext = NekoOdyssey.Scripts.Database.Domains.SaveV001.SaveV001DbContext;
 
 namespace NekoOdyssey.Scripts.Site.Core.Site
 {
     public class Site
     {
+        private const string GameFirstSite = "GamePlayZone3_02";
+
         private bool _databaseInitialized;
 
         private static Database.Domains.Sites.Entities.SiteEntity.Models.Site _previousSite;
@@ -18,6 +22,7 @@ namespace NekoOdyssey.Scripts.Site.Core.Site
         public Database.Domains.Sites.Entities.SiteEntity.Models.Site CurrentSite => _currentSite;
 
         public bool Ready { get; private set; } = false;
+        public bool GameStarted => IsGameStarted();
 
         public Subject<Unit> OnReady { get; } = new();
         public Subject<Database.Domains.Sites.Entities.SiteEntity.Models.Site> OnChangeSite { get; } = new();
@@ -67,6 +72,32 @@ namespace NekoOdyssey.Scripts.Site.Core.Site
         {
             Ready = true;
             OnReady.OnNext(default);
+        }
+
+        private bool IsGameStarted()
+        {
+            var firstSiteFound = false;
+            using var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = true });
+            var playerSiteRepo = new PlayerSiteV001Repo(dbContext);
+            firstSiteFound = playerSiteRepo.FindBySiteCode(GameFirstSite) != null;
+            Debug.Log($">>main_menu<< game_started {firstSiteFound}");
+            return firstSiteFound;
+        }
+
+        public void MoveToLastVisitedSite()
+        {
+            Debug.Log($">>main_menu<< last_visited_site db_check");
+            PlayerSiteV001 lastVisitedSite = null;
+            using (var dbContext = new SaveV001DbContext(new() { CopyMode = DbCopyMode.DoNotCopy, ReadOnly = true }))
+            {
+                var playerSiteRepo = new PlayerSiteV001Repo(dbContext);
+                lastVisitedSite = playerSiteRepo.FindLastVisited();
+            }
+            Debug.Log($">>main_menu<< last_visited_site check {lastVisitedSite != null}");
+
+            if (lastVisitedSite == null) return;
+            Debug.Log($">>main_menu<< last_visited_site {lastVisitedSite.SiteCode}");
+            SetSite(lastVisitedSite.SiteCode);
         }
 
         public void MoveToNextSite()
