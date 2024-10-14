@@ -56,6 +56,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Player.Phone.Apps
                 var dbCatPhoto = catPhotoRepo.FindByAssetBundleName(catCode);
                 catPhoto = dbCatPhoto == null ? catPhotoRepo.Add(catPhoto) : dbCatPhoto;
                 var socialPostRepo = new SocialPostV001Repo(dbContext);
+                var socialPost = socialPostRepo.FindByCatPhotoId(catPhoto.Id);
+                if (socialPost != null) return;
                 socialPostRepo.Add(new SocialPostV001(catPhoto));
             });
             LoadPosts();
