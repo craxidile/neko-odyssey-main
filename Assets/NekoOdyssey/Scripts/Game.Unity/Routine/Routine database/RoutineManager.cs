@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 using System.Linq;
+using DG.Tweening;
 
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
 using UniRx;
@@ -86,6 +87,10 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         Dictionary<string, Quest> _tempQuestCodeAndQuest = new();
 
 
+        List<GameObject> _sceneFade_EnableEventPoints = new();
+        List<GameObject> _sceneFade_disableEventPoints = new();
+        bool _sceneFade_isTransitioned = false;
+
 
         public DayNightLightingManager dayNightLightingManager;
         public ChatBalloonManager ChatBalloonManager { get; set; }
@@ -125,6 +130,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
             dayNightLightingManager.Start();
 
             SetUpRewardsAction();
+
+            SetUpRewardScenceFade();
         }
 
         public void Unbind()
@@ -939,6 +946,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
         {
             //_currentDialog.eventPoint.gameObject.SetActive(false);
 
+
+
             Debug.Log($"UpdateQuestEvent_RelatedQuestCode {questCode}");
             var player = GameRunner.Instance.Core.Player;
             var allQuestGroups = GameRunner.Instance.Core.MasterData.NpcMasterData.QuestGroupsMasterData.QuestGroups;
@@ -988,7 +997,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                         if (targetEventPoint != null)
                         {
                             Debug.Log($"UpdateQuestEvent_RelatedQuestCode 6");
-                            targetEventPoint.gameObject.SetActive(true);
+                            //targetEventPoint.gameObject.SetActive(true);
+                            _sceneFade_EnableEventPoints.Add(targetEventPoint.gameObject);
                             targetEventPoint.eventPointType = EventPoint.EventPointType.Quest;
                             targetEventPoint.ReferenceEventCode = quest.Code;
 
@@ -1024,7 +1034,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                                 if (quest.TargetActorList.Any(actor => currentQuest.TargetActorExists(actor)))
                                 {
                                     Debug.Log($"Check duplicate quest quest have same actor");
-                                    currentDialog.eventPoint.gameObject.SetActive(false);
+                                    //currentDialog.eventPoint.gameObject.SetActive(false);
+                                    _sceneFade_disableEventPoints.Add(currentDialog.eventPoint.gameObject);
                                 }
                             }
                         }
@@ -1047,6 +1058,71 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
                 }
             }
+
+            _sceneFade_isTransitioned = true;
+            //GameRunner.Instance.Core.Player.SetMode(PlayerMode.Stop);
+            //GameRunner.Instance.Core.GameScene.CloseScene();
+
+
+            foreach (var eventPoint in _sceneFade_disableEventPoints)
+            {
+                eventPoint.SetActive(false);
+            }
+            _sceneFade_disableEventPoints.Clear();
+            foreach (var eventPoint in _sceneFade_EnableEventPoints)
+            {
+                eventPoint.SetActive(true);
+            }
+            _sceneFade_EnableEventPoints.Clear();
+
+        }
+        void SetUpRewardScenceFade()
+        {
+            //GameRunner.Instance.Core.GameScene.OnChangeSceneFinish.Subscribe(sceneMode =>
+            //{
+            //    if (!_sceneFade_isTransitioned) return;
+
+            //    if (sceneMode == GameScene.GameSceneMode.Closing)
+            //    {
+            //        if (_sceneFade_disableEventPoints.Count <= 0 && _sceneFade_EnableEventPoints.Count <= 0) return;
+
+            //        Debug.Log("check OnChangeSceneFinish closed");
+            //        Debug.Log($"check player {GameRunner.Instance.Core.Player.Mode}");
+            //        foreach (var eventPoint in _sceneFade_disableEventPoints)
+            //        {
+            //            eventPoint.SetActive(false);
+            //        }
+            //        _sceneFade_disableEventPoints.Clear();
+            //        foreach (var eventPoint in _sceneFade_EnableEventPoints)
+            //        {
+            //            eventPoint.SetActive(true);
+            //        }
+            //        _sceneFade_EnableEventPoints.Clear();
+
+
+            //        GameRunner.Instance.Core.GameScene.OpenScene();
+            //        //GameRunner.Instance.Core.Player.SetMode(PlayerMode.Move);
+
+            //    }
+            //    else
+            //    {
+            //        _sceneFade_isTransitioned = false;
+
+            //        Debug.Log("check OnChangeSceneFinish opened");
+            //        Debug.Log($"check player {GameRunner.Instance.Core.Player.Mode}");
+            //        GameRunner.Instance.Core.Player.SetMode(PlayerMode.Move);
+            //        Debug.Log($"check player 1 {GameRunner.Instance.Core.Player.Mode}");
+
+            //        DOVirtual.DelayedCall(0.1f, () =>
+            //        {
+            //            Debug.Log($"check player 2 {GameRunner.Instance.Core.Player.Mode}");
+            //            GameRunner.Instance.Core.Player.SetMode(PlayerMode.Move);
+            //            Debug.Log($"check player 3 {GameRunner.Instance.Core.Player.Mode}");
+
+            //        });
+
+            //    }
+            //});
         }
 
     }
