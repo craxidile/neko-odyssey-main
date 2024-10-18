@@ -700,7 +700,8 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
         void GiveRewards()
         {
-            var rewards = _currentDialog.rewards;
+            var currentDialog = _currentDialog;
+            var rewards = currentDialog.rewards;
             foreach (var reward in rewards)
             {
                 Debug.Log($"Give reward {reward.Type} , {reward.Code} : {reward.Value}");
@@ -714,7 +715,9 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                         {
                             GameRunner.Instance.Core.PlayerMenu.SetActive(false);
                             Debug.Log($"Give reward 2");
-                            UpdateQuestEvent_RelatedQuestCode(_currentDialog.eventCode);
+                            Debug.Log($"Give reward check 1 {currentDialog == null}");
+                            Debug.Log($"Give reward check 2 {currentDialog.eventCode}");
+                            UpdateQuestEvent_RelatedQuestCode(currentDialog.eventCode, currentDialog);
                             Debug.Log($"Give reward 3");
                         });
                     }
@@ -731,16 +734,38 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
                     var item = masterItems.FirstOrDefault(i => i.Code == reward.Code);
                     var itemQty = reward.Value;
 
-                    GameRunner.Instance.Core.Player.Bag.AddBagItem(item, itemQty);
-                    GameRunner.Instance.Core.Player.ItemObtainPopUp.ShowPopUp(item, itemQty);
+
+                    if (reward.Value > 0)
+                    {
+                        GameRunner.Instance.Core.Player.Bag.AddBagItem(item, itemQty);
+                        GameRunner.Instance.Core.Player.ItemObtainPopUp.ShowPopUp(item, itemQty);
+                    }
+                    else if (reward.Value < 0)
+                    {
+                        GameRunner.Instance.Core.Player.Bag.UseBagItem(reward.Code);
+                    }
                 }
                 else if (reward.Type.Equals("Money", System.StringComparison.InvariantCultureIgnoreCase))
                 {
-                    GameRunner.Instance.Core.Player.AddPocketMoney(reward.Value);
+                    if (reward.Value > 0)
+                    {
+                        GameRunner.Instance.Core.Player.AddPocketMoney(reward.Value);
+                    }
+                    else if (reward.Value < 0)
+                    {
+                        GameRunner.Instance.Core.Player.UsePocketMoney(reward.Value);
+                    }
                 }
                 else if (reward.Type.Equals("Stamina", System.StringComparison.InvariantCultureIgnoreCase))
                 {
-                    GameRunner.Instance.Core.Player.Stamina.AddStamina(reward.Value);
+                    if (reward.Value > 0)
+                    {
+                        GameRunner.Instance.Core.Player.Stamina.AddStamina(reward.Value);
+                    }
+                    else if (reward.Value < 0)
+                    {
+                        GameRunner.Instance.Core.Player.Stamina.ConsumeStamina(reward.Value);
+                    }
                 }
                 else if (reward.Type.Equals("Site", System.StringComparison.InvariantCultureIgnoreCase))
                 {
@@ -910,7 +935,7 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
         //update quests that required questCode as condition 
         //used for immediately update quest on the same site
-        public void UpdateQuestEvent_RelatedQuestCode(string questCode)
+        void UpdateQuestEvent_RelatedQuestCode(string questCode, DialogueTemporaryData currentDialog)
         {
             //_currentDialog.eventPoint.gameObject.SetActive(false);
 
@@ -991,15 +1016,15 @@ namespace NekoOdyssey.Scripts.Game.Core.Routine
 
 
                             //disable duplicate actor objects
-                            Debug.Log($"Check duplicate quest : {_currentDialog.eventCode}");
+                            Debug.Log($"Check duplicate quest : {currentDialog.eventCode}");
 
-                            if (_tempQuestCodeAndQuest.TryGetValue(_currentDialog.eventCode, out Quest currentQuest))
+                            if (_tempQuestCodeAndQuest.TryGetValue(currentDialog.eventCode, out Quest currentQuest))
                             {
                                 Debug.Log($"Check duplicate quest get tempQuest");
                                 if (quest.TargetActorList.Any(actor => currentQuest.TargetActorExists(actor)))
                                 {
                                     Debug.Log($"Check duplicate quest quest have same actor");
-                                    _currentDialog.eventPoint.gameObject.SetActive(false);
+                                    currentDialog.eventPoint.gameObject.SetActive(false);
                                 }
                             }
                         }
