@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using NekoOdyssey.Scripts;
-using NekoOdyssey.Scripts.Game.Unity;
+using Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu;
 using UnityEngine;
 
-namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
+namespace NekoOdyssey.Scripts.Game.Core.PlayerMenu
 {
     public class PlayerMenuCandidateManager
     {
@@ -21,6 +19,17 @@ namespace Assets.NekoOdyssey.Scripts.Game.Core.PlayerMenu
 
         public void Unbind()
         {
+        }
+
+        public void Update()
+        {
+            var candidatesToRemove = new List<PlayerMenuCandidate>();
+            foreach (var candidate in Candidates)
+            {
+                if (candidate.GameObject.activeInHierarchy && candidate.GameObject.activeSelf) continue;
+                candidatesToRemove.Add(candidate);
+            }
+            Candidates.RemoveAll(c => candidatesToRemove.Contains(c));
         }
 
         public void Add(PlayerMenuCandidate candidate)

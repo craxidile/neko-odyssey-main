@@ -5,6 +5,7 @@ using NekoOdyssey.Scripts.Game.Core.Ais;
 using NekoOdyssey.Scripts.Game.Core.Areas;
 using NekoOdyssey.Scripts.Game.Core.Audios;
 using NekoOdyssey.Scripts.Game.Core.Cat;
+using NekoOdyssey.Scripts.Game.Core.PlayerMenu;
 using NekoOdyssey.Scripts.Game.Core.Settings;
 using NekoOdyssey.Scripts.Game.Core.Simulators;
 using NekoOdyssey.Scripts.Game.Core.Uis;
