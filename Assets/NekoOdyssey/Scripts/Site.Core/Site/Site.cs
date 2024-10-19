@@ -63,7 +63,7 @@ namespace NekoOdyssey.Scripts.Site.Core.Site
             // SetSite("GamePlayZone3_02", false);
             // SetSite("P0S02", false);
             // SetSite("NekoInside28BedroomFinal", false);
-            // SetSite("StartTitle", false);
+            SetSite("StartTitle", false);
             // SetSite("MiniGameFishing", false);
             // SetSite("DemoTitle", false);
         }
