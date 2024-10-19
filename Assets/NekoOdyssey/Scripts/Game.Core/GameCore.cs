@@ -7,6 +7,7 @@ using NekoOdyssey.Scripts.Game.Core.Audios;
 using NekoOdyssey.Scripts.Game.Core.Cat;
 using NekoOdyssey.Scripts.Game.Core.PlayerMenu;
 using NekoOdyssey.Scripts.Game.Core.Settings;
+using NekoOdyssey.Scripts.Game.Core.Shop;
 using NekoOdyssey.Scripts.Game.Core.Simulators;
 using NekoOdyssey.Scripts.Game.Core.Uis;
 using NekoOdyssey.Scripts.Game.Unity.Game.Core;
@@ -34,6 +35,7 @@ namespace NekoOdyssey.Scripts.Game.Core
         public Routine.RoutineManger RoutineManger { get; } = new(); // Linias Edit
         public EndDay.EndDayController EndDay { get; } = new(); // Linias Edit
         public GameScene.GameScene GameScene { get; } = new();
+        public NpcShop Shop { get; } = new();
         public SaveV001DbWriter SaveDbWriter { get; } = new();
 
         public bool SaveReady { get; private set; }
@@ -64,6 +66,7 @@ namespace NekoOdyssey.Scripts.Game.Core
                 //Routine.Bind();
                 RoutineManger.Bind();
                 EndDay.Bind();
+                Shop.Bind();
             }
         }
 
@@ -87,13 +90,14 @@ namespace NekoOdyssey.Scripts.Game.Core
                 //Routine.Start();
                 RoutineManger.Start();
                 EndDay.Start();
+                Shop.Start();
 
                 GameRunner.Instance.PlayerInputHandler.OnResetSaveTriggerred
                     .Subscribe(ResetSave)
                     .AddTo(GameRunner.Instance);
                 
                 // Remove this later
-                new TestDialog().Test();
+                // new TestDialog().Test();
             }
         }
 
@@ -117,6 +121,7 @@ namespace NekoOdyssey.Scripts.Game.Core
                 //Routine.Unbind();
                 RoutineManger.Unbind();
                 EndDay.Unbind();
+                Shop.Unbind();
             }
         }
 

@@ -30,6 +30,9 @@ namespace NekoOdyssey.Scripts.Game.Inputs
         public IObservable<Unit> OnBagTriggerred => this.UpdateAsObservable()
             .Where(_ => InputActions.Player.Bag.triggered);
         
+        public IObservable<Unit> OnShopTriggerred => this.UpdateAsObservable()
+            .Where(_ => InputActions.Player.Shop.triggered);
+        
         public IObservable<Unit> OnResetSaveTriggerred => this.UpdateAsObservable()
             .Where(_ => InputActions.Player.ResetSave.triggered);
 

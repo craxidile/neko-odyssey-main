@@ -82,6 +82,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""Shop"",
+                    ""type"": ""Button"",
+                    ""id"": ""470c0866-c660-4108-9534-de40f7111c86"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""PrevMenu"",
                     ""type"": ""Button"",
                     ""id"": ""6ff1e118-6765-4bbf-a21d-783cac23294a"",
@@ -687,6 +696,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Joystick"",
                     ""action"": ""SlideMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""36b9f3f1-d20e-40bd-aafe-365777b24412"",
+                    ""path"": ""<Keyboard>/#(5)"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Shop"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1678,6 +1698,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_Crouch = m_Player.FindAction("Crouch", throwIfNotFound: true);
         m_Player_Phone = m_Player.FindAction("Phone", throwIfNotFound: true);
         m_Player_Bag = m_Player.FindAction("Bag", throwIfNotFound: true);
+        m_Player_Shop = m_Player.FindAction("Shop", throwIfNotFound: true);
         m_Player_PrevMenu = m_Player.FindAction("PrevMenu", throwIfNotFound: true);
         m_Player_NextMenu = m_Player.FindAction("NextMenu", throwIfNotFound: true);
         m_Player_SlideMenu = m_Player.FindAction("SlideMenu", throwIfNotFound: true);
@@ -1772,6 +1793,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Crouch;
     private readonly InputAction m_Player_Phone;
     private readonly InputAction m_Player_Bag;
+    private readonly InputAction m_Player_Shop;
     private readonly InputAction m_Player_PrevMenu;
     private readonly InputAction m_Player_NextMenu;
     private readonly InputAction m_Player_SlideMenu;
@@ -1792,6 +1814,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @Crouch => m_Wrapper.m_Player_Crouch;
         public InputAction @Phone => m_Wrapper.m_Player_Phone;
         public InputAction @Bag => m_Wrapper.m_Player_Bag;
+        public InputAction @Shop => m_Wrapper.m_Player_Shop;
         public InputAction @PrevMenu => m_Wrapper.m_Player_PrevMenu;
         public InputAction @NextMenu => m_Wrapper.m_Player_NextMenu;
         public InputAction @SlideMenu => m_Wrapper.m_Player_SlideMenu;
@@ -1829,6 +1852,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Bag.started += instance.OnBag;
             @Bag.performed += instance.OnBag;
             @Bag.canceled += instance.OnBag;
+            @Shop.started += instance.OnShop;
+            @Shop.performed += instance.OnShop;
+            @Shop.canceled += instance.OnShop;
             @PrevMenu.started += instance.OnPrevMenu;
             @PrevMenu.performed += instance.OnPrevMenu;
             @PrevMenu.canceled += instance.OnPrevMenu;
@@ -1881,6 +1907,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Bag.started -= instance.OnBag;
             @Bag.performed -= instance.OnBag;
             @Bag.canceled -= instance.OnBag;
+            @Shop.started -= instance.OnShop;
+            @Shop.performed -= instance.OnShop;
+            @Shop.canceled -= instance.OnShop;
             @PrevMenu.started -= instance.OnPrevMenu;
             @PrevMenu.performed -= instance.OnPrevMenu;
             @PrevMenu.canceled -= instance.OnPrevMenu;
@@ -2161,6 +2190,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnCrouch(InputAction.CallbackContext context);
         void OnPhone(InputAction.CallbackContext context);
         void OnBag(InputAction.CallbackContext context);
+        void OnShop(InputAction.CallbackContext context);
         void OnPrevMenu(InputAction.CallbackContext context);
         void OnNextMenu(InputAction.CallbackContext context);
         void OnSlideMenu(InputAction.CallbackContext context);

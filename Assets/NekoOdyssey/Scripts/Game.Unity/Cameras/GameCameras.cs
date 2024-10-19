@@ -8,6 +8,7 @@ namespace NekoOdyssey.Scripts.Game.Unity.Cameras
     {
         public Camera mainCamera;
         public Camera playerCamera;
+        public Camera sellerCamera;
         public CinemachineVirtualCamera mainVirtualCamera;
     }
 }
