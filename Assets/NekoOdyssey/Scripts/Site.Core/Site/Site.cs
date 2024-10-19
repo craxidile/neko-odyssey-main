@@ -53,11 +53,11 @@ namespace NekoOdyssey.Scripts.Site.Core.Site
         private void InitializeSite()
         {
             if (CurrentSite != null) return;
-            SetSite("QuestPhase0Scene01B", false);
+            // SetSite("QuestPhase0Scene01B", false);
             // SetSite("Intro", false);
             // SetSite("GamePlayZone4_01", false);
             // SetSite("GamePlayZone4_02", false);
-            // SetSite("GamePlayZone6_01", false);
+            SetSite("GamePlayZone6_01", false);
             // SetSite("GamePlayZone6_06", false);
             // SetSite("GamePlayZone3_01", false);
             // SetSite("GamePlayZone3_02", false);
@@ -65,7 +65,7 @@ namespace NekoOdyssey.Scripts.Site.Core.Site
             // SetSite("NekoInside28BedroomFinal", false);
             // SetSite("StartTitle", false);
             // SetSite("MiniGameFishing", false);
-            SetSite("DemoTitle", false);
+            // SetSite("DemoTitle", false);
         }
 
         public void SetReady()
